@@ -1,0 +1,27 @@
+{
+  "name": "instant-status",
+  "version": "1.0.0",
+  "description": "Performant, robust, and clean monitoring application",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/instant-status/instant-status.git"
+  },
+  "author": "Callum Williams",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/instant-status/instant-status/issues"
+  },
+  "homepage": "https://github.com/instant-status/instant-status#readme",
+  "dependencies": {
+    "diskdb": "^0.1.17",
+    "koa": "^2.11.0",
+    "koa-json": "^2.0.2",
+    "koa-router": "^7.4.0",
+    "react": "^16.11.0",
+    "styled-components": "^5.0.0-rc.2"
+  }
+}
