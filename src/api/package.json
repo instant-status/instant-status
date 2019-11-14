@@ -1,0 +1,30 @@
+{
+  "name": "instant-status-api",
+  "version": "1.0.0",
+  "description": "API",
+  "main": "server.js",
+  "scripts": {
+    "dev": "nodemon -r esm server.js",
+    "start": "node -r esm server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/instant-status/instant-status.git"
+  },
+  "author": "Callum Williams",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/instant-status/instant-status/issues"
+  },
+  "homepage": "https://github.com/instant-status/instant-status#readme",
+  "dependencies": {
+    "diskdb": "^0.1.17",
+    "koa": "^2.11.0",
+    "koa-json": "^2.0.2",
+    "koa-router": "^7.4.0"
+  },
+  "devDependencies": {
+    "esm": "^3.2.25",
+    "nodemon": "^1.19.4"
+  }
+}
