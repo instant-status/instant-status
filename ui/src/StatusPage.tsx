@@ -25,6 +25,7 @@ const StatusPage = () => {
   const logout = () => {
     setIsLoggedIn(false);
     localStorage.setItem("isLoggedIn", "false");
+    localStorage.setItem("user", null);
   };
 
   const res = useFetch("http://localhost:3000/demo", [isLoggedIn]);
@@ -34,7 +35,6 @@ const StatusPage = () => {
 
   return (
     <div>
-      <pre>{JSON.stringify(res)}</pre>
       {!isLoggedIn ? (
         <GoogleLogin
           clientId="1005728579916-nepm78d66vdfgle17pd3c64pdrg16v0d.apps.googleusercontent.com"
@@ -44,11 +44,14 @@ const StatusPage = () => {
           cookiePolicy={"single_host_origin"}
         />
       ) : (
-        <GoogleLogout
-          clientId="1005728579916-nepm78d66vdfgle17pd3c64pdrg16v0d.apps.googleusercontent.com"
-          buttonText="Logout"
-          onLogoutSuccess={logout}
-        />
+        <>
+          <pre>{JSON.stringify(res)}</pre>
+          <GoogleLogout
+            clientId="1005728579916-nepm78d66vdfgle17pd3c64pdrg16v0d.apps.googleusercontent.com"
+            buttonText="Logout"
+            onLogoutSuccess={logout}
+          />
+        </>
       )}
     </div>
   );

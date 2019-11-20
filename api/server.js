@@ -1,10 +1,13 @@
 import Koa from "koa";
 import json from "koa-json";
 import bodyParser from "koa-bodyparser";
-import dotenv from "dotenv";
+import bearerToken from "koa-bearer-token";
 import cors from "@koa/cors";
-import googleSignInAuth from "koa-google-sign-in";
+
+import dotenv from "dotenv";
+
 import appRoutes from "./routes/routes";
+import { isRequestAuthenticated } from "./controllers/auth";
 
 const app = new Koa();
 
@@ -13,12 +16,22 @@ dotenv.config();
 app.use(cors());
 app.use(json());
 app.use(bodyParser());
+app.use(bearerToken());
+
 // Comment in to auth ui
-app.use(
-  googleSignInAuth({
-    clientId: process.env.GOOGLE_SIGN_IN_CLIENT_ID
-  })
-);
+
+app.use((ctx, next) => {
+  if (isRequestAuthenticated(ctx.request)) {
+    next();
+  } else {
+    ctx.status = 401;
+    ctx.body = {
+      error: 401,
+      message: "Please authenticate yourself!"
+    };
+  }
+});
+
 app.use(appRoutes.routes()).use(appRoutes.allowedMethods());
 
 const port = process.env.PORT || 3000;

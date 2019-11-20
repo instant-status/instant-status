@@ -22,6 +22,7 @@
     "diskdb": "^0.1.17",
     "dotenv": "^8.2.0",
     "koa": "^2.11.0",
+    "koa-bearer-token": "^1.0.0",
     "koa-bodyparser": "^4.2.1",
     "koa-google-sign-in": "^2.0.1",
     "koa-json": "^2.0.2",
