@@ -1,31 +1,23 @@
 import { useEffect, useState } from "react";
 
-const useFetch = (url: string, update: any) => {
-  const [response, setResponse] = useState(null);
-  const [error, setError] = useState(null);
-  console.log("error", error);
+function useFetch(url: string, reload?: any) {
+  const [data, setData] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  async function fetchUrl() {
+    const response = await fetch(url, {
+      credentials: "same-origin"
+    });
+    const json = await response.json();
+    setData(json);
+    setLoading(false);
+  }
 
   useEffect(() => {
-    const token =
-      localStorage.getItem("user") !== "null"
-        ? JSON.parse(localStorage.getItem("user")).id_token
-        : null;
-    const fetchData = async () => {
-      try {
-        const res = await fetch(url, {
-          headers: new Headers({
-            authorization: `Bearer ${token}`
-          })
-        });
-        const json = await res.json();
-        setResponse(json);
-      } catch (error) {
-        setError(error);
-      }
-    };
-    fetchData();
-  }, update);
-  return { response };
-};
+    fetchUrl();
+  }, reload || []);
+
+  return [data, loading] as [typeof data, typeof loading];
+}
 
 export default useFetch;

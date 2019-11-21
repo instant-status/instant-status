@@ -2,6 +2,13 @@ import React, { useState, useEffect } from "react";
 import GoogleLogin from "react-google-login";
 import { GoogleLogout } from "react-google-login";
 import useFetch from "./hooks/useFetch";
+import Sidebar from "./components/Sidebar";
+import styled from "styled-components";
+import PageContent from "./components/PageContent";
+
+const Wrapper = styled.div`
+  display: flex;
+`;
 
 const StatusPage = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -28,33 +35,28 @@ const StatusPage = () => {
     localStorage.setItem("user", null);
   };
 
-  const res = useFetch("http://localhost:3000/demo", [isLoggedIn]);
+  const res = useFetch("http://localhost:3000/instances", [isLoggedIn]);
   if (!res) {
     return <div>Loading...</div>;
   }
 
   return (
-    <div>
-      {!isLoggedIn ? (
-        <GoogleLogin
-          clientId="1005728579916-nepm78d66vdfgle17pd3c64pdrg16v0d.apps.googleusercontent.com"
-          buttonText="Login with Google"
-          onSuccess={responseGoogle}
-          onFailure={responseGoogle}
-          cookiePolicy={"single_host_origin"}
-        />
-      ) : (
-        <>
-          <pre>{JSON.stringify(res)}</pre>
-          <GoogleLogout
-            clientId="1005728579916-nepm78d66vdfgle17pd3c64pdrg16v0d.apps.googleusercontent.com"
-            buttonText="Logout"
-            onLogoutSuccess={logout}
-          />
-        </>
-      )}
-    </div>
+    <Wrapper>
+      <PageContent />
+    </Wrapper>
   );
 };
+// <GoogleLogin
+//   clientId="1005728579916-nepm78d66vdfgle17pd3c64pdrg16v0d.apps.googleusercontent.com"
+//   buttonText="Login with Google"
+//   onSuccess={responseGoogle}
+//   onFailure={responseGoogle}
+//   cookiePolicy={"single_host_origin"}
+// />
+// <GoogleLogout
+//   clientId="1005728579916-nepm78d66vdfgle17pd3c64pdrg16v0d.apps.googleusercontent.com"
+//   buttonText="Logout"
+//   onLogoutSuccess={logout}
+// />
 
 export default StatusPage;

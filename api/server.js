@@ -20,17 +20,17 @@ app.use(bearerToken());
 
 // Comment in to auth ui
 
-app.use((ctx, next) => {
-  if (isRequestAuthenticated(ctx.request)) {
-    next();
-  } else {
-    ctx.status = 401;
-    ctx.body = {
-      error: 401,
-      message: "Please authenticate yourself!"
-    };
-  }
-});
+// app.use((ctx, next) => {
+//   if (isRequestAuthenticated(ctx.request)) {
+//     next();
+//   } else {
+//     ctx.status = 401;
+//     ctx.body = {
+//       error: 401,
+//       message: "Please authenticate yourself!"
+//     };
+//   }
+// });
 
 app.use(appRoutes.routes()).use(appRoutes.allowedMethods());
 

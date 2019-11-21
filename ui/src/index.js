@@ -1,5 +1,5 @@
 import React from "react";
 import { render } from "react-dom";
-import StatusPage from "./StatusPage";
+import App from "./App";
 
-render(<StatusPage />, document.getElementById("app"));
+render(<App />, document.getElementById("app"));
