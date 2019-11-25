@@ -1,5 +1,6 @@
 import React from "react";
 import styled from "styled-components";
+import { APP_CONFIG } from "../config";
 
 const Header = styled.header`
   display: flex;
@@ -42,8 +43,8 @@ const SidebarHeader = (props: {
         >
           <defs>
             <linearGradient id="a">
-              <stop stop-color="#fdc168" offset="0" />
-              <stop stop-color="#fb8080" offset="1" />
+              <stop stopColor="#fdc168" offset="0" />
+              <stop stopColor="#fb8080" offset="1" />
             </linearGradient>
             <linearGradient
               gradientUnits="userSpaceOnUse"
@@ -63,9 +64,9 @@ const SidebarHeader = (props: {
             cx="90.1"
           />
           <g
-            stroke-linejoin="round"
-            stroke-linecap="round"
-            stroke-width="7.1"
+            strokeLinejoin="round"
+            strokeLinecap="round"
+            strokeWidth="7.1"
             stroke="#fff"
             fill="none"
           >
@@ -75,9 +76,9 @@ const SidebarHeader = (props: {
         </svg>
       </Logo>
       <AppInfo>
-        <AppName>{process.env.APP_NAME}</AppName>
+        <AppName>{APP_CONFIG.APP_NAME}</AppName>
         <PageInfo>
-          Stacks {props.stackCount} / Instances {props.instanceCount}
+          {props.stackCount} Stacks / {props.instanceCount} Instances
         </PageInfo>
       </AppInfo>
     </Header>

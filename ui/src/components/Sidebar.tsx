@@ -25,13 +25,44 @@ const SectionHeader = styled.h3`
   text-transform: uppercase;
 `;
 
+const EnvFilters = () => {
+  const { urlEnvParams } = useContext(StateContext);
+  const envFilters = ["production", "staging", "dev"];
+  return (
+    <>
+      {envFilters.map(tag => {
+        return (
+          <div key={tag}>
+            <input
+              type="checkbox"
+              checked={urlEnvParams.includes(tag) || true}
+              id={tag}
+              name={tag}
+              value={tag}
+            />
+            <label htmlFor={tag}>{tag}</label>
+          </div>
+        );
+      })}
+    </>
+  );
+};
+
 const TagFilters = ({ tags }: { tags: Set<string> }) => {
+  const [isChecked, setIsChecked] = useState(true);
+  const { urlVersionParams } = useContext(StateContext);
   return (
     <>
       {Array.from(tags).map(tag => {
         return (
           <div key={tag}>
-            <input type="checkbox" id={tag} name={tag} value={tag} />
+            <input
+              type="checkbox"
+              checked={urlVersionParams.includes(tag)}
+              id={tag}
+              name={tag}
+              value={tag}
+            />
             <label htmlFor={tag}>{tag}</label>
           </div>
         );
@@ -41,21 +72,31 @@ const TagFilters = ({ tags }: { tags: Set<string> }) => {
 };
 
 const Sidebar = () => {
-  const [pemLocation, setPemLocation] = useState(".ssh/");
-  const { pageData } = useContext(StateContext);
-  if (pageData.length < 1) return <div>loading</div>;
+  const [pemLocation, setPemLocation] = useState("~/.ssh/");
+  const {
+    sidebarData,
+    updateSidebarData,
+    pageData,
+    urlVersionParams,
+    urlEnvParams
+  } = useContext(StateContext);
+  updateSidebarData();
 
-  const tags = new Set(pageData.map(item => item.tag));
+  if (sidebarData.length < 1 || pageData.length < 1) return <div>loading</div>;
+
+  const tags = new Set(sidebarData.map(item => item.tag));
+  console.log(Object.keys(pageData));
 
   return (
     <>
       <Aside>
         <SidebarHeader
-          stackCount={pageData.length}
-          instanceCount={pageData.length}
+          stackCount={Object.keys(pageData).length}
+          instanceCount={sidebarData.length}
         />
         <section>
           <SectionHeader>Environment</SectionHeader>
+          <EnvFilters />
         </section>
         <section>
           <SectionHeader>Versions</SectionHeader>
@@ -63,15 +104,6 @@ const Sidebar = () => {
         </section>
         <section>
           <SectionHeader>Settings</SectionHeader>
-          <div>
-            <input
-              type="checkbox"
-              id="autoRefresh"
-              name="autoRefresh"
-              value={1}
-            />
-            <label htmlFor="autoRefresh">Auto Refresh</label>
-          </div>
           <div>
             <label htmlFor="orderBy">Order By</label>
             <input type="text" id="orderBy" name="orderBy" />

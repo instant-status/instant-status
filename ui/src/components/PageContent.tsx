@@ -2,7 +2,7 @@ import React, { useContext, useEffect } from "react";
 import Sidebar from "./Sidebar";
 import styled from "styled-components";
 import { StateContext } from "../context/StateContext";
-import Card from "./Card";
+import Card from "./card/Card";
 import SearchBar from "./SearchBar";
 
 const Page = styled.main`
@@ -15,25 +15,54 @@ const Page = styled.main`
   flex-direction: column;
   align-items: center;
 `;
+
 const Grid = styled.div`
+  width: 100%;
   display: grid;
-  grid-template-columns: 3fr 3fr 3fr;
+  grid-template-columns: repeat(auto-fit, 400px);
   grid-column-gap: 20px;
   grid-row-gap: 20px;
 `;
 
 const PageContent = () => {
-  const { pageData, updatePageData } = useContext(StateContext);
+  const {
+    pageData,
+    updatePageData,
+    urlVersionParams,
+    urlEnvParams
+  } = useContext(StateContext);
   updatePageData();
+
   return (
     <>
       <Sidebar />
       <Page>
         <SearchBar />
         <Grid>
-          {pageData.map(item => {
-            return <Card key={item._id} stack={item} />;
-          })}
+          {Object.entries(pageData)
+            .filter(item => {
+              if (urlVersionParams.length > 0) {
+                if (urlVersionParams.includes(item[1][0].tag)) {
+                  return true;
+                }
+                return false;
+              }
+              return true;
+            })
+            .filter(item => {
+              if (urlEnvParams.length > 0) {
+                if (urlEnvParams.includes(item[1][0].environment)) {
+                  return true;
+                }
+                return false;
+              }
+              return true;
+            })
+            .map(item => {
+              return (
+                <Card key={item[0]} stackName={item[0]} instances={item[1]} />
+              );
+            })}
         </Grid>
       </Page>
     </>

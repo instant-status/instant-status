@@ -35,11 +35,6 @@ const StatusPage = () => {
     localStorage.setItem("user", null);
   };
 
-  const res = useFetch("http://localhost:3000/instances", [isLoggedIn]);
-  if (!res) {
-    return <div>Loading...</div>;
-  }
-
   return (
     <Wrapper>
       <PageContent />
