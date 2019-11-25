@@ -9,7 +9,7 @@ const CardBackground = styled.div`
   border-radius: 2px;
   color: ${({ theme }) => theme.color.lightOne};
   box-shadow: ${({ theme }) => theme.shadow.card};
-  width: 400px;
+  width: 360px;
   display: flex;
   flex-direction: column;
 `;

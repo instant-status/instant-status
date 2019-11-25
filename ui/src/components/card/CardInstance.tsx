@@ -19,7 +19,7 @@ const InstanceRow = styled.div`
 `;
 
 const InstanceRowKey = styled.b`
-  width: 152px;
+  width: 137px;
   text-align: right;
   flex: none;
 `;

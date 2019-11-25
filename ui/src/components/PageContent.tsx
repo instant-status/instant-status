@@ -19,7 +19,7 @@ const Page = styled.main`
 const Grid = styled.div`
   width: 100%;
   display: grid;
-  grid-template-columns: repeat(auto-fit, 400px);
+  grid-template-columns: repeat(auto-fit, 360px);
   grid-column-gap: 20px;
   grid-row-gap: 20px;
 `;
