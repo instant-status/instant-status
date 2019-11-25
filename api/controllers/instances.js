@@ -11,13 +11,17 @@ export const addPrimalInstance = request => {
     if (process.env.ALLOWED_DATA.includes(item[0])) {
       data[item[0]] = item[1];
     }
+    data.createdAt = new Date();
   });
 
   db.instances.save(data);
   return data;
 };
 
-export const getInstanceById = thing => {};
+export const deleteInstance = request => {
+  db.connect("../data", ["instances"]);
+  db.instances.remove({ ec2InstanceID: request.id }, false);
+};
 
 const groupBy = (arr, criteria) => {
   return arr.reduce(function(obj, item) {

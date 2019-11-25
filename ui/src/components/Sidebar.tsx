@@ -54,16 +54,17 @@ const TagFilters = ({ tags }: { tags: Set<string> }) => {
   return (
     <>
       {Array.from(tags).map(tag => {
+        const name = tag === "" ? "👻" : tag;
         return (
-          <div key={tag}>
+          <div key={name}>
             <input
               type="checkbox"
-              checked={urlVersionParams.includes(tag)}
-              id={tag}
-              name={tag}
-              value={tag}
+              checked={urlVersionParams.includes(name)}
+              id={name}
+              name={name}
+              value={name}
             />
-            <label htmlFor={tag}>{tag}</label>
+            <label htmlFor={name}>{name}</label>
           </div>
         );
       })}

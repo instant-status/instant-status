@@ -12,6 +12,7 @@
   "dependencies": {
     "@types/node": "^12.12.11",
     "context": "0.0.1",
+    "polished": "^3.4.2",
     "react": "^16.12.0",
     "react-dom": "^16.12.0",
     "react-google-login": "^5.0.7",

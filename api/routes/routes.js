@@ -2,7 +2,7 @@ import KoaRouter from "koa-router";
 import { addDemoData, getDemoData } from "../controllers/demo";
 import {
   addPrimalInstance,
-  getInstanceById,
+  deleteInstance,
   getInstances
 } from "../controllers/instances";
 
@@ -28,23 +28,23 @@ router.get(
 
 // Instance Creation
 router.post(
-  "instanceHello",
-  "/instance/hello/:instanceId",
+  "createInstance",
+  "/instance/hello",
   async ctx => (ctx.body = addPrimalInstance(ctx.request.body))
 );
 
 // Instance Update
 router.patch(
   "updateInstance",
-  "/instance/update/:instanceId",
+  "/instance/update",
   async ctx => (ctx.body = addDemoData(ctx.request.body))
 );
 
 // Instance Delete
 router.delete(
-  "updateInstance",
-  "/instance/update/:instanceId",
-  async ctx => (ctx.body = addDemoData(ctx.request.body))
+  "deleteInstance",
+  "/instance/delete",
+  async ctx => (ctx.body = deleteInstance(ctx.request.body))
 );
 
 export default router;

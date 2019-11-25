@@ -44,9 +44,11 @@ const Card = (props: { instances: InstanceProps[]; stackName: string }) => {
   return (
     <CardBackground>
       <CardHeader stackName={props.stackName} />
-      {props.instances.map(instance => {
-        return <CardInstance instance={instance} />;
-      })}
+      {props.instances
+        .sort((a: any, b: any) => (a.createdAt < b.createdAt ? -1 : 1))
+        .map(instance => {
+          return <CardInstance instance={instance} />;
+        })}
       <CardFooter
         instanceIds={instanceIds(props.instances)}
         stackTitle={props.stackName}
