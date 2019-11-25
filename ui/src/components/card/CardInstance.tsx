@@ -10,7 +10,7 @@ const InstanceWrapper = styled.article`
   position: relative;
 `;
 
-const Instance = styled.article<blur: boolean>`
+const Instance = styled.article<{ blur: boolean }>`
   padding: 0 16px;
   font-size: 16px;
   ${props => props.blur && "filter: blur(2px);"}
