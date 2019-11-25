@@ -93,7 +93,10 @@ const CardInstance = (props: { instance: any }) => {
         </UpdatingInstance>
       )}
       <Instance blur={props.instance.updatingTo && isVisible}>
-        <InstanceName>{props.instance.ec2TagNameLower}</InstanceName>
+        <InstanceName>
+          {props.instance.isChosenOne && "👑 "}
+          {props.instance.ec2TagNameLower}
+        </InstanceName>
         {Object.entries(props.instance)
           .filter(row => {
             if (

@@ -3,7 +3,8 @@ import { addDemoData, getDemoData } from "../controllers/demo";
 import {
   addPrimalInstance,
   deleteInstance,
-  getInstances
+  getInstances,
+  updateInstance
 } from "../controllers/instances";
 
 const router = new KoaRouter();
@@ -37,7 +38,7 @@ router.post(
 router.patch(
   "updateInstance",
   "/instance/update",
-  async ctx => (ctx.body = addDemoData(ctx.request.body))
+  async ctx => (ctx.body = updateInstance(ctx.request.body))
 );
 
 // Instance Delete
