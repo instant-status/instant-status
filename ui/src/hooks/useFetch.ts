@@ -6,7 +6,7 @@ function useFetch(url: string, reload?: any) {
 
   async function fetchUrl() {
     const response = await fetch(url, {
-      credentials: "same-origin"
+      credentials: "same-origin",
     });
     const json = await response.json();
     setData(json);

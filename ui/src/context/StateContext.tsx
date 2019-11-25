@@ -9,7 +9,7 @@ export const defaultValues = {
   urlVersionParams: [],
   urlSearchParams: [],
   updatePageData: () => {},
-  updateSidebarData: () => {}
+  updateSidebarData: () => {},
 };
 
 export const StateContext = createContext(defaultValues);
@@ -62,7 +62,7 @@ export const StateProvider = ({ children }) => {
         urlVersionParams,
         urlSearchParams,
         updatePageData,
-        updateSidebarData
+        updateSidebarData,
       }}
     >
       {children}

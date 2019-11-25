@@ -1,0 +1,7 @@
+{
+  "endOfLine": "lf",
+  "semi": true,
+  "quotes": ["backtick"],
+  "tabWidth": 2,
+  "trailingComma": "all"
+}
