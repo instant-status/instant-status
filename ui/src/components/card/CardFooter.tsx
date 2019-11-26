@@ -42,7 +42,7 @@ const Text = styled.div`
 
 export interface CardFooterProps {
   instanceBranch: string;
-  instanceIds: [];
+  instanceIds: string[];
   stackTitle: string;
   stackUrl: string;
   stackZone: string;
@@ -53,7 +53,7 @@ const CardFooter = ({
   instanceIds,
   stackTitle,
   stackUrl,
-  stackZone
+  stackZone,
 }: CardFooterProps) => {
   const [awsUpdateUrl, setAwsUpdateUrl] = React.useState("");
 

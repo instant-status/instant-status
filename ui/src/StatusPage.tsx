@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import GoogleLogin from "react-google-login";
 import { GoogleLogout } from "react-google-login";
 import useFetch from "./hooks/useFetch";
-import Sidebar from "./components/Sidebar";
+import Sidebar from "./components/sidebar/Sidebar";
 import styled from "styled-components";
 import PageContent from "./components/PageContent";
 

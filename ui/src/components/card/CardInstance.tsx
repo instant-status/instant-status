@@ -48,6 +48,9 @@ const InstanceName = styled.h4`
   font-weight: 400;
   font-size: 20px;
   margin: 8px 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 `;
 
 const InstanceRow = styled.div`
@@ -56,13 +59,17 @@ const InstanceRow = styled.div`
 `;
 
 const InstanceRowKey = styled.b`
-  width: 137px;
+  width: 125px;
   text-align: right;
   flex: none;
 `;
 
 const InstanceRowValue = styled.span`
   padding-left: 6px;
+`;
+
+const StatusIcon = styled.div<{ onClick: () => void }>`
+  ${props => props.onClick && "cursor: pointer"}
 `;
 
 const CardInstance = (props: { instance: any }) => {
@@ -96,21 +103,34 @@ const CardInstance = (props: { instance: any }) => {
         <InstanceName>
           {props.instance.isChosenOne && "👑 "}
           {props.instance.ec2TagNameLower}
+          {props.instance.updatingTo && !isVisible && (
+            <StatusIcon
+              title="Show Updating Status"
+              onClick={() => setIsVisible(true)}
+            >
+              <IconUpdating color="#00ab4e" width="20px" />
+            </StatusIcon>
+          )}
         </InstanceName>
         {Object.entries(props.instance)
           .filter(row => {
             if (
-              Object.values(APP_CONFIG_CARD_MAPPING).includes(row[0] as string)
+              Object.keys(APP_CONFIG_CARD_MAPPING).includes(row[0] as string)
             ) {
               return row;
             }
           })
-          .map(row => (
-            <InstanceRow>
-              <InstanceRowKey>{row[0]}:</InstanceRowKey>
-              <InstanceRowValue>{row[1]}</InstanceRowValue>
-            </InstanceRow>
-          ))}
+          .map(row => {
+            const test = Object.entries(APP_CONFIG_CARD_MAPPING).find(obj => {
+              return obj[0] === row[0];
+            });
+            return (
+              <InstanceRow key={row[0]}>
+                <InstanceRowKey>{test[1]}:</InstanceRowKey>
+                <InstanceRowValue>{row[1]}</InstanceRowValue>
+              </InstanceRow>
+            );
+          })}
       </Instance>
     </InstanceWrapper>
   );

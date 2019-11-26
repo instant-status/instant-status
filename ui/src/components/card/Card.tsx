@@ -5,39 +5,43 @@ import CardFooter from "./CardFooter";
 import CardInstance from "./CardInstance";
 
 const CardBackground = styled.div`
-  background: ${({ theme }) => theme.color.darkOne};
+  background: ${props => props.theme.color.darkOne};
+  color: ${props => props.theme.color.lightOne};
   border-radius: 2px;
-  color: ${({ theme }) => theme.color.lightOne};
-  box-shadow: ${({ theme }) => theme.shadow.card};
+  box-shadow: ${props => props.theme.shadow.card};
   width: 360px;
   display: flex;
   flex-direction: column;
 `;
 
-const instanceIds = (instances?: any) => {
-  const ids = instances.map((inst: any) => inst.ec2InstanceID);
+const instanceIds = (instances?: InstanceProps[]) => {
+  const ids = instances.map(inst => inst.ec2InstanceID);
   return ids[0] ? ids : undefined;
 };
 
-const stackUrl = (instances?: any) => {
-  const urls = instances.map((inst: any) => inst.appUrl);
+const stackUrl = (instances?: InstanceProps[]) => {
+  const urls = instances.map(inst => inst.appUrl);
   return urls[0] ? urls[0] : undefined;
 };
 
-const stackZone = (instances?: any) => {
-  const zones = instances.map((inst: any) => inst.ec2AZ);
+const stackZone = (instances?: InstanceProps[]) => {
+  const zones = instances.map(inst => inst.ec2AZ);
   return zones[0] ? zones[0].slice(0, -1) : undefined;
 };
 
-const instanceBranch = (instances?: any) => {
-  const branch = instances.map((inst: any) =>
-    inst.branch !== "" ? inst.branch : inst.tag
+const instanceBranch = (instances?: InstanceProps[]) => {
+  const branch = instances.map(inst =>
+    inst.branch !== "" ? inst.branch : inst.tag,
   );
   return branch[0] ? branch[0] : undefined;
 };
 
 export interface InstanceProps {
-  ["key"]: string;
+  appUrl: string;
+  ec2AZ: string;
+  tag: string;
+  branch: string;
+  ec2InstanceID: string;
 }
 
 const Card = (props: { instances: InstanceProps[]; stackName: string }) => {
@@ -47,7 +51,9 @@ const Card = (props: { instances: InstanceProps[]; stackName: string }) => {
       {props.instances
         .sort((a: any, b: any) => (a.createdAt < b.createdAt ? -1 : 1))
         .map(instance => {
-          return <CardInstance instance={instance} />;
+          return (
+            <CardInstance key={instance.ec2InstanceID} instance={instance} />
+          );
         })}
       <CardFooter
         instanceIds={instanceIds(props.instances)}

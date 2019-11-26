@@ -1,7 +1,8 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useState, useEffect } from "react";
 import styled from "styled-components";
-import { StateContext } from "../context/StateContext";
+import { StateContext } from "../../context/StateContext";
 import SidebarHeader from "./SidebarHeader";
+import VersionFilters from "./VersionFilters";
 
 const Aside = styled.aside`
   background-color: ${({ theme }) => theme.color.darkOne};
@@ -48,60 +49,27 @@ const EnvFilters = () => {
   );
 };
 
-const TagFilters = ({ tags }: { tags: Set<string> }) => {
-  const [isChecked, setIsChecked] = useState(true);
-  const { urlVersionParams } = useContext(StateContext);
-  return (
-    <>
-      {Array.from(tags).map(tag => {
-        const name = tag === "" ? "👻" : tag;
-        return (
-          <div key={name}>
-            <input
-              type="checkbox"
-              checked={urlVersionParams.includes(name)}
-              id={name}
-              name={name}
-              value={name}
-            />
-            <label htmlFor={name}>{name}</label>
-          </div>
-        );
-      })}
-    </>
-  );
-};
-
 const Sidebar = () => {
   const [pemLocation, setPemLocation] = useState("~/.ssh/");
-  const {
-    sidebarData,
-    updateSidebarData,
-    pageData,
-    urlVersionParams,
-    urlEnvParams
-  } = useContext(StateContext);
-  updateSidebarData();
+  const { pageData } = useContext(StateContext);
+  const sidebarData = Object.values(pageData).flat(1);
 
-  if (sidebarData.length < 1 || pageData.length < 1) return <div>loading</div>;
-
-  const tags = new Set(sidebarData.map(item => item.tag));
-  console.log(Object.keys(pageData));
+  const versions = new Set(sidebarData.map(item => item.tag));
 
   return (
     <>
       <Aside>
         <SidebarHeader
-          stackCount={Object.keys(pageData).length}
-          instanceCount={sidebarData.length}
+          stackCount={Object.keys(pageData).length || 0}
+          instanceCount={sidebarData.length || 0}
         />
         <section>
           <SectionHeader>Environment</SectionHeader>
-          <EnvFilters />
+          {/* <EnvFilters /> */}
         </section>
         <section>
           <SectionHeader>Versions</SectionHeader>
-          <TagFilters tags={tags} />
+          <VersionFilters versions={Array.from(versions)} />
         </section>
         <section>
           <SectionHeader>Settings</SectionHeader>

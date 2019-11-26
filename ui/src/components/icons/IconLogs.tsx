@@ -7,7 +7,7 @@ const IconLogs = (props: { color?: string; width?: string }) => {
       xmlns="http://www.w3.org/2000/svg"
       xmlnsXlink="http://www.w3.org/1999/xlink"
       viewBox="0 0 512 512"
-      enable-background="new 0 0 512 512"
+      enableBackground="new 0 0 512 512"
       xmlSpace="preserve"
       style={{ fill: props.color || "inherit", width: props.width || "100%" }}
     >

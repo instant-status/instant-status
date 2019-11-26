@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-import { APP_CONFIG } from "../config";
+import { APP_CONFIG } from "../../config";
 
 const Header = styled.header`
   display: flex;
@@ -35,7 +35,7 @@ const SidebarHeader = (props: {
 }) => {
   return (
     <Header>
-      <Logo>
+      <Logo onClick={() => (window.location.href = `/`)}>
         <svg
           xmlns="http://www.w3.org/2000/svg"
           xmlnsXlink="http://www.w3.org/1999/xlink"
