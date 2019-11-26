@@ -3,6 +3,7 @@ import styled from "styled-components";
 import CardHeader from "./CardHeader";
 import CardFooter from "./CardFooter";
 import CardInstance from "./CardInstance";
+import InstanceProps from "../../utils/InstanceProps";
 
 const CardBackground = styled.div`
   background: ${props => props.theme.color.darkOne};
@@ -15,34 +16,28 @@ const CardBackground = styled.div`
 `;
 
 const instanceIds = (instances?: InstanceProps[]) => {
-  const ids = instances.map(inst => inst.ec2InstanceID);
+  const ids = instances.map(instance => instance.instanceID);
   return ids[0] ? ids : undefined;
 };
 
-const stackUrl = (instances?: InstanceProps[]) => {
-  const urls = instances.map(inst => inst.appUrl);
-  return urls[0] ? urls[0] : undefined;
+const getChosenOne = (instances?: InstanceProps[]) => {
+  const chosenOne = instances.filter(
+    instance => instance.instanceIsChosenOne === true,
+  );
+  return chosenOne[0] || undefined;
 };
 
-const stackZone = (instances?: InstanceProps[]) => {
-  const zones = instances.map(inst => inst.ec2AZ);
-  return zones[0] ? zones[0].slice(0, -1) : undefined;
+const stackUrl = (instances?: InstanceProps[]) => {
+  const chosenOne = getChosenOne(instances);
+  return chosenOne ? chosenOne.stackAppUrl : undefined;
 };
 
 const instanceBranch = (instances?: InstanceProps[]) => {
-  const branch = instances.map(inst =>
-    inst.branch !== "" ? inst.branch : inst.tag,
+  const branch = instances.map(instance =>
+    instance.branch !== "" ? instance.branch : instance.instanceVersion,
   );
   return branch[0] ? branch[0] : undefined;
 };
-
-export interface InstanceProps {
-  appUrl: string;
-  ec2AZ: string;
-  tag: string;
-  branch: string;
-  ec2InstanceID: string;
-}
 
 const Card = (props: { instances: InstanceProps[]; stackName: string }) => {
   return (
@@ -51,16 +46,11 @@ const Card = (props: { instances: InstanceProps[]; stackName: string }) => {
       {props.instances
         .sort((a: any, b: any) => (a.createdAt < b.createdAt ? -1 : 1))
         .map(instance => {
-          return (
-            <CardInstance key={instance.ec2InstanceID} instance={instance} />
-          );
+          return <CardInstance key={instance.instanceID} instance={instance} />;
         })}
       <CardFooter
-        instanceIds={instanceIds(props.instances)}
-        stackTitle={props.stackName}
-        stackUrl={stackUrl(props.instances)}
-        stackZone={stackZone(props.instances)}
-        instanceBranch={instanceBranch(props.instances)}
+        instancesToUpdate={instanceIds(props.instances)}
+        chosenOne={getChosenOne(props.instances)}
       />
     </CardBackground>
   );

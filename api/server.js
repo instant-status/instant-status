@@ -4,6 +4,7 @@ import bodyParser from "koa-bodyparser";
 import bearerToken from "koa-bearer-token";
 import cors from "@koa/cors";
 
+import db from "diskdb";
 import dotenv from "dotenv";
 
 import appRoutes from "./routes/routes";
@@ -18,8 +19,6 @@ app.use(json());
 app.use(bodyParser());
 app.use(bearerToken());
 
-// Comment in to auth ui
-
 // app.use((ctx, next) => {
 //   if (isRequestAuthenticated(ctx.request)) {
 //     next();
@@ -31,6 +30,8 @@ app.use(bearerToken());
 //     };
 //   }
 // });
+
+db.connect("../data/", ["instances"]);
 
 app.use(appRoutes.routes()).use(appRoutes.allowedMethods());
 

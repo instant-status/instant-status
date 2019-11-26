@@ -26,6 +26,7 @@ const Grid = styled.div`
 
 const PageContent = () => {
   const { pageData, urlVersionParams, urlEnvParams } = useContext(StateContext);
+  const stacks = Object.entries(pageData);
 
   return (
     <>
@@ -33,33 +34,37 @@ const PageContent = () => {
       <Page>
         <SearchBar />
         <Grid>
-          {Object.entries(pageData)
-            .filter(item => {
-              if (urlVersionParams.length > 0) {
-                if (
-                  urlVersionParams.includes(item[1][0].tag) ||
-                  item[1][0].tag === undefined
-                ) {
-                  return true;
+          {stacks.length > 0 && !pageData.error ? (
+            stacks
+              .filter(item => {
+                if (urlVersionParams.length > 0) {
+                  if (
+                    urlVersionParams.includes(item[1][0].tag) ||
+                    item[1][0].tag === undefined
+                  ) {
+                    return true;
+                  }
+                  return false;
                 }
-                return false;
-              }
-              return true;
-            })
-            // .filter(item => {
-            //   if (urlEnvParams.length > 0) {
-            //     if (urlEnvParams.includes(item[1][0].environment)) {
-            //       return true;
-            //     }
-            //     return false;
-            //   }
-            //   return true;
-            // })
-            .map(item => {
-              return (
-                <Card key={item[0]} stackName={item[0]} instances={item[1]} />
-              );
-            })}
+                return true;
+              })
+              // .filter(item => {
+              //   if (urlEnvParams.length > 0) {
+              //     if (urlEnvParams.includes(item[1][0].environment)) {
+              //       return true;
+              //     }
+              //     return false;
+              //   }
+              //   return true;
+              // })
+              .map(item => {
+                return (
+                  <Card key={item[0]} stackName={item[0]} instances={item[1]} />
+                );
+              })
+          ) : (
+            <p>loading</p>
+          )}
         </Grid>
       </Page>
     </>

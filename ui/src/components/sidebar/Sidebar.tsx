@@ -3,9 +3,10 @@ import styled from "styled-components";
 import { StateContext } from "../../context/StateContext";
 import SidebarHeader from "./SidebarHeader";
 import VersionFilters from "./VersionFilters";
+import InstanceProps from "../../utils/InstanceProps";
 
 const Aside = styled.aside`
-  background-color: ${({ theme }) => theme.color.darkOne};
+  background-color: ${props => props.theme.color.darkOne};
   width: 290px;
   height: 100vh;
   position: fixed;
@@ -54,7 +55,9 @@ const Sidebar = () => {
   const { pageData } = useContext(StateContext);
   const sidebarData = Object.values(pageData).flat(1);
 
-  const versions = new Set(sidebarData.map(item => item.tag));
+  const versions = new Set(
+    sidebarData.map((instance: InstanceProps) => instance.instanceVersion),
+  );
 
   return (
     <>

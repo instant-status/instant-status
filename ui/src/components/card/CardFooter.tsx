@@ -1,10 +1,11 @@
-import React from "react";
+import React, { useEffect } from "react";
 import styled from "styled-components";
 import randomString from "../../utils/randomString";
 import { transparentize } from "polished";
 import IconLogs from "../icons/IconLogs";
 import IconOpen from "../icons/IconOpen";
 import IconUpdate from "../icons/IconUpdate";
+import InstanceProps from "../../utils/InstanceProps";
 
 const Footer = styled.footer`
   margin-top: auto;
@@ -40,48 +41,38 @@ const Text = styled.div`
   margin-top: 0.2em;
 `;
 
-export interface CardFooterProps {
-  instanceBranch: string;
-  instanceIds: string[];
-  stackTitle: string;
-  stackUrl: string;
-  stackZone: string;
-}
-
-const CardFooter = ({
-  instanceBranch,
-  instanceIds,
-  stackTitle,
-  stackUrl,
-  stackZone,
-}: CardFooterProps) => {
+const CardFooter = (props: {
+  chosenOne: InstanceProps;
+  instancesToUpdate: string[];
+}) => {
   const [awsUpdateUrl, setAwsUpdateUrl] = React.useState("");
-
-  const logsUrl = `https://eu-west-2.console.aws.amazon.com/cloudwatch/home?region=${stackZone}#logStream:group=curatr-${stackTitle}`;
 
   const setUrl = () => {
     const urlHost = `https://eu-west-2.console.aws.amazon.com/systems-manager/automation/execute/Update-Curatr-Version`;
-    const urlRegion = `?region=${stackZone}`;
-    const urlInstances = `#InstanceId=${instanceIds}`;
-    const urlRandom = `&randomString=${randomString()}${randomString()}--${stackTitle}--${randomString()}${randomString()}`;
-    const urlBranch = `&releaseBranch=${instanceBranch}`;
+    const urlRegion = `?region=${"hererererrerererererererer"}`;
+    const urlInstances = `#InstanceId=${props.instancesToUpdate}`;
+    const urlRandom = `&randomString=${randomString()}${randomString()}--${
+      props.chosenOne.stackName
+    }--${randomString()}${randomString()}`;
+    const urlVersion = `&releaseBranch=${props.chosenOne.instanceVersion}`;
     const urlOptions = `&runMigrations=true&updateEnv=true&updateConfs=true`;
 
-    const url = `${urlHost}${urlRegion}${urlInstances}${urlRandom}${urlBranch}${urlOptions}`;
+    const url = `${urlHost}${urlRegion}${urlInstances}${urlRandom}${urlVersion}${urlOptions}`;
     setAwsUpdateUrl(url);
   };
 
-  React.useEffect(() => {
+  useEffect(() => {
     setUrl();
-  }, [stackUrl]);
+  }, [props.chosenOne.stackAppUrl]);
+
   return (
     <Footer>
       <Button
         title="View Logs"
         target="_blank"
         rel="noreferrer noopener"
-        disabled={!stackZone || !stackTitle}
-        href={logsUrl}
+        disabled={!props.chosenOne.stackLogsUrl}
+        href={props.chosenOne.stackLogsUrl}
       >
         <IconLogs width="40px" />
         <Text>Logs</Text>
@@ -90,8 +81,8 @@ const CardFooter = ({
         title="View Site"
         target="_blank"
         rel="noreferrer noopener"
-        disabled={!stackUrl}
-        href={stackUrl}
+        disabled={!props.chosenOne.stackAppUrl}
+        href={props.chosenOne.stackAppUrl}
       >
         <IconOpen width="40px" />
         <Text>Open</Text>
@@ -100,7 +91,7 @@ const CardFooter = ({
         title="Update Stack"
         target="_blank"
         rel="noreferrer noopener"
-        disabled={!instanceIds || !stackZone || !instanceBranch}
+        disabled={!props.instancesToUpdate || !props.chosenOne.instanceVersion}
         onClick={setUrl}
         href={awsUpdateUrl}
       >

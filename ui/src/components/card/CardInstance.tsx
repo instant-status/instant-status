@@ -2,7 +2,10 @@ import React, { useState } from "react";
 import styled from "styled-components";
 
 import { transparentize } from "polished";
-import { APP_CONFIG_CARD_MAPPING } from "../../config";
+import {
+  APP_CONFIG_CARD_MAPPING,
+  APP_CONFIG_CARD_ADVANCED_MAPPING,
+} from "../../config";
 import IconUpdating from "../icons/IconUpdating";
 import IconAdd from "../icons/IconAdd";
 
@@ -74,36 +77,53 @@ const StatusIcon = styled.div<{ onClick: () => void }>`
 
 const CardInstance = (props: { instance: any }) => {
   const [isVisible, setIsVisible] = useState(true);
+
+  const filteredCardData = Object.entries(props.instance).filter(row => {
+    if (Object.keys(APP_CONFIG_CARD_MAPPING).includes(row[0] as string)) {
+      return row;
+    }
+  });
+
+  const filteredAdvancedCardData = Object.entries(props.instance).filter(
+    row => {
+      if (
+        Object.keys(APP_CONFIG_CARD_ADVANCED_MAPPING).includes(row[0] as string)
+      ) {
+        return row;
+      }
+    },
+  );
+
   return (
     <InstanceWrapper>
-      {props.instance.updatingTo && isVisible && (
+      {props.instance.instanceUpdatingTo && isVisible && (
         <UpdatingInstance
           title="Hide Update Overlay"
           onClick={() => setIsVisible(false)}
         >
-          {props.instance.tag ? (
+          {props.instance.instanceVersion ? (
             <>
               <IconUpdating color="#00ab4e" width="40px" />
               Updating from:
               <br />
-              <i>{props.instance.tag}</i>
+              <i>{props.instance.instanceVersion}</i>
               to:
-              <i>{props.instance.updatingTo}</i>
+              <i>{props.instance.instanceUpdatingTo}</i>
             </>
           ) : (
             <>
               <IconAdd color="#FFF1E5" width="40px" />
               Spawning:
-              <i>{props.instance.updatingTo}</i>
+              <i>{props.instance.instanceUpdatingTo}</i>
             </>
           )}
         </UpdatingInstance>
       )}
-      <Instance blur={props.instance.updatingTo && isVisible}>
+      <Instance blur={props.instance.instanceUpdatingTo && isVisible}>
         <InstanceName>
-          {props.instance.isChosenOne && "👑 "}
-          {props.instance.ec2TagNameLower}
-          {props.instance.updatingTo && !isVisible && (
+          {props.instance.instanceIsChosenOne && "👑 "}
+          {props.instance.instanceName}
+          {props.instance.instanceUpdatingTo && !isVisible && (
             <StatusIcon
               title="Show Updating Status"
               onClick={() => setIsVisible(true)}
@@ -112,25 +132,17 @@ const CardInstance = (props: { instance: any }) => {
             </StatusIcon>
           )}
         </InstanceName>
-        {Object.entries(props.instance)
-          .filter(row => {
-            if (
-              Object.keys(APP_CONFIG_CARD_MAPPING).includes(row[0] as string)
-            ) {
-              return row;
-            }
-          })
-          .map(row => {
-            const test = Object.entries(APP_CONFIG_CARD_MAPPING).find(obj => {
-              return obj[0] === row[0];
-            });
-            return (
-              <InstanceRow key={row[0]}>
-                <InstanceRowKey>{test[1]}:</InstanceRowKey>
-                <InstanceRowValue>{row[1]}</InstanceRowValue>
-              </InstanceRow>
-            );
-          })}
+        {filteredCardData.map(row => {
+          const test = Object.entries(APP_CONFIG_CARD_MAPPING).find(obj => {
+            return obj[0] === row[0];
+          });
+          return (
+            <InstanceRow key={row[0]}>
+              <InstanceRowKey>{test[1]}:</InstanceRowKey>
+              <InstanceRowValue>{row[1]}</InstanceRowValue>
+            </InstanceRow>
+          );
+        })}
       </Instance>
     </InstanceWrapper>
   );

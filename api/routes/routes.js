@@ -4,7 +4,8 @@ import {
   addPrimalInstance,
   deleteInstance,
   getInstances,
-  updateInstance
+  updateInstance,
+  doneUpdatingInstance
 } from "../controllers/instances";
 
 const router = new KoaRouter();
@@ -31,21 +32,28 @@ router.get(
 router.post(
   "createInstance",
   "/instance/hello",
-  async ctx => (ctx.body = addPrimalInstance(ctx.request.body))
+  async ctx => (ctx.response.status = addPrimalInstance(ctx.request.body))
 );
 
 // Instance Update
 router.patch(
   "updateInstance",
   "/instance/update",
-  async ctx => (ctx.body = updateInstance(ctx.request.body))
+  async ctx => (ctx.response.status = updateInstance(ctx.request.body))
+);
+
+// Instance Update
+router.patch(
+  "finishUpdateInstance",
+  "/instance/update/done",
+  async ctx => (ctx.response.status = doneUpdatingInstance(ctx.request.body))
 );
 
 // Instance Delete
 router.delete(
   "deleteInstance",
   "/instance/delete",
-  async ctx => (ctx.body = deleteInstance(ctx.request.body))
+  async ctx => (ctx.response.status = deleteInstance(ctx.request.body))
 );
 
 export default router;
