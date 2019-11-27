@@ -24,7 +24,7 @@ const Grid = styled.div`
 `;
 
 const PageContent = () => {
-  const { pageData, urlVersionParams, urlEnvParams } = useContext(StateContext);
+  const { pageData, urlVersionParams, urlSortBy } = useContext(StateContext);
   const stacks = Object.entries(pageData);
 
   return (
@@ -36,8 +36,8 @@ const PageContent = () => {
             .filter(item => {
               if (urlVersionParams.length > 0) {
                 if (
-                  urlVersionParams.includes(item[1][0].tag) ||
-                  item[1][0].tag === undefined
+                  urlVersionParams.includes(item[1][0].instanceVersion) ||
+                  item[1][0].instanceVersion === undefined
                 ) {
                   return true;
                 }
@@ -45,15 +45,18 @@ const PageContent = () => {
               }
               return true;
             })
-            // .filter(item => {
-            //   if (urlEnvParams.length > 0) {
-            //     if (urlEnvParams.includes(item[1][0].environment)) {
-            //       return true;
-            //     }
-            //     return false;
-            //   }
-            //   return true;
-            // })
+            .sort((a, b) => {
+              const item1 = a[1][0]; // First instance
+              const item2 = b[1][0]; // First instance
+
+              const sortBy = urlSortBy.replace("!", "");
+              const sortByReverse = urlSortBy.startsWith("!");
+              if (sortByReverse) {
+                return item1[sortBy] < item2[sortBy] ? -1 : 1;
+              } else {
+                return item1[sortBy] > item2[sortBy] ? -1 : 1;
+              }
+            })
             .map(item => {
               return (
                 <Card key={item[0]} stackName={item[0]} instances={item[1]} />

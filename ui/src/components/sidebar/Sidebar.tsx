@@ -52,12 +52,16 @@ const EnvFilters = () => {
 
 const Sidebar = () => {
   const [pemLocation, setPemLocation] = useState("~/.ssh/");
-  const { pageData } = useContext(StateContext);
+  const { pageData, updateUrlParams } = useContext(StateContext);
   const sidebarData = Object.values(pageData).flat(1);
 
   const versions = new Set(
     sidebarData.map((instance: InstanceProps) => instance.instanceVersion),
   );
+
+  const updateOrderBy = (option: string) => {
+    updateUrlParams({ key: "sortBy", value: option });
+  };
 
   return (
     <>
@@ -77,8 +81,20 @@ const Sidebar = () => {
         <section>
           <SectionHeader>Settings</SectionHeader>
           <div>
-            <label htmlFor="orderBy">Order By</label>
-            <input type="text" id="orderBy" name="orderBy" />
+            <label htmlFor="order-by">Order By</label>
+            <select
+              id="order-by"
+              onChange={event => updateOrderBy(event.target.value)}
+            >
+              <option value="stackName">Stack A->Z</option>
+              <option value="!stackName">Stack Z->A</option>
+              <option value="instanceVersion">Instance New->Old</option>
+              <option value="!instanceVersion">Instance Old->new</option>
+              <option value="instanceHealthCode">Health Good->Bad</option>
+              <option value="!instanceHealthCode">Health Bad->Good</option>
+              <option value="instanceVersion">Version New->Old</option>
+              <option value="!instanceVersion">Version Old->New</option>
+            </select>
           </div>
           <div>
             <label htmlFor="pemLocation">Location of PEM files</label>
@@ -89,6 +105,17 @@ const Sidebar = () => {
               name="pemLocation"
               value={pemLocation}
             />
+          </div>
+          <div>
+            <input
+              type="checkbox"
+              // checked={}
+              id="save-settings"
+              name="save-settings"
+              value={1}
+              // onChange={() => toggleCheckbox(tag)}
+            />
+            <label htmlFor="save-settings">Save Settings</label>
           </div>
         </section>
         <footer></footer>

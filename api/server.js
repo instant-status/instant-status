@@ -9,6 +9,7 @@ import dotenv from "dotenv";
 
 import appRoutes from "./routes/routes";
 import { isRequestAuthenticated } from "./controllers/auth";
+import { APP_CONFIG } from "../config";
 
 const app = new Koa();
 
@@ -32,7 +33,7 @@ db.connect("../data/", ["instances"]);
 
 app.use(appRoutes.routes()).use(appRoutes.allowedMethods());
 
-const port = process.env.PORT || 3000;
+const port = APP_CONFIG.PORT || 3000;
 app.listen(port, () =>
   console.log(`Server started on http://localhost:${port}`)
 );

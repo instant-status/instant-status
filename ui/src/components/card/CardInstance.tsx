@@ -2,10 +2,7 @@ import React, { useState } from "react";
 import styled from "styled-components";
 
 import { transparentize } from "polished";
-import {
-  APP_CONFIG_CARD_MAPPING,
-  APP_CONFIG_CARD_ADVANCED_MAPPING,
-} from "../../config";
+import { APP_CONFIG } from "../../../../config";
 import IconUpdating from "../icons/IconUpdating";
 import IconAdd from "../icons/IconAdd";
 import CardInstanceStatus from "./CardInstanceStatus";
@@ -77,7 +74,7 @@ const CardInstance = (props: { instance: InstanceProps }) => {
   const [isOverlayVisible, setIsOverlayVisible] = useState(true);
 
   const filteredCardData = Object.entries(props.instance).filter(row => {
-    if (Object.keys(APP_CONFIG_CARD_MAPPING).includes(row[0] as string)) {
+    if (Object.keys(APP_CONFIG.CARD_MAPPING).includes(row[0] as string)) {
       return row;
     }
   });
@@ -85,7 +82,7 @@ const CardInstance = (props: { instance: InstanceProps }) => {
   const filteredAdvancedCardData = Object.entries(props.instance).filter(
     row => {
       if (
-        Object.keys(APP_CONFIG_CARD_ADVANCED_MAPPING).includes(row[0] as string)
+        Object.keys(APP_CONFIG.CARD_ADVANCED_MAPPING).includes(row[0] as string)
       ) {
         return row;
       }
@@ -134,7 +131,7 @@ const CardInstance = (props: { instance: InstanceProps }) => {
           )}
         </InstanceName>
         {filteredCardData.map(row => {
-          const test = Object.entries(APP_CONFIG_CARD_MAPPING).find(obj => {
+          const test = Object.entries(APP_CONFIG.CARD_MAPPING).find(obj => {
             return obj[0] === row[0];
           });
           return (

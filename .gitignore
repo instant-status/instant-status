@@ -1,2 +1,6 @@
 data/*
+data/logs/*
+!data/logs/
 !*demo.json
+
+config.js

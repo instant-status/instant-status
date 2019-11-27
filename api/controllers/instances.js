@@ -1,5 +1,6 @@
 import db from "diskdb";
 import { logEvent } from "./logs";
+import { APP_CONFIG } from "../../config";
 
 export const addPrimalInstance = request => {
   if (!request.instanceID) {
@@ -12,14 +13,14 @@ export const addPrimalInstance = request => {
     const data = {};
     requestItems.forEach(item => {
       // if the request item key exists in the ALLOWED_DATA array, save it
-      if (process.env.ALLOWED_DATA.includes(item[0])) {
+      if (APP_CONFIG.ALLOWED_DATA.includes(item[0])) {
         data[item[0]] = item[1];
       }
       data.createdAt = new Date();
     });
 
     db.instances.save(data);
-    logEvent({ event: "Making New Instance", payload: data });
+    logEvent({ event: "Instance Created", payload: data });
     return 204;
   }
   return 409;
@@ -35,7 +36,7 @@ export const updateInstance = request => {
 
   requestItems.forEach(item => {
     // if the request item key exists in the ALLOWED_DATA array, save it
-    if (process.env.ALLOWED_DATA.includes(item[0])) {
+    if (APP_CONFIG.ALLOWED_DATA.includes(item[0])) {
       data[item[0]] = item[1];
     }
   });
@@ -44,7 +45,7 @@ export const updateInstance = request => {
     upsert: true
   });
 
-  logEvent({ event: "Starting to Update Instance", payload: data });
+  logEvent({ event: "Instance Update: Started", payload: data });
   return 204;
 };
 
@@ -58,7 +59,7 @@ export const doneUpdatingInstance = request => {
 
   requestItems.forEach(item => {
     // if the request item key exists in the ALLOWED_DATA array, save it
-    if (process.env.ALLOWED_DATA.includes(item[0])) {
+    if (APP_CONFIG.ALLOWED_DATA.includes(item[0])) {
       data[item[0]] = item[1];
     }
   });
@@ -67,7 +68,7 @@ export const doneUpdatingInstance = request => {
     upsert: true
   });
 
-  logEvent({ event: "Deleted Instance", payload: request.instanceID });
+  logEvent({ event: "Instance Update: Done ", payload: request.instanceID });
   return 204;
 
   // Clear down if is chosen one
@@ -78,7 +79,7 @@ export const deleteInstance = request => {
     return 400;
   }
   db.instances.remove({ instanceID: request.instanceID }, true);
-  logEvent({ event: "Deleted Instance", payload: request.instanceID });
+  logEvent({ event: "Instance Deleted", payload: request.instanceID });
   return 204;
 };
 

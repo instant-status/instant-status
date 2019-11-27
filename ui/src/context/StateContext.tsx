@@ -1,12 +1,12 @@
 import React, { createContext, useState, useEffect } from "react";
 import useFetch from "../hooks/useFetch";
-import { APP_CONFIG } from "../config";
+import { APP_CONFIG } from "../../../config";
 
 export const initialState = {
   pageData: [],
   urlEnvParams: [],
   urlVersionParams: [],
-  urlSortByParams: [],
+  urlSortBy: "stackName",
   updateUrlParams: (params: object) => {},
 };
 
@@ -19,9 +19,7 @@ export const StateProvider = ({ children }) => {
   const [urlVersionParams, setUrlVersionParams] = useState(
     initialState.urlVersionParams,
   );
-  const [urlSortByParams, setUrlSortByParams] = useState(
-    initialState.urlSortByParams,
-  );
+  const [urlSortBy, setUrlSortBy] = useState(initialState.urlSortBy);
 
   const [data, loading] = useFetch(APP_CONFIG.DATA_URL);
   useEffect(() => {
@@ -37,7 +35,7 @@ export const StateProvider = ({ children }) => {
       setUrlVersionParams(urlParams.get("version").split(","));
     }
     if (urlParams.has("sortBy")) {
-      setUrlSortByParams(urlParams.get("sortBy").split(","));
+      setUrlSortBy(urlParams.get("sortBy"));
     }
   };
 
@@ -59,7 +57,7 @@ export const StateProvider = ({ children }) => {
         urlEnvParams,
         urlVersionParams,
         updateUrlParams,
-        urlSortByParams,
+        urlSortBy,
       }}
     >
       {children}
