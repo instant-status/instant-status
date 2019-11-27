@@ -8,12 +8,14 @@ export const initialState = {
   urlVersionParams: [],
   urlSortBy: "stackName",
   updateUrlParams: (params: object) => {},
+  setDataCalledAt: (time: number) => {},
 };
 
 export const StateContext = createContext(initialState);
 
 export const StateProvider = ({ children }) => {
   const [pageData, setPageData] = useState(initialState.pageData);
+  const [dataCalledAt, setDataCalledAt] = useState(new Date().getTime());
 
   const [urlEnvParams, setUrlEnvParams] = useState(initialState.urlEnvParams);
   const [urlVersionParams, setUrlVersionParams] = useState(
@@ -21,7 +23,8 @@ export const StateProvider = ({ children }) => {
   );
   const [urlSortBy, setUrlSortBy] = useState(initialState.urlSortBy);
 
-  const [data, loading] = useFetch(APP_CONFIG.DATA_URL);
+  const [data, loading] = useFetch(APP_CONFIG.DATA_URL, dataCalledAt);
+
   useEffect(() => {
     setPageData(data);
   }, [loading]);
@@ -58,6 +61,7 @@ export const StateProvider = ({ children }) => {
         urlVersionParams,
         updateUrlParams,
         urlSortBy,
+        setDataCalledAt,
       }}
     >
       {children}

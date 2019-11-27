@@ -2,6 +2,7 @@ export default interface InstanceProps {
   // Stack
   stackName: string;
   stackEnvironment: string;
+  stackRegion: string;
   stackAppUrl: string;
   stackLogsUrl: string;
 

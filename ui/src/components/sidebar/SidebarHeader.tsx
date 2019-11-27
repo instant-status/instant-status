@@ -43,8 +43,8 @@ const SidebarHeader = (props: {
         >
           <defs>
             <linearGradient id="a">
-              <stop stopColor="#fdc168" offset="0" />
-              <stop stopColor="#fb8080" offset="1" />
+              <stop stopColor="#1f2430" offset="0" />
+              <stop stopColor="#1f2430" offset="1" />
             </linearGradient>
             <linearGradient
               gradientUnits="userSpaceOnUse"

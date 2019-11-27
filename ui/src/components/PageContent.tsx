@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect } from "react";
 import styled from "styled-components";
 import { StateContext } from "../context/StateContext";
 import Card from "./card/Card";
@@ -24,8 +24,17 @@ const Grid = styled.div`
 `;
 
 const PageContent = () => {
-  const { pageData, urlVersionParams, urlSortBy } = useContext(StateContext);
+  const { pageData, setDataCalledAt, urlVersionParams, urlSortBy } = useContext(
+    StateContext,
+  );
   const stacks = Object.entries(pageData);
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setDataCalledAt(new Date().getTime());
+    }, 1000);
+    return () => clearTimeout(timer);
+  }, []);
 
   return (
     <Page>

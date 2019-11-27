@@ -12,10 +12,9 @@ const InstanceWrapper = styled.article`
   position: relative;
 `;
 
-const Instance = styled.article<{ blur: boolean }>`
+const Instance = styled.article`
   padding: 0 16px;
   font-size: 16px;
-  ${props => props.blur && "filter: blur(2px);"}
 `;
 
 const UpdatingInstance = styled.div`
@@ -33,6 +32,7 @@ const UpdatingInstance = styled.div`
   text-align: center;
   padding: 16px;
   cursor: pointer;
+  backdrop-filter: blur(2px);
 
   & > svg {
     flex: none;
@@ -71,7 +71,16 @@ const InstanceRowValue = styled.span`
 `;
 
 const CardInstance = (props: { instance: InstanceProps }) => {
-  const [isOverlayVisible, setIsOverlayVisible] = useState(true);
+  const instanceUpdatingToVersion = props.instance.instanceUpdatingToVersion;
+  const instanceVersion = props.instance.instanceVersion;
+
+  const statusCode = instanceUpdatingToVersion
+    ? 1
+    : instanceVersion === "primal"
+    ? 0
+    : props.instance.instanceHealthCode;
+
+  const [isOverlayVisible, setIsOverlayVisible] = useState(statusCode < 2);
 
   const filteredCardData = Object.entries(props.instance).filter(row => {
     if (Object.keys(APP_CONFIG.CARD_MAPPING).includes(row[0] as string)) {
@@ -89,14 +98,27 @@ const CardInstance = (props: { instance: InstanceProps }) => {
     },
   );
 
+  const OverlayContent = () => {
+    return (
+      <>
+        <IconUpdating color="#00ab4e" width="40px" />
+        Updating from:
+        <br />
+        <i>{props.instance.instanceVersion}</i>
+        to:
+        <i>{props.instance.instanceUpdatingToVersion}</i>
+      </>
+    );
+  };
+
   return (
     <InstanceWrapper>
-      {props.instance.instanceUpdatingToVersion && isOverlayVisible && (
+      {isOverlayVisible && (
         <UpdatingInstance
           title="Hide Update Overlay"
           onClick={() => setIsOverlayVisible(false)}
         >
-          {props.instance.instanceVersion ? (
+          {props.instance.instanceVersion !== "primal" ? (
             <>
               <IconUpdating color="#00ab4e" width="40px" />
               Updating from:
@@ -108,13 +130,13 @@ const CardInstance = (props: { instance: InstanceProps }) => {
           ) : (
             <>
               <IconAdd color="#FFF1E5" width="40px" />
-              Spawning:
+              Spawning to:
               <i>{props.instance.instanceUpdatingToVersion}</i>
             </>
           )}
         </UpdatingInstance>
       )}
-      <Instance blur={isOverlayVisible}>
+      <Instance>
         <InstanceName>
           {props.instance.instanceIsChosenOne && "👑 "}
           {props.instance.instanceName}
@@ -122,11 +144,7 @@ const CardInstance = (props: { instance: InstanceProps }) => {
             <CardInstanceStatus
               onClick={() => setIsOverlayVisible(true)}
               title="Show Updating Status"
-              statusCode={
-                props.instance.instanceUpdatingToVersion
-                  ? 1
-                  : props.instance.instanceHealthCode
-              }
+              statusCode={statusCode}
             />
           )}
         </InstanceName>

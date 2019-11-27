@@ -18,8 +18,9 @@ function useFetch(url: string, reload?: any) {
 
   useEffect(() => {
     const token = localStorage.getItem("bearer");
+    setLoading(true);
     fetchUrl(token);
-  }, reload || []);
+  }, [reload] || []);
 
   return [data, loading] as [typeof data, typeof loading];
 }
