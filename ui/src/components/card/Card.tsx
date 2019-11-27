@@ -27,18 +27,6 @@ const getChosenOne = (instances?: InstanceProps[]) => {
   return chosenOne[0] || undefined;
 };
 
-const stackUrl = (instances?: InstanceProps[]) => {
-  const chosenOne = getChosenOne(instances);
-  return chosenOne ? chosenOne.stackAppUrl : undefined;
-};
-
-const instanceBranch = (instances?: InstanceProps[]) => {
-  const branch = instances.map(instance =>
-    instance.branch !== "" ? instance.branch : instance.instanceVersion,
-  );
-  return branch[0] ? branch[0] : undefined;
-};
-
 const Card = (props: { instances: InstanceProps[]; stackName: string }) => {
   return (
     <CardBackground>

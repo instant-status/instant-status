@@ -62,8 +62,10 @@ const CardFooter = (props: {
   };
 
   useEffect(() => {
-    setUrl();
-  }, [props.chosenOne.stackAppUrl]);
+    if (props.chosenOne) {
+      setUrl();
+    }
+  }, [props.chosenOne && props.chosenOne.stackAppUrl]);
 
   return (
     <Footer>
@@ -71,8 +73,8 @@ const CardFooter = (props: {
         title="View Logs"
         target="_blank"
         rel="noreferrer noopener"
-        disabled={!props.chosenOne.stackLogsUrl}
-        href={props.chosenOne.stackLogsUrl}
+        disabled={!props.chosenOne || !props.chosenOne.stackLogsUrl}
+        href={props.chosenOne && props.chosenOne.stackLogsUrl}
       >
         <IconLogs width="40px" />
         <Text>Logs</Text>
@@ -81,8 +83,8 @@ const CardFooter = (props: {
         title="View Site"
         target="_blank"
         rel="noreferrer noopener"
-        disabled={!props.chosenOne.stackAppUrl}
-        href={props.chosenOne.stackAppUrl}
+        disabled={!props.chosenOne || !props.chosenOne.stackAppUrl}
+        href={props.chosenOne && props.chosenOne.stackAppUrl}
       >
         <IconOpen width="40px" />
         <Text>Open</Text>
@@ -91,7 +93,11 @@ const CardFooter = (props: {
         title="Update Stack"
         target="_blank"
         rel="noreferrer noopener"
-        disabled={!props.instancesToUpdate || !props.chosenOne.instanceVersion}
+        disabled={
+          !props.chosenOne ||
+          !props.instancesToUpdate ||
+          !props.chosenOne.instanceVersion
+        }
         onClick={setUrl}
         href={awsUpdateUrl}
       >

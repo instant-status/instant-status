@@ -19,17 +19,14 @@ app.use(json());
 app.use(bodyParser());
 app.use(bearerToken());
 
-// app.use((ctx, next) => {
-//   if (isRequestAuthenticated(ctx.request)) {
-//     next();
-//   } else {
-//     ctx.status = 401;
-//     ctx.body = {
-//       error: 401,
-//       message: "Please authenticate yourself!"
-//     };
-//   }
-// });
+app.use((ctx, next) => {
+  if (isRequestAuthenticated(ctx.request)) {
+    next();
+  } else {
+    ctx.status = 401;
+    ctx.body = [];
+  }
+});
 
 db.connect("../data/", ["instances"]);
 

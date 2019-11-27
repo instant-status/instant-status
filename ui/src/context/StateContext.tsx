@@ -2,21 +2,25 @@ import React, { createContext, useState, useEffect } from "react";
 import useFetch from "../hooks/useFetch";
 import { APP_CONFIG } from "../config";
 
-export const defaultValues = {
+export const initialState = {
   pageData: [],
   urlEnvParams: [],
   urlVersionParams: [],
+  urlSortByParams: [],
   updateUrlParams: (params: object) => {},
 };
 
-export const StateContext = createContext(defaultValues);
+export const StateContext = createContext(initialState);
 
 export const StateProvider = ({ children }) => {
-  const [pageData, setPageData] = useState(defaultValues.pageData);
+  const [pageData, setPageData] = useState(initialState.pageData);
 
-  const [urlEnvParams, setUrlEnvParams] = useState(defaultValues.urlEnvParams);
+  const [urlEnvParams, setUrlEnvParams] = useState(initialState.urlEnvParams);
   const [urlVersionParams, setUrlVersionParams] = useState(
-    defaultValues.urlVersionParams,
+    initialState.urlVersionParams,
+  );
+  const [urlSortByParams, setUrlSortByParams] = useState(
+    initialState.urlSortByParams,
   );
 
   const [data, loading] = useFetch(APP_CONFIG.DATA_URL);
@@ -32,12 +36,13 @@ export const StateProvider = ({ children }) => {
     if (urlParams.has("version")) {
       setUrlVersionParams(urlParams.get("version").split(","));
     }
+    if (urlParams.has("sortBy")) {
+      setUrlSortByParams(urlParams.get("sortBy").split(","));
+    }
   };
 
   const updateUrlParams = (params: { key: string; value: string }) => {
-    console.log("params.value", params.value.toString());
     urlParams.set(params.key, params.value.toString());
-    console.log("urlParams", urlParams);
     history.pushState({}, null, `?${decodeURIComponent(urlParams.toString())}`);
     getUrlParams();
   };
@@ -49,11 +54,12 @@ export const StateProvider = ({ children }) => {
   return (
     <StateContext.Provider
       value={{
-        ...defaultValues,
+        ...initialState,
         pageData,
         urlEnvParams,
         urlVersionParams,
         updateUrlParams,
+        urlSortByParams,
       }}
     >
       {children}

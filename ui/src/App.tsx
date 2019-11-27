@@ -1,7 +1,7 @@
 import React from "react";
 
 import { StateProvider } from "./context/StateContext";
-import StatusPage from "./StatusPage";
+import StatusPage from "./pages/StatusPage";
 import {
   createGlobalStyle,
   DefaultTheme,

@@ -4,9 +4,12 @@ function useFetch(url: string, reload?: any) {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  async function fetchUrl() {
+  async function fetchUrl(token: string) {
     const response = await fetch(url, {
       credentials: "same-origin",
+      headers: new Headers({
+        authorization: `Bearer ${token}`,
+      }),
     });
     const json = await response.json();
     setData(json);
@@ -14,7 +17,8 @@ function useFetch(url: string, reload?: any) {
   }
 
   useEffect(() => {
-    fetchUrl();
+    const token = localStorage.getItem("bearer");
+    fetchUrl(token);
   }, reload || []);
 
   return [data, loading] as [typeof data, typeof loading];
