@@ -5,6 +5,7 @@ import { APP_CONFIG } from "../../../../config";
 import InstanceProps from "../../utils/InstanceProps";
 import { getStatusIcon } from "./getStatus";
 import CardInstanceStatusOverlay from "./CardInstanceStatusOverlay";
+import { transparentize } from "polished";
 
 const InstanceWrapper = styled.article`
   position: relative;
@@ -15,13 +16,27 @@ const Instance = styled.article`
   font-size: 16px;
 `;
 
-const InstanceName = styled.h4`
-  font-weight: 400;
-  font-size: 20px;
+const InstanceHeader = styled.header`
   margin: 8px 0;
   display: flex;
   align-items: center;
   justify-content: space-between;
+`;
+
+const InstanceName = styled.h4`
+  font-weight: 400;
+  font-size: 20px;
+  margin: 0;
+  width: 90%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+`;
+
+const InstanceNumber = styled.span`
+  color: ${props => transparentize(0.5, props.theme.color.lightOne)};
+  font-size: 16px;
+  margin-left: 10px;
 `;
 
 const InstanceRow = styled.div`
@@ -43,7 +58,10 @@ const SmallStatusIcon = styled.div`
   cursor: pointer;
 `;
 
-const CardInstance = (props: { instance: InstanceProps }) => {
+const CardInstance = (props: {
+  instance: InstanceProps;
+  instanceNumber: number;
+}) => {
   const instanceIsBooting =
     props.instance.instanceVersion === "primal" &&
     !props.instance.instanceInGhostMode &&
@@ -94,9 +112,13 @@ const CardInstance = (props: { instance: InstanceProps }) => {
         />
       )}
       <Instance>
-        <InstanceName>
-          {props.instance.instanceIsChosenOne && "👑 "}
-          {props.instance.instanceName}
+        <InstanceHeader>
+          <InstanceName>
+            {props.instance.instanceIsChosenOne && "👑 "}
+            {props.instance.instanceID}
+            <InstanceNumber>#{props.instanceNumber}</InstanceNumber>
+          </InstanceName>
+
           {!isOverlayVisible && (
             <SmallStatusIcon
               title="Show Info"
@@ -105,7 +127,7 @@ const CardInstance = (props: { instance: InstanceProps }) => {
               {getStatusIcon(statusCode)}
             </SmallStatusIcon>
           )}
-        </InstanceName>
+        </InstanceHeader>
         {filteredCardData.map(row => {
           const test = Object.entries(APP_CONFIG.CARD_MAPPING).find(obj => {
             return obj[0] === row[0];
@@ -113,6 +135,19 @@ const CardInstance = (props: { instance: InstanceProps }) => {
           return (
             <InstanceRow key={row[0]}>
               <InstanceRowKey>{test[1]}:</InstanceRowKey>
+              <InstanceRowValue>{row[1]}</InstanceRowValue>
+            </InstanceRow>
+          );
+        })}
+        {filteredAdvancedCardData.map(row => {
+          const advancedData = Object.entries(
+            APP_CONFIG.CARD_ADVANCED_MAPPING,
+          ).find(obj => {
+            return obj[0] === row[0];
+          });
+          return (
+            <InstanceRow key={row[0]}>
+              <InstanceRowKey>{advancedData[1]}:</InstanceRowKey>
               <InstanceRowValue>{row[1]}</InstanceRowValue>
             </InstanceRow>
           );

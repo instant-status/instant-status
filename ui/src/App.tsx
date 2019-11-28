@@ -42,6 +42,10 @@ const GlobalStyle = createGlobalStyle`
     min-height: 100%;
     background-color: ${props => props.theme.color.darkOne};
   }
+
+  b, strong {
+    font-weight: 700;
+  }
 `;
 
 const App = () => {

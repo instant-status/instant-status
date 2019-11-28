@@ -35,8 +35,14 @@ const Card = (props: { instances: InstanceProps[]; stackName: string }) => {
         .sort((a: InstanceProps, b: InstanceProps) =>
           a.instanceCreatedAt < b.instanceCreatedAt ? -1 : 1,
         )
-        .map(instance => {
-          return <CardInstance key={instance.instanceID} instance={instance} />;
+        .map((instance, i) => {
+          return (
+            <CardInstance
+              key={instance.instanceID}
+              instanceNumber={i + 1}
+              instance={instance}
+            />
+          );
         })}
       <CardFooter
         instancesToUpdate={instanceIds(props.instances)}
