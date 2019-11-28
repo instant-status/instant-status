@@ -1,5 +1,5 @@
 import db from "diskdb";
-import { APP_CONFIG } from "../../config";
+import ALLOWED_DATA from "../../allowedData";
 
 export const getDemoData = urlParams => {
   db.connect("../data", ["demo"]);
@@ -14,7 +14,7 @@ export const addDemoData = request => {
 
   requestItems.forEach(item => {
     // if the request item key exists in the ALLOWED_DATA array, save it
-    if (APP_CONFIG.ALLOWED_DATA.includes(item[0])) {
+    if (ALLOWED_DATA.includes(item[0])) {
       data[item[0]] = item[1];
     }
   });

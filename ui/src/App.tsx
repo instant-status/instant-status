@@ -7,6 +7,7 @@ import {
   DefaultTheme,
   ThemeProvider,
 } from "styled-components";
+import { lighten } from "polished";
 
 const theme: DefaultTheme = {
   color: {
@@ -45,6 +46,10 @@ const GlobalStyle = createGlobalStyle`
 
   b, strong {
     font-weight: 700;
+  }
+
+  hr {
+    border-color: ${props => lighten(0.1, props.theme.color.darkOne)}
   }
 `;
 

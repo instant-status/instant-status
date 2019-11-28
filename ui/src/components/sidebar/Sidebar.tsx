@@ -7,6 +7,7 @@ import InstanceProps from "../../utils/InstanceProps";
 import Checkbox from "./Checkbox";
 import TextInput from "./TextInput";
 import SelectInput from "./SelectInput";
+import { lighten } from "polished";
 
 const Aside = styled.aside`
   background-color: ${props => props.theme.color.darkOne};
@@ -25,7 +26,7 @@ const AsideGhost = styled.div`
 const SectionHeader = styled.h3`
   font-size: 14px;
   font-weight: 400;
-  border-bottom: 1px solid ${props => props.theme.color.lightOne};
+  border-bottom: 1px solid ${props => lighten(0.1, props.theme.color.darkOne)};
   padding-bottom: 4px;
   text-transform: uppercase;
 `;

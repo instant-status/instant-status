@@ -1,6 +1,6 @@
 import db from "diskdb";
 import { logEvent } from "./logs";
-import { APP_CONFIG } from "../../config";
+import ALLOWED_DATA from "../../allowedData";
 
 export const addPrimalInstance = request => {
   if (!request.instanceID) {
@@ -13,7 +13,7 @@ export const addPrimalInstance = request => {
     const data = {};
     requestItems.forEach(item => {
       // if the request item key exists in the ALLOWED_DATA array, save it
-      if (APP_CONFIG.ALLOWED_DATA.includes(item[0])) {
+      if (ALLOWED_DATA.includes(item[0])) {
         data[item[0]] = item[1];
       }
       data.createdAt = new Date();
@@ -36,7 +36,7 @@ export const updateInstance = request => {
 
   requestItems.forEach(item => {
     // if the request item key exists in the ALLOWED_DATA array, save it
-    if (APP_CONFIG.ALLOWED_DATA.includes(item[0])) {
+    if (ALLOWED_DATA.includes(item[0])) {
       data[item[0]] = item[1];
     }
   });
@@ -59,7 +59,7 @@ export const doneUpdatingInstance = request => {
 
   requestItems.forEach(item => {
     // if the request item key exists in the ALLOWED_DATA array, save it
-    if (APP_CONFIG.ALLOWED_DATA.includes(item[0])) {
+    if (ALLOWED_DATA.includes(item[0])) {
       data[item[0]] = item[1];
     }
   });

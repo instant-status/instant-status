@@ -13,8 +13,8 @@ export default interface InstanceProps {
   instanceUpdatedAt: string;
   instanceBuild: string;
   instanceVersion: string;
-  instanceDiskUsedGB: number;
-  instanceDiskTotalGB: number;
+  instanceDiskUsedGb: number;
+  instanceDiskTotalGb: number;
   instanceKeyFileName: string;
   instanceIsChosenOne: boolean;
   instanceInGhostMode: boolean;

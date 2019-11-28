@@ -1,10 +1,11 @@
 import React from "react";
 import styled from "styled-components";
+import { lighten } from "polished";
 
 const Header = styled.header`
   padding: 10px 16px;
   display: flex;
-  border-bottom: 1px solid rgba(225, 225, 225, 0.2);
+  border-bottom: 1px solid ${props => lighten(0.1, props.theme.color.darkOne)};
   justify-content: space-between;
 `;
 

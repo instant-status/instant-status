@@ -47,15 +47,25 @@ export const getStatusMessage = (
         </>
       );
     case 2:
+      if (instance.instanceVersion !== instance.instanceUpdatingToVersion) {
+        return (
+          <>
+            Updating from:
+            <br />
+            <i>{instance.instanceVersion}</i>
+            to:
+            <i>{instance.instanceUpdatingToVersion}</i>
+          </>
+        );
+      }
       return (
         <>
-          Updating from:
+          Refreshing:
           <br />
-          <i>{instance.instanceVersion}</i>
-          to:
           <i>{instance.instanceUpdatingToVersion}</i>
         </>
       );
+
     case 3:
       return instance.instanceHealthMessage;
     case 4:

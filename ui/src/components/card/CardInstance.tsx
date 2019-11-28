@@ -6,9 +6,12 @@ import InstanceProps from "../../utils/InstanceProps";
 import { getStatusIcon } from "./getStatus";
 import CardInstanceStatusOverlay from "./CardInstanceStatusOverlay";
 import { transparentize } from "polished";
+import getDate from "../../utils/getDate";
+import CopyText from "../../utils/CopyText";
 
 const InstanceWrapper = styled.article`
   position: relative;
+  user-select: none;
 `;
 
 const Instance = styled.article`
@@ -50,10 +53,6 @@ const InstanceRowKey = styled.b`
   flex: none;
 `;
 
-const InstanceRowValue = styled.span`
-  padding-left: 6px;
-`;
-
 const SmallStatusIcon = styled.div`
   cursor: pointer;
 `;
@@ -85,12 +84,6 @@ const CardInstance = (props: {
     : props.instance.instanceHealthCode;
 
   const [isOverlayVisible, setIsOverlayVisible] = useState(statusCode < 3);
-
-  const filteredCardData = Object.entries(props.instance).filter(row => {
-    if (Object.keys(APP_CONFIG.CARD_MAPPING).includes(row[0] as string)) {
-      return row;
-    }
-  });
 
   const filteredAdvancedCardData = Object.entries(props.instance).filter(
     row => {
@@ -128,17 +121,42 @@ const CardInstance = (props: {
             </SmallStatusIcon>
           )}
         </InstanceHeader>
-        {filteredCardData.map(row => {
-          const test = Object.entries(APP_CONFIG.CARD_MAPPING).find(obj => {
-            return obj[0] === row[0];
-          });
-          return (
-            <InstanceRow key={row[0]}>
-              <InstanceRowKey>{test[1]}:</InstanceRowKey>
-              <InstanceRowValue>{row[1]}</InstanceRowValue>
-            </InstanceRow>
-          );
-        })}
+        <div>
+          <InstanceRow>
+            <InstanceRowKey>IP:</InstanceRowKey>
+            <CopyText value={props.instance.instancePublicIP}>
+              {props.instance.instancePublicIP}
+            </CopyText>
+          </InstanceRow>
+          <InstanceRow>
+            <InstanceRowKey>Version:</InstanceRowKey>
+            <CopyText value={props.instance.instanceVersion}>
+              {`${props.instance.instanceVersion} `}
+              {props.instance.instanceBuild &&
+                `(build: ${props.instance.instanceBuild}`}
+            </CopyText>
+          </InstanceRow>
+          <InstanceRow>
+            <InstanceRowKey>Deployed:</InstanceRowKey>
+            <CopyText value={props.instance.instanceUpdatedAt}>
+              {getDate(props.instance.instanceUpdatedAt)}
+            </CopyText>
+          </InstanceRow>
+          <InstanceRow>
+            <InstanceRowKey>Disk:</InstanceRowKey>
+            <CopyText
+              value={`Using ${props.instance.instanceDiskUsedGb} of ${props.instance.instanceDiskUsedGb} total | ${props.instance.instanceType}`}
+            >
+              {props.instance.instancePublicIP}
+            </CopyText>
+          </InstanceRow>
+        </div>
+        {filteredAdvancedCardData && (
+          <>
+            <br />
+            <hr />
+          </>
+        )}
         {filteredAdvancedCardData.map(row => {
           const advancedData = Object.entries(
             APP_CONFIG.CARD_ADVANCED_MAPPING,
@@ -148,7 +166,7 @@ const CardInstance = (props: {
           return (
             <InstanceRow key={row[0]}>
               <InstanceRowKey>{advancedData[1]}:</InstanceRowKey>
-              <InstanceRowValue>{row[1]}</InstanceRowValue>
+              <CopyText value={row[1]}>{row[1]}</CopyText>
             </InstanceRow>
           );
         })}
