@@ -1,12 +1,10 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 
-import { transparentize } from "polished";
 import { APP_CONFIG } from "../../../../config";
-import IconUpdating from "../icons/IconUpdating";
-import IconAdd from "../icons/IconAdd";
-import CardInstanceStatus from "./CardInstanceStatus";
 import InstanceProps from "../../utils/InstanceProps";
+import { getStatusIcon } from "./getStatus";
+import CardInstanceStatusOverlay from "./CardInstanceStatusOverlay";
 
 const InstanceWrapper = styled.article`
   position: relative;
@@ -15,35 +13,6 @@ const InstanceWrapper = styled.article`
 const Instance = styled.article`
   padding: 0 16px;
   font-size: 16px;
-`;
-
-const UpdatingInstance = styled.div`
-  width: 100%;
-  height: 100%;
-  background-color: ${({ theme }) =>
-    theme.color.darkOne && transparentize(0.2, theme.color.darkOne)};
-  font-size: 15px;
-  position: absolute;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 100;
-  flex-direction: column;
-  text-align: center;
-  padding: 16px;
-  cursor: pointer;
-  backdrop-filter: blur(2px);
-
-  & > svg {
-    flex: none;
-  }
-
-  & > i {
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    width: 100%;
-  }
 `;
 
 const InstanceName = styled.h4`
@@ -70,17 +39,34 @@ const InstanceRowValue = styled.span`
   padding-left: 6px;
 `;
 
-const CardInstance = (props: { instance: InstanceProps }) => {
-  const instanceUpdatingToVersion = props.instance.instanceUpdatingToVersion;
-  const instanceVersion = props.instance.instanceVersion;
+const SmallStatusIcon = styled.div`
+  cursor: pointer;
+`;
 
-  const statusCode = instanceUpdatingToVersion
-    ? 1
-    : instanceVersion === "primal"
+const CardInstance = (props: { instance: InstanceProps }) => {
+  const instanceIsBooting =
+    props.instance.instanceVersion === "primal" &&
+    !props.instance.instanceInGhostMode &&
+    !props.instance.instanceUpdatingToVersion;
+
+  const instanceIsGhost =
+    props.instance.instanceVersion === "primal" &&
+    props.instance.instanceInGhostMode &&
+    props.instance.instanceUpdatingToVersion;
+
+  const instanceIsUpdating =
+    props.instance.instanceVersion !== "primal" &&
+    props.instance.instanceUpdatingToVersion;
+
+  const statusCode = instanceIsBooting
     ? 0
+    : instanceIsGhost
+    ? 1
+    : instanceIsUpdating
+    ? 2
     : props.instance.instanceHealthCode;
 
-  const [isOverlayVisible, setIsOverlayVisible] = useState(statusCode < 2);
+  const [isOverlayVisible, setIsOverlayVisible] = useState(statusCode < 3);
 
   const filteredCardData = Object.entries(props.instance).filter(row => {
     if (Object.keys(APP_CONFIG.CARD_MAPPING).includes(row[0] as string)) {
@@ -98,54 +84,26 @@ const CardInstance = (props: { instance: InstanceProps }) => {
     },
   );
 
-  const OverlayContent = () => {
-    return (
-      <>
-        <IconUpdating color="#00ab4e" width="40px" />
-        Updating from:
-        <br />
-        <i>{props.instance.instanceVersion}</i>
-        to:
-        <i>{props.instance.instanceUpdatingToVersion}</i>
-      </>
-    );
-  };
-
   return (
     <InstanceWrapper>
       {isOverlayVisible && (
-        <UpdatingInstance
-          title="Hide Update Overlay"
+        <CardInstanceStatusOverlay
           onClick={() => setIsOverlayVisible(false)}
-        >
-          {props.instance.instanceVersion !== "primal" ? (
-            <>
-              <IconUpdating color="#00ab4e" width="40px" />
-              Updating from:
-              <br />
-              <i>{props.instance.instanceVersion}</i>
-              to:
-              <i>{props.instance.instanceUpdatingToVersion}</i>
-            </>
-          ) : (
-            <>
-              <IconAdd color="#FFF1E5" width="40px" />
-              Spawning to:
-              <i>{props.instance.instanceUpdatingToVersion}</i>
-            </>
-          )}
-        </UpdatingInstance>
+          statusCode={statusCode}
+          instance={props.instance}
+        />
       )}
       <Instance>
         <InstanceName>
           {props.instance.instanceIsChosenOne && "👑 "}
           {props.instance.instanceName}
           {!isOverlayVisible && (
-            <CardInstanceStatus
+            <SmallStatusIcon
+              title="Show Info"
               onClick={() => setIsOverlayVisible(true)}
-              title="Show Updating Status"
-              statusCode={statusCode}
-            />
+            >
+              {getStatusIcon(statusCode)}
+            </SmallStatusIcon>
           )}
         </InstanceName>
         {filteredCardData.map(row => {

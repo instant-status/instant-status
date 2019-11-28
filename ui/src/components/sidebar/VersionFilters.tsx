@@ -1,5 +1,6 @@
 import React, { useState, useContext, useEffect } from "react";
 import { StateContext } from "../../context/StateContext";
+import Checkbox from "./Checkbox";
 
 const VersionFilters = (props: { versions: any }) => {
   const { urlVersionParams, updateUrlParams } = useContext(StateContext);
@@ -16,33 +17,29 @@ const VersionFilters = (props: { versions: any }) => {
   }, [props.versions, urlVersionParams.length]);
 
   const toggleCheckbox = (name: string) => {
+    let newArray = [] as [];
     if (isCheckedArray.includes(name)) {
-      const newArray = isCheckedArray.filter(version => version !== name);
-      setIsCheckedArray(newArray);
-      updateUrlParams({ key: "version", value: newArray });
+      newArray = isCheckedArray.filter(version => version !== name);
     } else {
-      const newArray = [...isCheckedArray, name];
-      setIsCheckedArray(newArray);
-      updateUrlParams({ key: "version", value: newArray });
+      newArray = [...isCheckedArray, name] as [];
     }
+    setIsCheckedArray(newArray);
+    updateUrlParams({ key: "version", value: newArray });
   };
 
   return props.versions
-    .filter((tag: string) => tag !== undefined)
-    .map((tag: string, i: number) => {
-      const name = tag === "" ? "👻" : tag;
+    .filter((version: string) => version !== undefined)
+    .map((version: string, i: number) => {
+      // If we have an empty version string, show an icon as the label
+      const label = version === "" ? "👻" : version;
       return (
-        <div key={i}>
-          <input
-            type="checkbox"
-            checked={isCheckedArray.includes(tag)}
-            id={tag}
-            name={tag}
-            value={tag}
-            onChange={() => toggleCheckbox(tag)}
-          />
-          <label htmlFor={tag}>{name}</label>
-        </div>
+        <Checkbox
+          key={i}
+          isChecked={isCheckedArray.includes(version)}
+          value={version}
+          label={label}
+          onChange={() => toggleCheckbox(version)}
+        />
       );
     });
 };

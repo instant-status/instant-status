@@ -14,6 +14,7 @@ const theme: DefaultTheme = {
     darkTwo: "#191e2a",
     lightOne: "#FFF1E5",
     lightTwo: "#FFFAF5",
+    red: "EE2F01",
   },
   shadow: {
     card: "4px 4px 20px rgba(0, 0, 0, 0.17)",

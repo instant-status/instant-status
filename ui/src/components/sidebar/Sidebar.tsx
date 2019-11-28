@@ -4,6 +4,9 @@ import { StateContext } from "../../context/StateContext";
 import SidebarHeader from "./SidebarHeader";
 import VersionFilters from "./VersionFilters";
 import InstanceProps from "../../utils/InstanceProps";
+import Checkbox from "./Checkbox";
+import TextInput from "./TextInput";
+import SelectInput from "./SelectInput";
 
 const Aside = styled.aside`
   background-color: ${props => props.theme.color.darkOne};
@@ -22,7 +25,7 @@ const AsideGhost = styled.div`
 const SectionHeader = styled.h3`
   font-size: 14px;
   font-weight: 400;
-  border-bottom: 1px solid #fff;
+  border-bottom: 1px solid ${props => props.theme.color.lightOne};
   padding-bottom: 4px;
   text-transform: uppercase;
 `;
@@ -51,8 +54,14 @@ const EnvFilters = () => {
 };
 
 const Sidebar = () => {
-  const [pemLocation, setPemLocation] = useState("~/.ssh/");
-  const { pageData, updateUrlParams } = useContext(StateContext);
+  const {
+    pageData,
+    updateUrlParams,
+    updateKeyLocation,
+    keyLocation,
+    updateRememberSettings,
+    rememberSettings,
+  } = useContext(StateContext);
   const sidebarData = Object.values(pageData).flat(1);
 
   const versions = new Set(
@@ -81,42 +90,22 @@ const Sidebar = () => {
         <section>
           <SectionHeader>Settings</SectionHeader>
           <div>
-            <label htmlFor="order-by">Order By</label>
-            <select
-              id="order-by"
+            <SelectInput
               onChange={event => updateOrderBy(event.target.value)}
-            >
-              <option value="stackName">Stack A->Z</option>
-              <option value="!stackName">Stack Z->A</option>
-              <option value="instanceVersion">Instance New->Old</option>
-              <option value="!instanceVersion">Instance Old->new</option>
-              <option value="instanceHealthCode">Health Good->Bad</option>
-              <option value="!instanceHealthCode">Health Bad->Good</option>
-              <option value="instanceVersion">Version New->Old</option>
-              <option value="!instanceVersion">Version Old->New</option>
-            </select>
-          </div>
-          <div>
-            <label htmlFor="pemLocation">Location of PEM files</label>
-            <input
-              onChange={(event: any) => setPemLocation(event.target.current)}
-              type="text"
-              id="pemLocation"
-              name="pemLocation"
-              value={pemLocation}
+              label="Order By"
             />
           </div>
-          <div>
-            <input
-              type="checkbox"
-              // checked={}
-              id="save-settings"
-              name="save-settings"
-              value={1}
-              // onChange={() => toggleCheckbox(tag)}
-            />
-            <label htmlFor="save-settings">Save Settings</label>
-          </div>
+          <TextInput
+            value={keyLocation}
+            onChange={(event: any) => updateKeyLocation(event.target.value)}
+            label="Key File Location:"
+          />
+          <Checkbox
+            isChecked={rememberSettings}
+            value="true"
+            label={rememberSettings ? "Clear Settings" : "Remember Settings"}
+            onChange={() => updateRememberSettings(!rememberSettings)}
+          />
         </section>
         <footer></footer>
       </Aside>

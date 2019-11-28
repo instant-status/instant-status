@@ -41,28 +41,6 @@ const SidebarHeader = (props: {
           xmlnsXlink="http://www.w3.org/1999/xlink"
           viewBox="0 0 100 100"
         >
-          <defs>
-            <linearGradient id="a">
-              <stop stopColor="#1f2430" offset="0" />
-              <stop stopColor="#1f2430" offset="1" />
-            </linearGradient>
-            <linearGradient
-              gradientUnits="userSpaceOnUse"
-              y2="144.3"
-              x2="90.7"
-              y1="44.1"
-              x1="90.7"
-              id="b"
-              xlinkHref="#a"
-            />
-          </defs>
-          <circle
-            transform="translate(-40 -44)"
-            fill="url(#b)"
-            r="50"
-            cy="94.3"
-            cx="90.1"
-          />
           <g
             strokeLinejoin="round"
             strokeLinecap="round"
