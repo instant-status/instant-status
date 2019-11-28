@@ -30,10 +30,10 @@ const PageContent = () => {
   const stacks = Object.entries(pageData);
 
   useEffect(() => {
-    // const timer = setInterval(() => {
-    //   setDataCalledAt(new Date().getTime());
-    // }, 1000);
-    // return () => clearTimeout(timer);
+    const timer = setInterval(() => {
+      setDataCalledAt(new Date().getTime());
+    }, 1000);
+    return () => clearTimeout(timer);
   }, []);
 
   return (
