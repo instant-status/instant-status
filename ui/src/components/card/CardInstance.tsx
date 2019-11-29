@@ -69,7 +69,7 @@ const ProgressBackground = styled.div`
   position: relative;
   height: 10px;
   border-radius: 4px;
-  margin: 4px;
+  margin: auto 4px 3px;
   background: ${props =>
     `linear-gradient(to right, ${props.theme.color.green}, ${props.theme.color.orange}, ${props.theme.color.red})`};
   width: 100%;
