@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import styled from "styled-components";
 
 import { APP_CONFIG } from "../../../../config";
@@ -53,10 +53,11 @@ const InstanceRow = styled.div`
   display: flex;
 `;
 
-const InstanceRowKey = styled.b`
+const InstanceRowKey = styled.div`
   width: 125px;
   text-align: right;
   flex: none;
+  opacity: 0.7;
   padding-right: 4px;
 `;
 
@@ -70,8 +71,9 @@ const ProgressBackground = styled.div`
   border-radius: 4px;
   margin: 4px;
   background: ${props =>
-    `linear-gradient(to right, ${props.theme.color.blue}, ${props.theme.color.red})`};
+    `linear-gradient(to right, ${props.theme.color.green}, ${props.theme.color.orange}, ${props.theme.color.red})`};
   width: 100%;
+  opacity: 0.75;
 `;
 
 const ProgressFreeSpace = styled.div<{ width: number }>`
@@ -85,7 +87,7 @@ const ProgressFreeSpace = styled.div<{ width: number }>`
 `;
 
 const ProgressBar = (props: { total: number; used: number }) => {
-  const freeSpace = props.total - props.used;
+  const freeSpace = 100 - Math.floor((props.used / props.total) * 100);
 
   return (
     <ProgressBackground>
@@ -122,7 +124,11 @@ const CardInstance = (props: {
     ? 2
     : props.instance.instanceHealthCode;
 
-  const [isOverlayVisible, setIsOverlayVisible] = useState(statusCode < 3);
+  const [isOverlayVisible, setIsOverlayVisible] = useState(false);
+
+  useEffect(() => {
+    setIsOverlayVisible(statusCode < 3);
+  }, [statusCode]);
 
   const filteredAdvancedCardData = Object.entries(props.instance).filter(
     row => {
@@ -178,10 +184,10 @@ const CardInstance = (props: {
           </InstanceRow>
           <InstanceRow>
             <InstanceRowKey>Version:</InstanceRowKey>
-            <CopyText value={props.instance.instanceVersion}>
-              {`${props.instance.instanceVersion} `}
-              {props.instance.instanceBuild &&
-                `(build: ${props.instance.instanceBuild}`}
+            <CopyText
+              value={`${props.instance.instanceVersion} (build: ${props.instance.instanceBuild})`}
+            >
+              {props.instance.instanceVersion}
             </CopyText>
             <IconButton
               href={`${APP_CONFIG.GITHUB_VERSION_URL}${props.instance.instanceVersion}`}
@@ -199,7 +205,7 @@ const CardInstance = (props: {
             {/* invert value and use background filter */}
             <InstanceRowKey>Disk:</InstanceRowKey>
             <CopyText
-              value={`Using ${props.instance.instanceDiskUsedGb} of ${props.instance.instanceDiskUsedGb} total | ${props.instance.instanceType}`}
+              value={`Using ${props.instance.instanceDiskUsedGb}Gb of ${props.instance.instanceDiskTotalGb}Gb total | ${props.instance.instanceType}`}
             >
               <ProgressBar
                 total={props.instance.instanceDiskTotalGb}

@@ -10,6 +10,9 @@ const Link = styled.span<{ active: boolean }>`
   transition: all 0.15s cubic-bezier(0.4, 0, 0.2, 1);
   width: 100%;
   display: flex;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 `;
 
 export interface CopyButtonProps {
@@ -21,8 +24,10 @@ const CopyText = ({ value, children }: CopyButtonProps) => {
   const [active, setActive] = useState(false);
 
   const copy = (text: string) => {
-    setActive(true);
-    navigator.clipboard.writeText(text);
+    if (navigator.clipboard) {
+      navigator.clipboard.writeText(text);
+      setActive(true);
+    }
     setTimeout(() => {
       setActive(false);
     }, 450);

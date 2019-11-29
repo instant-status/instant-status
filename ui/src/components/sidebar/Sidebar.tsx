@@ -105,7 +105,7 @@ const Sidebar = () => {
             onChange={() => updateShowAdvanced(!showAdvanced)}
           />
           <div>
-            <label htmlFor="cowbell">WIP</label>
+            <label htmlFor="wip">WIP</label>
             <input
               type="range"
               id="wip"

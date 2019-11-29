@@ -7,7 +7,6 @@ import {
   DefaultTheme,
   ThemeProvider,
 } from "styled-components";
-import "typeface-pt-sans";
 import { lighten } from "polished";
 
 export const theme: DefaultTheme = {
@@ -19,7 +18,7 @@ export const theme: DefaultTheme = {
     red: "#ee2f01",
     green: "#00ab4e",
     blue: "#26a8ff",
-    orange: "fcaf17",
+    orange: "#fcaf17",
   },
   shadow: {
     card: "4px 4px 20px rgba(0, 0, 0, 0.17)",
