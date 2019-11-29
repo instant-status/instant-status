@@ -1,13 +1,18 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import styled from "styled-components";
 
 import { APP_CONFIG } from "../../../../config";
 import InstanceProps from "../../utils/InstanceProps";
-import { getStatusIcon } from "./getStatus";
+import { getStatusIcon } from "../../utils/getStatus";
 import CardInstanceStatusOverlay from "./CardInstanceStatusOverlay";
 import { transparentize } from "polished";
 import getDate from "../../utils/getDate";
-import CopyText from "../../utils/CopyText";
+import CopyText from "../shared/CopyText";
+import IconGithub from "../icons/IconGithub";
+import IconUbuntu from "../icons/IconUbuntu";
+import { theme } from "../../App";
+import IconButton from "../shared/IconButton";
+import { StateContext } from "../../context/StateContext";
 
 const InstanceWrapper = styled.article`
   position: relative;
@@ -51,16 +56,49 @@ const InstanceRowKey = styled.b`
   width: 125px;
   text-align: right;
   flex: none;
+  padding-right: 4px;
 `;
 
 const SmallStatusIcon = styled.div`
   cursor: pointer;
 `;
 
+const ProgressBackground = styled.div`
+  position: relative;
+  height: 10px;
+  border-radius: 4px;
+  margin: 4px;
+  background: ${props =>
+    `linear-gradient(to right, ${props.theme.color.blue}, ${props.theme.color.red})`};
+  width: 100%;
+`;
+
+const ProgressFreeSpace = styled.div<{ width: number }>`
+  width: ${props => props.width}%;
+  position: absolute;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  border-left: 2px solid ${props => props.theme.color.darkOne};
+  backdrop-filter: grayscale(1);
+`;
+
+const ProgressBar = (props: { total: number; used: number }) => {
+  const freeSpace = props.total - props.used;
+
+  return (
+    <ProgressBackground>
+      <ProgressFreeSpace width={freeSpace} />
+    </ProgressBackground>
+  );
+};
+
 const CardInstance = (props: {
   instance: InstanceProps;
   instanceNumber: number;
 }) => {
+  const { keyLocation } = useContext(StateContext);
+
   const instanceIsBooting =
     props.instance.instanceVersion === "primal" &&
     !props.instance.instanceInGhostMode &&
@@ -127,6 +165,15 @@ const CardInstance = (props: {
             <CopyText value={props.instance.instancePublicIP}>
               {props.instance.instancePublicIP}
             </CopyText>
+            <IconButton
+              onClick={() =>
+                navigator.clipboard.writeText(
+                  `ssh ubuntu@${props.instance.instancePublicIP} -i ${keyLocation}${props.instance.instanceKeyFileName}.pem`,
+                )
+              }
+            >
+              <IconUbuntu color={theme.color.lightOne} width="1em" />
+            </IconButton>
           </InstanceRow>
           <InstanceRow>
             <InstanceRowKey>Version:</InstanceRowKey>
@@ -135,6 +182,11 @@ const CardInstance = (props: {
               {props.instance.instanceBuild &&
                 `(build: ${props.instance.instanceBuild}`}
             </CopyText>
+            <IconButton
+              href={`${APP_CONFIG.GITHUB_VERSION_URL}${props.instance.instanceVersion}`}
+            >
+              <IconGithub color={theme.color.lightOne} width="1em" />
+            </IconButton>
           </InstanceRow>
           <InstanceRow>
             <InstanceRowKey>Deployed:</InstanceRowKey>
@@ -143,11 +195,15 @@ const CardInstance = (props: {
             </CopyText>
           </InstanceRow>
           <InstanceRow>
+            {/* invert value and use background filter */}
             <InstanceRowKey>Disk:</InstanceRowKey>
             <CopyText
               value={`Using ${props.instance.instanceDiskUsedGb} of ${props.instance.instanceDiskUsedGb} total | ${props.instance.instanceType}`}
             >
-              {props.instance.instancePublicIP}
+              <ProgressBar
+                total={props.instance.instanceDiskTotalGb}
+                used={props.instance.instanceDiskUsedGb}
+              />
             </CopyText>
           </InstanceRow>
         </div>

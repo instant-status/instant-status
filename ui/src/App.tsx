@@ -7,15 +7,19 @@ import {
   DefaultTheme,
   ThemeProvider,
 } from "styled-components";
+import "typeface-pt-sans";
 import { lighten } from "polished";
 
-const theme: DefaultTheme = {
+export const theme: DefaultTheme = {
   color: {
     darkOne: "#1f2430",
     darkTwo: "#191e2a",
-    lightOne: "#FFF1E5",
+    lightOne: "#fff1e5",
     lightTwo: "#FFFAF5",
-    red: "EE2F01",
+    red: "#ee2f01",
+    green: "#00ab4e",
+    blue: "#26a8ff",
+    orange: "fcaf17",
   },
   shadow: {
     card: "4px 4px 20px rgba(0, 0, 0, 0.17)",

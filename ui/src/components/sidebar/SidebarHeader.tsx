@@ -44,12 +44,12 @@ const SidebarHeader = (props: {
           <g
             strokeLinejoin="round"
             strokeLinecap="round"
-            strokeWidth="7.1"
+            strokeWidth="7"
             stroke="#fff"
             fill="none"
           >
-            <path d="M0 50h25l6-12 10 37 15-55 10 38 5-8h29" />
-            <path opacity=".3" d="M-2 55h25l7-11 10 36 14-54 10 37 5-8h29" />
+            <path d="M4 50h21l6-12 10 37 15-55 10 38 5-8h25" />
+            <path d="M4 55h19l7-11 10 36 14-54 10 37 5-8h27" opacity="0.3" />
           </g>
         </svg>
       </Logo>

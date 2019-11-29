@@ -1,14 +1,9 @@
 import React from "react";
-import IconUpdating from "../icons/IconUpdating";
-import IconAdd from "../icons/IconAdd";
 import styled from "styled-components";
-import { getStatusIcon, getStatusMessage } from "./getStatus";
 import { transparentize } from "polished";
-import InstanceProps from "../../utils/InstanceProps";
 
-const StatusIcon = styled.div`
-  /* cursor: pointer; */
-`;
+import InstanceProps from "../../utils/InstanceProps";
+import { getStatusIcon, getStatusMessage } from "../../utils/getStatus";
 
 const UpdatingInstance = styled.div`
   width: 100%;

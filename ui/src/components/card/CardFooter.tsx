@@ -10,6 +10,7 @@ import InstanceProps from "../../utils/InstanceProps";
 const Footer = styled.footer`
   margin-top: auto;
   display: flex;
+  user-select: none;
 `;
 
 const Button = styled.a<{ disabled: boolean }>`

@@ -8,6 +8,9 @@ declare module "styled-components" {
       lightOne: string;
       lightTwo: string;
       red: string;
+      green: string;
+      blue: string;
+      orange: string;
     };
     shadow: {
       card: string;

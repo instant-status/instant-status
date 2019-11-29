@@ -1,32 +1,34 @@
 import React from "react";
-import IconUpdating from "../icons/IconUpdating";
-import IconAdd from "../icons/IconAdd";
-import InstanceProps from "../../utils/InstanceProps";
-import IconInfo from "../icons/IconInfo";
-import IconWarning from "../icons/IconWarning";
-import IconError from "../icons/IconError";
-import IconOkay from "../icons/IconOkay";
+
+import InstanceProps from "./InstanceProps";
+
+import IconUpdating from "../components/icons/IconUpdating";
+import IconAdd from "../components/icons/IconAdd";
+import IconInfo from "../components/icons/IconInfo";
+import IconWarning from "../components/icons/IconWarning";
+import IconError from "../components/icons/IconError";
+import IconOkay from "../components/icons/IconOkay";
+import { theme } from "../App";
 
 export const getStatusIcon = (statusCode: number, size?: string) => {
   const iconSize = size || "20px";
-
   switch (statusCode) {
     case 0:
-      return <IconAdd color="#00ab4e" width={iconSize} />;
+      return <IconAdd color={theme.color.green} width={iconSize} />;
     case 1:
-      return <IconAdd color="#FFF1E5" width={iconSize} />;
+      return <IconAdd color={theme.color.lightOne} width={iconSize} />;
     case 2:
-      return <IconUpdating color="#00ab4e" width={iconSize} />;
+      return <IconUpdating color={theme.color.green} width={iconSize} />;
     case 3:
     case 4:
     case 5:
-      return <IconOkay color="#00ab4e" width={iconSize} />;
+      return <IconOkay color={theme.color.green} width={iconSize} />;
     case 6:
-      return <IconInfo color="#26a8ff" width={iconSize} />;
+      return <IconInfo color={theme.color.blue} width={iconSize} />;
     case 7:
-      return <IconWarning color="#fcaf17" width={iconSize} />;
+      return <IconWarning color={theme.color.orange} width={iconSize} />;
     case 8:
-      return <IconError color="#EE2F01" width={iconSize} />;
+      return <IconError color={theme.color.red} width={iconSize} />;
     default:
   }
 };
