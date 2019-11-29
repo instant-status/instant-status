@@ -62,6 +62,10 @@ const Sidebar = () => {
     keyLocation,
     updateRememberSettings,
     rememberSettings,
+    showAdvanced,
+    updateShowAdvanced,
+    instanceDisplayCount,
+    updateInstanceDisplayCount,
   } = useContext(StateContext);
   const sidebarData = Object.values(pageData).flat(1);
 
@@ -90,10 +94,29 @@ const Sidebar = () => {
         </section>
         <section>
           <SectionHeader>Settings</SectionHeader>
+          <SelectInput
+            onChange={event => updateOrderBy(event.target.value)}
+            label="Order By"
+          />
+          <Checkbox
+            isChecked={showAdvanced}
+            value="true"
+            label={"Show Advanced"}
+            onChange={() => updateShowAdvanced(!showAdvanced)}
+          />
           <div>
-            <SelectInput
-              onChange={event => updateOrderBy(event.target.value)}
-              label="Order By"
+            <label htmlFor="cowbell">WIP</label>
+            <input
+              type="range"
+              id="wip"
+              name="wip"
+              min="0"
+              max="2"
+              onChange={(event: any) =>
+                updateInstanceDisplayCount(event.target.value)
+              }
+              value={instanceDisplayCount}
+              step="1"
             />
           </div>
           <TextInput

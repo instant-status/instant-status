@@ -22,6 +22,7 @@ const InstanceWrapper = styled.article`
 const Instance = styled.article`
   padding: 0 16px;
   font-size: 16px;
+  margin: 20px 0;
 `;
 
 const InstanceHeader = styled.header`
@@ -48,7 +49,7 @@ const InstanceNumber = styled.span`
 `;
 
 const InstanceRow = styled.div`
-  margin-bottom: 8px;
+  margin-bottom: 10px;
   display: flex;
 `;
 
@@ -97,7 +98,7 @@ const CardInstance = (props: {
   instance: InstanceProps;
   instanceNumber: number;
 }) => {
-  const { keyLocation } = useContext(StateContext);
+  const { keyLocation, showAdvanced } = useContext(StateContext);
 
   const instanceIsBooting =
     props.instance.instanceVersion === "primal" &&
@@ -207,25 +208,24 @@ const CardInstance = (props: {
             </CopyText>
           </InstanceRow>
         </div>
-        {filteredAdvancedCardData && (
+        {showAdvanced && (
           <>
-            <br />
-            <hr />
+            {filteredAdvancedCardData && <br />}
+            {filteredAdvancedCardData.map(row => {
+              const advancedData = Object.entries(
+                APP_CONFIG.CARD_ADVANCED_MAPPING,
+              ).find(obj => {
+                return obj[0] === row[0];
+              });
+              return (
+                <InstanceRow key={row[0]}>
+                  <InstanceRowKey>{advancedData[1]}:</InstanceRowKey>
+                  <CopyText value={row[1]}>{row[1]}</CopyText>
+                </InstanceRow>
+              );
+            })}
           </>
         )}
-        {filteredAdvancedCardData.map(row => {
-          const advancedData = Object.entries(
-            APP_CONFIG.CARD_ADVANCED_MAPPING,
-          ).find(obj => {
-            return obj[0] === row[0];
-          });
-          return (
-            <InstanceRow key={row[0]}>
-              <InstanceRowKey>{advancedData[1]}:</InstanceRowKey>
-              <CopyText value={row[1]}>{row[1]}</CopyText>
-            </InstanceRow>
-          );
-        })}
       </Instance>
     </InstanceWrapper>
   );

@@ -1,9 +1,10 @@
-import React from "react";
+import React, { useContext } from "react";
 import styled from "styled-components";
 import CardHeader from "./CardHeader";
 import CardFooter from "./CardFooter";
 import CardInstance from "./CardInstance";
 import InstanceProps from "../../utils/InstanceProps";
+import { StateContext } from "../../context/StateContext";
 
 const CardBackground = styled.div`
   background: ${props => props.theme.color.darkOne};
@@ -28,6 +29,8 @@ const getChosenOne = (instances?: InstanceProps[]) => {
 };
 
 const Card = (props: { instances: InstanceProps[]; stackName: string }) => {
+  const { instanceDisplayCount } = useContext(StateContext);
+
   return (
     <CardBackground>
       <CardHeader stackName={props.stackName} />
@@ -35,6 +38,7 @@ const Card = (props: { instances: InstanceProps[]; stackName: string }) => {
         .sort((a: InstanceProps, b: InstanceProps) =>
           a.instanceCreatedAt < b.instanceCreatedAt ? -1 : 1,
         )
+        .slice(0, instanceDisplayCount)
         .map((instance, i) => {
           return (
             <CardInstance

@@ -8,9 +8,13 @@ export const initialState = {
   urlVersionParams: [],
   urlSortBy: "stackName",
   keyLocation: "~/.ssh/",
+  showAdvanced: false,
+  instanceDisplayCount: 2,
   rememberSettings: false,
   updateRememberSettings: (rememberSettings: boolean) => {},
   updateKeyLocation: (keyLocation: string) => {},
+  updateShowAdvanced: (show: boolean) => {},
+  updateInstanceDisplayCount: (value: number) => {},
   updateUrlParams: (params: { key: string; value: string | [] }) => {},
   setDataCalledAt: (time: number) => {},
 };
@@ -46,8 +50,6 @@ export const StateProvider = ({ children }) => {
   }, []);
 
   // User Settings
-  const [urlSortBy, setUrlSortBy] = useState(initialState.urlSortBy);
-
   const getInitialRememberSettings = () => {
     if (localStorage.getItem("rememberSettings") === "true") {
       return true;
@@ -62,6 +64,50 @@ export const StateProvider = ({ children }) => {
     localStorage.setItem("rememberSettings", setting.toString());
   };
 
+  const [urlSortBy, setUrlSortBy] = useState(initialState.urlSortBy);
+
+  // Show Advanced data on cards
+  const getInitialShowAdvanced = () => {
+    if (rememberSettings && localStorage.getItem("showAdvanced") === "true") {
+      return true;
+    } else if (
+      urlParams.has("showAdvanced") &&
+      urlParams.get("showAdvanced") === "true"
+    ) {
+      return true;
+    }
+    return initialState.showAdvanced;
+  };
+  const [showAdvanced, setShowAdvanced] = useState(getInitialShowAdvanced());
+  const updateShowAdvanced = (setting: boolean) => {
+    setShowAdvanced(setting);
+    if (rememberSettings) {
+      localStorage.setItem("showAdvanced", setting.toString());
+    }
+    updateUrlParams({ key: "showAdvanced", value: setting.toString() });
+  };
+
+  // Show number of instances on cards
+  const getInitialInstanceDisplayCount = () => {
+    if (rememberSettings) {
+      return Number(localStorage.getItem("instanceDisplayCount"));
+    } else if (urlParams.has("instanceDisplayCount")) {
+      return Number(urlParams.get("instanceDisplayCount"));
+    }
+    return initialState.instanceDisplayCount;
+  };
+  const [instanceDisplayCount, setInstanceDisplayCount] = useState(
+    getInitialInstanceDisplayCount(),
+  );
+  const updateInstanceDisplayCount = (setting: number) => {
+    setInstanceDisplayCount(setting);
+    if (rememberSettings) {
+      localStorage.setItem("instanceDisplayCount", setting.toString());
+    }
+    updateUrlParams({ key: "instanceDisplayCount", value: setting.toString() });
+  };
+
+  // Customise key file location
   const getInitialKeyLocation = () => {
     if (rememberSettings && localStorage.getItem("keyLocation")) {
       return localStorage.getItem("keyLocation");
@@ -99,7 +145,10 @@ export const StateProvider = ({ children }) => {
     updateUrlParams,
     urlEnvParams,
     urlSortBy,
+    showAdvanced,
     urlVersionParams,
+    instanceDisplayCount,
+    updateShowAdvanced,
   };
 
   return (
