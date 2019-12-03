@@ -1,0 +1,26 @@
+{
+  "name": "instant-status-monitor",
+  "version": "1.0.0",
+  "description": "Monitor",
+  "main": "server.js",
+  "scripts": {
+    "dev": "nodemon -r esm server.js",
+    "start": "node -r esm server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/instant-status/instant-status.git"
+  },
+  "author": "Callum Williams",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/instant-status/instant-status/issues"
+  },
+  "homepage": "https://github.com/instant-status/instant-status#readme",
+  "dependencies": {
+    "axios": "^0.19.0"
+  },
+  "devDependencies": {
+    "esm": "^3.2.25"
+  }
+}
