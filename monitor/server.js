@@ -77,7 +77,7 @@ const checkHealth = async () => {
             case 7:
               instanceHasWarningHealthIssues = true;
               break;
-            case 0:
+            case 5:
               delete (healthAlertMemory[instance.instanceID].alertLastHealthCode)
               delete (healthAlertMemory[instance.instanceID].alertLastHealthMessage)
               delete (healthAlertMemory[instance.instanceID].alertLastSentAt)
@@ -91,13 +91,23 @@ const checkHealth = async () => {
           } else {
             healthAlertMemory[instance.instanceID].truancyCount++;
           }
-          if (healthAlertMemory[instance.instanceID].truancyCount >= truancyThreshold) {
-            payload = `{
-              "instanceID": ${instance.instanceID},
-              "instanceHealthCode": 7,
-              "instanceHealthMessage": "Instance has not reported health ${truancyThreshold} consecutive times."
-            }`
-            updateInstance(payload);
+          let newHealthCode = 5;
+          (healthAlertMemory[instance.instanceID].truancyCount >= truancyThreshold) ? newHealthCode = 8 : newHealthCode = 7
+          var payload = `{
+            "instanceID": "${instance.instanceID}",
+            "instanceHealthCode": ${newHealthCode},
+            "instanceHealthMessage": "Instance has not reported health ${healthAlertMemory[instance.instanceID].truancyCount} consecutive time(s)."
+          }`
+          updateInstance(payload);
+          instance.instanceHealthCode = newHealthCode
+          instance.instanceHealthMessage = `Instance has not reported health ${healthAlertMemory[instance.instanceID].truancyCount} consecutive time(s).`
+          if (healthAlertMemory[instance.instanceID].truancyCount == truancyThreshold) {
+            if (checkAlertPreconditions(instance, timeNow)) {
+              sendAlert(stack[0], instance, "emergency", ["slack"]);
+              healthAlertMemory[instance.instanceID].alertLastHealthCode = instance.instanceHealthCode;
+              healthAlertMemory[instance.instanceID].alertLastHealthMessage = instance.instanceHealthMessage;
+              healthAlertMemory[instance.instanceID].alertLastSentAt = timeNow.toISOString();
+            }
           }
         } else {
           if (instanceHasEmergencyHealthIssues) {
@@ -137,7 +147,7 @@ const checkHealth = async () => {
   setTimeout(checkHealth, 60 * checkingMinuteInterval * 1000);
 }
 
-const sendAlert = async (stack, instance, type, platforms) => {
+const sendAlert = (stack, instance, type, platforms) => {
   if (platforms.indexOf("slack") > -1 && APP_CONFIG.SLACK_API_KEYS && typeof (APP_CONFIG.SLACK_API_KEYS[type]) !== "undefined") {
     const url = `https://hooks.slack.com/services/${APP_CONFIG.SLACK_API_KEYS[type]}`;
     const errorMessage = instance.instanceHealthMessage || "No Health Message was provided, please check this server manually!"
@@ -163,19 +173,20 @@ const sendAlert = async (stack, instance, type, platforms) => {
         }
       ]
     }`;
-    await axios.post(url, data);
+    axios.post(url, data);
   }
 }
 
-const updateInstance = async (payload) => {
+const updateInstance = (payload) => {
   const url = `http://127.0.0.1:3000/instance/update`
   const config = {
     headers: {
-      'Authorization': `Bearer ${APP_CONFIG.BEARER_TOKEN}`
+      'Authorization': `Bearer ${APP_CONFIG.BEARER_TOKEN}`,
+      'Content-Type': `application/json`
     }
   };
   const data = payload;
-  await axios.post(url, config, data);
+  axios.patch(url, data, config);
 }
 
 const checkAlertPreconditions = (instance, timeNow) => {
