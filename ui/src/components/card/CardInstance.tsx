@@ -64,6 +64,7 @@ const InstanceRowKey = styled.div`
 
 const SmallStateIcon = styled.div`
   cursor: pointer;
+  padding-right: 10px;
 `;
 
 const SmallHealthIcon = styled.div`

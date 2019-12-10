@@ -9,7 +9,7 @@ import IconOkay from "../components/icons/IconOkay";
 import { theme } from "../App";
 
 export const getHealthIcon = (healthCode: number, size?: string) => {
-  const iconSize = size || "20px";
+  const iconSize = size || "25px";
   switch (healthCode) {
     case 0:
       return <IconOkay color={theme.color.green} width={iconSize} />;
