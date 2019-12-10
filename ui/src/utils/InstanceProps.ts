@@ -25,6 +25,9 @@ export default interface InstanceProps {
   instanceID: string;
   instanceType: string;
 
+  // Instance State
+  instanceStateCode: number;
+
   // Health Check
   instanceLastHealthyAt: string;
   instanceHealthCode: number;

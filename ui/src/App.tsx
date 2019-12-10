@@ -14,11 +14,12 @@ export const theme: DefaultTheme = {
     darkOne: "#1f2430",
     darkTwo: "#191e2a",
     lightOne: "#fff1e5",
-    lightTwo: "#FFFAF5",
+    lightTwo: "#ffaf5",
     red: "#ee2f01",
     green: "#00ab4e",
     blue: "#26a8ff",
     orange: "#fcaf17",
+    purple: "#c06bd0",
   },
   shadow: {
     card: "4px 4px 20px rgba(0, 0, 0, 0.17)",

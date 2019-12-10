@@ -11,6 +11,7 @@ declare module "styled-components" {
       green: string;
       blue: string;
       orange: string;
+      purple: string;
     };
     shadow: {
       card: string;

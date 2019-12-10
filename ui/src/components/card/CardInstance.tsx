@@ -3,8 +3,9 @@ import styled from "styled-components";
 
 import { APP_CONFIG } from "../../../../config";
 import InstanceProps from "../../utils/InstanceProps";
-import { getStatusIcon } from "../../utils/getStatus";
-import CardInstanceStatusOverlay from "./CardInstanceStatusOverlay";
+import { getStateIcon } from "../../utils/getState";
+import { getHealthIcon } from "../../utils/getHealth";
+import CardInstanceOverlay from "./CardInstanceOverlay";
 import { transparentize } from "polished";
 import getDate from "../../utils/getDate";
 import CopyText from "../shared/CopyText";
@@ -61,7 +62,11 @@ const InstanceRowKey = styled.div`
   padding-right: 4px;
 `;
 
-const SmallStatusIcon = styled.div`
+const SmallStateIcon = styled.div`
+  cursor: pointer;
+`;
+
+const SmallHealthIcon = styled.div`
   cursor: pointer;
 `;
 
@@ -116,19 +121,26 @@ const CardInstance = (props: {
     props.instance.instanceVersion !== "primal" &&
     props.instance.instanceUpdatingToVersion;
 
-  const statusCode = instanceIsBooting
+  const stateCode = instanceIsBooting
     ? 0
     : instanceIsGhost
     ? 1
     : instanceIsUpdating
     ? 2
-    : props.instance.instanceHealthCode;
+    : 3;
 
-  const [isOverlayVisible, setIsOverlayVisible] = useState(false);
+  const healthCode = props.instance.instanceHealthCode || 0;
+
+  const [isStateOverlayVisible, setIsStateOverlayVisible] = useState(false);
+  const [isHealthOverlayVisible, setIsHealthOverlayVisible] = useState(false);
 
   useEffect(() => {
-    setIsOverlayVisible(statusCode < 3);
-  }, [statusCode]);
+    setIsStateOverlayVisible(stateCode < 3);
+  }, [stateCode]);
+
+  useEffect(() => {
+    setIsHealthOverlayVisible(healthCode > 1);
+  }, [healthCode]);
 
   const filteredAdvancedCardData = Object.entries(props.instance).filter(
     row => {
@@ -142,10 +154,20 @@ const CardInstance = (props: {
 
   return (
     <InstanceWrapper>
-      {isOverlayVisible && (
-        <CardInstanceStatusOverlay
-          onClick={() => setIsOverlayVisible(false)}
-          statusCode={statusCode}
+      {isStateOverlayVisible && (
+        <CardInstanceOverlay
+          onClick={() => setIsStateOverlayVisible(false)}
+          type="state"
+          stateorHealthCode={stateCode}
+          instance={props.instance}
+        />
+      )}
+
+      {isHealthOverlayVisible && (
+        <CardInstanceOverlay
+          onClick={() => setIsHealthOverlayVisible(false)}
+          type="health"
+          stateorHealthCode={healthCode}
           instance={props.instance}
         />
       )}
@@ -157,13 +179,22 @@ const CardInstance = (props: {
             <InstanceNumber>#{props.instanceNumber}</InstanceNumber>
           </InstanceName>
 
-          {!isOverlayVisible && (
-            <SmallStatusIcon
+          {!isStateOverlayVisible && (
+            <SmallStateIcon
               title="Show Info"
-              onClick={() => setIsOverlayVisible(true)}
+              onClick={() => setIsStateOverlayVisible(true)}
             >
-              {getStatusIcon(statusCode)}
-            </SmallStatusIcon>
+              {getStateIcon(stateCode)}
+            </SmallStateIcon>
+          )}
+
+          {!isStateOverlayVisible && (
+            <SmallHealthIcon
+              title="Show Info"
+              onClick={() => setIsHealthOverlayVisible(true)}
+            >
+              {getHealthIcon(healthCode)}
+            </SmallHealthIcon>
           )}
         </InstanceHeader>
         <div>
