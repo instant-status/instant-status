@@ -125,10 +125,10 @@ const CardInstance = (props: {
   const stateCode = instanceIsBooting
     ? 0
     : instanceIsGhost
-    ? 1
-    : instanceIsUpdating
-    ? 2
-    : 3;
+      ? 1
+      : instanceIsUpdating
+        ? 2
+        : 3;
 
   const healthCode = props.instance.instanceHealthCode || 0;
 
@@ -180,23 +180,20 @@ const CardInstance = (props: {
             <InstanceNumber>#{props.instanceNumber}</InstanceNumber>
           </InstanceName>
 
-          {!isStateOverlayVisible && (
-            <SmallStateIcon
-              title="Show Info"
-              onClick={() => setIsStateOverlayVisible(true)}
-            >
-              {getStateIcon(stateCode)}
-            </SmallStateIcon>
-          )}
+          <SmallStateIcon
+            title="Show Info"
+            onClick={() => setIsStateOverlayVisible(true)}
+          >
+            {getStateIcon(stateCode)}
+          </SmallStateIcon>
 
-          {!isStateOverlayVisible && (
-            <SmallHealthIcon
-              title="Show Info"
-              onClick={() => setIsHealthOverlayVisible(true)}
-            >
-              {getHealthIcon(healthCode)}
-            </SmallHealthIcon>
-          )}
+          <SmallHealthIcon
+            title="Show Info"
+            onClick={() => setIsHealthOverlayVisible(true)}
+          >
+            {getHealthIcon(healthCode)}
+          </SmallHealthIcon>
+
         </InstanceHeader>
         <div>
           <InstanceRow>
