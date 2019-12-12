@@ -3,7 +3,8 @@ import styled from "styled-components";
 import { transparentize } from "polished";
 
 import InstanceProps from "../../utils/InstanceProps";
-import { getStatusIcon, getStatusMessage } from "../../utils/getStatus";
+import { getStateIcon, getStateMessage } from "../../utils/getState";
+import { getHealthIcon, getHealthMessage } from "../../utils/getHealth";
 
 const UpdatingInstance = styled.div`
   width: 100%;
@@ -34,17 +35,29 @@ const UpdatingInstance = styled.div`
   }
 `;
 
-const CardInstanceStatusOverlay = (props: {
+const CardInstanceOverlay = (props: {
   onClick: () => void;
-  statusCode: number;
+  type: string;
+  stateorHealthCode: number;
   instance: InstanceProps;
 }) => {
+  if (props.type === "state") {
   return (
     <UpdatingInstance title="Hide Info" onClick={props.onClick}>
-      {getStatusIcon(props.statusCode, "40px")}
-      {getStatusMessage(props.statusCode, props.instance)}
+      {getStateIcon(props.stateorHealthCode, "40px")}
+      {getStateMessage(props.stateorHealthCode, props.instance)}
     </UpdatingInstance>
-  );
+    );
+   };
+
+  if (props.type === "health") {
+  return (
+    <UpdatingInstance title="Hide Info" onClick={props.onClick}>
+      {getHealthIcon(props.stateorHealthCode, "40px")}
+      {getHealthMessage(props.instance)}
+    </UpdatingInstance>
+    );
+  };
 };
 
-export default CardInstanceStatusOverlay;
+export default CardInstanceOverlay;
