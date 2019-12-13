@@ -56,22 +56,43 @@ export const doneUpdatingInstance = request => {
 
   const requestItems = Object.entries(request);
   const data = {};
+  let shouldCleardown = false;
+  const instancesToDelete = [];
 
   requestItems.forEach(item => {
     // if the request item key exists in the ALLOWED_DATA array, save it
     if (ALLOWED_DATA.includes(item[0])) {
       data[item[0]] = item[1];
+
+      // if the instance reporting as done is the chosen one for this update
+      // we should cleardown
+      if (item[0] === "instanceIsChosenOne" && item[1]) shouldCleardown = true;
     }
   });
+
+  if (shouldCleardown && typeof data["stackName"] === "string") {
+    const currentStackInstances = db.instances.find({ stackName: data["stackName"] });
+    if (currentStackInstances.length > 0) {
+      currentStackInstances.forEach(instance => {
+        if (instance.instanceID !== data.instanceID &&
+          instance.instanceUpdatingToVersion !== data.instanceVersion
+        ) {
+          instancesToDelete.push(instance.instanceID);
+        }
+      });
+
+      instancesToDelete.forEach(instanceID => {
+        db.instances.remove({ instanceID: instanceID }, true);
+      });
+    }
+  }
 
   db.instances.update({ instanceID: request.instanceID }, data, {
     upsert: true
   });
 
-  logEvent({ event: "Instance Update: Done ", payload: request.instanceID });
+  logEvent({ event: "Instance Update: Done", payload: request.instanceID });
   return 204;
-
-  // Clear down if is chosen one
 };
 
 export const deleteInstance = request => {
