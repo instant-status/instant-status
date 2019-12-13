@@ -61,9 +61,9 @@ const PageContent = () => {
               const sortBy = urlSortBy.replace("!", "");
               const sortByReverse = urlSortBy.startsWith("!");
               if (sortByReverse) {
-                return item1[sortBy] < item2[sortBy] ? -1 : 1;
+                return item1[sortBy] < item2[sortBy] ? 1 : -1;
               } else {
-                return item1[sortBy] > item2[sortBy] ? -1 : 1;
+                return item1[sortBy] > item2[sortBy] ? 1 : -1;
               }
             })
             .map(item => {
@@ -72,8 +72,8 @@ const PageContent = () => {
               );
             })
         ) : (
-          <p>loading</p>
-        )}
+            <p>loading</p>
+          )}
       </Grid>
     </Page>
   );
