@@ -57,7 +57,6 @@ export const doneUpdatingInstance = request => {
   const requestItems = Object.entries(request);
   const data = {};
   let shouldCleardown = false;
-  const instancesToDelete = [];
 
   requestItems.forEach(item => {
     // if the request item key exists in the ALLOWED_DATA array, save it
@@ -77,12 +76,8 @@ export const doneUpdatingInstance = request => {
         if (instance.instanceID !== data.instanceID &&
           instance.instanceUpdatingToVersion !== data.instanceVersion
         ) {
-          instancesToDelete.push(instance.instanceID);
+          db.instances.remove({ instanceID: instance.instanceID }, true);
         }
-      });
-
-      instancesToDelete.forEach(instanceID => {
-        db.instances.remove({ instanceID: instanceID }, true);
       });
     }
   }
