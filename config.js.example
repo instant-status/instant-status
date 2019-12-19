@@ -1,0 +1,11 @@
+export const APP_CONFIG = {
+  APP_NAME: "App Status",
+  DATA_URL: "http://127.0.0.1:3000/instances?groupBy=stackName",
+  GITHUB_VERSION_URL: "https://github.com/instant-status/instant-status/tree/",
+  BEARER_TOKEN:
+    "strong-token-here",
+  CARD_ADVANCED_MAPPING: {
+    instanceID: "ID",
+    instanceAZ: "ec2AZ"
+  }
+};
