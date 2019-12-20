@@ -16,7 +16,7 @@ const StyledSearchBar = styled.input`
 `;
 
 const SearchBar = () => {
-  return <StyledSearchBar type="text" placeholder="Search" />;
+  return <StyledSearchBar type="text" disabled placeholder="Search" />;
 };
 
 export default SearchBar;

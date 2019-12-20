@@ -12,7 +12,11 @@ function useFetch(url: string, reload?: any) {
       }),
     });
     const json = await response.json();
-    setData(json);
+    if (response.status !== 200) {
+      setData([{ error: "Unauthorised" }]);
+    } else {
+      setData(json);
+    }
     setLoading(false);
   }
 

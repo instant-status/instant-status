@@ -136,19 +136,20 @@ export const StateProvider = ({ children }) => {
   // Data to expose to rest of app
   const providerObject = {
     ...initialState,
+    instanceDisplayCount,
     keyLocation,
-    rememberSettings,
-    updateRememberSettings,
     pageData,
+    rememberSettings,
     setDataCalledAt,
+    showAdvanced,
+    updateInstanceDisplayCount,
     updateKeyLocation,
+    updateRememberSettings,
+    updateShowAdvanced,
     updateUrlParams,
     urlEnvParams,
     urlSortBy,
-    showAdvanced,
     urlVersionParams,
-    instanceDisplayCount,
-    updateShowAdvanced,
   };
 
   return (

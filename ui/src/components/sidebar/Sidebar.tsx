@@ -8,6 +8,7 @@ import Checkbox from "./Checkbox";
 import TextInput from "./TextInput";
 import SelectInput from "./SelectInput";
 import { lighten } from "polished";
+import SliderInput from "./SliderInput";
 
 const Aside = styled.aside`
   background-color: ${props => props.theme.color.darkOne};
@@ -16,6 +17,8 @@ const Aside = styled.aside`
   position: fixed;
   color: #fff;
   padding: 20px 0 20px 20px;
+  display: flex;
+  flex-direction: column;
 `;
 
 const AsideGhost = styled.div`
@@ -31,28 +34,12 @@ const SectionHeader = styled.h3`
   text-transform: uppercase;
 `;
 
-const EnvFilters = () => {
-  const { urlEnvParams } = useContext(StateContext);
-  const envFilters = ["production", "staging", "dev"];
-  return (
-    <>
-      {envFilters.map(tag => {
-        return (
-          <div key={tag}>
-            <input
-              type="checkbox"
-              checked={urlEnvParams.includes(tag) || true}
-              id={tag}
-              name={tag}
-              value={tag}
-            />
-            <label htmlFor={tag}>{tag}</label>
-          </div>
-        );
-      })}
-    </>
-  );
-};
+const Footer = styled.footer`
+  margin: auto 20px 0 0;
+  text-align: center;
+  opacity: 0.8;
+  font-size: 14px;
+`;
 
 const Sidebar = () => {
   const {
@@ -77,6 +64,8 @@ const Sidebar = () => {
     updateUrlParams({ key: "sortBy", value: option });
   };
 
+  console.log(Object.values(pageData).flat(1));
+
   return (
     <>
       <Aside>
@@ -84,10 +73,6 @@ const Sidebar = () => {
           stackCount={Object.keys(pageData).length || 0}
           instanceCount={sidebarData.length || 0}
         />
-        <section>
-          <SectionHeader>Environment</SectionHeader>
-          {/* <EnvFilters /> */}
-        </section>
         <section>
           <SectionHeader>Versions</SectionHeader>
           <VersionFilters versions={Array.from(versions)} />
@@ -98,31 +83,24 @@ const Sidebar = () => {
             onChange={event => updateOrderBy(event.target.value)}
             label="Order By"
           />
-          <Checkbox
-            isChecked={showAdvanced}
-            value="true"
-            label={"Show Advanced"}
-            onChange={() => updateShowAdvanced(!showAdvanced)}
+          <SliderInput
+            value={instanceDisplayCount}
+            onChange={(event: any) =>
+              updateInstanceDisplayCount(event.target.value)
+            }
+            total={4}
+            label="Display Count:"
           />
-          <div>
-            <label htmlFor="wip">WIP</label>
-            <input
-              type="range"
-              id="wip"
-              name="wip"
-              min="0"
-              max="2"
-              onChange={(event: any) =>
-                updateInstanceDisplayCount(event.target.value)
-              }
-              value={instanceDisplayCount}
-              step="1"
-            />
-          </div>
           <TextInput
             value={keyLocation}
             onChange={(event: any) => updateKeyLocation(event.target.value)}
             label="Key File Location:"
+          />
+          <Checkbox
+            isChecked={showAdvanced}
+            value="true"
+            label={"Show More Info"}
+            onChange={() => updateShowAdvanced(!showAdvanced)}
           />
           <Checkbox
             isChecked={rememberSettings}
@@ -131,7 +109,7 @@ const Sidebar = () => {
             onChange={() => updateRememberSettings(!rememberSettings)}
           />
         </section>
-        <footer></footer>
+        <Footer>Made with ⚡ by Callum</Footer>
       </Aside>
       <AsideGhost />
     </>

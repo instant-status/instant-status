@@ -1,16 +1,5 @@
 import React from "react";
-import styled from "styled-components";
-
-const InputBoxContainer = styled.label`
-  display: flex;
-  flex-direction: column;
-  margin: 0 20px 10px 0;
-`;
-
-const Label = styled.span`
-  font-size: 16px;
-  margin-bottom: 6px;
-`;
+import { InputBoxContainer, Label } from "../shared/SettingsInputs";
 
 const SelectInput = (props: {
   label: string;
