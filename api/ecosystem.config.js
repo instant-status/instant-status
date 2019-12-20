@@ -1,8 +1,9 @@
 module.exports = {
   apps: [
     {
-      name: "Curatr Status v2",
+      name: "App Status",
       script: "server.js",
+      node_args: "-r esm",
       env: {
         NODE_ENV: "development"
       },
