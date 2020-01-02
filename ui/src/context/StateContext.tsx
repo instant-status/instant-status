@@ -7,7 +7,7 @@ export const initialState = {
   urlEnvParams: [],
   urlVersionParams: [],
   urlSortBy: "stackName",
-  keyLocation: "~/.ssh/",
+  keyLocation: APP_CONFIG.DEFAULT_KEY_LOCATION || "~/.ssh/",
   showAdvanced: false,
   instanceDisplayCount: 2,
   rememberSettings: false,
