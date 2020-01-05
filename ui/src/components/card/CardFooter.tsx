@@ -48,7 +48,12 @@ const CardFooter = (props: {
 }) => {
   const [awsUpdateUrl, setAwsUpdateUrl] = React.useState("");
 
-  const setUrl = () => {
+  const setUrl = (event?: any) => {
+    // Check for a right click as we want to ignore these
+    if (!event || event.button === 2) {
+      return;
+    }
+
     const urlHost = `https://${props.chosenOne.stackRegion}.console.aws.amazon.com/systems-manager/automation/execute/Update-Curatr-Version`;
     const urlRegion = `?region=${props.chosenOne.stackRegion}`;
     const urlInstances = `#InstanceId=${props.instancesToUpdate}`;
@@ -57,8 +62,8 @@ const CardFooter = (props: {
     }--${randomString()}${randomString()}`;
     const urlVersion = `&releaseBranch=${props.chosenOne.instanceVersion}`;
     const urlOptions = `&runMigrations=true&updateEnv=true&updateConfs=true`;
-
     const url = `${urlHost}${urlRegion}${urlInstances}${urlRandom}${urlVersion}${urlOptions}`;
+
     setAwsUpdateUrl(url);
   };
 
@@ -99,7 +104,7 @@ const CardFooter = (props: {
           !props.instancesToUpdate ||
           !props.chosenOne.instanceVersion
         }
-        onClick={setUrl}
+        onMouseDown={event => setUrl(event)}
         href={awsUpdateUrl}
       >
         <IconUpdate width="40px" />
