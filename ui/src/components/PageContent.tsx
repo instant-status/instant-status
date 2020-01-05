@@ -21,6 +21,7 @@ const Grid = styled.div`
   grid-template-columns: repeat(auto-fit, 360px);
   grid-column-gap: 20px;
   grid-row-gap: 20px;
+  justify-content: center;
 `;
 
 const PageContent = () => {
@@ -72,8 +73,8 @@ const PageContent = () => {
               );
             })
         ) : (
-            <p>loading</p>
-          )}
+          <p>loading</p>
+        )}
       </Grid>
     </Page>
   );
