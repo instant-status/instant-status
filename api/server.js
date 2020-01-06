@@ -8,8 +8,8 @@ import db from "diskdb";
 import dotenv from "dotenv";
 
 import appRoutes from "./routes/routes";
-import { isRequestAuthenticated } from "./controllers/auth";
-import { APP_CONFIG } from "../config";
+import { isRequestAllowed } from "./controllers/auth";
+import { APP_CONFIG } from "../appConfig";
 
 const app = new Koa();
 
@@ -21,8 +21,8 @@ app.use(bodyParser());
 app.use(bearerToken());
 
 app.use((ctx, next) => {
-  if (isRequestAuthenticated(ctx.request)) {
-    next();
+  if (isRequestAllowed(ctx.request)) {
+    return next();
   } else {
     ctx.status = 401;
     ctx.body = [];

@@ -1,6 +1,6 @@
 import React, { createContext, useState, useEffect } from "react";
 import useFetch from "../hooks/useFetch";
-import { APP_CONFIG } from "../../../config";
+import { APP_CONFIG } from "../../../appConfig";
 
 export const initialState = {
   pageData: [],

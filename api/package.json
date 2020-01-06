@@ -21,12 +21,15 @@
     "@koa/cors": "^2.2.3",
     "diskdb": "^0.1.17",
     "dotenv": "^8.2.0",
+    "googleapis": "^46.0.0",
+    "jsonwebtoken": "^8.5.1",
     "koa": "^2.11.0",
     "koa-bearer-token": "^1.0.0",
     "koa-bodyparser": "^4.2.1",
     "koa-google-sign-in": "^2.0.1",
     "koa-json": "^2.0.2",
-    "koa-router": "^7.4.0"
+    "koa-router": "^7.4.0",
+    "react-google-button": "^0.7.0"
   },
   "devDependencies": {
     "esm": "^3.2.25",

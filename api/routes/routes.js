@@ -7,11 +7,15 @@ import {
   updateInstance,
   doneUpdatingInstance
 } from "../controllers/instances";
+import { authGoogle } from "../controllers/auth";
 
 const router = new KoaRouter();
 
 // Home
-router.get("/", ctx => (ctx.body = { version: "1.0.0" }));
+router.get("home", "/", ctx => (ctx.body = { version: "1.0.0" }));
+
+// Google Auth
+router.get("auth", "/auth/google/callback", authGoogle);
 
 // Demo data
 router.get("demo", "/demo", async ctx => (ctx.body = getDemoData(ctx.query)));

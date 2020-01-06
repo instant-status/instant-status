@@ -10,12 +10,14 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "js-cookie": "^2.2.1",
     "moment": "^2.24.0",
     "parcel-bundler": "^1.12.4",
     "polished": "^3.4.2",
     "react": "^16.12.0",
     "react-dom": "^16.12.0",
     "react-dropzone": "^10.2.1",
+    "react-google-button": "^0.7.0",
     "styled-components": "^5.0.0-regexrehydrate",
     "typeface-pt-sans": "0.0.72",
     "typescript": "^3.7.3"

@@ -1,7 +1,11 @@
 import React, { useCallback } from "react";
 import styled from "styled-components";
 import { useDropzone } from "react-dropzone";
+import GoogleButton from 'react-google-button'
 import { theme } from "../App";
+import { APP_CONFIG } from "../../../appConfig";
+
+const googleAuthURL = APP_CONFIG.GOOGLE_AUTH_URL;
 
 const SplashContent = styled.div`
   display: flex;
@@ -57,6 +61,13 @@ const Splash = () => {
       </svg>
       <input {...getInputProps()} />
       <SplashText>Upload key file to unlock</SplashText>
+      <br />
+      <GoogleButton
+        onClick={e => {
+          e.stopPropagation();
+          window.location = googleAuthURL;
+        }}
+      />
     </SplashContent>
   );
 };

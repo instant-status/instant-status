@@ -1,3 +1,4 @@
+import Cookies from "js-cookie"
 import React, { useState, useEffect, useContext } from "react";
 import Sidebar from "../components/sidebar/Sidebar";
 import styled from "styled-components";
@@ -14,7 +15,7 @@ const StatusPage = () => {
 
   const hasData = Object.entries(pageData).length > 0;
 
-  if (localStorage.getItem("bearer")) {
+  if (localStorage.getItem("bearer") || Cookies.get('Auth-Bearer')) {
     if (pageData[0] && pageData[0].error) {
       return <Splash />;
     }

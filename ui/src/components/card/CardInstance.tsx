@@ -1,7 +1,7 @@
 import React, { useState, useContext, useEffect } from "react";
 import styled from "styled-components";
 
-import { APP_CONFIG } from "../../../../config";
+import { APP_CONFIG } from "../../../../appConfig";
 import InstanceProps from "../../utils/InstanceProps";
 import { getStateIcon } from "../../utils/getState";
 import { getHealthIcon } from "../../utils/getHealth";

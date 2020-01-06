@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import Cookies from "js-cookie";
 
 function useFetch(url: string, reload?: any) {
   const [data, setData] = useState([]);
@@ -21,7 +22,7 @@ function useFetch(url: string, reload?: any) {
   }
 
   useEffect(() => {
-    const token = localStorage.getItem("bearer");
+    const token = localStorage.getItem("bearer") || Cookies.get('Auth-Bearer');
     setLoading(true);
     fetchUrl(token);
   }, [reload] || []);

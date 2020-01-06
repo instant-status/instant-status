@@ -35,6 +35,7 @@ const SectionHeader = styled.h3`
 `;
 
 const Footer = styled.footer`
+  color: #fff;
   margin: auto 20px 0 0;
   text-align: center;
   opacity: 0.8;
@@ -63,8 +64,6 @@ const Sidebar = () => {
   const updateOrderBy = (option: string) => {
     updateUrlParams({ key: "sortBy", value: option });
   };
-
-  console.log(Object.values(pageData).flat(1));
 
   return (
     <>
@@ -109,7 +108,7 @@ const Sidebar = () => {
             onChange={() => updateRememberSettings(!rememberSettings)}
           />
         </section>
-        <Footer>Made with ⚡ by Callum</Footer>
+        <Footer><a href="https://github.com/instant-status/instant-status" rel="noopener noreferrer" title="Instant-Status on GitHub">Instant Status</a>: Made With ⚡</Footer>
       </Aside>
       <AsideGhost />
     </>
