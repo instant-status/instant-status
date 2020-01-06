@@ -35,11 +35,14 @@ const SectionHeader = styled.h3`
 `;
 
 const Footer = styled.footer`
-  color: #fff;
   margin: auto 20px 0 0;
   text-align: center;
   opacity: 0.8;
   font-size: 14px;
+`;
+
+const A = styled.a`
+  color: #fff
 `;
 
 const Sidebar = () => {
@@ -108,7 +111,13 @@ const Sidebar = () => {
             onChange={() => updateRememberSettings(!rememberSettings)}
           />
         </section>
-        <Footer><a href="https://github.com/instant-status/instant-status" rel="noopener noreferrer" title="Instant-Status on GitHub">Instant Status</a>: Made With ⚡</Footer>
+        <Footer>
+          <A
+            href="https://github.com/instant-status/instant-status"
+            rel="noopener noreferrer"
+            title="Instant-Status on GitHub">Instant Status
+          </A>: Made With ⚡
+        </Footer>
       </Aside>
       <AsideGhost />
     </>
