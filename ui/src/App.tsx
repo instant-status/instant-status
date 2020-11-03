@@ -9,6 +9,10 @@ import {
 } from "styled-components";
 import { lighten } from "polished";
 
+import { BrowserRouter, Route, Switch } from "react-router-dom";
+import AutoLogin from "./pages/AutoLogin";
+import Logout from "./pages/Logout";
+
 export const theme: DefaultTheme = {
   color: {
     darkOne: "#1f2430",
@@ -45,7 +49,7 @@ const GlobalStyle = createGlobalStyle`
     margin: 0;
     padding: 0;
     min-height: 100%;
-    background-color: ${props => props.theme.color.darkOne};
+    background-color: ${(props) => props.theme.color.darkOne};
   }
 
   b, strong {
@@ -53,7 +57,7 @@ const GlobalStyle = createGlobalStyle`
   }
 
   hr {
-    border-color: ${props => lighten(0.1, props.theme.color.darkOne)}
+    border-color: ${(props) => lighten(0.1, props.theme.color.darkOne)}
   }
 `;
 
@@ -61,10 +65,20 @@ const App = () => {
   return (
     <StateProvider>
       <ThemeProvider theme={theme}>
-        <>
-          <GlobalStyle />
-          <StatusPage />
-        </>
+        <GlobalStyle />
+        <BrowserRouter>
+          <Switch>
+            <Route exact path="/login">
+              <AutoLogin />
+            </Route>
+            <Route exact path="/logout">
+              <Logout />
+            </Route>
+            <Route path="/">
+              <StatusPage />
+            </Route>
+          </Switch>
+        </BrowserRouter>
       </ThemeProvider>
     </StateProvider>
   );
