@@ -51,6 +51,8 @@ const Sidebar = () => {
     updateUrlParams,
     updateKeyLocation,
     keyLocation,
+    updatePrefillReleaseWith,
+    prefillReleaseWith,
     updateRememberSettings,
     rememberSettings,
     showAdvanced,
@@ -97,6 +99,11 @@ const Sidebar = () => {
             value={keyLocation}
             onChange={(event: any) => updateKeyLocation(event.target.value)}
             label="Key File Location:"
+          />
+          <TextInput
+            value={prefillReleaseWith}
+            onChange={(event: any) => updatePrefillReleaseWith(event.target.value)}
+            label="Prefill Release With:"
           />
           <Checkbox
             isChecked={showAdvanced}

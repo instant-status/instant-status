@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useContext, useEffect } from "react";
 import styled from "styled-components";
 import randomString from "../../utils/randomString";
 import { transparentize } from "polished";
@@ -6,6 +6,7 @@ import IconLogs from "../icons/IconLogs";
 import IconOpen from "../icons/IconOpen";
 import IconUpdate from "../icons/IconUpdate";
 import InstanceProps from "../../utils/InstanceProps";
+import { StateContext } from "../../context/StateContext";
 
 const Footer = styled.footer`
   margin-top: auto;
@@ -47,6 +48,11 @@ const CardFooter = (props: {
   instancesToUpdate: string[];
 }) => {
   const [awsUpdateUrl, setAwsUpdateUrl] = React.useState("");
+  const { prefillReleaseWith } = useContext(StateContext);
+
+  const releaseBranch = ( prefillReleaseWith === "" )
+    ? props.chosenOne.instanceVersion
+    : prefillReleaseWith;
 
   const setUrl = (event?: any) => {
     // Check for a right click as we want to ignore these
@@ -60,7 +66,7 @@ const CardFooter = (props: {
     const urlRandom = `&randomString=${randomString()}${randomString()}--${
       props.chosenOne.stackName
     }--${randomString()}${randomString()}`;
-    const urlVersion = `&releaseBranch=${props.chosenOne.instanceVersion}`;
+    const urlVersion = `&releaseBranch=${releaseBranch}`;
     const urlOptions = `&runMigrations=true&updateEnv=true&updateConfs=true`;
     const url = `${urlHost}${urlRegion}${urlInstances}${urlRandom}${urlVersion}${urlOptions}`;
 

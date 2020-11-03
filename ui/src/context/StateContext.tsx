@@ -8,11 +8,13 @@ export const initialState = {
   urlVersionParams: [],
   urlSortBy: "stackName",
   keyLocation: APP_CONFIG.DEFAULT_KEY_LOCATION || "~/.ssh/",
+  prefillReleaseWith: "",
   showAdvanced: false,
   instanceDisplayCount: 2,
   rememberSettings: false,
   updateRememberSettings: (rememberSettings: boolean) => {},
   updateKeyLocation: (keyLocation: string) => {},
+  updatePrefillReleaseWith: (prefillReleaseWith: string) => {},
   updateShowAdvanced: (show: boolean) => {},
   updateInstanceDisplayCount: (value: number) => {},
   updateUrlParams: (params: { key: string; value: string | [] }) => {},
@@ -125,6 +127,15 @@ export const StateProvider = ({ children }) => {
     updateUrlParams({ key: "keyLocation", value: keyLocation });
   };
 
+  // Customise prefill release with text
+  const getInitialPrefillReleaseWith = () => {
+    return initialState.prefillReleaseWith;
+  };
+  const [prefillReleaseWith, setPrefillReleaseWith] = useState(getInitialPrefillReleaseWith());
+  const updatePrefillReleaseWith = (prefillReleaseWith: string) => {
+    setPrefillReleaseWith(prefillReleaseWith);
+  };
+
   // Page data
   const [pageData, setPageData] = useState(initialState.pageData);
   const [dataCalledAt, setDataCalledAt] = useState(new Date().getTime());
@@ -138,12 +149,14 @@ export const StateProvider = ({ children }) => {
     ...initialState,
     instanceDisplayCount,
     keyLocation,
+    prefillReleaseWith,
     pageData,
     rememberSettings,
     setDataCalledAt,
     showAdvanced,
     updateInstanceDisplayCount,
     updateKeyLocation,
+    updatePrefillReleaseWith,
     updateRememberSettings,
     updateShowAdvanced,
     updateUrlParams,
