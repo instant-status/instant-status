@@ -18,21 +18,21 @@
   },
   "homepage": "https://github.com/instant-status/instant-status#readme",
   "dependencies": {
-    "@koa/cors": "^2.2.3",
-    "diskdb": "^0.1.17",
-    "dotenv": "^8.2.0",
-    "googleapis": "^46.0.0",
-    "jsonwebtoken": "^8.5.1",
-    "koa": "^2.11.0",
-    "koa-bearer-token": "^1.0.0",
-    "koa-bodyparser": "^4.2.1",
-    "koa-google-sign-in": "^2.0.1",
-    "koa-json": "^2.0.2",
-    "koa-router": "^7.4.0",
-    "react-google-button": "^0.7.0"
+    "@koa/cors": "3.1.0",
+    "diskdb": "0.1.17",
+    "dotenv": "8.2.0",
+    "googleapis": "63.0.0",
+    "jsonwebtoken": "8.5.1",
+    "koa": "2.13.0",
+    "koa-bearer-token": "1.0.0",
+    "koa-bodyparser": "4.3.0",
+    "koa-google-sign-in": "2.0.1",
+    "koa-json": "2.0.2",
+    "koa-router": "10.0.0",
+    "react-google-button": "0.7.1"
   },
   "devDependencies": {
-    "esm": "^3.2.25",
-    "nodemon": "^1.19.4"
+    "esm": "3.2.25",
+    "nodemon": "1.19.4"
   }
 }
