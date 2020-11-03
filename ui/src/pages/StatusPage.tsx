@@ -1,10 +1,10 @@
-import Cookies from "js-cookie"
-import React, { useState, useEffect, useContext } from "react";
-import Sidebar from "../components/sidebar/Sidebar";
+import Cookies from "js-cookie";
+import React, { memo, useContext } from "react";
 import styled from "styled-components";
 import PageContent from "../components/PageContent";
-import Splash from "./Splash";
+import Sidebar from "../components/sidebar/Sidebar";
 import { StateContext } from "../context/StateContext";
+import Login from "./Login";
 
 const Wrapper = styled.div`
   display: flex;
@@ -15,9 +15,9 @@ const StatusPage = () => {
 
   const hasData = Object.entries(pageData).length > 0;
 
-  if (localStorage.getItem("bearer") || Cookies.get('Auth-Bearer')) {
+  if (localStorage.getItem("bearer") || Cookies.get("Auth-Bearer")) {
     if (pageData[0] && pageData[0].error) {
-      return <Splash />;
+      return <Login />;
     }
     if (hasData) {
       return (
@@ -30,7 +30,7 @@ const StatusPage = () => {
     return <h1>Loading</h1>;
   }
 
-  return <Splash />;
+  return <Login />;
 };
 
-export default StatusPage;
+export default memo(StatusPage);
