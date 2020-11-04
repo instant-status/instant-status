@@ -52,8 +52,8 @@ const Card = (props: { instances: InstanceProps[]; stackName: string }) => {
           );
         })}
       <CardFooter
-        instancesToUpdate={instanceIds(props.instances)}
         chosenOne={getChosenOne(props.instances)}
+        instancesToUpdate={instanceIds(props.instances)}
       />
     </CardBackground>
   );
