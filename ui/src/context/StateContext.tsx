@@ -1,14 +1,15 @@
-import React, { createContext, useState, useEffect } from "react";
-import useFetch from "../hooks/useFetch";
+import React, { createContext, useEffect, useState } from "react";
+
 import { APP_CONFIG } from "../../../appConfig";
+import useFetch from "../hooks/useFetch";
 
 export const initialState = {
   pageData: [],
   urlEnvParams: [],
   urlVersionParams: [],
-  urlSortBy: "stackName",
-  keyLocation: APP_CONFIG.DEFAULT_KEY_LOCATION || "~/.ssh/",
-  prefillReleaseWith: "",
+  urlSortBy: `stackName`,
+  keyLocation: APP_CONFIG.DEFAULT_KEY_LOCATION || `~/.ssh/`,
+  prefillReleaseWith: ``,
   showAdvanced: false,
   instanceDisplayCount: 2,
   rememberSettings: false,
@@ -17,13 +18,13 @@ export const initialState = {
   updatePrefillReleaseWith: (prefillReleaseWith: string) => {},
   updateShowAdvanced: (show: boolean) => {},
   updateInstanceDisplayCount: (value: number) => {},
-  updateUrlParams: (params: { key: string; value: string | [] }) => {},
+  updateUrlParams: (params: { key: string; value: string | string[] }) => {},
   setDataCalledAt: (time: number) => {},
 };
 
 export const StateContext = createContext(initialState);
 
-export const StateProvider = ({ children }) => {
+export const StateProvider = (props: { children: React.ReactNode }) => {
   // URL Params
   const [urlEnvParams, setUrlEnvParams] = useState(initialState.urlEnvParams);
   const [urlVersionParams, setUrlVersionParams] = useState(
@@ -31,14 +32,14 @@ export const StateProvider = ({ children }) => {
   );
   const urlParams = new URLSearchParams(window.location.search);
   const getUrlParams = () => {
-    if (urlParams.has("env")) {
-      setUrlEnvParams(urlParams.get("env").split(","));
+    if (urlParams.has(`env`)) {
+      setUrlEnvParams(urlParams.get(`env`).split(`,`));
     }
-    if (urlParams.has("version")) {
-      setUrlVersionParams(urlParams.get("version").split(","));
+    if (urlParams.has(`version`)) {
+      setUrlVersionParams(urlParams.get(`version`).split(`,`));
     }
-    if (urlParams.has("sortBy")) {
-      setUrlSortBy(urlParams.get("sortBy"));
+    if (urlParams.has(`sortBy`)) {
+      setUrlSortBy(urlParams.get(`sortBy`));
     }
   };
 
@@ -53,7 +54,7 @@ export const StateProvider = ({ children }) => {
 
   // User Settings
   const getInitialRememberSettings = () => {
-    if (localStorage.getItem("rememberSettings") === "true") {
+    if (localStorage.getItem(`rememberSettings`) === `true`) {
       return true;
     }
     return initialState.rememberSettings;
@@ -63,18 +64,18 @@ export const StateProvider = ({ children }) => {
   );
   const updateRememberSettings = (setting: boolean) => {
     setRememberSettings(setting);
-    localStorage.setItem("rememberSettings", setting.toString());
+    localStorage.setItem(`rememberSettings`, setting.toString());
   };
 
   const [urlSortBy, setUrlSortBy] = useState(initialState.urlSortBy);
 
   // Show Advanced data on cards
   const getInitialShowAdvanced = () => {
-    if (rememberSettings && localStorage.getItem("showAdvanced") === "true") {
+    if (rememberSettings && localStorage.getItem(`showAdvanced`) === `true`) {
       return true;
     } else if (
-      urlParams.has("showAdvanced") &&
-      urlParams.get("showAdvanced") === "true"
+      urlParams.has(`showAdvanced`) &&
+      urlParams.get(`showAdvanced`) === `true`
     ) {
       return true;
     }
@@ -84,17 +85,17 @@ export const StateProvider = ({ children }) => {
   const updateShowAdvanced = (setting: boolean) => {
     setShowAdvanced(setting);
     if (rememberSettings) {
-      localStorage.setItem("showAdvanced", setting.toString());
+      localStorage.setItem(`showAdvanced`, setting.toString());
     }
-    updateUrlParams({ key: "showAdvanced", value: setting.toString() });
+    updateUrlParams({ key: `showAdvanced`, value: setting.toString() });
   };
 
   // Show number of instances on cards
   const getInitialInstanceDisplayCount = () => {
     if (rememberSettings) {
-      return Number(localStorage.getItem("instanceDisplayCount"));
-    } else if (urlParams.has("instanceDisplayCount")) {
-      return Number(urlParams.get("instanceDisplayCount"));
+      return Number(localStorage.getItem(`instanceDisplayCount`));
+    } else if (urlParams.has(`instanceDisplayCount`)) {
+      return Number(urlParams.get(`instanceDisplayCount`));
     }
     return initialState.instanceDisplayCount;
   };
@@ -104,17 +105,17 @@ export const StateProvider = ({ children }) => {
   const updateInstanceDisplayCount = (setting: number) => {
     setInstanceDisplayCount(setting);
     if (rememberSettings) {
-      localStorage.setItem("instanceDisplayCount", setting.toString());
+      localStorage.setItem(`instanceDisplayCount`, setting.toString());
     }
-    updateUrlParams({ key: "instanceDisplayCount", value: setting.toString() });
+    updateUrlParams({ key: `instanceDisplayCount`, value: setting.toString() });
   };
 
   // Customise key file location
   const getInitialKeyLocation = () => {
-    if (rememberSettings && localStorage.getItem("keyLocation")) {
-      return localStorage.getItem("keyLocation");
-    } else if (urlParams.has("keyLocation")) {
-      return urlParams.get("keyLocation");
+    if (rememberSettings && localStorage.getItem(`keyLocation`)) {
+      return localStorage.getItem(`keyLocation`);
+    } else if (urlParams.has(`keyLocation`)) {
+      return urlParams.get(`keyLocation`);
     }
     return initialState.keyLocation;
   };
@@ -122,16 +123,18 @@ export const StateProvider = ({ children }) => {
   const updateKeyLocation = (keyLocation: string) => {
     setUrlKeyLocation(keyLocation);
     if (rememberSettings) {
-      localStorage.setItem("keyLocation", keyLocation);
+      localStorage.setItem(`keyLocation`, keyLocation);
     }
-    updateUrlParams({ key: "keyLocation", value: keyLocation });
+    updateUrlParams({ key: `keyLocation`, value: keyLocation });
   };
 
   // Customise prefill release with text
   const getInitialPrefillReleaseWith = () => {
     return initialState.prefillReleaseWith;
   };
-  const [prefillReleaseWith, setPrefillReleaseWith] = useState(getInitialPrefillReleaseWith());
+  const [prefillReleaseWith, setPrefillReleaseWith] = useState(
+    getInitialPrefillReleaseWith(),
+  );
   const updatePrefillReleaseWith = (prefillReleaseWith: string) => {
     setPrefillReleaseWith(prefillReleaseWith);
   };
@@ -139,7 +142,10 @@ export const StateProvider = ({ children }) => {
   // Page data
   const [pageData, setPageData] = useState(initialState.pageData);
   const [dataCalledAt, setDataCalledAt] = useState(new Date().getTime());
-  const [data, loading] = useFetch(APP_CONFIG.DATA_URL, dataCalledAt);
+  const [data, loading] = useFetch(
+    APP_CONFIG.DATA_URL,
+    dataCalledAt.toString(),
+  );
   useEffect(() => {
     setPageData(data);
   }, [loading]);
@@ -167,7 +173,7 @@ export const StateProvider = ({ children }) => {
 
   return (
     <StateContext.Provider value={providerObject}>
-      {children}
+      {props.children}
     </StateContext.Provider>
   );
 };

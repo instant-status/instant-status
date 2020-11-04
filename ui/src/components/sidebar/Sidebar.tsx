@@ -1,17 +1,18 @@
-import React, { useContext, useState } from "react";
+import { lighten } from "polished";
+import React, { useContext } from "react";
 import styled from "styled-components";
+
 import { StateContext } from "../../context/StateContext";
-import SidebarHeader from "./SidebarHeader";
-import VersionFilters from "./VersionFilters";
 import InstanceProps from "../../utils/InstanceProps";
 import Checkbox from "./Checkbox";
-import TextInput from "./TextInput";
 import SelectInput from "./SelectInput";
-import { lighten } from "polished";
+import SidebarHeader from "./SidebarHeader";
 import SliderInput from "./SliderInput";
+import TextInput from "./TextInput";
+import VersionFilters from "./VersionFilters";
 
 const Aside = styled.aside`
-  background-color: ${props => props.theme.color.darkOne};
+  background-color: ${(props) => props.theme.color.darkOne};
   width: 290px;
   height: 100vh;
   position: fixed;
@@ -29,7 +30,7 @@ const AsideGhost = styled.div`
 const SectionHeader = styled.h3`
   font-size: 14px;
   font-weight: 400;
-  border-bottom: 1px solid ${props => lighten(0.1, props.theme.color.darkOne)};
+  border-bottom: 1px solid ${(props) => lighten(0.1, props.theme.color.darkOne)};
   padding-bottom: 4px;
   text-transform: uppercase;
 `;
@@ -42,7 +43,7 @@ const Footer = styled.footer`
 `;
 
 const A = styled.a`
-  color: #fff
+  color: #fff;
 `;
 
 const Sidebar = () => {
@@ -67,7 +68,7 @@ const Sidebar = () => {
   );
 
   const updateOrderBy = (option: string) => {
-    updateUrlParams({ key: "sortBy", value: option });
+    updateUrlParams({ key: `sortBy`, value: option });
   };
 
   return (
@@ -84,37 +85,37 @@ const Sidebar = () => {
         <section>
           <SectionHeader>Settings</SectionHeader>
           <SelectInput
-            onChange={event => updateOrderBy(event.target.value)}
+            onChange={(event) => updateOrderBy(event.target.value)}
             label="Order By"
           />
           <SliderInput
             value={instanceDisplayCount}
-            onChange={(event: any) =>
-              updateInstanceDisplayCount(event.target.value)
+            onChange={(event) =>
+              updateInstanceDisplayCount(Number(event.target.value))
             }
             total={4}
             label="Display Count:"
           />
           <TextInput
             value={keyLocation}
-            onChange={(event: any) => updateKeyLocation(event.target.value)}
+            onChange={(event) => updateKeyLocation(event.target.value)}
             label="Key File Location:"
           />
           <TextInput
             value={prefillReleaseWith}
-            onChange={(event: any) => updatePrefillReleaseWith(event.target.value)}
+            onChange={(event) => updatePrefillReleaseWith(event.target.value)}
             label="Prefill Release With:"
           />
           <Checkbox
             isChecked={showAdvanced}
             value="true"
-            label={"Show More Info"}
+            label={`Show More Info`}
             onChange={() => updateShowAdvanced(!showAdvanced)}
           />
           <Checkbox
             isChecked={rememberSettings}
             value="true"
-            label={rememberSettings ? "Clear Settings" : "Remember Settings"}
+            label={rememberSettings ? `Clear Settings` : `Remember Settings`}
             onChange={() => updateRememberSettings(!rememberSettings)}
           />
         </section>
@@ -122,8 +123,11 @@ const Sidebar = () => {
           <A
             href="https://github.com/instant-status/instant-status"
             rel="noopener noreferrer"
-            title="Instant-Status on GitHub">Instant Status
-          </A>: Made With ⚡
+            title="Instant-Status on GitHub"
+          >
+            Instant Status
+          </A>
+          : Made With ⚡
         </Footer>
       </Aside>
       <AsideGhost />

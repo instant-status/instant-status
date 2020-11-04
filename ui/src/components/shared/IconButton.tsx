@@ -29,7 +29,7 @@ const IconButton = (props: {
         </a>
       )}
       {props.onClick && (
-        <span onClick={() => click()}>{active ? "✅" : props.children}</span>
+        <span onClick={() => click()}>{active ? `✅` : props.children}</span>
       )}
     </Button>
   );

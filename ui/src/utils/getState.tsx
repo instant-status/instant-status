@@ -1,13 +1,12 @@
 import React from "react";
 
+import { theme } from "../App";
+import IconAdd from "../components/icons/IconAdd";
+import IconUpdating from "../components/icons/IconUpdating";
 import InstanceProps from "./InstanceProps";
 
-import IconUpdating from "../components/icons/IconUpdating";
-import IconAdd from "../components/icons/IconAdd";
-import { theme } from "../App";
-
 export const getStateIcon = (stateCode: number, size?: string) => {
-  const iconSize = size || "25px";
+  const iconSize = size || `25px`;
   switch (stateCode) {
     case 0:
       return <IconAdd color={theme.color.purple} width={iconSize} />;
@@ -19,10 +18,7 @@ export const getStateIcon = (stateCode: number, size?: string) => {
   }
 };
 
-export const getStateMessage = (
-  stateCode: number,
-  instance: InstanceProps,
-) => {
+export const getStateMessage = (stateCode: number, instance: InstanceProps) => {
   switch (stateCode) {
     case 0:
       return <>Booting New Instance!</>;

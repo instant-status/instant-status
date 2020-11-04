@@ -1,11 +1,11 @@
+import { lighten } from "polished";
 import React from "react";
 import styled from "styled-components";
-import { lighten } from "polished";
 
 const Header = styled.header`
   padding: 10px 16px;
   display: flex;
-  border-bottom: 1px solid ${props => lighten(0.1, props.theme.color.darkOne)};
+  border-bottom: 1px solid ${(props) => lighten(0.1, props.theme.color.darkOne)};
   justify-content: space-between;
 `;
 
@@ -20,7 +20,7 @@ const StackName = styled.h2`
 `;
 
 const StackLogo = styled.div<{ image: string }>`
-  background: url(${props => props.image}) center center no-repeat;
+  background: url(${(props) => props.image}) center center no-repeat;
   background-size: contain;
   padding: 16px 28px;
   flex: none;

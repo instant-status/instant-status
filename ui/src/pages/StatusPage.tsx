@@ -1,6 +1,7 @@
 import Cookies from "js-cookie";
 import React, { memo, useContext } from "react";
 import styled from "styled-components";
+
 import PageContent from "../components/PageContent";
 import Sidebar from "../components/sidebar/Sidebar";
 import { StateContext } from "../context/StateContext";
@@ -15,7 +16,7 @@ const StatusPage = () => {
 
   const hasData = Object.entries(pageData).length > 0;
 
-  if (localStorage.getItem("bearer") || Cookies.get("Auth-Bearer")) {
+  if (localStorage.getItem(`bearer`) || Cookies.get(`Auth-Bearer`)) {
     if (pageData[0] && pageData[0].error) {
       return <Login />;
     }

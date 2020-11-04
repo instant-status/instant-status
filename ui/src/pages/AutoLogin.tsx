@@ -1,4 +1,5 @@
 import { memo } from "react";
+
 import { APP_CONFIG } from "../../../appConfig";
 
 const AutoLogin = () => {

@@ -1,19 +1,20 @@
 import React from "react";
 import styled from "styled-components";
+
 import { InputBoxContainer, Label } from "../shared/SettingsInputs";
 
 const InputBox = styled.input`
   font-size: 16px;
-  background-color: ${props => props.theme.color.darkOne};
+  background-color: ${(props) => props.theme.color.darkOne};
   padding: 8px 12px;
   border: none;
-  color: ${props => props.theme.color.lightOne};
+  color: ${(props) => props.theme.color.lightOne};
   border-radius: 6px;
 `;
 
 const TextInput = (props: {
   label: string;
-  onChange: (event: any) => void;
+  onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
   value: string;
 }) => {
   return (

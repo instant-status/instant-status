@@ -13,7 +13,7 @@ const IconUpdating = (props: {
       viewBox="0 0 512 512"
       enableBackground="new 0 0 512 512"
       xmlSpace="preserve"
-      style={{ fill: props.color || "inherit", width: props.width || "100%" }}
+      style={{ fill: props.color || `inherit`, width: props.width || `100%` }}
     >
       <g>
         <path
