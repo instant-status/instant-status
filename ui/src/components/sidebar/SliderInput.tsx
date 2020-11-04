@@ -1,5 +1,6 @@
 import React from "react";
 import styled from "styled-components";
+
 import { InputBoxContainer, Label } from "../shared/SettingsInputs";
 
 const Output = styled.span`
@@ -9,16 +10,17 @@ const Output = styled.span`
 
 const SliderInput = (props: {
   label: string;
-  onChange: (event: any) => void;
+  onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
   value: number;
   total: number;
 }) => {
   return (
     <InputBoxContainer>
       <Label>
-        {props.label}{" "}
+        {props.label}
+        {` `}
         <Output>
-          (showing {props.value} out of {"4"})
+          (showing {props.value} out of {`4`})
         </Output>
       </Label>
       <input

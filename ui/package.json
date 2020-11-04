@@ -5,7 +5,10 @@
   "main": "index.js",
   "scripts": {
     "dev": "parcel index.html",
-    "build": "parcel build index.html"
+    "build": "parcel build index.html",
+    "lint": "eslint \"src/**/*.{ts,tsx,js}\"",
+    "format": "prettier --write \"src/**/*.{ts,tsx,js,json,md}\"",
+    "tsc": "tsc --noEmit"
   },
   "author": "",
   "license": "ISC",
@@ -26,6 +29,14 @@
     "@types/node": "14.14.6",
     "@types/react": "16.9.55",
     "@types/react-router-dom": "5.1.6",
-    "@types/styled-components": "4.4.3"
+    "@types/styled-components": "4.4.3",
+    "@typescript-eslint/eslint-plugin": "4.6.1",
+    "@typescript-eslint/parser": "4.6.1",
+    "eslint": "7.12.1",
+    "eslint-config-prettier": "6.15.0",
+    "eslint-plugin-prettier": "3.1.4",
+    "eslint-plugin-react": "7.21.5",
+    "eslint-plugin-simple-import-sort": "5.0.3",
+    "prettier": "2.1.2"
   }
 }

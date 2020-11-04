@@ -1,6 +1,7 @@
 import React, { memo } from "react";
 import GoogleButton from "react-google-button";
 import styled from "styled-components";
+
 import { APP_CONFIG } from "../../../appConfig";
 import { theme } from "../App";
 
@@ -22,7 +23,7 @@ const Login = () => {
         xmlns="http://www.w3.org/2000/svg"
         xmlnsXlink="http://www.w3.org/1999/xlink"
         viewBox="0 0 100 100"
-        style={{ width: "160px" }}
+        style={{ width: `160px` }}
       >
         <g
           strokeLinejoin="round"

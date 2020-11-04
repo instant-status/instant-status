@@ -1,11 +1,12 @@
 import React, { useContext, useEffect } from "react";
 import styled from "styled-components";
+
 import { StateContext } from "../context/StateContext";
 import Card from "./card/Card";
 import SearchBar from "./SearchBar";
 
 const Page = styled.main`
-  background-color: ${props => props.theme.color.darkTwo};
+  background-color: ${(props) => props.theme.color.darkTwo};
   width: 100%;
   min-height: 100vh;
   border-radius: 40px 0 0 0;
@@ -43,7 +44,7 @@ const PageContent = () => {
       <Grid>
         {stacks.length > 0 && !pageData.error ? (
           stacks
-            .filter(item => {
+            .filter((item) => {
               if (urlVersionParams.length > 0) {
                 if (
                   urlVersionParams.includes(item[1][0].instanceVersion) ||
@@ -59,15 +60,15 @@ const PageContent = () => {
               const item1 = a[1][0]; // First instance
               const item2 = b[1][0]; // First instance
 
-              const sortBy = urlSortBy.replace("!", "");
-              const sortByReverse = urlSortBy.startsWith("!");
+              const sortBy = urlSortBy.replace(`!`, ``);
+              const sortByReverse = urlSortBy.startsWith(`!`);
               if (sortByReverse) {
                 return item1[sortBy] < item2[sortBy] ? 1 : -1;
               } else {
                 return item1[sortBy] > item2[sortBy] ? 1 : -1;
               }
             })
-            .map(item => {
+            .map((item) => {
               return (
                 <Card key={item[0]} stackName={item[0]} instances={item[1]} />
               );

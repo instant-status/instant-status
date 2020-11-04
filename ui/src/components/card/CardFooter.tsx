@@ -1,12 +1,13 @@
+import { transparentize } from "polished";
 import React, { useContext, useEffect } from "react";
 import styled from "styled-components";
+
+import { StateContext } from "../../context/StateContext";
+import InstanceProps from "../../utils/InstanceProps";
 import randomString from "../../utils/randomString";
-import { transparentize } from "polished";
 import IconLogs from "../icons/IconLogs";
 import IconOpen from "../icons/IconOpen";
 import IconUpdate from "../icons/IconUpdate";
-import InstanceProps from "../../utils/InstanceProps";
-import { StateContext } from "../../context/StateContext";
 
 const Footer = styled.footer`
   margin-top: auto;
@@ -19,15 +20,15 @@ const Button = styled.a<{ disabled: boolean }>`
   display: flex;
   flex-direction: column;
   align-items: center;
-  color: ${props =>
+  color: ${(props) =>
     props.disabled && props.theme.color.darkOne
       ? transparentize(0.8, props.theme.color.lightOne)
       : props.theme.color.lightOne};
-  fill: ${props =>
+  fill: ${(props) =>
     props.disabled && props.theme.color.darkOne
       ? transparentize(0.8, props.theme.color.lightOne)
       : props.theme.color.lightOne};
-  cursor: ${props => (props.disabled ? "not-allowed" : "pointer")};
+  cursor: ${(props) => (props.disabled ? `not-allowed` : `pointer`)};
   text-decoration: none;
   padding: 1rem 0;
   transition: background-color 0.15s ease-out;
@@ -47,14 +48,15 @@ const CardFooter = (props: {
   chosenOne: InstanceProps;
   instancesToUpdate: string[];
 }) => {
-  const [awsUpdateUrl, setAwsUpdateUrl] = React.useState("");
+  const [awsUpdateUrl, setAwsUpdateUrl] = React.useState(``);
   const { prefillReleaseWith } = useContext(StateContext);
 
-  const releaseBranch = ( prefillReleaseWith === "" )
-    ? props.chosenOne.instanceVersion
-    : prefillReleaseWith;
+  const releaseBranch =
+    prefillReleaseWith === ``
+      ? props.chosenOne?.instanceVersion
+      : prefillReleaseWith;
 
-  const setUrl = (event?: any) => {
+  const setUrl = (event?: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
     // Check for a right click as we want to ignore these
     if (!event || event.button === 2) {
       return;
@@ -108,9 +110,9 @@ const CardFooter = (props: {
         disabled={
           !props.chosenOne ||
           !props.instancesToUpdate ||
-          !props.chosenOne.instanceVersion
+          !props.chosenOne?.instanceVersion
         }
-        onMouseDown={event => setUrl(event)}
+        onMouseDown={(event) => setUrl(event)}
         href={awsUpdateUrl}
       >
         <IconUpdate width="40px" />

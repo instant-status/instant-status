@@ -1,32 +1,31 @@
+import { lighten } from "polished";
 import React from "react";
-
-import { StateProvider } from "./context/StateContext";
-import StatusPage from "./pages/StatusPage";
+import { BrowserRouter, Route, Switch } from "react-router-dom";
 import {
   createGlobalStyle,
   DefaultTheme,
   ThemeProvider,
 } from "styled-components";
-import { lighten } from "polished";
 
-import { BrowserRouter, Route, Switch } from "react-router-dom";
+import { StateProvider } from "./context/StateContext";
 import AutoLogin from "./pages/AutoLogin";
 import Logout from "./pages/Logout";
+import StatusPage from "./pages/StatusPage";
 
 export const theme: DefaultTheme = {
   color: {
-    darkOne: "#1f2430",
-    darkTwo: "#191e2a",
-    lightOne: "#fff1e5",
-    lightTwo: "#ffaf5",
-    red: "#ee2f01",
-    green: "#00ab4e",
-    blue: "#26a8ff",
-    orange: "#fcaf17",
-    purple: "#c06bd0",
+    darkOne: `#1f2430`,
+    darkTwo: `#191e2a`,
+    lightOne: `#fff1e5`,
+    lightTwo: `#ffaf5`,
+    red: `#ee2f01`,
+    green: `#00ab4e`,
+    blue: `#26a8ff`,
+    orange: `#fcaf17`,
+    purple: `#c06bd0`,
   },
   shadow: {
-    card: "4px 4px 20px rgba(0, 0, 0, 0.17)",
+    card: `4px 4px 20px rgba(0, 0, 0, 0.17)`,
   },
 };
 

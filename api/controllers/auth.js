@@ -82,8 +82,8 @@ export const authGoogle = async ctx => {
 
     const authCookie = jwt.sign(validUsers, API_CONFIG.APP_SECRET, { expiresIn: AUTH_VALID_FOR_SECONDS });
 
-    // Redirct them back to the home page with a valid bearer in their cookie
-    ctx.cookies.set(APP_CONFIG.COOKIE_NAME, authCookie, { maxAge: 1000 * AUTH_VALID_FOR_SECONDS, httpOnly: false })
+    // Redirect them back to the home page with a valid bearer in their cookie
+    ctx.cookies.set(APP_CONFIG.COOKIE_NAME, authCookie, { maxAge: 1000 * AUTH_VALID_FOR_SECONDS, httpOnly: false });
     ctx.body = `Redirecting to ${APP_CONFIG.APP_NAME}...`;
     ctx.response.redirect(APP_CONFIG.APP_URL);
     return;

@@ -1,19 +1,19 @@
-import React, { useState, useContext, useEffect } from "react";
+import { transparentize } from "polished";
+import React, { useContext, useEffect, useState } from "react";
 import styled from "styled-components";
 
 import { APP_CONFIG } from "../../../../appConfig";
-import InstanceProps from "../../utils/InstanceProps";
-import { getStateIcon } from "../../utils/getState";
-import { getHealthIcon } from "../../utils/getHealth";
-import CardInstanceOverlay from "./CardInstanceOverlay";
-import { transparentize } from "polished";
+import { theme } from "../../App";
+import { StateContext } from "../../context/StateContext";
 import getDate from "../../utils/getDate";
-import CopyText from "../shared/CopyText";
+import { getHealthIcon } from "../../utils/getHealth";
+import { getStateIcon } from "../../utils/getState";
+import InstanceProps from "../../utils/InstanceProps";
 import IconGithub from "../icons/IconGithub";
 import IconUbuntu from "../icons/IconUbuntu";
-import { theme } from "../../App";
+import CopyText from "../shared/CopyText";
 import IconButton from "../shared/IconButton";
-import { StateContext } from "../../context/StateContext";
+import CardInstanceOverlay from "./CardInstanceOverlay";
 
 const InstanceWrapper = styled.article`
   position: relative;
@@ -44,7 +44,7 @@ const InstanceName = styled.h4`
 `;
 
 const InstanceNumber = styled.span`
-  color: ${props => transparentize(0.5, props.theme.color.lightOne)};
+  color: ${(props) => transparentize(0.5, props.theme.color.lightOne)};
   font-size: 16px;
   margin-left: 10px;
 `;
@@ -76,19 +76,19 @@ const ProgressBackground = styled.div`
   height: 10px;
   border-radius: 4px;
   margin: auto 4px 3px;
-  background: ${props =>
+  background: ${(props) =>
     `linear-gradient(to right, ${props.theme.color.green}, ${props.theme.color.orange}, ${props.theme.color.red})`};
   width: 100%;
   opacity: 0.75;
 `;
 
 const ProgressFreeSpace = styled.div<{ width: number }>`
-  width: ${props => props.width}%;
+  width: ${(props) => props.width}%;
   position: absolute;
   right: 0;
   top: 0;
   bottom: 0;
-  border-left: 2px solid ${props => props.theme.color.darkOne};
+  border-left: 2px solid ${(props) => props.theme.color.darkOne};
   backdrop-filter: grayscale(1);
 `;
 
@@ -109,26 +109,26 @@ const CardInstance = (props: {
   const { keyLocation, showAdvanced } = useContext(StateContext);
 
   const instanceIsBooting =
-    props.instance.instanceVersion === "primal" &&
+    props.instance.instanceVersion === `primal` &&
     !props.instance.instanceInGhostMode &&
     !props.instance.instanceUpdatingToVersion;
 
   const instanceIsGhost =
-    props.instance.instanceVersion === "primal" &&
+    props.instance.instanceVersion === `primal` &&
     props.instance.instanceInGhostMode &&
     props.instance.instanceUpdatingToVersion;
 
   const instanceIsUpdating =
-    props.instance.instanceVersion !== "primal" &&
+    props.instance.instanceVersion !== `primal` &&
     props.instance.instanceUpdatingToVersion;
 
   const stateCode = instanceIsBooting
     ? 0
     : instanceIsGhost
-      ? 1
-      : instanceIsUpdating
-        ? 2
-        : 3;
+    ? 1
+    : instanceIsUpdating
+    ? 2
+    : 3;
 
   const healthCode = props.instance.instanceHealthCode || 0;
 
@@ -144,7 +144,7 @@ const CardInstance = (props: {
   }, [healthCode]);
 
   const filteredAdvancedCardData = Object.entries(props.instance).filter(
-    row => {
+    (row) => {
       if (
         Object.keys(APP_CONFIG.CARD_ADVANCED_MAPPING).includes(row[0] as string)
       ) {
@@ -175,7 +175,7 @@ const CardInstance = (props: {
       <Instance>
         <InstanceHeader>
           <InstanceName>
-            {props.instance.instanceIsChosenOne && "👑 "}
+            {props.instance.instanceIsChosenOne && `👑 `}
             {props.instance.instanceID}
             <InstanceNumber>#{props.instanceNumber}</InstanceNumber>
           </InstanceName>
@@ -193,7 +193,6 @@ const CardInstance = (props: {
           >
             {getHealthIcon(healthCode)}
           </SmallHealthIcon>
-
         </InstanceHeader>
         <div>
           <InstanceRow>
@@ -246,10 +245,10 @@ const CardInstance = (props: {
         {showAdvanced && (
           <>
             {filteredAdvancedCardData && <br />}
-            {filteredAdvancedCardData.map(row => {
+            {filteredAdvancedCardData.map((row) => {
               const advancedData = Object.entries(
                 APP_CONFIG.CARD_ADVANCED_MAPPING,
-              ).find(obj => {
+              ).find((obj) => {
                 return obj[0] === row[0];
               });
               return (

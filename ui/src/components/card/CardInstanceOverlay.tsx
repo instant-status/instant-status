@@ -1,10 +1,10 @@
+import { transparentize } from "polished";
 import React from "react";
 import styled from "styled-components";
-import { transparentize } from "polished";
 
-import InstanceProps from "../../utils/InstanceProps";
-import { getStateIcon, getStateMessage } from "../../utils/getState";
 import { getHealthIcon, getHealthMessage } from "../../utils/getHealth";
+import { getStateIcon, getStateMessage } from "../../utils/getState";
+import InstanceProps from "../../utils/InstanceProps";
 
 const UpdatingInstance = styled.div`
   width: 100%;
@@ -41,23 +41,23 @@ const CardInstanceOverlay = (props: {
   stateorHealthCode: number;
   instance: InstanceProps;
 }) => {
-  if (props.type === "state") {
-  return (
-    <UpdatingInstance title="Hide Info" onClick={props.onClick}>
-      {getStateIcon(props.stateorHealthCode, "40px")}
-      {getStateMessage(props.stateorHealthCode, props.instance)}
-    </UpdatingInstance>
+  if (props.type === `state`) {
+    return (
+      <UpdatingInstance title="Hide Info" onClick={props.onClick}>
+        {getStateIcon(props.stateorHealthCode, `40px`)}
+        {getStateMessage(props.stateorHealthCode, props.instance)}
+      </UpdatingInstance>
     );
-   };
+  }
 
-  if (props.type === "health") {
-  return (
-    <UpdatingInstance title="Hide Info" onClick={props.onClick}>
-      {getHealthIcon(props.stateorHealthCode, "40px")}
-      {getHealthMessage(props.instance)}
-    </UpdatingInstance>
+  if (props.type === `health`) {
+    return (
+      <UpdatingInstance title="Hide Info" onClick={props.onClick}>
+        {getHealthIcon(props.stateorHealthCode, `40px`)}
+        {getHealthMessage(props.instance)}
+      </UpdatingInstance>
     );
-  };
+  }
 };
 
 export default CardInstanceOverlay;

@@ -26,10 +26,10 @@ const Box = styled.div<{ isChecked: boolean }>`
   height: 20px;
   border-radius: 6px;
   margin: 8px;
-  background-color: ${props =>
+  background-color: ${(props) =>
     props.isChecked ? props.theme.color.lightOne : props.theme.color.darkOne};
   transition: all 100ms;
-  border: 1px solid ${props => props.theme.color.lightOne};
+  border: 1px solid ${(props) => props.theme.color.lightOne};
 `;
 
 const Label = styled.span`

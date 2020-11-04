@@ -1,10 +1,11 @@
 import React, { useContext } from "react";
 import styled from "styled-components";
-import CardHeader from "./CardHeader";
-import CardFooter from "./CardFooter";
-import CardInstance from "./CardInstance";
-import InstanceProps from "../../utils/InstanceProps";
+
 import { StateContext } from "../../context/StateContext";
+import InstanceProps from "../../utils/InstanceProps";
+import CardFooter from "./CardFooter";
+import CardHeader from "./CardHeader";
+import CardInstance from "./CardInstance";
 
 const CardBackground = styled.div`
   background: ${(props) => props.theme.color.darkOne};

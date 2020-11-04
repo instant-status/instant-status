@@ -1,8 +1,9 @@
-import React, { useState, useContext, useEffect } from "react";
+import React, { useContext, useEffect, useState } from "react";
+
 import { StateContext } from "../../context/StateContext";
 import Checkbox from "./Checkbox";
 
-const VersionFilters = (props: { versions: any }) => {
+const VersionFilters = (props: { versions: string[] }) => {
   const { urlVersionParams, updateUrlParams } = useContext(StateContext);
   const [isCheckedArray, setIsCheckedArray] = useState(
     urlVersionParams.length > 0 ? urlVersionParams : props.versions,
@@ -17,21 +18,21 @@ const VersionFilters = (props: { versions: any }) => {
   }, [props.versions, urlVersionParams.length]);
 
   const toggleCheckbox = (name: string) => {
-    let newArray = [] as [];
+    let newArray = [] as string[];
     if (isCheckedArray.includes(name)) {
-      newArray = isCheckedArray.filter(version => version !== name);
+      newArray = isCheckedArray.filter((version) => version !== name);
     } else {
       newArray = [...isCheckedArray, name] as [];
     }
     setIsCheckedArray(newArray);
-    updateUrlParams({ key: "version", value: newArray });
+    updateUrlParams({ key: `version`, value: newArray });
   };
 
   return props.versions
     .filter((version: string) => version !== undefined)
     .map((version: string, i: number) => {
       // If we have an empty version string, show an icon as the label
-      const label = version === "" ? "👻" : version;
+      const label = version === `` ? `👻` : version;
       return (
         <Checkbox
           key={i}
