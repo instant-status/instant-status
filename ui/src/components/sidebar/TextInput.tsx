@@ -15,12 +15,18 @@ const InputBox = styled.input`
 const TextInput = (props: {
   label: string;
   onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  onBlur?: (event: React.ChangeEvent<HTMLInputElement>) => void;
   value: string;
 }) => {
   return (
     <InputBoxContainer>
       <Label>{props.label}</Label>
-      <InputBox onChange={props.onChange} type="text" value={props.value} />
+      <InputBox
+        onChange={props.onChange}
+        onBlur={props.onBlur}
+        type="text"
+        value={props.value}
+      />
     </InputBoxContainer>
   );
 };

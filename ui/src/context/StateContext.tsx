@@ -14,7 +14,7 @@ export const initialState = {
   instanceDisplayCount: 2,
   rememberSettings: false,
   updateRememberSettings: (rememberSettings: boolean) => {},
-  updateKeyLocation: (keyLocation: string) => {},
+  updateKeyLocation: (keyLocation: string, checkForTrailingSlash: boolean) => {},
   updatePrefillReleaseWith: (prefillReleaseWith: string) => {},
   updateShowAdvanced: (show: boolean) => {},
   updateInstanceDisplayCount: (value: number) => {},
@@ -120,7 +120,8 @@ export const StateProvider = (props: { children: React.ReactNode }) => {
     return initialState.keyLocation;
   };
   const [keyLocation, setUrlKeyLocation] = useState(getInitialKeyLocation());
-  const updateKeyLocation = (keyLocation: string) => {
+  const updateKeyLocation = (keyLocation: string, checkForTrailingSlash: boolean = false) => {
+    if (checkForTrailingSlash && !keyLocation.endsWith('/')) keyLocation += '/';
     setUrlKeyLocation(keyLocation);
     if (rememberSettings) {
       localStorage.setItem(`keyLocation`, keyLocation);

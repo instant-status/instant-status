@@ -203,7 +203,7 @@ const CardInstance = (props: {
             <IconButton
               onClick={() =>
                 navigator.clipboard.writeText(
-                  `ssh ubuntu@${props.instance.instancePublicIP} -i ${keyLocation}${props.instance.instanceKeyFileName}.pem`,
+                  `ssh ubuntu@${props.instance.instancePublicIP} -i '${keyLocation}${props.instance.instanceKeyFileName}.pem'`,
                 )
               }
             >

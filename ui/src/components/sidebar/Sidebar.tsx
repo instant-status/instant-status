@@ -99,6 +99,7 @@ const Sidebar = () => {
           <TextInput
             value={keyLocation}
             onChange={(event) => updateKeyLocation(event.target.value)}
+            onBlur={(event) => updateKeyLocation(event.target.value, true)}
             label="Key File Location:"
           />
           <TextInput
