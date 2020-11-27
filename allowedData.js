@@ -7,7 +7,6 @@ export default [
   "instanceName",
   "instancePublicIP",
   "instanceUpdatedAt",
-  "instanceBuild",
   "instanceVersion",
   "instanceDiskUsedGb",
   "instanceDiskTotalGb",

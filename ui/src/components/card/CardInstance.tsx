@@ -213,7 +213,7 @@ const CardInstance = (props: {
           <InstanceRow>
             <InstanceRowKey>Version:</InstanceRowKey>
             <CopyText
-              value={`${props.instance.instanceVersion} (build: ${props.instance.instanceBuild})`}
+              value={`${props.instance.instanceVersion}`}
             >
               {props.instance.instanceVersion}
             </CopyText>

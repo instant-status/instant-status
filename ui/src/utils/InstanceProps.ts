@@ -11,7 +11,6 @@ export default interface InstanceProps {
   instancePublicIP: string;
   instanceCreatedAt: string;
   instanceUpdatedAt: string;
-  instanceBuild: string;
   instanceVersion: string;
   instanceDiskUsedGb: number;
   instanceDiskTotalGb: number;
