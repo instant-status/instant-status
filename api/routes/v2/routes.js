@@ -1,18 +1,20 @@
-import KoaRouter from "@koa/router";
-import {
-  checkIn
-} from "../../controllers/v2/checkIn";
+import KoaRouter from '@koa/router';
+
+import { checkIn } from '../../controllers/v2/checkIn';
+import { updateGet, updatePost } from '../../controllers/v2/update';
 
 const routerV2 = new KoaRouter({
-  prefix: '/v2'
+  prefix: '/v2',
 });
 
 // Home
-routerV2.get("/", ctx => (ctx.body = { version: "2.0.0" }));
+routerV2.get('/', (ctx) => (ctx.body = { version: '2.0.0' }));
 
 // Check-in
-routerV2.post("/check-in", checkIn);
+routerV2.post('/check-in', checkIn);
 
-export {
-  routerV2
-};
+// Update
+routerV2.get('/update', updateGet);
+routerV2.post('/update', updatePost);
+
+export default routerV2;
