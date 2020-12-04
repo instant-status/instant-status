@@ -32,7 +32,11 @@
     "react-google-button": "0.7.1"
   },
   "devDependencies": {
+    "eslint": "^7.14.0",
+    "eslint-config-prettier": "^6.15.0",
+    "eslint-plugin-prettier": "^3.2.0",
     "esm": "3.2.25",
-    "nodemon": "2.0.6"
+    "nodemon": "2.0.6",
+    "prettier": "^2.2.1"
   }
 }
