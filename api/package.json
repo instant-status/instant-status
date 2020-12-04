@@ -5,7 +5,8 @@
   "main": "server.js",
   "scripts": {
     "dev": "nodemon -r esm server.js",
-    "start": "node -r esm server.js"
+    "start": "node -r esm server.js",
+    "prettier": "prettier --write './**/*.js'"
   },
   "repository": {
     "type": "git",
