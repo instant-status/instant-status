@@ -1,5 +1,5 @@
 import { transparentize } from "polished";
-import React, { useContext, useEffect } from "react";
+import React, { memo, useContext, useEffect } from "react";
 import styled from "styled-components";
 
 import { StateContext } from "../../context/StateContext";
@@ -122,4 +122,4 @@ const CardFooter = (props: {
   );
 };
 
-export default CardFooter;
+export default memo(CardFooter);

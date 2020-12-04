@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { memo, useContext } from "react";
 import styled from "styled-components";
 
 import { StateContext } from "../../context/StateContext";
@@ -60,4 +60,4 @@ const Card = (props: { instances: InstanceProps[]; stackName: string }) => {
   );
 };
 
-export default Card;
+export default memo(Card);

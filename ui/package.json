@@ -13,23 +13,28 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "framer-motion": "^2.9.4",
     "js-cookie": "2.2.1",
     "moment": "2.29.1",
     "parcel-bundler": "1.12.4",
     "polished": "4.0.3",
-    "react": "17.0.1",
-    "react-dom": "17.0.1",
+    "react": "^16.14.0",
+    "react-countup": "4.3.3",
+    "react-dom": "^16.14.0",
     "react-google-button": "0.7.1",
     "react-helmet": "6.1.0",
+    "react-query": "2.26.3",
     "react-router-dom": "5.2.0",
     "styled-components": "5.2.1",
     "typeface-pt-sans": "1.1.13",
     "typescript": "3.9.7"
   },
   "devDependencies": {
+    "@types/js-cookie": "2.2.6",
     "@types/node": "14.14.6",
     "@types/react": "16.9.55",
     "@types/react-helmet": "6.1.0",
+    "@types/react-query": "1.1.2",
     "@types/react-router-dom": "5.1.6",
     "@types/styled-components": "4.4.3",
     "@typescript-eslint/eslint-plugin": "4.6.1",
@@ -39,6 +44,7 @@
     "eslint-plugin-prettier": "3.1.4",
     "eslint-plugin-react": "7.21.5",
     "eslint-plugin-simple-import-sort": "5.0.3",
-    "prettier": "2.1.2"
+    "prettier": "2.1.2",
+    "react-query-devtools": "2.6.3"
   }
 }

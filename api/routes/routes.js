@@ -5,7 +5,8 @@ import {
   deleteInstance,
   getInstances,
   updateInstance,
-  doneUpdatingInstance
+  doneUpdatingInstance,
+  getInstancesMeta,
 } from "../controllers/instances";
 import { authGoogle } from "../controllers/auth";
 
@@ -30,6 +31,13 @@ router.get(
   "getInstances",
   "/instances",
   async ctx => (ctx.body = getInstances(ctx.query))
+);
+
+// Instance Metadata Fetching
+router.get(
+  "getInstancesMeta",
+  "/instances/meta",
+  async ctx => (ctx.body = getInstancesMeta(ctx.query))
 );
 
 // Instance Creation

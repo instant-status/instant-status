@@ -1,6 +1,6 @@
 import { google } from "googleapis";
 import jwt from 'jsonwebtoken';
-import { APP_CONFIG } from '../../appConfig';
+import { APP_CONFIG } from '../../appConfig.ts';
 import { API_CONFIG } from "../../apiConfig";
 
 let bearerTokens = [API_CONFIG.BEARER_TOKEN];

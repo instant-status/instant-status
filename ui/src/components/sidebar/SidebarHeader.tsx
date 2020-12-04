@@ -1,7 +1,8 @@
 import React from "react";
+import { useCountUp } from "react-countup";
 import styled from "styled-components";
 
-import { APP_CONFIG } from "../../../../appConfig";
+import APP_CONFIG from "../../config";
 
 const Header = styled.header`
   display: flex;
@@ -34,6 +35,8 @@ const SidebarHeader = (props: {
   stackCount: number;
   instanceCount: number;
 }) => {
+  const { countUp } = useCountUp({ end: props.stackCount });
+  // const { countUp: instanceCount } = useCountUp({ end: props.instanceCount });
   return (
     <Header>
       <Logo onClick={() => (window.location.href = `/`)}>
@@ -57,7 +60,7 @@ const SidebarHeader = (props: {
       <AppInfo>
         <AppName>{APP_CONFIG.APP_NAME}</AppName>
         <PageInfo>
-          {props.stackCount} Stacks / {props.instanceCount} Instances
+          {countUp} Stacks / {props.instanceCount} Instances
         </PageInfo>
       </AppInfo>
     </Header>

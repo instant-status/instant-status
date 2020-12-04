@@ -1,7 +1,6 @@
 import React, { createContext, useEffect, useState } from "react";
 
-import { APP_CONFIG } from "../../../appConfig";
-import useFetch from "../hooks/useFetch";
+import APP_CONFIG from "../config";
 
 export const initialState = {
   pageData: [],
@@ -139,26 +138,14 @@ export const StateProvider = (props: { children: React.ReactNode }) => {
     setPrefillReleaseWith(prefillReleaseWith);
   };
 
-  // Page data
-  const [pageData, setPageData] = useState(initialState.pageData);
-  const [dataCalledAt, setDataCalledAt] = useState(new Date().getTime());
-  const [data, loading] = useFetch(
-    APP_CONFIG.DATA_URL,
-    dataCalledAt.toString(),
-  );
-  useEffect(() => {
-    setPageData(data);
-  }, [loading]);
-
   // Data to expose to rest of app
   const providerObject = {
     ...initialState,
     instanceDisplayCount,
     keyLocation,
     prefillReleaseWith,
-    pageData,
+    pageData: [],
     rememberSettings,
-    setDataCalledAt,
     showAdvanced,
     updateInstanceDisplayCount,
     updateKeyLocation,

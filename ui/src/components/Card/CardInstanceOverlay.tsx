@@ -1,5 +1,5 @@
 import { transparentize } from "polished";
-import React from "react";
+import React, { memo } from "react";
 import styled from "styled-components";
 
 import { getHealthIcon, getHealthMessage } from "../../utils/getHealth";
@@ -60,4 +60,4 @@ const CardInstanceOverlay = (props: {
   }
 };
 
-export default CardInstanceOverlay;
+export default memo(CardInstanceOverlay);

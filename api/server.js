@@ -9,7 +9,7 @@ import dotenv from "dotenv";
 
 import appRoutes from "./routes/routes";
 import { isRequestAllowed } from "./controllers/auth";
-import { APP_CONFIG } from "../appConfig";
+import { APP_CONFIG } from "../appConfig.ts";
 
 const app = new Koa();
 

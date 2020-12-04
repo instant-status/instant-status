@@ -99,23 +99,12 @@ export const deleteInstance = request => {
   return 204;
 };
 
-const groupBy = (arr, criteria) => {
-  return arr.reduce(function(obj, item) {
-    // Check if the criteria is a function to run on the item or a property of it
-    var key = typeof criteria === "function" ? criteria(item) : item[criteria];
-
-    // If the key doesn't exist yet, create it
-    if (!obj.hasOwnProperty(key)) {
-      obj[key] = [];
-    }
-
-    // Push the value to the object
-    obj[key].push(item);
-
-    // Return the object to the next item in the loop
-    return obj;
+const groupBy = key => array =>
+  array.reduce((objectsByKeyValue, obj) => {
+    const value = obj[key];
+    objectsByKeyValue[value] = (objectsByKeyValue[value] || []).concat(obj);
+    return objectsByKeyValue;
   }, {});
-};
 
 export const getInstances = urlParams => {
   if (urlParams.groupBy) {
@@ -125,8 +114,22 @@ export const getInstances = urlParams => {
 
     const stacks = db.instances.find(urlParams);
 
-    return groupBy(stacks, instance => instance[groupByValue]);
+    const groupByItem = groupBy(groupByValue);
+    return groupByItem(stacks);
   } else {
     return db.instances.find(urlParams);
+  }
+};
+
+export const getInstancesMeta = () => {
+  const instances = db.instances.find();
+  const stacks = new Set(instances.map(instance => instance.stackName));
+  const versions = new Set(instances.map(instance => instance.instanceVersion));
+
+  return {
+    versions: [...versions],
+    instanceCount: instances.length,
+    stackCount: [...stacks].length,
+    instanceDisplayRange: 3,
   }
 };

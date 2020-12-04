@@ -29,6 +29,7 @@
     "koa-google-sign-in": "2.0.1",
     "koa-json": "2.0.2",
     "koa-router": "10.0.0",
+    "object-hash": "2.0.3",
     "react-google-button": "0.7.1"
   },
   "devDependencies": {

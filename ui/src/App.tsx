@@ -1,33 +1,20 @@
+import { AnimatePresence } from "framer-motion";
 import { lighten } from "polished";
 import React from "react";
-import { BrowserRouter, Route, Switch } from "react-router-dom";
-import {
-  createGlobalStyle,
-  DefaultTheme,
-  ThemeProvider,
-} from "styled-components";
+import { Helmet } from "react-helmet";
+import { ReactQueryDevtools } from "react-query-devtools";
+import { BrowserRouter, Redirect, Route, Switch } from "react-router-dom";
+import { createGlobalStyle, ThemeProvider } from "styled-components";
 
+import DevMenu from "./components/DevTools/DevMenu";
+import APP_CONFIG from "./config";
 import { StateProvider } from "./context/StateContext";
+import useIsLoggedIn from "./hooks/useIsLoggedIn";
 import AutoLogin from "./pages/AutoLogin";
+import Login from "./pages/Login";
 import Logout from "./pages/Logout";
 import StatusPage from "./pages/StatusPage";
-
-export const theme: DefaultTheme = {
-  color: {
-    darkOne: `#1f2430`,
-    darkTwo: `#191e2a`,
-    lightOne: `#fff1e5`,
-    lightTwo: `#ffaf5`,
-    red: `#ee2f01`,
-    green: `#00ab4e`,
-    blue: `#26a8ff`,
-    orange: `#fcaf17`,
-    purple: `#c06bd0`,
-  },
-  shadow: {
-    card: `4px 4px 20px rgba(0, 0, 0, 0.17)`,
-  },
-};
+import theme from "./utils/theme";
 
 const GlobalStyle = createGlobalStyle`
   html {
@@ -61,25 +48,43 @@ const GlobalStyle = createGlobalStyle`
 `;
 
 const App = () => {
+  const { isLoggedIn } = useIsLoggedIn();
+
   return (
-    <StateProvider>
-      <ThemeProvider theme={theme}>
-        <GlobalStyle />
-        <BrowserRouter>
-          <Switch>
-            <Route exact path="/login">
-              <AutoLogin />
-            </Route>
-            <Route exact path="/logout">
-              <Logout />
-            </Route>
-            <Route path="/">
-              <StatusPage />
-            </Route>
-          </Switch>
-        </BrowserRouter>
-      </ThemeProvider>
-    </StateProvider>
+    <ThemeProvider theme={theme}>
+      <Helmet>
+        <title>{APP_CONFIG.APP_NAME}</title>
+      </Helmet>
+      <GlobalStyle />
+      <BrowserRouter>
+        <Route
+          render={({ location }) => (
+            // <AnimatePresence exitBeforeEnter initial={false}>
+            <Switch location={location} key={location.pathname}>
+              <Route exact path="/google">
+                {!isLoggedIn ? <AutoLogin /> : <Redirect to="/" />}
+              </Route>
+              <Route exact path="/login">
+                {!isLoggedIn ? <Login /> : <Redirect to="/" />}
+              </Route>
+              <Route exact path="/logout">
+                <Logout />
+              </Route>
+              <Route path="/">
+                {isLoggedIn ? <StatusPage /> : <Redirect to="/login" />}
+              </Route>
+            </Switch>
+            // </AnimatePresence>
+          )}
+        />
+      </BrowserRouter>
+      {APP_CONFIG.DEV_MODE && (
+        <>
+          <DevMenu />
+          <ReactQueryDevtools initialIsOpen={true} />
+        </>
+      )}
+    </ThemeProvider>
   );
 };
 

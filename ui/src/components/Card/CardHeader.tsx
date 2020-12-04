@@ -1,5 +1,5 @@
 import { lighten } from "polished";
-import React from "react";
+import React, { memo } from "react";
 import styled from "styled-components";
 
 const Header = styled.header`
@@ -35,4 +35,4 @@ const CardHeader = (props: { stackName: string }) => {
   );
 };
 
-export default CardHeader;
+export default memo(CardHeader);

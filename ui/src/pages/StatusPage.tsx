@@ -1,37 +1,28 @@
-import Cookies from "js-cookie";
-import React, { memo, useContext } from "react";
+import React, { memo } from "react";
+import { QueryCache, ReactQueryCacheProvider } from "react-query";
 import styled from "styled-components";
 
 import PageContent from "../components/PageContent";
 import Sidebar from "../components/sidebar/Sidebar";
-import { StateContext } from "../context/StateContext";
-import Login from "./Login";
+import { StateProvider } from "../context/StateContext";
 
 const Wrapper = styled.div`
   display: flex;
 `;
 
+const queryCache = new QueryCache();
+
 const StatusPage = () => {
-  const { pageData } = useContext(StateContext);
-
-  const hasData = Object.entries(pageData).length > 0;
-
-  if (localStorage.getItem(`bearer`) || Cookies.get(`Auth-Bearer`)) {
-    if (pageData[0] && pageData[0].error) {
-      return <Login />;
-    }
-    if (hasData) {
-      return (
-        <Wrapper>
-          <Sidebar />
+  return (
+    <Wrapper>
+      <StateProvider>
+        <Sidebar />
+        <ReactQueryCacheProvider queryCache={queryCache}>
           <PageContent />
-        </Wrapper>
-      );
-    }
-    return <h1>Loading</h1>;
-  }
-
-  return <Login />;
+        </ReactQueryCacheProvider>
+      </StateProvider>
+    </Wrapper>
+  );
 };
 
 export default memo(StatusPage);
