@@ -1,5 +1,5 @@
 import db from "diskdb";
-// import { logEvent } from "./logs";
+
 import ALLOWED_DATA from "../../../allowedData";
 
 export const checkIn = ctx => {
