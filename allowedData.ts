@@ -1,4 +1,4 @@
-export default [
+const ALLOWED_DATA = <const>[
   "instance_id",
   "stackName",
   "stackRegion",
@@ -20,5 +20,9 @@ export default [
   "instanceType",
   "instanceLastHealthyAt",
   "instanceHealthCode",
-  "instanceHealthMessage"
+  "instanceHealthMessage",
 ];
+
+export type AllowedDataType = typeof ALLOWED_DATA[number];
+
+export default ALLOWED_DATA;

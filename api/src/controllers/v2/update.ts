@@ -1,7 +1,24 @@
 import db from 'diskdb';
 
-import ALLOWED_DATA from '../../../allowedData';
+import ALLOWED_DATA, { AllowedDataType } from '../../../../allowedData';
 import checkForRequiredDataKeys from '../../helpers/checkForRequiredDataKeys';
+import response from '../../helpers/returnResponse';
+
+interface UpdateGetResponseBody {
+  ok: boolean;
+  update_id: string;
+  is_cancelled: boolean;
+  update_configs: boolean;
+  update_envs: boolean;
+  run_migrations: boolean;
+  rollback_migrations: boolean;
+  update_app_to: string;
+  update_xapi_to: string;
+  instances_count: number;
+  finished_installation_count: number;
+  chosen_one?: string;
+  switch_code_at_date?: string;
+}
 
 export const updateGet = (ctx) => {
   // Ensuring we have required data in the request
@@ -33,8 +50,8 @@ export const updateGet = (ctx) => {
       update_app_to: latestUpdate.update_app_to,
       update_xapi_to: latestUpdate.update_xapi_to,
       instances_count: latestUpdate.instances_count,
-      finished_installaton_count: latestUpdate.finished_installaton_count,
-    };
+      finished_installation_count: latestUpdate.finished_installation_count,
+    } as UpdateGetResponseBody;
 
     if (latestUpdate.chosen_one) {
       responseBody.chosen_one = latestUpdate.chosen_one;
@@ -47,7 +64,7 @@ export const updateGet = (ctx) => {
   } else {
     return response(ctx, 404, {
       ok: false,
-      message: `'${body.update_id}' is not one of the latest updates.`,
+      message: `No update found with id: '${body.update_id}'.`,
     });
   }
 };
@@ -76,7 +93,7 @@ export const updatePost = (ctx) => {
 
   payloadItems.forEach((item) => {
     // If the payload item key exists in the ALLOWED_DATA array, save it
-    if (ALLOWED_DATA.includes(item[0])) {
+    if (ALLOWED_DATA.includes(item[0] as AllowedDataType)) {
       data[item[0]] = item[1];
     }
   });
@@ -86,9 +103,4 @@ export const updatePost = (ctx) => {
   });
 
   return response(ctx, 200, responseBody);
-};
-
-const response = (ctx, statusCode, responseBody) => {
-  ctx.status = statusCode;
-  if (responseBody) ctx.body = responseBody;
 };

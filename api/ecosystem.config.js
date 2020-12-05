@@ -2,7 +2,7 @@ module.exports = {
   apps: [
     {
       name: 'App Status',
-      script: 'server.js',
+      script: 'server.ts',
       node_args: '-r esm',
       env: {
         NODE_ENV: 'development',

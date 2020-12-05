@@ -1,6 +1,7 @@
 import db from 'diskdb';
 
-import ALLOWED_DATA from '../../../allowedData';
+import ALLOWED_DATA, { AllowedDataType } from '../../../../allowedData';
+import response from '../../helpers/returnResponse';
 
 export const checkIn = (ctx) => {
   // Ensuring we have required data in the request
@@ -26,7 +27,7 @@ export const checkIn = (ctx) => {
 
   payloadItems.forEach((item) => {
     // If the payload item key exists in the ALLOWED_DATA array, save it
-    if (ALLOWED_DATA.includes(item[0])) {
+    if (ALLOWED_DATA.includes(item[0] as AllowedDataType)) {
       data[item[0]] = item[1];
     }
   });
@@ -36,9 +37,4 @@ export const checkIn = (ctx) => {
   });
 
   return response(ctx, 200, responseBody);
-};
-
-const response = (ctx, statusCode, responseBody) => {
-  ctx.status = statusCode;
-  if (responseBody) ctx.body = responseBody;
 };
