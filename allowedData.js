@@ -1,4 +1,5 @@
 export default [
+  "instance_id",
   "stackName",
   "stackRegion",
   "stackEnvironment",

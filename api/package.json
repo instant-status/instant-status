@@ -5,13 +5,14 @@
   "main": "server.js",
   "scripts": {
     "dev": "nodemon -r esm server.js",
-    "start": "node -r esm server.js"
+    "start": "node -r esm server.js",
+    "prettier": "prettier --write './**/*.js'"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/instant-status/instant-status.git"
   },
-  "author": "Callum Williams",
+  "author": "Instant Status",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/instant-status/instant-status/issues"
@@ -19,20 +20,24 @@
   "homepage": "https://github.com/instant-status/instant-status#readme",
   "dependencies": {
     "@koa/cors": "3.1.0",
+    "@koa/router": "10.0.0",
     "diskdb": "0.1.17",
     "dotenv": "8.2.0",
-    "googleapis": "63.0.0",
+    "googleapis": "65.0.0",
     "jsonwebtoken": "8.5.1",
     "koa": "2.13.0",
     "koa-bearer-token": "1.0.0",
     "koa-bodyparser": "4.3.0",
     "koa-google-sign-in": "2.0.1",
     "koa-json": "2.0.2",
-    "koa-router": "10.0.0",
     "react-google-button": "0.7.1"
   },
   "devDependencies": {
+    "eslint": "^7.14.0",
+    "eslint-config-prettier": "^6.15.0",
+    "eslint-plugin-prettier": "^3.2.0",
     "esm": "3.2.25",
-    "nodemon": "1.19.4"
+    "nodemon": "2.0.6",
+    "prettier": "^2.2.1"
   }
 }

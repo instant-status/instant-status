@@ -1,0 +1,19 @@
+{
+  "extends": [
+    "plugin:prettier/recommended"
+  ],
+
+  "env": {
+    "commonjs": true,
+    "es6": true,
+    "node": true
+  },
+
+  "presets": ["es2020"],
+
+  "plugins": ["prettier"],
+
+  "rules": {
+    "prettier/prettier": "error"
+  }
+}

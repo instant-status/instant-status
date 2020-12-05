@@ -1,15 +1,15 @@
-import Koa from "koa";
-import json from "koa-json";
-import bodyParser from "koa-bodyparser";
-import bearerToken from "koa-bearer-token";
-import cors from "@koa/cors";
+import Koa from 'koa';
+import json from 'koa-json';
+import bodyParser from 'koa-bodyparser';
+import bearerToken from 'koa-bearer-token';
+import cors from '@koa/cors';
 
-import db from "diskdb";
-import dotenv from "dotenv";
+import db from 'diskdb';
+import dotenv from 'dotenv';
 
-import appRoutes from "./routes/routes";
-import { isRequestAllowed } from "./controllers/auth";
-import { APP_CONFIG } from "../appConfig";
+import { routerV1, routerV2 } from './routes/routes';
+import { isRequestAllowed } from './controllers/auth';
+import { APP_CONFIG } from '../appConfig';
 
 const app = new Koa();
 
@@ -29,9 +29,12 @@ app.use((ctx, next) => {
   }
 });
 
-db.connect("../data/", ["instances"]);
+db.connect('../data/', ['instances', 'updates', 'updatesHistory']);
 
-app.use(appRoutes.routes()).use(appRoutes.allowedMethods());
+app
+  .use(routerV1.routes())
+  .use(routerV2.routes())
+  .use(routerV1.allowedMethods());
 
 const port = APP_CONFIG.PORT || 3000;
 app.listen(port, () =>
