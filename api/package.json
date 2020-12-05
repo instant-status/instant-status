@@ -2,11 +2,11 @@
   "name": "instant-status-api",
   "version": "1.0.0",
   "description": "API",
-  "main": "server.js",
+  "main": "src/server.ts",
   "scripts": {
-    "dev": "nodemon -r esm server.js",
-    "start": "node -r esm server.js",
-    "prettier": "prettier --write './**/*.js'"
+    "dev": "ts-node-dev --respawn src/server.ts",
+    "start": "ts-node src/server.ts",
+    "prettier": "prettier --write './src/**/*.js'"
   },
   "repository": {
     "type": "git",
@@ -22,22 +22,26 @@
     "@koa/cors": "3.1.0",
     "@koa/router": "10.0.0",
     "diskdb": "0.1.17",
-    "dotenv": "8.2.0",
     "googleapis": "65.0.0",
     "jsonwebtoken": "8.5.1",
     "koa": "2.13.0",
-    "koa-bearer-token": "1.0.0",
     "koa-bodyparser": "4.3.0",
     "koa-google-sign-in": "2.0.1",
     "koa-json": "2.0.2",
-    "react-google-button": "0.7.1"
+    "typescript": "4.1.2"
   },
   "devDependencies": {
-    "eslint": "^7.14.0",
-    "eslint-config-prettier": "^6.15.0",
-    "eslint-plugin-prettier": "^3.2.0",
-    "esm": "3.2.25",
-    "nodemon": "2.0.6",
-    "prettier": "^2.2.1"
+    "@types/jsonwebtoken": "8.5.0",
+    "@types/koa": "2.11.6",
+    "@types/koa-bodyparser": "4.3.0",
+    "@types/koa-json": "2.0.18",
+    "@types/koa__cors": "3.0.2",
+    "@types/koa__router": "8.0.3",
+    "eslint": "7.14.0",
+    "eslint-config-prettier": "6.15.0",
+    "eslint-plugin-prettier": "3.2.0",
+    "prettier": "2.2.1",
+    "ts-node": "9.1.0",
+    "ts-node-dev": "1.0.0"
   }
 }

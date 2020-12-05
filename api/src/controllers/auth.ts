@@ -1,29 +1,29 @@
 import { google } from 'googleapis';
 import jwt from 'jsonwebtoken';
-import { APP_CONFIG } from '../../appConfig';
-import { API_CONFIG } from '../../apiConfig';
-
-let bearerTokens = [API_CONFIG.BEARER_TOKEN];
+import { APP_CONFIG } from '../../../appConfig';
+import { API_CONFIG } from '../../../apiConfig';
+import formatAuthorisationToken from '../helpers/formatAuthorisationToken';
 
 const CLIENT_ID = API_CONFIG.GOOGLE_AUTH.CLIENT_ID;
 const CLIENT_SECRET = API_CONFIG.GOOGLE_AUTH.CLIENT_SECRET;
 const REDIRECT_URL = API_CONFIG.GOOGLE_AUTH.REDIRECT_URL;
 const AUTH_VALID_FOR_SECONDS = 60 * 60 * 1; // 1 hour
 
-export const isRequestAllowed = (request) => {
+export const isRequestAllowed = (request: {
+  url: string;
+  headers: { authorization?: string };
+}) => {
   // Don't require auth if user is trying to log in
   if (request.url.includes('/auth/google/callback')) {
     return true;
   }
 
-  // Check if provided token is in allowed bearers
-  if (bearerTokens.indexOf(request.token) > -1) {
-    return true;
-  }
-
   // Check if provided token is a valid JWT
   try {
-    jwt.verify(request.token, API_CONFIG.APP_SECRET);
+    jwt.verify(
+      formatAuthorisationToken(request.headers.authorization),
+      API_CONFIG.APP_SECRET
+    );
     return true;
   } catch (err) {
     // if not valid, catch the error and allow the app to return false below
@@ -32,7 +32,7 @@ export const isRequestAllowed = (request) => {
   return false;
 };
 
-export const authGoogle = async (ctx) => {
+export const authGoogle = async (ctx: any) => {
   try {
     const code = ctx.query.code;
     if (!code) {

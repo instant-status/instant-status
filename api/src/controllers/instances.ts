@@ -1,8 +1,12 @@
 import db from 'diskdb';
 import { logEvent } from './logs';
-import ALLOWED_DATA from '../../allowedData';
+import ALLOWED_DATA, { AllowedDataType } from '../../../allowedData';
 
-export const addPrimalInstance = (request) => {
+export const addPrimalInstance = (
+  request: {
+    [k in AllowedDataType]: string;
+  }
+) => {
   if (!request.instanceID) {
     return 400;
   }
@@ -10,10 +14,10 @@ export const addPrimalInstance = (request) => {
   const requestItems = Object.entries(request);
 
   if (db.instances.find({ instanceID: request.instanceID }).length < 1) {
-    const data = {};
+    const data = {} as { createdAt: Date };
     requestItems.forEach((item) => {
       // if the request item key exists in the ALLOWED_DATA array, save it
-      if (ALLOWED_DATA.includes(item[0])) {
+      if (ALLOWED_DATA.includes(item[0] as AllowedDataType)) {
         data[item[0]] = item[1];
       }
       data.createdAt = new Date();
@@ -26,7 +30,11 @@ export const addPrimalInstance = (request) => {
   return 409;
 };
 
-export const updateInstance = (request) => {
+export const updateInstance = (
+  request: {
+    [k in AllowedDataType]: string;
+  }
+) => {
   if (!request.instanceID) {
     return 400;
   }
@@ -36,7 +44,7 @@ export const updateInstance = (request) => {
 
   requestItems.forEach((item) => {
     // if the request item key exists in the ALLOWED_DATA array, save it
-    if (ALLOWED_DATA.includes(item[0])) {
+    if (ALLOWED_DATA.includes(item[0] as AllowedDataType)) {
       data[item[0]] = item[1];
     }
   });
@@ -49,18 +57,22 @@ export const updateInstance = (request) => {
   return 204;
 };
 
-export const doneUpdatingInstance = (request) => {
+export const doneUpdatingInstance = (
+  request: {
+    [k in AllowedDataType]: string;
+  }
+) => {
   if (!request.instanceID) {
     return 400;
   }
 
   const requestItems = Object.entries(request);
-  const data = {};
+  const data = {} as { instanceVersion: string; instanceID: string };
   let shouldCleardown = false;
 
   requestItems.forEach((item) => {
     // if the request item key exists in the ALLOWED_DATA array, save it
-    if (ALLOWED_DATA.includes(item[0])) {
+    if (ALLOWED_DATA.includes(item[0] as AllowedDataType)) {
       data[item[0]] = item[1];
 
       // if the instance reporting as done is the chosen one for this update
@@ -74,7 +86,7 @@ export const doneUpdatingInstance = (request) => {
       stackName: data['stackName'],
     });
     if (currentStackInstances.length > 0) {
-      currentStackInstances.forEach((instance) => {
+      currentStackInstances.forEach((instance: any) => {
         if (
           instance.instanceID !== data.instanceID &&
           instance.instanceUpdatingToVersion !== data.instanceVersion
@@ -93,7 +105,11 @@ export const doneUpdatingInstance = (request) => {
   return 204;
 };
 
-export const deleteInstance = (request) => {
+export const deleteInstance = (
+  request: {
+    [k in AllowedDataType]: string;
+  }
+) => {
   if (!request.instanceID) {
     return 400;
   }
@@ -102,8 +118,8 @@ export const deleteInstance = (request) => {
   return 204;
 };
 
-const groupBy = (arr, criteria) => {
-  return arr.reduce(function (obj, item) {
+const groupBy = (arr: any, criteria: (instance: any) => void) => {
+  return arr.reduce(function (obj: any, item: any) {
     // Check if the criteria is a function to run on the item or a property of it
     var key = typeof criteria === 'function' ? criteria(item) : item[criteria];
 
@@ -120,7 +136,7 @@ const groupBy = (arr, criteria) => {
   }, {});
 };
 
-export const getInstances = (urlParams) => {
+export const getInstances = (urlParams: { [k: string]: string }) => {
   if (urlParams.groupBy) {
     const groupByValue = urlParams.groupBy;
 
