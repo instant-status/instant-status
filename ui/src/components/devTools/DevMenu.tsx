@@ -54,7 +54,13 @@ const DevMenu = () => {
               <MenuButton
                 type="button"
                 animate={{ x: -75 }}
-                exit={{ x: 0, opacity: 0 }}
+                exit={{
+                  x: 0,
+                  opacity: 0,
+                  transition: {
+                    delay: 0.2,
+                  },
+                }}
                 onClick={() => {
                   localStorage.removeItem(`bearer`);
                   window.location.href = `/logout`;
@@ -67,7 +73,12 @@ const DevMenu = () => {
               <MenuButton
                 type="button"
                 animate={{ x: -75 }}
-                exit={{ x: 0 }}
+                exit={{
+                  x: 0,
+                  transition: {
+                    delay: 0.2,
+                  },
+                }}
                 onClick={() => {
                   localStorage.setItem(`bearer`, APP_CONFIG.DEV_JWT);
                   window.location.reload();

@@ -1,5 +1,5 @@
 export const API_CONFIG = {
-  APP_SECRET: "strong-token-here",
+  APP_SECRET: "your-256-bit-secret",
   ALLOWED_USERS: {
     "user@example.com": { roles: [""] },
   },
