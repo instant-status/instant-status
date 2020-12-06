@@ -5,7 +5,7 @@ const Logout = () => {
   useEffect(() => {
     localStorage.removeItem(`bearer`);
   }, []);
-  return <Redirect to="/" />;
+  return <Redirect to="/" push={true} />;
 };
 
 export default memo(Logout);

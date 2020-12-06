@@ -20,7 +20,7 @@ const SliderInput = (props: {
         {props.label}
         {` `}
         <Output>
-          (showing {props.value} out of {`4`})
+          (showing {props.value} out of {props.total})
         </Output>
       </Label>
       <input

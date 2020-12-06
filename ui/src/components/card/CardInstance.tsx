@@ -3,12 +3,12 @@ import React, { useContext, useEffect, useState } from "react";
 import styled from "styled-components";
 
 import { APP_CONFIG } from "../../../../appConfig";
-import { theme } from "../../App";
 import { StateContext } from "../../context/StateContext";
 import getDate from "../../utils/getDate";
 import { getHealthIcon } from "../../utils/getHealth";
 import { getStateIcon } from "../../utils/getState";
 import InstanceProps from "../../utils/InstanceProps";
+import theme from "../../utils/theme";
 import IconGithub from "../icons/IconGithub";
 import IconUbuntu from "../icons/IconUbuntu";
 import CopyText from "../shared/CopyText";
@@ -212,9 +212,7 @@ const CardInstance = (props: {
           </InstanceRow>
           <InstanceRow>
             <InstanceRowKey>Version:</InstanceRowKey>
-            <CopyText
-              value={`${props.instance.instanceVersion}`}
-            >
+            <CopyText value={`${props.instance.instanceVersion}`}>
               {props.instance.instanceVersion}
             </CopyText>
             <IconButton

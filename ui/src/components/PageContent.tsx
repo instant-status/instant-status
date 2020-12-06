@@ -1,7 +1,11 @@
-import React, { useContext, useEffect } from "react";
+import React, { useContext } from "react";
+import { useQuery } from "react-query";
 import styled from "styled-components";
 
+import { APP_CONFIG } from "../../../appConfig";
+import logo from "../assets/logo.svg";
 import { StateContext } from "../context/StateContext";
+import fetchUrl from "../hooks/useFetch";
 import Card from "./card/Card";
 import SearchBar from "./SearchBar";
 
@@ -23,26 +27,32 @@ const Grid = styled.div`
   grid-column-gap: 20px;
   grid-row-gap: 20px;
   justify-content: center;
+  height: 100%;
+
+  & > img {
+    align-self: center;
+  }
 `;
 
 const PageContent = () => {
-  const { pageData, setDataCalledAt, urlVersionParams, urlSortBy } = useContext(
-    StateContext,
-  );
-  const stacks = Object.entries(pageData);
+  const { urlVersionParams, urlSortBy } = useContext(StateContext);
 
-  useEffect(() => {
-    const timer = setInterval(() => {
-      setDataCalledAt(new Date().getTime());
-    }, 1000);
-    return () => clearTimeout(timer);
-  }, []);
+  const stacksQuery = useQuery(
+    `stacksData`,
+    () => fetchUrl(`${APP_CONFIG.DATA_URL}/instances?groupBy=stackName`),
+    {
+      refetchInterval: 10000, // Refetch the data every second
+    },
+  );
+
+  const stacks = Object.entries(stacksQuery?.data || []);
+  console.log(`stacks`, stacks);
 
   return (
     <Page>
       <SearchBar />
       <Grid>
-        {stacks.length > 0 && !pageData.error ? (
+        {stacks.length > 0 ? (
           stacks
             .filter((item) => {
               if (urlVersionParams.length > 0) {
@@ -74,7 +84,7 @@ const PageContent = () => {
               );
             })
         ) : (
-          <p>loading</p>
+          <img src={logo} alt="Loading..." />
         )}
       </Grid>
     </Page>

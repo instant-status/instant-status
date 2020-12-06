@@ -1,9 +1,9 @@
 import React from "react";
 
-import { theme } from "../App";
 import IconAdd from "../components/icons/IconAdd";
 import IconUpdating from "../components/icons/IconUpdating";
 import InstanceProps from "./InstanceProps";
+import theme from "./theme";
 
 export const getStateIcon = (stateCode: number, size?: string) => {
   const iconSize = size || `25px`;

@@ -28,7 +28,7 @@ const Box = styled.div<{ isChecked: boolean }>`
   margin: 8px;
   background-color: ${(props) =>
     props.isChecked ? props.theme.color.lightOne : props.theme.color.darkOne};
-  transition: all 100ms;
+  transition: background-color 100ms;
   border: 1px solid ${(props) => props.theme.color.lightOne};
 `;
 

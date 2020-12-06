@@ -1,11 +1,11 @@
 import React from "react";
 
-import { theme } from "../App";
 import IconError from "../components/icons/IconError";
 import IconInfo from "../components/icons/IconInfo";
 import IconOkay from "../components/icons/IconOkay";
 import IconWarning from "../components/icons/IconWarning";
 import InstanceProps from "./InstanceProps";
+import theme from "./theme";
 
 export const getHealthIcon = (healthCode: number, size?: string) => {
   const iconSize = size || `25px`;
