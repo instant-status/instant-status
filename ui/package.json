@@ -13,6 +13,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "config": "^3.3.3",
     "framer-motion": "2.9.5",
     "js-cookie": "2.2.1",
     "moment": "2.29.1",

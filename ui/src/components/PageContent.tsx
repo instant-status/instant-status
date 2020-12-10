@@ -1,8 +1,8 @@
+import APP_CONFIG from "@instant-status/appConfig";
 import React, { useContext } from "react";
 import { useQuery } from "react-query";
 import styled from "styled-components";
 
-import { APP_CONFIG } from "../../../appConfig";
 import logo from "../assets/logo.svg";
 import { StateContext } from "../context/StateContext";
 import fetchUrl from "../hooks/useFetch";
