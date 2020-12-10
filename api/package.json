@@ -6,7 +6,9 @@
   "scripts": {
     "dev": "ts-node-dev --respawn src/server.ts",
     "start": "ts-node src/server.ts",
-    "prettier": "prettier --write './src/**/*.js'"
+    "lint": "eslint \"src/**/*.{ts,tsx}\"",
+    "format": "prettier --write \"src/**/*.{ts,tsx,json,md}\"",
+    "tsc": "tsc --noEmit"
   },
   "repository": {
     "type": "git",
@@ -37,6 +39,7 @@
     "@types/koa-json": "2.0.18",
     "@types/koa__cors": "3.0.2",
     "@types/koa__router": "8.0.3",
+    "@typescript-eslint/parser": "4.9.1",
     "eslint": "7.14.0",
     "eslint-config-prettier": "6.15.0",
     "eslint-plugin-prettier": "3.2.0",

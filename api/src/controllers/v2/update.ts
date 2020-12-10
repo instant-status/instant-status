@@ -1,7 +1,7 @@
 import db from 'diskdb';
 import { JsonObject } from 'type-fest';
 
-import ALLOWED_DATA, { AllowedDataType } from '../../../../allowedData';
+import ALLOWED_DATA, { AllowedDataType } from '../../../../config/allowedData';
 import checkForRequiredDataKeys from '../../helpers/checkForRequiredDataKeys';
 import response from '../../helpers/returnResponse';
 

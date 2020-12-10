@@ -1,5 +1,9 @@
 {
   "compilerOptions": {
+    "rootDirs": [
+      "../config/",
+      "src",
+    ],
     "module": "commonjs",
     "esModuleInterop": true,
     "target": "es6",

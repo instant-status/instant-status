@@ -1,6 +1,6 @@
 import db from 'diskdb';
 import { logEvent } from './logs';
-import ALLOWED_DATA, { AllowedDataType } from '../../../allowedData';
+import ALLOWED_DATA, { AllowedDataType } from '../../../config/allowedData';
 
 export const addPrimalInstance = (
   request: {

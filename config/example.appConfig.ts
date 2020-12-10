@@ -1,4 +1,4 @@
-export const APP_CONFIG = {
+const APP_CONFIG = {
   APP_NAME: "App Status",
   APP_URL: "http://localhost:1234",
   DATA_URL: "http://localhost:3000",
@@ -15,3 +15,5 @@ export const APP_CONFIG = {
     "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoiSW5zdGFudCBTdGF0dXMiLCJpYXQiOjE1MTYyMzkwMjJ9.Th-AFgMpPdgvUm2U3VpXCelnofPMaj1QIUSpco24yuQ",
   PORT: 3000,
 };
+
+export default APP_CONFIG;

@@ -1,9 +1,9 @@
 import React, { memo } from "react";
 import GoogleButton from "react-google-button";
 import styled from "styled-components";
+import APP_CONFIG from "../../../config/appConfig";
 
 import logo from "../assets/logo.svg";
-import APP_CONFIG from "../config";
 
 const SplashContent = styled.div`
   display: flex;
