@@ -1,6 +1,6 @@
 import { memo } from "react";
 
-import { APP_CONFIG } from "../../../appConfig";
+import APP_CONFIG from "../../../config/appConfig";
 
 const AutoLogin = () => {
   window.location.href = APP_CONFIG.GOOGLE_AUTH_URL;

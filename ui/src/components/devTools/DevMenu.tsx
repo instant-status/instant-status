@@ -2,7 +2,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import React, { memo, useRef, useState } from "react";
 import styled from "styled-components";
 
-import APP_CONFIG from "../../config";
+import APP_CONFIG from "../../../../config/appConfig";
 import useIsLoggedIn from "../../hooks/useIsLoggedIn";
 import useOnClickOutside from "../../hooks/useOnClickOutside";
 import theme from "../../utils/theme";

@@ -3,7 +3,7 @@ import React, { useContext } from "react";
 import { useQuery } from "react-query";
 import styled from "styled-components";
 
-import { APP_CONFIG } from "../../../../appConfig";
+import APP_CONFIG from "../../../../config/appConfig";
 import { StateContext } from "../../context/StateContext";
 import fetchUrl from "../../hooks/useFetch";
 import Checkbox from "./Checkbox";

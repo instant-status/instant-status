@@ -1,4 +1,4 @@
-import APP_CONFIG from "@instant-status/appConfig";
+import APP_CONFIG from "../../../config/appConfig";
 import React, { useContext } from "react";
 import { useQuery } from "react-query";
 import styled from "styled-components";

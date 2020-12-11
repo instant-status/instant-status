@@ -1,6 +1,6 @@
 import React, { createContext, useEffect, useState } from "react";
 
-import APP_CONFIG from "../config";
+import APP_CONFIG from "../../../config/appConfig";
 
 export const initialState = {
   urlEnvParams: [],

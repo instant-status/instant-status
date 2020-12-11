@@ -6,7 +6,7 @@ import { BrowserRouter, Redirect, Route, Switch } from "react-router-dom";
 import { createGlobalStyle, ThemeProvider } from "styled-components";
 
 import DevMenu from "./components/devTools/DevMenu";
-import APP_CONFIG from "./config";
+import APP_CONFIG from "../../config/appConfig";
 import useIsLoggedIn from "./hooks/useIsLoggedIn";
 import AutoLogin from "./pages/AutoLogin";
 import Login from "./pages/Login";

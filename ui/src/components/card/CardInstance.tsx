@@ -2,7 +2,7 @@ import { transparentize } from "polished";
 import React, { useContext, useEffect, useState } from "react";
 import styled from "styled-components";
 
-import { APP_CONFIG } from "../../../../appConfig";
+import APP_CONFIG from "../../../../config/appConfig";
 import { StateContext } from "../../context/StateContext";
 import getDate from "../../utils/getDate";
 import { getHealthIcon } from "../../utils/getHealth";
