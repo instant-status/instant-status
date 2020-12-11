@@ -57,13 +57,50 @@ export const updateGet = (ctx) => {
 export const updatePost = (ctx) => {
   // Ensuring we have required data in the request
   const body = ctx.request.body;
-  if (!body.instance_id || !body.stack_id) {
-    return response(ctx, 400);
+  const requiredDataKeys = [
+    'message',
+    'progress',
+    'server_id',
+    'stage',
+    'update_id',
+  ];
+  const checkForRequiredDataKeysResult = checkForRequiredDataKeys(
+    body,
+    requiredDataKeys
+  );
+  if (checkForRequiredDataKeysResult.hasAllRequiredDataKeys === false) {
+    return response(ctx, 400, {
+      ok: false,
+      message: checkForRequiredDataKeysResult.message,
+    });
   }
 
-  // Fetching the details of the latest update for the Stack and returning a response
-  const latestUpdate = db.updates.findOne({ stack_id: body.stack_id });
-  console.log(latestUpdate);
+  // Fetching the details of the given update and returning a response
+  const latestUpdate = db.updates.findOne({ update_id: body.update_id });
+  if (!latestUpdate) {
+    return response(ctx, 404, {
+      ok: false,
+      message: `No update found with id: '${body.update_id}'.`,
+    });
+  }
+
+  switch (body.stage) {
+    case 'election':
+      break;
+
+    case 'installation':
+      break;
+
+    case 'completion':
+      break;
+
+    case 'election':
+      break;
+
+    default:
+      break;
+  }
+
   const updateIsAvailable =
     !latestUpdate.instance_ids.includes(body.instance_id) ||
     latestUpdate.update_id !== body.last_update_id;
