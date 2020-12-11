@@ -9,6 +9,7 @@
     "target": "es6",
     "moduleResolution": "node",
     "sourceMap": true,
+    "skipLibCheck": true,
     "outDir": "dist"
   },
   "include": ["src/**/*"],

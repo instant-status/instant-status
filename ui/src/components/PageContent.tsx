@@ -8,6 +8,7 @@ import { StateContext } from "../context/StateContext";
 import fetchUrl from "../hooks/useFetch";
 import Card from "./card/Card";
 import SearchBar from "./SearchBar";
+import InstanceProps from "../utils/InstanceProps";
 
 const Page = styled.main`
   background-color: ${(props) => props.theme.color.darkTwo};
@@ -80,7 +81,11 @@ const PageContent = () => {
             })
             .map((item) => {
               return (
-                <Card key={item[0]} stackName={item[0]} instances={item[1]} />
+                <Card
+                  key={item[0]}
+                  stackName={item[0]}
+                  instances={item[1] as InstanceProps[]}
+                />
               );
             })
         ) : (

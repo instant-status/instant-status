@@ -2,6 +2,26 @@ import React, { createContext, useEffect, useState } from "react";
 
 import APP_CONFIG from "../../../config/appConfig";
 
+interface InitialStateProps {
+  urlEnvParams: string[];
+  urlVersionParams: string[];
+  urlSortBy: string;
+  keyLocation: string;
+  prefillReleaseWith: string;
+  showAdvanced: boolean;
+  instanceDisplayCount: number;
+  rememberSettings: boolean;
+  updateRememberSettings: (rememberSettings: boolean) => void;
+  updateKeyLocation: (
+    keyLocation: string,
+    checkForTrailingSlash?: boolean,
+  ) => void;
+  updatePrefillReleaseWith: (prefillReleaseWith: string) => void;
+  updateShowAdvanced: (show: boolean) => void;
+  updateInstanceDisplayCount: (value: number) => void;
+  updateUrlParams: (params: { key: string; value: string | string[] }) => void;
+}
+
 export const initialState = {
   urlEnvParams: [],
   urlVersionParams: [],
@@ -11,18 +31,9 @@ export const initialState = {
   showAdvanced: false,
   instanceDisplayCount: 2,
   rememberSettings: false,
-  updateRememberSettings: (rememberSettings: boolean) => {},
-  updateKeyLocation: (
-    keyLocation: string,
-    checkForTrailingSlash?: boolean,
-  ) => {},
-  updatePrefillReleaseWith: (prefillReleaseWith: string) => {},
-  updateShowAdvanced: (show: boolean) => {},
-  updateInstanceDisplayCount: (value: number) => {},
-  updateUrlParams: (params: { key: string; value: string | string[] }) => {},
 };
 
-export const StateContext = createContext(initialState);
+export const StateContext = createContext({} as InitialStateProps);
 
 export const StateProvider = (props: { children: React.ReactNode }) => {
   // URL Params
@@ -163,7 +174,7 @@ export const StateProvider = (props: { children: React.ReactNode }) => {
   };
 
   return (
-    <StateContext.Provider value={providerObject}>
+    <StateContext.Provider value={providerObject as InitialStateProps}>
       {props.children}
     </StateContext.Provider>
   );
