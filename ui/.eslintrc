@@ -14,9 +14,6 @@
   "rules": {
     "prettier/prettier": "error",
 
-    "simple-import-sort/sort": "error",
-    "sort-imports": "off",
-
     "quotes": ["error", "backtick"],
     "@typescript-eslint/explicit-module-boundary-types": "off",
     "@typescript-eslint/no-empty-function": "off"

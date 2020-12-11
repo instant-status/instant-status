@@ -1,46 +1,29 @@
 import { lighten } from "polished";
 import React from "react";
-import { BrowserRouter, Route, Switch } from "react-router-dom";
-import {
-  createGlobalStyle,
-  DefaultTheme,
-  ThemeProvider,
-} from "styled-components";
+import { Helmet } from "react-helmet";
+import { ReactQueryDevtools } from "react-query-devtools";
+import { BrowserRouter, Redirect, Route, Switch } from "react-router-dom";
+import { createGlobalStyle, ThemeProvider } from "styled-components";
 
-import { StateProvider } from "./context/StateContext";
+import DevMenu from "./components/devTools/DevMenu";
+import APP_CONFIG from "../../config/appConfig";
+import useIsLoggedIn from "./hooks/useIsLoggedIn";
 import AutoLogin from "./pages/AutoLogin";
+import Login from "./pages/Login";
 import Logout from "./pages/Logout";
 import StatusPage from "./pages/StatusPage";
-
-export const theme: DefaultTheme = {
-  color: {
-    darkOne: `#1f2430`,
-    darkTwo: `#191e2a`,
-    lightOne: `#fff1e5`,
-    lightTwo: `#ffaf5`,
-    red: `#ee2f01`,
-    green: `#00ab4e`,
-    blue: `#26a8ff`,
-    orange: `#fcaf17`,
-    purple: `#c06bd0`,
-  },
-  shadow: {
-    card: `4px 4px 20px rgba(0, 0, 0, 0.17)`,
-  },
-};
+import theme from "./utils/theme";
 
 const GlobalStyle = createGlobalStyle`
   html {
     box-sizing: border-box;
     height: 100%;
   }
-
   *,
   *:before,
   *:after {
     box-sizing: inherit;
   }
-
   body {
     font-family: "PT Sans", sans-serif;
     font-weight: 400;
@@ -50,36 +33,50 @@ const GlobalStyle = createGlobalStyle`
     min-height: 100%;
     background-color: ${(props) => props.theme.color.darkOne};
   }
-
   b, strong {
     font-weight: 700;
   }
-
   hr {
     border-color: ${(props) => lighten(0.1, props.theme.color.darkOne)}
   }
 `;
 
 const App = () => {
+  const { isLoggedIn } = useIsLoggedIn();
+
   return (
-    <StateProvider>
-      <ThemeProvider theme={theme}>
-        <GlobalStyle />
-        <BrowserRouter>
-          <Switch>
-            <Route exact path="/login">
-              <AutoLogin />
-            </Route>
-            <Route exact path="/logout">
-              <Logout />
-            </Route>
-            <Route path="/">
-              <StatusPage />
-            </Route>
-          </Switch>
-        </BrowserRouter>
-      </ThemeProvider>
-    </StateProvider>
+    <ThemeProvider theme={theme}>
+      <Helmet>
+        <title>{APP_CONFIG.APP_NAME}</title>
+      </Helmet>
+      <GlobalStyle />
+      <BrowserRouter>
+        <Route
+          render={({ location }) => (
+            <Switch location={location} key={location.pathname}>
+              <Route exact path="/google">
+                {!isLoggedIn ? <AutoLogin /> : <Redirect to="/" />}
+              </Route>
+              <Route exact path="/login">
+                {!isLoggedIn ? <Login /> : <Redirect to="/" />}
+              </Route>
+              <Route exact path="/logout">
+                <Logout />
+              </Route>
+              <Route path="/">
+                {isLoggedIn ? <StatusPage /> : <Redirect to="/login" />}
+              </Route>
+            </Switch>
+          )}
+        />
+      </BrowserRouter>
+      {APP_CONFIG.DEV_MODE && (
+        <>
+          <DevMenu />
+          <ReactQueryDevtools initialIsOpen={true} />
+        </>
+      )}
+    </ThemeProvider>
   );
 };
 

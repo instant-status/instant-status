@@ -1,9 +1,11 @@
 import { lighten } from "polished";
 import React, { useContext } from "react";
+import { useQuery } from "react-query";
 import styled from "styled-components";
 
+import APP_CONFIG from "../../../../config/appConfig";
 import { StateContext } from "../../context/StateContext";
-import InstanceProps from "../../utils/InstanceProps";
+import fetchUrl from "../../hooks/useFetch";
 import Checkbox from "./Checkbox";
 import SelectInput from "./SelectInput";
 import SidebarHeader from "./SidebarHeader";
@@ -48,7 +50,6 @@ const A = styled.a`
 
 const Sidebar = () => {
   const {
-    pageData,
     updateUrlParams,
     updateKeyLocation,
     keyLocation,
@@ -61,26 +62,29 @@ const Sidebar = () => {
     instanceDisplayCount,
     updateInstanceDisplayCount,
   } = useContext(StateContext);
-  const sidebarData = Object.values(pageData).flat(1);
-
-  const versions = new Set(
-    sidebarData.map((instance: InstanceProps) => instance.instanceVersion),
-  );
 
   const updateOrderBy = (option: string) => {
     updateUrlParams({ key: `sortBy`, value: option });
   };
 
+  const sidebarQuery = useQuery(
+    `sidebarData`,
+    () => fetchUrl(`${APP_CONFIG.DATA_URL}/v2/meta`),
+    {
+      refetchInterval: 10000, // Refetch the data every second
+    },
+  );
+
   return (
     <>
       <Aside>
         <SidebarHeader
-          stackCount={Object.keys(pageData).length || 0}
-          instanceCount={sidebarData.length || 0}
+          stackCount={sidebarQuery.data?.stackCount || 0}
+          instanceCount={sidebarQuery.data?.instanceCount || 0}
         />
         <section>
           <SectionHeader>Versions</SectionHeader>
-          <VersionFilters versions={Array.from(versions)} />
+          <VersionFilters versions={sidebarQuery.data?.activeVersions || []} />
         </section>
         <section>
           <SectionHeader>Settings</SectionHeader>

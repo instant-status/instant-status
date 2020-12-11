@@ -1,7 +1,7 @@
 import { google } from 'googleapis';
 import jwt from 'jsonwebtoken';
-import { APP_CONFIG } from '../../../appConfig';
-import { API_CONFIG } from '../../../apiConfig';
+import APP_CONFIG from '../../../config/appConfig';
+import API_CONFIG from '../../../config/apiConfig';
 import formatAuthorisationToken from '../helpers/formatAuthorisationToken';
 
 const CLIENT_ID = API_CONFIG.GOOGLE_AUTH.CLIENT_ID;

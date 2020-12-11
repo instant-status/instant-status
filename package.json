@@ -17,5 +17,8 @@
   "bugs": {
     "url": "https://github.com/instant-status/instant-status/issues"
   },
-  "homepage": "https://github.com/instant-status/instant-status#readme"
+  "homepage": "https://github.com/instant-status/instant-status#readme",
+  "devDependencies": {
+    "typescript": "^4.1.2"
+  }
 }

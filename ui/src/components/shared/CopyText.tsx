@@ -7,7 +7,7 @@ const Link = styled.span<{ active: boolean }>`
   border-radius: 6px;
   position: relative;
   opacity: ${(props) => (props.active ? 0.8 : 1)};
-  transition: all 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: opacity 0.15s cubic-bezier(0.4, 0, 0.2, 1);
   width: 100%;
   display: flex;
   white-space: nowrap;

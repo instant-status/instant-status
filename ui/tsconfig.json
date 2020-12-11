@@ -1,11 +1,15 @@
 {
   "compilerOptions": {
-    "rootDir": "src",
+    "rootDirs": [
+      "../config/",
+      "src",
+    ],
     "outDir": "dist",
     "jsx": "react",
     "esModuleInterop": true,
+    "skipLibCheck": true,
     "typeRoots": ["./@types", "./node_modules/@types"],
-    "lib": ["dom", "es2015", "es2016", "es2017", "es2018", "es2019"]
+    "lib": ["dom", "es2015", "es2016", "es2017", "es2018", "es2019"],
   },
   "includes": ["src/**/*"],
   "exclude": ["node_modules", "dist/**/*"]

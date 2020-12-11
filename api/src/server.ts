@@ -7,7 +7,7 @@ import db from 'diskdb';
 
 import { routerV1, routerV2 } from './routes/routes';
 import { isRequestAllowed } from './controllers/auth';
-import { APP_CONFIG } from '../../appConfig';
+import APP_CONFIG from '../../config/appConfig';
 
 const app = new Koa();
 

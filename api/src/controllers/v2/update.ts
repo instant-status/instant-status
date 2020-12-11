@@ -1,24 +1,9 @@
 import db from 'diskdb';
+import { JsonObject } from 'type-fest';
 
-import ALLOWED_DATA, { AllowedDataType } from '../../../../allowedData';
+import ALLOWED_DATA, { AllowedDataType } from '../../../../config/allowedData';
 import checkForRequiredDataKeys from '../../helpers/checkForRequiredDataKeys';
 import response from '../../helpers/returnResponse';
-
-interface UpdateGetResponseBody {
-  ok: boolean;
-  update_id: string;
-  is_cancelled: boolean;
-  update_configs: boolean;
-  update_envs: boolean;
-  run_migrations: boolean;
-  rollback_migrations: boolean;
-  update_app_to: string;
-  update_xapi_to: string;
-  instances_count: number;
-  finished_installation_count: number;
-  chosen_one?: string;
-  switch_code_at_date?: string;
-}
 
 export const updateGet = (ctx) => {
   // Ensuring we have required data in the request
@@ -51,7 +36,7 @@ export const updateGet = (ctx) => {
       update_xapi_to: latestUpdate.update_xapi_to,
       instances_count: latestUpdate.instances_count,
       finished_installation_count: latestUpdate.finished_installation_count,
-    } as UpdateGetResponseBody;
+    } as JsonObject;
 
     if (latestUpdate.chosen_one) {
       responseBody.chosen_one = latestUpdate.chosen_one;

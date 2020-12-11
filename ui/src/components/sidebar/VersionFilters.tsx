@@ -28,21 +28,25 @@ const VersionFilters = (props: { versions: string[] }) => {
     updateUrlParams({ key: `version`, value: newArray });
   };
 
-  return props.versions
-    .filter((version: string) => version !== undefined)
-    .map((version: string, i: number) => {
-      // If we have an empty version string, show an icon as the label
-      const label = version === `` ? `👻` : version;
-      return (
-        <Checkbox
-          key={i}
-          isChecked={isCheckedArray.includes(version)}
-          value={version}
-          label={label}
-          onChange={() => toggleCheckbox(version)}
-        />
-      );
-    });
+  return (
+    <>
+      {props.versions
+        .filter((version: string) => version !== undefined)
+        .map((version: string, i: number) => {
+          // If we have an empty version string, show an icon as the label
+          const label = version === `` ? `👻` : version;
+          return (
+            <Checkbox
+              key={i}
+              isChecked={isCheckedArray.includes(version)}
+              value={version}
+              label={label}
+              onChange={() => toggleCheckbox(version)}
+            />
+          );
+        })}
+    </>
+  );
 };
 
 export default VersionFilters;

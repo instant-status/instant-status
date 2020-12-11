@@ -1,6 +1,6 @@
 import db from 'diskdb';
 
-import ALLOWED_DATA, { AllowedDataType } from '../../../../allowedData';
+import ALLOWED_DATA, { AllowedDataType } from '../../../../config/allowedData';
 import response from '../../helpers/returnResponse';
 
 export const checkIn = (ctx) => {

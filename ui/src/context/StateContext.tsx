@@ -1,10 +1,28 @@
 import React, { createContext, useEffect, useState } from "react";
 
-import { APP_CONFIG } from "../../../appConfig";
-import useFetch from "../hooks/useFetch";
+import APP_CONFIG from "../../../config/appConfig";
+
+interface InitialStateProps {
+  urlEnvParams: string[];
+  urlVersionParams: string[];
+  urlSortBy: string;
+  keyLocation: string;
+  prefillReleaseWith: string;
+  showAdvanced: boolean;
+  instanceDisplayCount: number;
+  rememberSettings: boolean;
+  updateRememberSettings: (rememberSettings: boolean) => void;
+  updateKeyLocation: (
+    keyLocation: string,
+    checkForTrailingSlash?: boolean,
+  ) => void;
+  updatePrefillReleaseWith: (prefillReleaseWith: string) => void;
+  updateShowAdvanced: (show: boolean) => void;
+  updateInstanceDisplayCount: (value: number) => void;
+  updateUrlParams: (params: { key: string; value: string | string[] }) => void;
+}
 
 export const initialState = {
-  pageData: [],
   urlEnvParams: [],
   urlVersionParams: [],
   urlSortBy: `stackName`,
@@ -13,16 +31,9 @@ export const initialState = {
   showAdvanced: false,
   instanceDisplayCount: 2,
   rememberSettings: false,
-  updateRememberSettings: (rememberSettings: boolean) => {},
-  updateKeyLocation: (keyLocation: string, checkForTrailingSlash: boolean) => {},
-  updatePrefillReleaseWith: (prefillReleaseWith: string) => {},
-  updateShowAdvanced: (show: boolean) => {},
-  updateInstanceDisplayCount: (value: number) => {},
-  updateUrlParams: (params: { key: string; value: string | string[] }) => {},
-  setDataCalledAt: (time: number) => {},
 };
 
-export const StateContext = createContext(initialState);
+export const StateContext = createContext({} as InitialStateProps);
 
 export const StateProvider = (props: { children: React.ReactNode }) => {
   // URL Params
@@ -120,8 +131,11 @@ export const StateProvider = (props: { children: React.ReactNode }) => {
     return initialState.keyLocation;
   };
   const [keyLocation, setUrlKeyLocation] = useState(getInitialKeyLocation());
-  const updateKeyLocation = (keyLocation: string, checkForTrailingSlash: boolean = false) => {
-    if (checkForTrailingSlash && !keyLocation.endsWith('/')) keyLocation += '/';
+  const updateKeyLocation = (
+    keyLocation: string,
+    checkForTrailingSlash = false,
+  ) => {
+    if (checkForTrailingSlash && !keyLocation.endsWith(`/`)) keyLocation += `/`;
     setUrlKeyLocation(keyLocation);
     if (rememberSettings) {
       localStorage.setItem(`keyLocation`, keyLocation);
@@ -140,26 +154,13 @@ export const StateProvider = (props: { children: React.ReactNode }) => {
     setPrefillReleaseWith(prefillReleaseWith);
   };
 
-  // Page data
-  const [pageData, setPageData] = useState(initialState.pageData);
-  const [dataCalledAt, setDataCalledAt] = useState(new Date().getTime());
-  const [data, loading] = useFetch(
-    APP_CONFIG.DATA_URL,
-    dataCalledAt.toString(),
-  );
-  useEffect(() => {
-    setPageData(data);
-  }, [loading]);
-
   // Data to expose to rest of app
   const providerObject = {
     ...initialState,
     instanceDisplayCount,
     keyLocation,
     prefillReleaseWith,
-    pageData,
     rememberSettings,
-    setDataCalledAt,
     showAdvanced,
     updateInstanceDisplayCount,
     updateKeyLocation,
@@ -173,7 +174,7 @@ export const StateProvider = (props: { children: React.ReactNode }) => {
   };
 
   return (
-    <StateContext.Provider value={providerObject}>
+    <StateContext.Provider value={providerObject as InitialStateProps}>
       {props.children}
     </StateContext.Provider>
   );
