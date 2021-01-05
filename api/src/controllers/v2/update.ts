@@ -1,7 +1,5 @@
 import db from 'diskdb';
 import { JsonObject } from 'type-fest';
-
-import ALLOWED_DATA, { AllowedDataType } from '../../../../config/allowedData';
 import checkForRequiredDataKeys from '../../helpers/checkForRequiredDataKeys';
 import response from '../../helpers/returnResponse';
 
@@ -34,8 +32,8 @@ export const updateGet = (ctx) => {
       rollback_migrations: latestUpdate.rollback_migrations,
       update_app_to: latestUpdate.update_app_to,
       update_xapi_to: latestUpdate.update_xapi_to,
-      instances_count: latestUpdate.instances_count,
-      finished_installation_count: latestUpdate.finished_installation_count,
+      server_count: latestUpdate.server_count,
+      server_completed_count: latestUpdate.server_completed_count,
     } as JsonObject;
 
     if (latestUpdate.chosen_one) {
@@ -49,7 +47,7 @@ export const updateGet = (ctx) => {
   } else {
     return response(ctx, 404, {
       ok: false,
-      message: `No update found with id: '${body.update_id}'.`,
+      message: `'${body.update_id}' is not one of the latest updates.`,
     });
   }
 };
@@ -80,49 +78,75 @@ export const updatePost = (ctx) => {
   if (!latestUpdate) {
     return response(ctx, 404, {
       ok: false,
-      message: `No update found with id: '${body.update_id}'.`,
+      message: `'${body.update_id}' is not one of the latest updates.`,
     });
   }
 
+  const responseBody = {} as JsonObject;
+
   switch (body.stage) {
     case 'election':
+      if (!latestUpdate['servers'].includes(body.server_id)) {
+        const serverIdsCount = latestUpdate['servers'].length;
+        if (serverIdsCount < 1) {
+          latestUpdate['chosen_one'] = body.server_id;
+        }
+        latestUpdate['servers'].push(body.server_id);
+        latestUpdate['server_count'] = serverIdsCount + 1;
+      }
+      db.updates.update({ update_id: body.update_id }, latestUpdate);
       break;
 
     case 'installation':
+      // We don't need to do anything special for this stage.
+      // Server update below is required, so we don't quit out.
+      break;
+
+    case 'special':
+      // We don't need to do anything special for this stage.
+      // Server update below is required, so we don't quit out.
       break;
 
     case 'completion':
+      if (!latestUpdate['servers_completed'].includes(body.server_id)) {
+        latestUpdate['servers_completed'].push(body.server_id);
+        latestUpdate['server_completed_count'] += 1;
+      }
+
+      if (latestUpdate['chosen_one'] === body.server_id) {
+        latestUpdate['switch_code_at_date'] =
+          Math.floor(Date.now() / 1000) + 20;
+      }
+
+      db.updates.update({ update_id: body.update_id }, latestUpdate);
       break;
 
-    case 'election':
+    case 'finished':
+      // We don't need to do anything special for this stage.
+      // Server update below is required, so we don't quit out.
       break;
 
     default:
-      break;
+      return response(ctx, 400, {
+        ok: false,
+        message: `No stage found with name: '${body.stage}'.`,
+      });
   }
 
-  const updateIsAvailable =
-    !latestUpdate.instance_ids.includes(body.instance_id) ||
-    latestUpdate.update_id !== body.last_update_id;
-  const responseBody = {
-    ok: true,
-    update_available: updateIsAvailable,
-  };
+  db.instances.update(
+    {
+      server_id: body.server_id,
+    },
+    {
+      server_id: body.server_id,
+      update_progress: body.progress,
+      update_stage: body.stage,
+      update_message: body.message,
+    },
+    { upsert: true }
+  );
 
-  // Save latest server information
-  const payloadItems = Object.entries(body);
-  const data = {};
-
-  payloadItems.forEach((item) => {
-    // If the payload item key exists in the ALLOWED_DATA array, save it
-    if (ALLOWED_DATA.includes(item[0] as AllowedDataType)) {
-      data[item[0]] = item[1];
-    }
-  });
-
-  db.instances.update({ instance_id: body.instance_id }, data, {
-    upsert: true,
-  });
+  responseBody.ok = true;
 
   return response(ctx, 200, responseBody);
 };
