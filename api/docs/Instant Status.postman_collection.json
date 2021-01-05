@@ -1,0 +1,189 @@
+{
+	"info": {
+		"_postman_id": "74b38977-3b0b-4c09-9ea5-b5cede27f37e",
+		"name": "Instant Status",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "v2",
+			"item": [
+				{
+					"name": "Metadata",
+					"protocolProfileBehavior": {
+						"disabledSystemHeaders": {
+							"user-agent": true,
+							"host": true
+						}
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://35.179.64.115:3000/v2/metadata",
+							"protocol": "http",
+							"host": [
+								"35",
+								"179",
+								"64",
+								"115"
+							],
+							"port": "3000",
+							"path": [
+								"v2",
+								"metadata"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true,
+						"disabledSystemHeaders": {
+							"host": true,
+							"user-agent": true
+						}
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"update_id\": \"fdgfiiugidrugdu\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://35.179.64.115:3000/v2/update",
+							"protocol": "http",
+							"host": [
+								"35",
+								"179",
+								"64",
+								"115"
+							],
+							"port": "3000",
+							"path": [
+								"v2",
+								"update"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update",
+					"protocolProfileBehavior": {
+						"disabledSystemHeaders": {
+							"host": true,
+							"user-agent": true
+						}
+					},
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"last_update_id\": \"fdgfiiugidrugdu\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://35.179.64.115:3000/v2/update",
+							"protocol": "http",
+							"host": [
+								"35",
+								"179",
+								"64",
+								"115"
+							],
+							"port": "3000",
+							"path": [
+								"v2",
+								"update"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "Instances",
+			"protocolProfileBehavior": {
+				"disabledSystemHeaders": {
+					"host": true,
+					"user-agent": true
+				}
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://35.179.64.115:3000/instances",
+					"protocol": "http",
+					"host": [
+						"35",
+						"179",
+						"64",
+						"115"
+					],
+					"port": "3000",
+					"path": [
+						"instances"
+					],
+					"query": [
+						{
+							"key": "groupBy",
+							"value": "stackName",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"auth": {
+		"type": "bearer",
+		"bearer": [
+			{
+				"key": "token",
+				"value": "{{bearerToken}}",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"id": "5003893b-fd64-4adb-a61b-48aff5fc58de",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"id": "feacbe31-c3b0-45d3-99b9-435a3686bbc8",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"protocolProfileBehavior": {}
+}

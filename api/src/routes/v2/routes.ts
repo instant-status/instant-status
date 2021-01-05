@@ -2,7 +2,7 @@ import KoaRouter from '@koa/router';
 
 import { checkIn } from '../../controllers/v2/checkIn';
 import { updateGet, updatePost } from '../../controllers/v2/update';
-import { getMeta } from '../../controllers/v2/meta';
+import { getMetadata } from '../../controllers/v2/metadata';
 
 const routerV2 = new KoaRouter({
   prefix: '/v2',
@@ -19,6 +19,6 @@ routerV2.get('/update', updateGet);
 routerV2.post('/update', updatePost);
 
 // Metadata
-routerV2.get('/meta', getMeta);
+routerV2.get('/metadata', getMetadata);
 
 export default routerV2;
