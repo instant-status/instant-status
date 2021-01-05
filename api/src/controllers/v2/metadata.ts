@@ -2,7 +2,7 @@ import db from 'diskdb';
 import { InstanceProps } from '../../../../types/globalTypes';
 import response from '../../helpers/returnResponse';
 
-export const getMeta = (ctx: any) => {
+export const getMetadata = (ctx: any) => {
   const instances = db.instances.find() as InstanceProps[];
   const stacks = new Set(instances.map((instance) => instance.stackName));
   const versions = new Set(

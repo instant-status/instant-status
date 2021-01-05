@@ -69,7 +69,7 @@ const Sidebar = () => {
 
   const sidebarQuery = useQuery(
     `sidebarData`,
-    () => fetchUrl(`${APP_CONFIG.DATA_URL}/v2/meta`),
+    () => fetchUrl(`${APP_CONFIG.DATA_URL}/v2/metadata`),
     {
       refetchInterval: 10000, // Refetch the data every second
     },

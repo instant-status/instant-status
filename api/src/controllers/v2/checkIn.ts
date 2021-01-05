@@ -6,7 +6,7 @@ import response from '../../helpers/returnResponse';
 export const checkIn = (ctx) => {
   // Ensuring we have required data in the request
   const body = ctx.request.body;
-  if (!body.instance_id || !body.stack_id) {
+  if (!body.server_id || !body.stack_id) {
     return response(ctx, 400);
   }
 
@@ -14,7 +14,7 @@ export const checkIn = (ctx) => {
   const latestUpdate = db.updates.findOne({ stack_id: body.stack_id });
   console.log(latestUpdate);
   const updateIsAvailable =
-    !latestUpdate.instance_ids.includes(body.instance_id) ||
+    !latestUpdate.server_ids.includes(body.server_id) ||
     latestUpdate.update_id !== body.last_update_id;
   const responseBody = {
     ok: true,
@@ -32,7 +32,7 @@ export const checkIn = (ctx) => {
     }
   });
 
-  db.instances.update({ instance_id: body.instance_id }, data, {
+  db.instances.update({ server_id: body.server_id }, data, {
     upsert: true,
   });
 
