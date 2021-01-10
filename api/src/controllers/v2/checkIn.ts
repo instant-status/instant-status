@@ -14,7 +14,7 @@ export const checkIn = (ctx) => {
   const latestUpdate = db.updates.findOne({ stack_id: body.stack_id });
   console.log(latestUpdate);
   const updateIsAvailable =
-    !latestUpdate.server_ids.includes(body.server_id) ||
+    !latestUpdate.servers.includes(body.server_id) &&
     latestUpdate.update_id !== body.last_update_id;
   const responseBody = {
     ok: true,
