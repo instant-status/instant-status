@@ -1,13 +1,22 @@
 import db from 'diskdb';
 
 import ALLOWED_DATA, { AllowedDataType } from '../../../../config/allowedData';
+import checkForRequiredDataKeys from '../../helpers/checkForRequiredDataKeys';
 import response from '../../helpers/returnResponse';
 
 export const checkIn = (ctx) => {
   // Ensuring we have required data in the request
   const body = ctx.request.body;
-  if (!body.server_id || !body.stack_id) {
-    return response(ctx, 400);
+  const requiredDataKeys = ['server_id', 'stack_id', 'last_update_id'];
+  const checkForRequiredDataKeysResult = checkForRequiredDataKeys(
+    body,
+    requiredDataKeys
+  );
+  if (checkForRequiredDataKeysResult.hasAllRequiredDataKeys === false) {
+    return response(ctx, 400, {
+      ok: false,
+      message: checkForRequiredDataKeysResult.message,
+    });
   }
 
   // Fetching the details of the latest update for the Stack and returning a response
