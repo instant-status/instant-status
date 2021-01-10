@@ -28,6 +28,7 @@ export const checkIn = (ctx) => {
   const responseBody = {
     ok: true,
     update_available: updateIsAvailable,
+    update_id: latestUpdate.update_id,
   };
 
   // Save latest server information
