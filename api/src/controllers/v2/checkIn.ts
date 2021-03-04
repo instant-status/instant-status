@@ -22,6 +22,13 @@ export const checkIn = (ctx) => {
   // Fetching the details of the latest update for the Stack and returning a response
   const latestUpdate = db.updates.findOne({ stack_id: body.stack_id });
   console.log(latestUpdate);
+  if (!latestUpdate) {
+    return response(ctx, 404, {
+      ok: false,
+      message: `'${body.stack_id}' is not a known Stack.`,
+    });
+  }
+
   const updateIsAvailable =
     !latestUpdate.servers.includes(body.server_id) &&
     latestUpdate.update_id !== body.last_update_id;
