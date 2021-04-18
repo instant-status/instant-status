@@ -30,7 +30,7 @@ const apiPost = async (url: string, body: any) => {
 };
 
 const apiGetStacks = () => {
-  return apiFetch(`${APP_CONFIG.DATA_URL}/instances?groupBy=stackName`);
+  return apiFetch(`${APP_CONFIG.DATA_URL}/instances?groupBy=stack_id`);
 };
 
 const apiCreateUpdate = (payload: { body: any }) => {

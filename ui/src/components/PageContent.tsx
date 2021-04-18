@@ -58,8 +58,8 @@ const PageContent = () => {
               .filter((item) => {
                 if (urlVersionParams.length > 0) {
                   if (
-                    urlVersionParams.includes(item[1][0].instanceVersion) ||
-                    item[1][0].instanceVersion === undefined
+                    urlVersionParams.includes(item[1][0].server_app_version) ||
+                    item[1][0].server_app_version === undefined
                   ) {
                     return true;
                   }
@@ -83,7 +83,7 @@ const PageContent = () => {
                 return (
                   <Card
                     key={item[0]}
-                    stackName={item[0]}
+                    stackId={item[0]}
                     instances={item[1] as InstanceProps[]}
                   />
                 );

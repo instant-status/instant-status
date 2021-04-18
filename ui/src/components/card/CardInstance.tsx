@@ -109,28 +109,16 @@ const CardInstance = (props: {
   const { keyLocation, showAdvanced } = useContext(StateContext);
 
   const instanceIsBooting =
-    props.instance.instanceVersion === `primal` &&
-    !props.instance.instanceInGhostMode &&
-    !props.instance.instanceUpdatingToVersion;
-
-  const instanceIsGhost =
-    props.instance.instanceVersion === `primal` &&
-    props.instance.instanceInGhostMode &&
-    props.instance.instanceUpdatingToVersion;
+    props.instance.server_app_version === `primal` &&
+    !props.instance.server_updating_app_to;
 
   const instanceIsUpdating =
-    props.instance.instanceVersion !== `primal` &&
-    props.instance.instanceUpdatingToVersion;
+    props.instance.server_app_version !== `primal` &&
+    props.instance.server_updating_app_to;
 
-  const stateCode = instanceIsBooting
-    ? 0
-    : instanceIsGhost
-    ? 1
-    : instanceIsUpdating
-    ? 2
-    : 3;
+  const stateCode = instanceIsBooting ? 0 : instanceIsUpdating ? 2 : 3;
 
-  const healthCode = props.instance.instanceHealthCode || 0;
+  const healthCode = props.instance.server_health_code || 0;
 
   const [isStateOverlayVisible, setIsStateOverlayVisible] = useState(false);
   const [isHealthOverlayVisible, setIsHealthOverlayVisible] = useState(false);
@@ -175,7 +163,7 @@ const CardInstance = (props: {
       <Instance>
         <InstanceHeader>
           <InstanceName>
-            {props.instance.instanceIsChosenOne && `👑 `}
+            {props.instance.server_is_chosen_one && `👑 `}
             {props.instance.server_id}
             <InstanceNumber>#{props.instanceNumber}</InstanceNumber>
           </InstanceName>
@@ -197,13 +185,13 @@ const CardInstance = (props: {
         <div>
           <InstanceRow>
             <InstanceRowKey>IP:</InstanceRowKey>
-            <CopyText value={props.instance.instancePublicIP}>
-              {props.instance.instancePublicIP}
+            <CopyText value={props.instance.server_public_ip}>
+              {props.instance.server_public_ip}
             </CopyText>
             <IconButton
               onClick={() =>
                 navigator.clipboard.writeText(
-                  `ssh ubuntu@${props.instance.instancePublicIP} -i '${keyLocation}${props.instance.instanceKeyFileName}.pem'`,
+                  `ssh ubuntu@${props.instance.server_public_ip} -i '${keyLocation}${props.instance.server_key_file_name}.pem'`,
                 )
               }
             >
@@ -212,30 +200,30 @@ const CardInstance = (props: {
           </InstanceRow>
           <InstanceRow>
             <InstanceRowKey>Version:</InstanceRowKey>
-            <CopyText value={`${props.instance.instanceVersion}`}>
-              {props.instance.instanceVersion}
+            <CopyText value={`${props.instance.server_app_version}`}>
+              {props.instance.server_app_version}
             </CopyText>
             <IconButton
-              href={`${APP_CONFIG.GITHUB_VERSION_URL}${props.instance.instanceVersion}`}
+              href={`${APP_CONFIG.GITHUB_VERSION_URL}${props.instance.server_app_version}`}
             >
               <IconGithub color={theme.color.lightOne} width="1em" />
             </IconButton>
           </InstanceRow>
           <InstanceRow>
             <InstanceRowKey>Deployed:</InstanceRowKey>
-            <CopyText value={props.instance.instanceUpdatedAt}>
-              {getDate(props.instance.instanceUpdatedAt)}
+            <CopyText value={props.instance.server_updated_at}>
+              {getDate(props.instance.server_updated_at)}
             </CopyText>
           </InstanceRow>
           <InstanceRow>
             {/* invert value and use background filter */}
             <InstanceRowKey>Disk:</InstanceRowKey>
             <CopyText
-              value={`Using ${props.instance.instanceDiskUsedGb}Gb of ${props.instance.instanceDiskTotalGb}Gb total | ${props.instance.instanceType}`}
+              value={`Using ${props.instance.server_disk_used_gb}Gb of ${props.instance.server_disk_total_gb}Gb total | ${props.instance.server_type}`}
             >
               <ProgressBar
-                total={props.instance.instanceDiskTotalGb}
-                used={props.instance.instanceDiskUsedGb}
+                total={props.instance.server_disk_total_gb}
+                used={props.instance.server_disk_used_gb}
               />
             </CopyText>
           </InstanceRow>

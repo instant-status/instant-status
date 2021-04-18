@@ -27,22 +27,22 @@ const server_ids = (instances?: InstanceProps[]) => {
 
 const getChosenOne = (instances?: InstanceProps[]) => {
   const chosenOne = instances.filter(
-    (instance) => instance.instanceIsChosenOne === true,
+    (instance) => instance.server_is_chosen_one === true,
   );
   return chosenOne[0] || undefined;
 };
 
-const Card = (props: { instances: InstanceProps[]; stackName: string }) => {
+const Card = (props: { instances: InstanceProps[]; stackId: string }) => {
   const store = useContext(globalStoreContext);
 
   return useObserver(() => (
     <CardBackground layout>
-      <CardHeader stackName={props.stackName} />
+      <CardHeader stackId={props.stackId} />
       <AnimateSharedLayout>
         {props.instances
           .sort((a: InstanceProps, b: InstanceProps) => {
             if (a.instanceCreatedAt === b.instanceCreatedAt) {
-              return a.instancePublicIP < b.instancePublicIP ? -1 : 1;
+              return a.server_public_ip < b.server_public_ip ? -1 : 1;
             }
             return a.instanceCreatedAt < b.instanceCreatedAt ? -1 : 1;
           })

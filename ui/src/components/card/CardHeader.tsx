@@ -9,7 +9,7 @@ const Header = styled.header`
   justify-content: space-between;
 `;
 
-const StackName = styled.h2`
+const StackId = styled.h2`
   margin: 0;
   font-size: 28px;
   font-weight: 400;
@@ -26,11 +26,11 @@ const StackLogo = styled.div<{ image: string }>`
   flex: none;
 `;
 
-const CardHeader = (props: { stackName: string }) => {
+const CardHeader = (props: { stackId: string; stackLogo?: string }) => {
   return (
     <Header>
-      <StackName>{props.stackName}</StackName>
-      <StackLogo image={`../../images/${props.stackName}.svg`} />
+      <StackId>{props.stackId}</StackId>
+      <StackLogo image={props.stackLogo} />
     </Header>
   );
 };

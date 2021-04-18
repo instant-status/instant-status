@@ -210,7 +210,7 @@ export const getStacksAvailableForUpdate = (ctx: any) => {
   const output = {};
 
   for (const instance of instances) {
-    const update = db.updates.findOne({ stack_id: instance.stackName });
+    const update = db.updates.findOne({ stack_id: instance.stack_id });
 
     const isUpdating =
       update &&
@@ -218,12 +218,12 @@ export const getStacksAvailableForUpdate = (ctx: any) => {
         update.server_count === 0 ||
         update.server_completed_count !== update.server_count);
 
-    output[instance.stackName] = {
-      stackName: instance.stackName,
+    output[instance.stack_id] = {
+      stack_id: instance.stack_id,
       stackVersion: isUpdating
         ? `Updating to ${update.update_app_to}`
-        : instance.instanceVersion,
-      stackEnvironment: instance.stackEnvironment,
+        : instance.server_app_version,
+      stack_environment: instance.stack_environment,
       isUpdating: isUpdating,
     };
   }
@@ -231,7 +231,7 @@ export const getStacksAvailableForUpdate = (ctx: any) => {
   const stackInfo = Object.values(output);
 
   const responseBody = Object.entries(
-    groupBy(stackInfo, (data) => data.stackEnvironment)
+    groupBy(stackInfo, (data) => data.stack_environment)
   ) as any;
 
   return response(ctx, 200, responseBody);

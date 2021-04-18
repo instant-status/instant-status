@@ -122,25 +122,25 @@ const CreateUpdateModal = () => {
     },
   );
 
-  const toggleCheckbox = (stackName: string) => {
-    if (stacksToUpdate.includes(stackName)) {
-      setStacksToUpdate(stacksToUpdate.filter((stack) => stack !== stackName));
+  const toggleCheckbox = (stackId: string) => {
+    if (stacksToUpdate.includes(stackId)) {
+      setStacksToUpdate(stacksToUpdate.filter((stack) => stack !== stackId));
     } else {
-      setStacksToUpdate([...stacksToUpdate, stackName]);
+      setStacksToUpdate([...stacksToUpdate, stackId]);
     }
   };
 
-  const toggleAll = (stackNames: string[], isChecked: boolean) => {
+  const toggleAll = (stackIds: string[], isChecked: boolean) => {
     let stacks = stacksToUpdate;
 
-    for (const stackName of stackNames) {
-      if (stacksToUpdate.includes(stackName)) {
-        stacks = stacks.filter((stack) => stack !== stackName);
+    for (const stackId of stackIds) {
+      if (stacksToUpdate.includes(stackId)) {
+        stacks = stacks.filter((stack) => stack !== stackId);
       }
     }
 
     if (!isChecked) {
-      stacks = [...stacks, ...stackNames];
+      stacks = [...stacks, ...stackIds];
     }
 
     setStacksToUpdate(stacks);
@@ -150,7 +150,7 @@ const CreateUpdateModal = () => {
     .map((environment) => {
       if (step !== UpdateStepTypes.pickOptions) {
         const filteredStacks = environment[1].filter((stack) =>
-          stacksToUpdate.includes(stack.stackName),
+          stacksToUpdate.includes(stack.stack_id),
         );
 
         if (filteredStacks.length) {
@@ -189,7 +189,7 @@ const CreateUpdateModal = () => {
                       name={`select_all_${stackEnvironment[0]}`}
                       callback={(isChecked) =>
                         toggleAll(
-                          stackEnvironment[1].map((stack) => stack.stackName),
+                          stackEnvironment[1].map((stack) => stack.stack_id),
                           isChecked,
                         )
                       }
@@ -200,18 +200,18 @@ const CreateUpdateModal = () => {
               <Columns>
                 {stackEnvironment[1].map((stack) => (
                   <UncontrolledCheckbox
-                    key={`${stack.stackName}-${stack.stackVersion}`}
-                    label={stack.stackName}
+                    key={`${stack.stack_id}-${stack.stackVersion}`}
+                    label={stack.stack_id}
                     helperLabel={stack.stackVersion}
-                    name={stack.stackName}
+                    name={stack.stack_id}
                     disabled={
                       step !== UpdateStepTypes.pickOptions
                         ? true
                         : stack.isUpdating
                     }
                     faded={stack.isUpdating}
-                    onClick={() => toggleCheckbox(stack.stackName)}
-                    checked={stacksToUpdate.includes(stack.stackName)}
+                    onClick={() => toggleCheckbox(stack.stack_id)}
+                    checked={stacksToUpdate.includes(stack.stack_id)}
                   />
                 ))}
               </Columns>
@@ -281,10 +281,10 @@ const CreateUpdateModal = () => {
                 Back
               </BackButton>
               <UpdateButton
-                // type="button"
+                type="button"
                 onClick={() => {
-                  // setStep(UpdateStepTypes.coolOff);
-                  onSave();
+                  setStep(UpdateStepTypes.coolOff);
+                  // onSave();
                 }}
               >
                 Confirm Update

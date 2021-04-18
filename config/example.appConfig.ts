@@ -7,7 +7,7 @@ const APP_CONFIG = {
   COOKIE_NAME: "Bearer",
   CARD_ADVANCED_MAPPING: {
     server_id: "ID",
-    instanceAZ: "ec2AZ",
+    server_availability_zone: "ec2AZ",
   },
   DEFAULT_KEY_LOCATION: "~/.ssh/",
   DEV_MODE: true,

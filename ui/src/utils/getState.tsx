@@ -27,18 +27,18 @@ export const getStateMessage = (stateCode: number, instance: InstanceProps) => {
         <>
           Spawning to:
           <br />
-          {instance.instanceUpdatingToVersion}
+          {instance.server_updating_app_to}
         </>
       );
     case 2:
-      if (instance.instanceVersion !== instance.instanceUpdatingToVersion) {
+      if (instance.server_app_version !== instance.server_updating_app_to) {
         return (
           <>
             Updating from:
             <br />
-            <i>{instance.instanceVersion}</i>
+            <i>{instance.server_app_version}</i>
             to:
-            <i>{instance.instanceUpdatingToVersion}</i>
+            <i>{instance.server_updating_app_to}</i>
           </>
         );
       }
@@ -46,22 +46,22 @@ export const getStateMessage = (stateCode: number, instance: InstanceProps) => {
         <>
           Refreshing:
           <br />
-          <i>{instance.instanceUpdatingToVersion}</i>
+          <i>{instance.server_updating_app_to}</i>
         </>
       );
 
     case 3:
-      return instance.instanceHealthMessage;
+      return instance.server_health_message;
     case 4:
-      return instance.instanceHealthMessage;
+      return instance.server_health_message;
     case 5:
-      return instance.instanceHealthMessage;
+      return instance.server_health_message;
     case 6:
-      return instance.instanceHealthMessage;
+      return instance.server_health_message;
     case 7:
-      return instance.instanceHealthMessage;
+      return instance.server_health_message;
     case 8:
-      return instance.instanceHealthMessage;
+      return instance.server_health_message;
     default:
   }
 };

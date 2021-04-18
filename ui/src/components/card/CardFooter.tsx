@@ -65,7 +65,7 @@ const CardFooter = (props: {
 
   const releaseBranch =
     prefillReleaseWith === ``
-      ? props.chosenOne?.instanceVersion
+      ? props.chosenOne?.server_app_version
       : prefillReleaseWith;
 
   const setUrl = (event?: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
@@ -74,11 +74,11 @@ const CardFooter = (props: {
       return;
     }
 
-    const urlHost = `https://${props.chosenOne.stackRegion}.console.aws.amazon.com/systems-manager/automation/execute/Update-Curatr-Version`;
-    const urlRegion = `?region=${props.chosenOne.stackRegion}`;
+    const urlHost = `https://${props.chosenOne.stack_region}.console.aws.amazon.com/systems-manager/automation/execute/Update-Curatr-Version`;
+    const urlRegion = `?region=${props.chosenOne.stack_region}`;
     const urlInstances = `#server_id=${props.instancesToUpdate}`;
     const urlRandom = `&randomString=${randomString()}${randomString()}--${
-      props.chosenOne.stackName
+      props.chosenOne.stack_id
     }--${randomString()}${randomString()}`;
     const urlVersion = `&releaseBranch=${releaseBranch}`;
     const urlOptions = `&runMigrations=true&updateEnv=true&updateConfs=true`;
@@ -91,7 +91,7 @@ const CardFooter = (props: {
     if (props.chosenOne) {
       setUrl();
     }
-  }, [props.chosenOne && props.chosenOne.stackAppUrl]);
+  }, [props.chosenOne && props.chosenOne.stack_app_url]);
 
   return (
     <Footer>
@@ -100,8 +100,8 @@ const CardFooter = (props: {
         title="View Logs"
         target="_blank"
         rel="noreferrer noopener"
-        disabled={!props.chosenOne || !props.chosenOne.stackLogsUrl}
-        href={props.chosenOne && props.chosenOne.stackLogsUrl}
+        disabled={!props.chosenOne || !props.chosenOne.stack_logs_url}
+        href={props.chosenOne && props.chosenOne.stack_logs_url}
       >
         <IconLogs width="40px" />
         <Text>Logs</Text>
@@ -111,8 +111,8 @@ const CardFooter = (props: {
         title="View Site"
         target="_blank"
         rel="noreferrer noopener"
-        disabled={!props.chosenOne || !props.chosenOne.stackAppUrl}
-        href={props.chosenOne && props.chosenOne.stackAppUrl}
+        disabled={!props.chosenOne || !props.chosenOne.stack_app_url}
+        href={props.chosenOne && props.chosenOne.stack_app_url}
       >
         <IconOpen width="40px" />
         <Text>Open</Text>
@@ -122,13 +122,13 @@ const CardFooter = (props: {
         disabled={
           !props.chosenOne ||
           !props.instancesToUpdate ||
-          !props.chosenOne?.instanceVersion
+          !props.chosenOne?.server_app_version
         }
         onClick={() => {
           store.setIsUpdateModalOpen(true);
           setQuery({
-            stack: props.chosenOne.stackName,
-            version: props.chosenOne.instanceVersion,
+            stack: props.chosenOne.stack_id,
+            version: props.chosenOne.server_app_version,
           });
         }}
       >

@@ -27,7 +27,7 @@ interface InitialStateProps {
 export const initialState = {
   urlEnvParams: [],
   urlVersionParams: [],
-  urlSortBy: `stackName`,
+  urlSortBy: `stack_id`,
   keyLocation: APP_CONFIG.DEFAULT_KEY_LOCATION || `~/.ssh/`,
   prefillReleaseWith: ``,
   showAdvanced: false,

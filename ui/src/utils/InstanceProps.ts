@@ -1,34 +1,33 @@
 export default interface InstanceProps {
   // Stack
-  stackName: string;
-  stackEnvironment: string;
-  stackRegion: string;
-  stackAppUrl: string;
-  stackLogsUrl: string;
+  stack_id: string;
+  stack_environment: string;
+  stack_region: string;
+  stack_app_url: string;
+  stack_logs_url: string;
 
   // Instance Display
-  instanceName: string;
-  instancePublicIP: string;
+  server_name: string;
+  server_public_ip: string;
   instanceCreatedAt: string;
-  instanceUpdatedAt: string;
-  instanceVersion: string;
-  instanceDiskUsedGb: number;
-  instanceDiskTotalGb: number;
-  instanceKeyFileName: string;
-  instanceIsChosenOne: boolean;
-  instanceInGhostMode: boolean;
-  instanceUpdatingToVersion: string | null;
+  server_updated_at: string;
+  server_app_version: string;
+  server_disk_used_gb: number;
+  server_disk_total_gb: number;
+  server_key_file_name: string;
+  server_is_chosen_one: boolean;
+  server_updating_app_to: string | null;
 
   // Instance Display Advanced
-  instanceAZ: string;
+  server_availability_zone: string;
   server_id: string;
-  instanceType: string;
+  server_type: string;
 
   // Instance State
   instanceStateCode: number;
 
   // Health Check
-  instanceLastHealthyAt: string;
-  instanceHealthCode: number;
-  instanceHealthMessage: string;
+  server_health_updated_at: string;
+  server_health_code: number;
+  server_health_message: string;
 }
