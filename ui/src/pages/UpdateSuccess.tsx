@@ -22,6 +22,7 @@ const CancelButton = styled.button`
 interface UpdateSuccessProps {
   callback: () => void;
   cancel: () => void;
+  onClose: () => void;
 }
 
 const UpdateSuccess = (props: UpdateSuccessProps) => {
@@ -41,7 +42,7 @@ const UpdateSuccess = (props: UpdateSuccessProps) => {
   return (
     <Stack justify="center" spacing={4}>
       {count <= 0 ? (
-        <CancelButton>Close</CancelButton>
+        <CancelButton onClick={props.onClose}>Close</CancelButton>
       ) : (
         <CancelButton onClick={props.cancel}>({count}s) Cancel...</CancelButton>
       )}

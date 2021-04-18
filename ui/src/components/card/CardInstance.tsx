@@ -140,6 +140,7 @@ const CardInstance = (props: {
       }
     },
   );
+  console.log(APP_CONFIG.GITHUB_VERSION_URL)
 
   return (
     <InstanceWrapper>

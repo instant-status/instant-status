@@ -55,7 +55,6 @@ export const updateGet = (ctx) => {
 };
 
 export const updateCreate = (ctx) => {
-  console.log('body');
   const body = ctx.request.body;
 
   const requiredDataKeys = [
@@ -82,10 +81,12 @@ export const updateCreate = (ctx) => {
     }
 
     const lastUpdate = db.updates.findOne({ stack_id: stack_id });
+    const lastUpdateHistory = db.updatesHistory.save(lastUpdate);
+    db.updates.remove({ update_id: lastUpdateHistory?.update_id });
 
     db.updates.save({
       update_id: Date.now() + '-' + stack_id,
-      last_update_id: lastUpdate?.update_id || undefined,
+      last_update_id: lastUpdateHistory?.update_id || undefined,
       stack_id: stack_id,
       servers: [],
       servers_completed: [],

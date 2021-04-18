@@ -7,6 +7,7 @@ import response from '../../helpers/returnResponse';
 export const checkIn = (ctx) => {
   // Ensuring we have required data in the request
   const body = ctx.request.body;
+  console.log('New checkin', body);
   const requiredDataKeys = ['server_id', 'stack_id', 'last_update_id'];
   const checkForRequiredDataKeysResult = checkForRequiredDataKeys(
     body,
@@ -21,7 +22,7 @@ export const checkIn = (ctx) => {
 
   // Fetching the details of the latest update for the Stack and returning a response
   const latestUpdate = db.updates.findOne({ stack_id: body.stack_id });
-  console.log(latestUpdate);
+
   if (!latestUpdate) {
     return response(ctx, 404, {
       ok: false,

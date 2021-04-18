@@ -81,7 +81,7 @@ enum UpdateStepTypes {
 
 const CreateUpdateModal = () => {
   const [step, setStep] = useState(UpdateStepTypes.pickOptions);
-  const [query] = useQueryParams({
+  const [query, setQuery] = useQueryParams({
     stack: StringParam,
     version: StringParam,
     xapiVersion: StringParam,
@@ -170,10 +170,19 @@ const CreateUpdateModal = () => {
     modalTitle = "Update requested";
   }
 
+  const closeModal = () => {
+    setQuery({
+      stack: undefined,
+      version: undefined,
+      xapiVersion: undefined,
+    });
+    store.setIsUpdateModalOpen(false)
+  }
+
   return (
     <ModalBase
       title={modalTitle}
-      onClose={() => store.setIsUpdateModalOpen(false)}
+      onClose={closeModal}
     >
       <Stack direction="down" spacing={8}>
         {stacks
@@ -295,6 +304,7 @@ const CreateUpdateModal = () => {
             <UpdateSuccess
               callback={onSave}
               cancel={() => setStep(UpdateStepTypes.pickOptions)}
+              onClose={closeModal}
             />
           )}
         </Stack>
