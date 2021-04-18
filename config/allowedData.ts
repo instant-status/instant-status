@@ -14,7 +14,7 @@ const ALLOWED_DATA = <const>[
   "server_app_version",
   "server_xapi_version",
   "server_disk_used_gb",
-  "server_disk_free_gb",
+  "server_disk_total_gb",
   "server_key_file_name",
   "server_availability_zone",
   "server_type",

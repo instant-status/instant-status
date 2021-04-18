@@ -47,7 +47,6 @@ const PageContent = () => {
   });
 
   const stacks = Object.entries(stacksQuery?.data || []);
-  console.log("stacks", stacks);
 
   return useObserver(() => (
     <Page>
@@ -81,7 +80,6 @@ const PageContent = () => {
                 }
               })
               .map((item) => {
-                console.log("item", item);
                 return (
                   <Card key={item[0]} instances={item[1] as InstanceProps[]} />
                 );

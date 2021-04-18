@@ -201,6 +201,11 @@ export const updatePost = (ctx) => {
       server_update_stage: body.stage,
       server_update_progress: body.progress,
       server_update_message: body.message,
+      ...(body.stage === 'finished' && {
+        server_app_version: latestUpdate.update_app_to,
+        server_xapi_version: latestUpdate.update_xapi_to,
+        // TODO: Add updated at time
+      }),
       server_updating_app_to: latestUpdate.update_app_to,
       server_updating_xapi_to: latestUpdate.update_xapi_to,
       server_is_chosen_one:

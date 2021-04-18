@@ -32,5 +32,5 @@ app
 
 const port = APP_CONFIG.PORT || 3000;
 app.listen(port, () =>
-  console.log(`Server started on http://localhost:${port}`)
+  console.info(`Server started on http://localhost:${port}`)
 );

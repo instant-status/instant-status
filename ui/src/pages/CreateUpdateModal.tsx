@@ -67,7 +67,7 @@ const StackColumnName = styled.h3`
 
 const Columns = styled.div`
   column-count: 4;
-
+  break-inside: avoid;
   & > * {
     margin-bottom: 0.2rem;
   }
@@ -97,7 +97,7 @@ const CreateUpdateModal = () => {
   );
 
   const onSubmit = (data) => {
-    console.log("data", data);
+    // console.log("data", data);
   };
 
   const onSave = () => {
@@ -176,14 +176,11 @@ const CreateUpdateModal = () => {
       version: undefined,
       xapiVersion: undefined,
     });
-    store.setIsUpdateModalOpen(false)
-  }
+    store.setIsUpdateModalOpen(false);
+  };
 
   return (
-    <ModalBase
-      title={modalTitle}
-      onClose={closeModal}
-    >
+    <ModalBase title={modalTitle} onClose={closeModal}>
       <Stack direction="down" spacing={8}>
         {stacks
           .sort((a, b) => a[1].length > b[1].length)
@@ -218,9 +215,12 @@ const CreateUpdateModal = () => {
                         ? true
                         : stack.isUpdating
                     }
-                    faded={stack.isUpdating}
+                    visuallyDisabled={stack.isUpdating}
                     onClick={() => toggleCheckbox(stack.stack_id)}
-                    checked={stacksToUpdate.includes(stack.stack_id)}
+                    checked={
+                      !stack.isUpdating &&
+                      stacksToUpdate.includes(stack.stack_id)
+                    }
                   />
                 ))}
               </Columns>

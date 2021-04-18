@@ -1,15 +1,15 @@
-import React, { forwardRef } from "react";
+import React from "react";
 import styled from "styled-components";
-import useCombinedRefs from "../../hooks/useCombinedRefs";
 import Stack from "../Stack";
 
 const CheckboxContainer = styled.label<{ $disabled: boolean }>`
-  display: flex;
-  align-items: center;
-  user-select: none;
-  cursor: ${(props) => (props.$disabled ? "not-allowed" : "pointer")};
-  ${(props) => props.$disabled && "opacity: 0.7;"};
   ${(props) => props.$disabled && "font-style: italic;"};
+  ${(props) => props.$disabled && "opacity: 0.7;"};
+  align-items: center;
+  break-inside: avoid;
+  cursor: ${(props) => (props.$disabled ? "not-allowed" : "pointer")};
+  display: flex;
+  user-select: none;
 `;
 
 const HiddenCheckbox = styled.input`
@@ -47,27 +47,25 @@ const HelperLabel = styled.span`
 `;
 
 interface CheckboxProps {
-  defaultChecked?: boolean;
   label: string;
-  value?: string;
+  checked: boolean;
   name: string;
   helperLabel?: string;
   disabled?: boolean;
-  faded?: boolean;
-  callback?: () => void;
+  visuallyDisabled?: boolean;
+  onClick: (value: string) => void;
 }
 
-const UncontrolledCheckbox = (props) => {
+const UncontrolledCheckbox = (props: CheckboxProps) => {
   return (
-    <CheckboxContainer $disabled={props.faded}>
+    <CheckboxContainer $disabled={props.visuallyDisabled}>
       <HiddenCheckbox
         type="checkbox"
         name={props.name}
         checked={props.checked}
-        defaultChecked={props.checked}
         onChange={() => props.onClick(props.name)}
       />
-      <Box $isChecked={props.checked} $disabled={props.faded} />
+      <Box $isChecked={props.checked} $disabled={props.visuallyDisabled} />
       <Stack direction="down">
         <Label>{props.label}</Label>
         <HelperLabel>{props.helperLabel}</HelperLabel>
