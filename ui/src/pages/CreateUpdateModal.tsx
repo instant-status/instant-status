@@ -167,7 +167,7 @@ const CreateUpdateModal = () => {
     modalTitle = "Review Update";
   }
   if (step === UpdateStepTypes.coolOff) {
-    modalTitle = "Update requested";
+    modalTitle = "Update Requested";
   }
 
   const closeModal = () => {
