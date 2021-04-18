@@ -114,7 +114,7 @@ const CardInstance = (props: {
 
   const instanceIsUpdating =
     props.instance.server_app_version !== `primal` &&
-    props.instance.server_updating_app_to;
+    props.instance.server_updating_app_to !== props.instance.server_app_version;
 
   const stateCode = instanceIsBooting ? 0 : instanceIsUpdating ? 2 : 3;
 

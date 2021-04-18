@@ -20,7 +20,7 @@ const CardBackground = styled(motion.div)`
   flex-direction: column;
 `;
 
-const server_ids = (instances?: InstanceProps[]) => {
+const serverIds = (instances?: InstanceProps[]) => {
   const ids = instances.map((instance) => instance.server_id);
   return ids[0] ? ids : undefined;
 };
@@ -32,12 +32,17 @@ const getChosenOne = (instances?: InstanceProps[]) => {
   return chosenOne[0] || undefined;
 };
 
-const Card = (props: { instances: InstanceProps[]; stackId: string }) => {
+const Card = (props: { instances: InstanceProps[] }) => {
   const store = useContext(globalStoreContext);
+
+  const firstInstance = props.instances[0];
 
   return useObserver(() => (
     <CardBackground layout>
-      <CardHeader stackId={props.stackId} />
+      <CardHeader
+        stackId={firstInstance.stack_id}
+        stackLogo={firstInstance.stack_logo}
+      />
       <AnimateSharedLayout>
         {props.instances
           .sort((a: InstanceProps, b: InstanceProps) => {
@@ -60,7 +65,7 @@ const Card = (props: { instances: InstanceProps[]; stackId: string }) => {
 
       <CardFooter
         chosenOne={getChosenOne(props.instances)}
-        instancesToUpdate={server_ids(props.instances)}
+        instancesToUpdate={serverIds(props.instances)}
       />
     </CardBackground>
   ));

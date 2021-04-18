@@ -1,12 +1,9 @@
 import { transparentize } from "polished";
-import React, { useContext, useEffect } from "react";
-import { useHistory } from "react-router";
+import React, { useContext } from "react";
 import styled from "styled-components";
 
-import { StateContext } from "../../context/StateContext";
 import { globalStoreContext } from "../../store/globalStore";
 import InstanceProps from "../../utils/InstanceProps";
-import randomString from "../../utils/randomString";
 import IconLogs from "../icons/IconLogs";
 import IconOpen from "../icons/IconOpen";
 import IconUpdate from "../icons/IconUpdate";
@@ -56,42 +53,10 @@ const CardFooter = (props: {
   const [query, setQuery] = useQueryParams({
     stack: StringParam,
     version: StringParam,
+    xapiVersion: StringParam,
   });
 
-  const [_, setAwsUpdateUrl] = React.useState(``);
-  const { prefillReleaseWith } = useContext(StateContext);
   const store = useContext(globalStoreContext);
-  const history = useHistory();
-
-  const releaseBranch =
-    prefillReleaseWith === ``
-      ? props.chosenOne?.server_app_version
-      : prefillReleaseWith;
-
-  const setUrl = (event?: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
-    // Check for a right click as we want to ignore these
-    if (!event || event.button === 2) {
-      return;
-    }
-
-    const urlHost = `https://${props.chosenOne.stack_region}.console.aws.amazon.com/systems-manager/automation/execute/Update-Curatr-Version`;
-    const urlRegion = `?region=${props.chosenOne.stack_region}`;
-    const urlInstances = `#server_id=${props.instancesToUpdate}`;
-    const urlRandom = `&randomString=${randomString()}${randomString()}--${
-      props.chosenOne.stack_id
-    }--${randomString()}${randomString()}`;
-    const urlVersion = `&releaseBranch=${releaseBranch}`;
-    const urlOptions = `&runMigrations=true&updateEnv=true&updateConfs=true`;
-    const url = `${urlHost}${urlRegion}${urlInstances}${urlRandom}${urlVersion}${urlOptions}`;
-
-    setAwsUpdateUrl(url);
-  };
-
-  useEffect(() => {
-    if (props.chosenOne) {
-      setUrl();
-    }
-  }, [props.chosenOne && props.chosenOne.stack_app_url]);
 
   return (
     <Footer>
@@ -129,6 +94,7 @@ const CardFooter = (props: {
           setQuery({
             stack: props.chosenOne.stack_id,
             version: props.chosenOne.server_app_version,
+            xapiVersion: props.chosenOne.server_xapi_version,
           });
         }}
       >
