@@ -190,9 +190,11 @@ export const updatePost = (ctx) => {
     },
     {
       server_id: body.server_id,
-      update_progress: body.progress,
-      update_stage: body.stage,
-      update_message: body.message,
+      server_update_stage: body.stage,
+      server_update_progress: body.progress,
+      server_update_message: body.message,
+      server_updating_app_to: latestUpdate.update_app_to,
+      server_updating_xapi_to: latestUpdate.update_xapi_to,
     },
     { upsert: true }
   );
