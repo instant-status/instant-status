@@ -30,7 +30,6 @@ const Grid = styled.div`
   grid-column-gap: 20px;
   grid-row-gap: 20px;
   justify-content: center;
-  height: 100%;
 
   & > img {
     align-self: center;

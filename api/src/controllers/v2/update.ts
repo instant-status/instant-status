@@ -204,7 +204,7 @@ export const updatePost = (ctx) => {
       ...(body.stage === 'finished' && {
         server_app_version: latestUpdate.update_app_to,
         server_xapi_version: latestUpdate.update_xapi_to,
-        // TODO: Add updated at time
+        server_updated_at: new Date().toISOString(),
       }),
       server_updating_app_to: latestUpdate.update_app_to,
       server_updating_xapi_to: latestUpdate.update_xapi_to,
