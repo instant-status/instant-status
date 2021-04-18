@@ -84,19 +84,26 @@ export const updateCreate = (ctx) => {
     const lastUpdate = db.updates.findOne({ stack_id: stack_id });
 
     db.updates.save({
+      update_id: Date.now() + '-' + stack_id,
+      last_update_id: lastUpdate?.update_id || undefined,
+      stack_id: stack_id,
+      servers: [],
+      servers_completed: [],
+      server_count: 0,
+      server_completed_count: 0,
+      created_at: Date.now(),
+      is_cancelled: false, // not in use
+
       update_configs: body.update_configs,
       update_envs: body.update_envs,
       run_migrations: body.run_migrations,
-      // rollback_migrations: false,
+      rollback_migrations: false, // not in use
+
       update_app_to: body.update_app_to,
       update_xapi_to: body.update_xapi_to,
-      stack_id: stack_id,
-      server_completed_count: 0,
-      server_count: 0,
 
-      last_update_id: lastUpdate?.stack_id || undefined,
-      update_id: Date.now() + '-' + stack_id,
-      created_at: Date.now(),
+      chosen_one: '',
+      switch_code_at_date: 0,
     });
   }
 
