@@ -5,7 +5,7 @@ export interface InstanceProps {
   instanceDiskUsedGb: number;
   instanceHealthCode: number;
   instanceHealthMessage: string;
-  instanceID: string;
+  server_id: string;
   instanceInGhostMode: false;
   instanceIsChosenOne: true;
   instanceKeyFileName: string;

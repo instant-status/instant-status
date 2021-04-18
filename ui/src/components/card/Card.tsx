@@ -20,8 +20,8 @@ const CardBackground = styled(motion.div)`
   flex-direction: column;
 `;
 
-const instanceIds = (instances?: InstanceProps[]) => {
-  const ids = instances.map((instance) => instance.instanceID);
+const server_ids = (instances?: InstanceProps[]) => {
+  const ids = instances.map((instance) => instance.server_id);
   return ids[0] ? ids : undefined;
 };
 
@@ -50,7 +50,7 @@ const Card = (props: { instances: InstanceProps[]; stackName: string }) => {
           .map((instance, i) => {
             if (i + 1 <= store.instanceDisplayCount) {
               return (
-                <motion.div key={instance.instanceID}>
+                <motion.div key={instance.server_id}>
                   <CardInstance instanceNumber={i + 1} instance={instance} />
                 </motion.div>
               );
@@ -60,7 +60,7 @@ const Card = (props: { instances: InstanceProps[]; stackName: string }) => {
 
       <CardFooter
         chosenOne={getChosenOne(props.instances)}
-        instancesToUpdate={instanceIds(props.instances)}
+        instancesToUpdate={server_ids(props.instances)}
       />
     </CardBackground>
   ));

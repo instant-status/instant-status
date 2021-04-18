@@ -21,7 +21,7 @@ export default interface InstanceProps {
 
   // Instance Display Advanced
   instanceAZ: string;
-  instanceID: string;
+  server_id: string;
   instanceType: string;
 
   // Instance State

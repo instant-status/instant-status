@@ -8,13 +8,13 @@ export const addPrimalInstance = (
     [k in AllowedDataType]: string;
   }
 ) => {
-  if (!request.instanceID) {
+  if (!request.server_id) {
     return 400;
   }
 
   const requestItems = Object.entries(request);
 
-  if (db.instances.find({ instanceID: request.instanceID }).length < 1) {
+  if (db.instances.find({ server_id: request.server_id }).length < 1) {
     const data = {} as { createdAt: Date };
     requestItems.forEach((item) => {
       // if the request item key exists in the ALLOWED_DATA array, save it
@@ -36,7 +36,7 @@ export const updateInstance = (
     [k in AllowedDataType]: string;
   }
 ) => {
-  if (!request.instanceID) {
+  if (!request.server_id) {
     return 400;
   }
 
@@ -50,7 +50,7 @@ export const updateInstance = (
     }
   });
 
-  db.instances.update({ instanceID: request.instanceID }, data, {
+  db.instances.update({ server_id: request.server_id }, data, {
     upsert: true,
   });
 
@@ -63,12 +63,12 @@ export const doneUpdatingInstance = (
     [k in AllowedDataType]: string;
   }
 ) => {
-  if (!request.instanceID) {
+  if (!request.server_id) {
     return 400;
   }
 
   const requestItems = Object.entries(request);
-  const data = {} as { instanceVersion: string; instanceID: string };
+  const data = {} as { instanceVersion: string; server_id: string };
   let shouldCleardown = false;
 
   requestItems.forEach((item) => {
@@ -89,20 +89,20 @@ export const doneUpdatingInstance = (
     if (currentStackInstances.length > 0) {
       currentStackInstances.forEach((instance: any) => {
         if (
-          instance.instanceID !== data.instanceID &&
+          instance.server_id !== data.server_id &&
           instance.instanceUpdatingToVersion !== data.instanceVersion
         ) {
-          db.instances.remove({ instanceID: instance.instanceID }, true);
+          db.instances.remove({ server_id: instance.server_id }, true);
         }
       });
     }
   }
 
-  db.instances.update({ instanceID: request.instanceID }, data, {
+  db.instances.update({ server_id: request.server_id }, data, {
     upsert: true,
   });
 
-  logEvent({ event: 'Instance Update: Done', payload: request.instanceID });
+  logEvent({ event: 'Instance Update: Done', payload: request.server_id });
   return 204;
 };
 
@@ -111,11 +111,11 @@ export const deleteInstance = (
     [k in AllowedDataType]: string;
   }
 ) => {
-  if (!request.instanceID) {
+  if (!request.server_id) {
     return 400;
   }
-  db.instances.remove({ instanceID: request.instanceID }, true);
-  logEvent({ event: 'Instance Deleted', payload: request.instanceID });
+  db.instances.remove({ server_id: request.server_id }, true);
+  logEvent({ event: 'Instance Deleted', payload: request.server_id });
   return 204;
 };
 

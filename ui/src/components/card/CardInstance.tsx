@@ -176,7 +176,7 @@ const CardInstance = (props: {
         <InstanceHeader>
           <InstanceName>
             {props.instance.instanceIsChosenOne && `👑 `}
-            {props.instance.instanceID}
+            {props.instance.server_id}
             <InstanceNumber>#{props.instanceNumber}</InstanceNumber>
           </InstanceName>
 

@@ -76,7 +76,7 @@ const CardFooter = (props: {
 
     const urlHost = `https://${props.chosenOne.stackRegion}.console.aws.amazon.com/systems-manager/automation/execute/Update-Curatr-Version`;
     const urlRegion = `?region=${props.chosenOne.stackRegion}`;
-    const urlInstances = `#InstanceId=${props.instancesToUpdate}`;
+    const urlInstances = `#server_id=${props.instancesToUpdate}`;
     const urlRandom = `&randomString=${randomString()}${randomString()}--${
       props.chosenOne.stackName
     }--${randomString()}${randomString()}`;
