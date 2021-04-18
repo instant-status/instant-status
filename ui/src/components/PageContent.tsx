@@ -1,14 +1,16 @@
-import APP_CONFIG from "../../../config/appConfig";
+import { AnimatePresence, AnimateSharedLayout } from "framer-motion";
+import { useObserver } from "mobx-react-lite";
 import React, { useContext } from "react";
 import { useQuery } from "react-query";
 import styled from "styled-components";
-
-import logo from "../assets/logo.svg";
+import logo from "url:../assets/logo.svg";
+import apiRoutes from "../api/apiRoutes";
 import { StateContext } from "../context/StateContext";
-import fetchUrl from "../hooks/useFetch";
+import CreateUpdateModal from "../pages/CreateUpdateModal";
+import { globalStoreContext } from "../store/globalStore";
+import InstanceProps from "../utils/InstanceProps";
 import Card from "./card/Card";
 import SearchBar from "./SearchBar";
-import InstanceProps from "../utils/InstanceProps";
 
 const Page = styled.main`
   background-color: ${(props) => props.theme.color.darkTwo};
@@ -38,62 +40,65 @@ const Grid = styled.div`
 const PageContent = () => {
   const { urlVersionParams, urlSortBy } = useContext(StateContext);
 
-  const stacksQuery = useQuery(
-    `stacksData`,
-    () => fetchUrl(`${APP_CONFIG.DATA_URL}/instances?groupBy=stackName`),
-    {
-      refetchInterval: 10000, // Refetch the data every second
-    },
-  );
+  const store = useContext(globalStoreContext);
+
+  const stacksQuery = useQuery(`stacksData`, apiRoutes.apiGetStacks, {
+    refetchInterval: 10000, // Refetch the data every second
+  });
 
   const stacks = Object.entries(stacksQuery?.data || []);
-  console.log(`stacks`, stacks);
 
-  return (
+  return useObserver(() => (
     <Page>
       <SearchBar />
-      <Grid>
-        {stacks.length > 0 ? (
-          stacks
-            .filter((item) => {
-              if (urlVersionParams.length > 0) {
-                if (
-                  urlVersionParams.includes(item[1][0].instanceVersion) ||
-                  item[1][0].instanceVersion === undefined
-                ) {
-                  return true;
+      <AnimateSharedLayout>
+        <Grid>
+          {stacks.length > 0 ? (
+            stacks
+              .filter((item) => {
+                if (urlVersionParams.length > 0) {
+                  if (
+                    urlVersionParams.includes(item[1][0].instanceVersion) ||
+                    item[1][0].instanceVersion === undefined
+                  ) {
+                    return true;
+                  }
+                  return false;
                 }
-                return false;
-              }
-              return true;
-            })
-            .sort((a, b) => {
-              const item1 = a[1][0]; // First instance
-              const item2 = b[1][0]; // First instance
+                return true;
+              })
+              .sort((a, b) => {
+                const item1 = a[1][0]; // First instance
+                const item2 = b[1][0]; // First instance
 
-              const sortBy = urlSortBy.replace(`!`, ``);
-              const sortByReverse = urlSortBy.startsWith(`!`);
-              if (sortByReverse) {
-                return item1[sortBy] < item2[sortBy] ? 1 : -1;
-              } else {
-                return item1[sortBy] > item2[sortBy] ? 1 : -1;
-              }
-            })
-            .map((item) => {
-              return (
-                <Card
-                  key={item[0]}
-                  stackName={item[0]}
-                  instances={item[1] as InstanceProps[]}
-                />
-              );
-            })
-        ) : (
-          <img src={logo} alt="Loading..." />
-        )}
-      </Grid>
+                const sortBy = urlSortBy.replace(`!`, ``);
+                const sortByReverse = urlSortBy.startsWith(`!`);
+                if (sortByReverse) {
+                  return item1[sortBy] < item2[sortBy] ? 1 : -1;
+                } else {
+                  return item1[sortBy] > item2[sortBy] ? 1 : -1;
+                }
+              })
+              .map((item) => {
+                return (
+                  <Card
+                    key={item[0]}
+                    stackName={item[0]}
+                    instances={item[1] as InstanceProps[]}
+                  />
+                );
+              })
+          ) : (
+            <img src={logo} alt="Loading..." />
+          )}
+        </Grid>
+      </AnimateSharedLayout>
+
+      <AnimatePresence>
+        {store.isUpdateModalOpen && <CreateUpdateModal />}
+      </AnimatePresence>
     </Page>
-  );
+  ));
 };
 
 export default PageContent;

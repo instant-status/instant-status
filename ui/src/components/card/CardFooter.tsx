@@ -1,13 +1,16 @@
 import { transparentize } from "polished";
 import React, { useContext, useEffect } from "react";
+import { useHistory } from "react-router";
 import styled from "styled-components";
 
 import { StateContext } from "../../context/StateContext";
+import { globalStoreContext } from "../../store/globalStore";
 import InstanceProps from "../../utils/InstanceProps";
 import randomString from "../../utils/randomString";
 import IconLogs from "../icons/IconLogs";
 import IconOpen from "../icons/IconOpen";
 import IconUpdate from "../icons/IconUpdate";
+import { StringParam, useQueryParams } from "use-query-params";
 
 const Footer = styled.footer`
   margin-top: auto;
@@ -15,10 +18,11 @@ const Footer = styled.footer`
   user-select: none;
 `;
 
-const Button = styled.a<{ disabled: boolean }>`
+const Button = styled.button<{ disabled: boolean }>`
   width: 33.33%;
   display: flex;
   flex-direction: column;
+  border: none;
   align-items: center;
   color: ${(props) =>
     props.disabled && props.theme.color.darkOne
@@ -33,6 +37,7 @@ const Button = styled.a<{ disabled: boolean }>`
   padding: 1rem 0;
   transition: background-color 0.15s ease-out;
   font-size: 1.5em;
+  background-color: ${({ theme }) => theme.color.darkOne};
 
   :hover {
     background-color: ${({ theme }) => theme.color.darkTwo};
@@ -48,8 +53,15 @@ const CardFooter = (props: {
   chosenOne: InstanceProps;
   instancesToUpdate: string[];
 }) => {
-  const [awsUpdateUrl, setAwsUpdateUrl] = React.useState(``);
+  const [query, setQuery] = useQueryParams({
+    stack: StringParam,
+    version: StringParam,
+  });
+
+  const [_, setAwsUpdateUrl] = React.useState(``);
   const { prefillReleaseWith } = useContext(StateContext);
+  const store = useContext(globalStoreContext);
+  const history = useHistory();
 
   const releaseBranch =
     prefillReleaseWith === ``
@@ -84,6 +96,7 @@ const CardFooter = (props: {
   return (
     <Footer>
       <Button
+        as="a"
         title="View Logs"
         target="_blank"
         rel="noreferrer noopener"
@@ -94,6 +107,7 @@ const CardFooter = (props: {
         <Text>Logs</Text>
       </Button>
       <Button
+        as="a"
         title="View Site"
         target="_blank"
         rel="noreferrer noopener"
@@ -105,15 +119,18 @@ const CardFooter = (props: {
       </Button>
       <Button
         title="Update Stack"
-        target="_blank"
-        rel="noreferrer noopener"
         disabled={
           !props.chosenOne ||
           !props.instancesToUpdate ||
           !props.chosenOne?.instanceVersion
         }
-        onMouseDown={(event) => setUrl(event)}
-        href={awsUpdateUrl}
+        onClick={() => {
+          store.setIsUpdateModalOpen(true);
+          setQuery({
+            stack: props.chosenOne.stackName,
+            version: props.chosenOne.instanceVersion,
+          });
+        }}
       >
         <IconUpdate width="40px" />
         <Text>Update</Text>

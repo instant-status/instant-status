@@ -1,9 +1,9 @@
 import React, { memo } from "react";
-import GoogleButton from "react-google-button";
+// import GoogleButton from "react-google-button";
 import styled from "styled-components";
-import APP_CONFIG from "../../../config/appConfig";
+// import APP_CONFIG from "../../../config/appConfig";
 
-import logo from "../assets/logo.svg";
+import logo from "url:../assets/logo.svg";
 
 const SplashContent = styled.div`
   display: flex;
@@ -25,12 +25,12 @@ const Login = () => {
     <SplashContent>
       <LoadingLogo src={logo} alt="Loading pulse" />
       <br />
-      <GoogleButton
+      {/* <GoogleButton
         onClick={(e) => {
           e.stopPropagation();
           window.location.href = APP_CONFIG.GOOGLE_AUTH_URL;
         }}
-      />
+      /> */}
     </SplashContent>
   );
 };

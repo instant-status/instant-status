@@ -1,6 +1,8 @@
 import db from 'diskdb';
 import { JsonObject } from 'type-fest';
+import { InstanceProps } from '../../../../types/globalTypes';
 import checkForRequiredDataKeys from '../../helpers/checkForRequiredDataKeys';
+import groupBy from '../../helpers/groupBy';
 import response from '../../helpers/returnResponse';
 
 export const updateGet = (ctx) => {
@@ -50,6 +52,55 @@ export const updateGet = (ctx) => {
       message: `'${body.update_id}' is not one of the latest updates.`,
     });
   }
+};
+
+export const updateCreate = (ctx) => {
+  console.log('body');
+  const body = ctx.request.body;
+
+  const requiredDataKeys = [
+    'run_migrations',
+    'stack_ids',
+    'update_app_to',
+    'update_configs',
+    'update_envs',
+    'update_xapi_to',
+  ];
+
+  for (const stack_id of body.stack_ids) {
+    // Ensuring we have required data in the request
+
+    const checkForRequiredDataKeysResult = checkForRequiredDataKeys(
+      body,
+      requiredDataKeys
+    );
+    if (checkForRequiredDataKeysResult.hasAllRequiredDataKeys === false) {
+      return response(ctx, 400, {
+        ok: false,
+        message: checkForRequiredDataKeysResult.message,
+      });
+    }
+
+    const lastUpdate = db.updates.findOne({ stack_id: stack_id });
+
+    db.updates.save({
+      update_configs: body.update_configs,
+      update_envs: body.update_envs,
+      run_migrations: body.run_migrations,
+      // rollback_migrations: false,
+      update_app_to: body.update_app_to,
+      update_xapi_to: body.update_xapi_to,
+      stack_id: stack_id,
+      server_completed_count: 0,
+      server_count: 0,
+
+      last_update_id: lastUpdate?.stack_id || undefined,
+      update_id: Date.now() + '-' + stack_id,
+      created_at: Date.now(),
+    });
+  }
+
+  return response(ctx, 202, {});
 };
 
 export const updatePost = (ctx) => {
@@ -147,6 +198,39 @@ export const updatePost = (ctx) => {
   );
 
   responseBody.ok = true;
+
+  return response(ctx, 200, responseBody);
+};
+
+export const getStacksAvailableForUpdate = (ctx: any) => {
+  const instances = db.instances.find() as InstanceProps[];
+
+  const output = {};
+
+  for (const instance of instances) {
+    const update = db.updates.findOne({ stack_id: instance.stackName });
+
+    const isUpdating =
+      update &&
+      (update.server_completed_count === 0 ||
+        update.server_count === 0 ||
+        update.server_completed_count !== update.server_count);
+
+    output[instance.stackName] = {
+      stackName: instance.stackName,
+      stackVersion: isUpdating
+        ? `Updating to ${update.update_app_to}`
+        : instance.instanceVersion,
+      stackEnvironment: instance.stackEnvironment,
+      isUpdating: isUpdating,
+    };
+  }
+
+  const stackInfo = Object.values(output);
+
+  const responseBody = Object.entries(
+    groupBy(stackInfo, (data) => data.stackEnvironment)
+  ) as any;
 
   return response(ctx, 200, responseBody);
 };

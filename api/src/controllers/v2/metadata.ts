@@ -13,6 +13,7 @@ export const getMetadata = (ctx: any) => {
     activeVersions: [...versions],
     instanceCount: instances.length,
     stackCount: [...stacks].length,
+    stacks: [...stacks],
     maxInstanceCount: 3,
   };
 

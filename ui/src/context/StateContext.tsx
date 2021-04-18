@@ -20,6 +20,8 @@ interface InitialStateProps {
   updateShowAdvanced: (show: boolean) => void;
   updateInstanceDisplayCount: (value: number) => void;
   updateUrlParams: (params: { key: string; value: string | string[] }) => void;
+  setIsUpdateModalOpen: (value: boolean) => void;
+  isUpdateModalOpen: boolean;
 }
 
 export const initialState = {
@@ -154,9 +156,13 @@ export const StateProvider = (props: { children: React.ReactNode }) => {
     setPrefillReleaseWith(prefillReleaseWith);
   };
 
+  const [isUpdateModalOpen, setIsUpdateModalOpen] = useState(false);
+
   // Data to expose to rest of app
   const providerObject = {
     ...initialState,
+    isUpdateModalOpen,
+    setIsUpdateModalOpen,
     instanceDisplayCount,
     keyLocation,
     prefillReleaseWith,

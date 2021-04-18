@@ -54,44 +54,26 @@ interface CheckboxProps {
   helperLabel?: string;
   disabled?: boolean;
   faded?: boolean;
-  callback?: (isChecked: boolean) => void;
+  callback?: () => void;
 }
 
-const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(
-  (props, forwardedRef) => {
-    const [checked, setChecked] = React.useState(props.defaultChecked || false);
+const UncontrolledCheckbox = (props) => {
+  return (
+    <CheckboxContainer $disabled={props.faded}>
+      <HiddenCheckbox
+        type="checkbox"
+        name={props.name}
+        checked={props.checked}
+        defaultChecked={props.checked}
+        onChange={() => props.onClick(props.name)}
+      />
+      <Box $isChecked={props.checked} $disabled={props.faded} />
+      <Stack direction="down">
+        <Label>{props.label}</Label>
+        <HelperLabel>{props.helperLabel}</HelperLabel>
+      </Stack>
+    </CheckboxContainer>
+  );
+};
 
-    const innerRef = React.useRef(null);
-    const combinedRef = useCombinedRefs(forwardedRef, innerRef);
-
-    const onChange = (event) => {
-      if (!props.disabled) {
-        setChecked(event.target.checked);
-
-        if (typeof props.callback === "function") {
-          props.callback(checked);
-        }
-      }
-    };
-
-    return (
-      <CheckboxContainer $disabled={props.faded}>
-        <HiddenCheckbox
-          ref={combinedRef}
-          type="checkbox"
-          name={props.name}
-          value={props.value}
-          defaultChecked={checked}
-          onChange={(event) => onChange(event)}
-        />
-        <Box $isChecked={checked} $disabled={props.faded} />
-        <Stack direction="down">
-          <Label>{props.label}</Label>
-          <HelperLabel>{props.helperLabel}</HelperLabel>
-        </Stack>
-      </CheckboxContainer>
-    );
-  },
-);
-
-export default Checkbox;
+export default UncontrolledCheckbox;

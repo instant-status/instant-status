@@ -1,7 +1,6 @@
 import { lighten } from "polished";
 import React from "react";
 import { Helmet } from "react-helmet";
-import { ReactQueryDevtools } from "react-query-devtools";
 import { BrowserRouter, Redirect, Route, Switch } from "react-router-dom";
 import { createGlobalStyle, ThemeProvider } from "styled-components";
 
@@ -13,6 +12,10 @@ import Login from "./pages/Login";
 import Logout from "./pages/Logout";
 import StatusPage from "./pages/StatusPage";
 import theme from "./utils/theme";
+import { StateProvider } from "./context/StateContext";
+import { QueryClient, QueryClientProvider } from "react-query";
+import { StoreProvider } from "./store/globalStore";
+import { QueryParamProvider } from "use-query-params";
 
 const GlobalStyle = createGlobalStyle`
   html {
@@ -39,10 +42,14 @@ const GlobalStyle = createGlobalStyle`
   hr {
     border-color: ${(props) => lighten(0.1, props.theme.color.darkOne)}
   }
+  .full-width {
+    width: 100%;
+  }
 `;
 
 const App = () => {
   const { isLoggedIn } = useIsLoggedIn();
+  const queryClient = new QueryClient();
 
   return (
     <ThemeProvider theme={theme}>
@@ -50,32 +57,40 @@ const App = () => {
         <title>{APP_CONFIG.APP_NAME}</title>
       </Helmet>
       <GlobalStyle />
-      <BrowserRouter>
-        <Route
-          render={({ location }) => (
-            <Switch location={location} key={location.pathname}>
-              <Route exact path="/google">
-                {!isLoggedIn ? <AutoLogin /> : <Redirect to="/" />}
-              </Route>
-              <Route exact path="/login">
-                {!isLoggedIn ? <Login /> : <Redirect to="/" />}
-              </Route>
-              <Route exact path="/logout">
-                <Logout />
-              </Route>
-              <Route path="/">
-                {isLoggedIn ? <StatusPage /> : <Redirect to="/login" />}
-              </Route>
-            </Switch>
-          )}
-        />
-      </BrowserRouter>
-      {APP_CONFIG.DEV_MODE && (
-        <>
-          <DevMenu />
-          <ReactQueryDevtools initialIsOpen={true} />
-        </>
-      )}
+      <QueryClientProvider client={queryClient}>
+        <StoreProvider>
+          <BrowserRouter>
+            <QueryParamProvider ReactRouterRoute={Route}>
+              <Route
+                render={({ location }) => (
+                  <Switch location={location} key={location.pathname}>
+                    <Route exact path="/google">
+                      {!isLoggedIn ? <AutoLogin /> : <Redirect to="/" />}
+                    </Route>
+                    <Route exact path="/login">
+                      {!isLoggedIn ? <Login /> : <Redirect to="/" />}
+                    </Route>
+                    <Route exact path="/logout">
+                      <Logout />
+                    </Route>
+                    <Route path="/">
+                      {isLoggedIn ? (
+                        <StateProvider>
+                          <StatusPage />
+                        </StateProvider>
+                      ) : (
+                        <Redirect to="/login" />
+                      )}
+                    </Route>
+                  </Switch>
+                )}
+              />
+            </QueryParamProvider>
+          </BrowserRouter>
+        </StoreProvider>
+      </QueryClientProvider>
+
+      {APP_CONFIG.DEV_MODE && <DevMenu />}
     </ThemeProvider>
   );
 };

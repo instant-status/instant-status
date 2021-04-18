@@ -1,10 +1,10 @@
 import { AnimatePresence, motion } from "framer-motion";
-import React, { memo, useRef, useState } from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 
 import APP_CONFIG from "../../../../config/appConfig";
 import useIsLoggedIn from "../../hooks/useIsLoggedIn";
-import useOnClickOutside from "../../hooks/useOnClickOutside";
+import useClickAway from "../../hooks/useClickAway";
 import theme from "../../utils/theme";
 import IconGlasses from "../icons/IconGlasses";
 import IconLock from "../icons/IconLock";
@@ -40,8 +40,7 @@ const MenuToggleButton = styled(motion.button)`
 
 const DevMenu = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const menuButtonRef = useRef<HTMLButtonElement | null>(null);
-  useOnClickOutside(menuButtonRef, () => setIsMenuOpen(false));
+  const menuButtonRef = useClickAway(() => setIsMenuOpen(false));
 
   const { isLoggedIn } = useIsLoggedIn();
 
@@ -105,4 +104,4 @@ const DevMenu = () => {
   );
 };
 
-export default memo(DevMenu);
+export default DevMenu;

@@ -19,6 +19,7 @@
   },
   "homepage": "https://github.com/instant-status/instant-status#readme",
   "devDependencies": {
-    "typescript": "^4.1.2"
+    "@babel/core": "7.12.10",
+    "typescript": "4.1.2"
   }
 }
