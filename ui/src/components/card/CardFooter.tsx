@@ -48,7 +48,7 @@ const Text = styled.div`
 
 const CardFooter = (props: {
   chosenOne: InstanceProps;
-  instancesToUpdate: string[];
+  isUpdating: boolean;
 }) => {
   const [query, setQuery] = useQueryParams({
     stack: StringParam,
@@ -84,11 +84,7 @@ const CardFooter = (props: {
       </Button>
       <Button
         title="Update Stack"
-        disabled={
-          !props.chosenOne ||
-          !props.instancesToUpdate ||
-          !props.chosenOne?.server_app_version
-        }
+        disabled={props.isUpdating}
         onClick={() => {
           store.setIsUpdateModalOpen(true);
           setQuery({

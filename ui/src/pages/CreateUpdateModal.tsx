@@ -118,7 +118,7 @@ const CreateUpdateModal = () => {
     `apiGetStacksAvailableForUpdate`,
     apiRoutes.apiGetStacksAvailableForUpdate,
     {
-      // refetchInterval: 2000, // Refetch the data every second
+      refetchInterval: 2000, // Refetch the data every second
     },
   );
 

@@ -41,8 +41,13 @@ const apiGetStacksAvailableForUpdate = () => {
   return apiFetch(`${APP_CONFIG.DATA_URL}/v2/stacks/available-for-update`);
 };
 
+const apiGetUpdatingStacks = () => {
+  return apiFetch(`${APP_CONFIG.DATA_URL}/v2/stacks/updating`);
+};
+
 export default {
   apiGetStacks,
   apiCreateUpdate,
   apiGetStacksAvailableForUpdate,
+  apiGetUpdatingStacks,
 };

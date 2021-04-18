@@ -1,9 +1,8 @@
-import { AnimatePresence, AnimateSharedLayout, motion } from "framer-motion";
+import { AnimateSharedLayout, motion } from "framer-motion";
 import { useObserver } from "mobx-react-lite";
 import React, { useContext } from "react";
 import styled from "styled-components";
 
-import { StateContext } from "../../context/StateContext";
 import { globalStoreContext } from "../../store/globalStore";
 import InstanceProps from "../../utils/InstanceProps";
 import CardFooter from "./CardFooter";
@@ -20,11 +19,6 @@ const CardBackground = styled(motion.div)`
   flex-direction: column;
 `;
 
-const serverIds = (instances?: InstanceProps[]) => {
-  const ids = instances.map((instance) => instance.server_id);
-  return ids[0] ? ids : undefined;
-};
-
 const getChosenOne = (instances?: InstanceProps[]) => {
   const chosenOne = instances.filter(
     (instance) => instance.server_is_chosen_one === true,
@@ -32,7 +26,7 @@ const getChosenOne = (instances?: InstanceProps[]) => {
   return chosenOne[0] || undefined;
 };
 
-const Card = (props: { instances: InstanceProps[] }) => {
+const Card = (props: { instances: InstanceProps[]; isUpdating: boolean }) => {
   const store = useContext(globalStoreContext);
 
   const firstInstance = props.instances[0];
@@ -65,7 +59,7 @@ const Card = (props: { instances: InstanceProps[] }) => {
 
       <CardFooter
         chosenOne={getChosenOne(props.instances)}
-        instancesToUpdate={serverIds(props.instances)}
+        isUpdating={props.isUpdating}
       />
     </CardBackground>
   ));

@@ -22,7 +22,7 @@ const StackId = styled.h2`
 const StackLogo = styled.div<{ image: string }>`
   background: url(${(props) => props.image}) center center no-repeat;
   background-size: contain;
-  padding: 16px 28px;
+  padding: 16px;
   flex: none;
 `;
 

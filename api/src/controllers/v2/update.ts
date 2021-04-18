@@ -251,3 +251,25 @@ export const getStacksAvailableForUpdate = (ctx: any) => {
 
   return response(ctx, 200, responseBody);
 };
+
+export const getUpdatingStacks = (ctx: any) => {
+  const servers = db.instances.find() as InstanceProps[];
+
+  const responseBody = [];
+
+  for (const server of servers) {
+    const update = db.updates.findOne({ stack_id: server.stack_id });
+
+    const isUpdating =
+      update &&
+      (update.server_completed_count === 0 ||
+        update.server_count === 0 ||
+        update.server_completed_count !== update.server_count);
+
+    if (isUpdating) {
+      responseBody.push(server.stack_id);
+    }
+  }
+
+  return response(ctx, 200, { stacks: responseBody });
+};

@@ -46,6 +46,16 @@ const PageContent = () => {
     refetchInterval: 10000, // Refetch the data every second
   });
 
+  const stackUpdatesQuery = useQuery(
+    `apiGetUpdatingStacks`,
+    apiRoutes.apiGetUpdatingStacks,
+    {
+      refetchInterval: 2000, // Refetch the data every second
+    },
+  );
+
+  const updatingStacks = [...(stackUpdatesQuery.data?.stacks || [])];
+
   const stacks = Object.entries(stacksQuery?.data || []);
 
   return useObserver(() => (
@@ -81,7 +91,11 @@ const PageContent = () => {
               })
               .map((item) => {
                 return (
-                  <Card key={item[0]} instances={item[1] as InstanceProps[]} />
+                  <Card
+                    key={item[0]}
+                    isUpdating={updatingStacks.includes(item[0])}
+                    instances={item[1] as InstanceProps[]}
+                  />
                 );
               })
           ) : (

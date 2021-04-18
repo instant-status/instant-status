@@ -68,7 +68,7 @@ export const doneUpdatingInstance = (
   }
 
   const requestItems = Object.entries(request);
-  const data = {} as { server_app_version: string; server_id: string };
+  const data = {} as { instanceVersion: string; server_id: string };
   let shouldCleardown = false;
 
   requestItems.forEach((item) => {
@@ -78,19 +78,19 @@ export const doneUpdatingInstance = (
 
       // if the instance reporting as done is the chosen one for this update
       // we should cleardown
-      if (item[0] === 'server_is_chosen_one' && item[1]) shouldCleardown = true;
+      if (item[0] === 'instanceIsChosenOne' && item[1]) shouldCleardown = true;
     }
   });
 
-  if (shouldCleardown && typeof data['stack_id'] === 'string') {
+  if (shouldCleardown && typeof data['stackName'] === 'string') {
     const currentStackInstances = db.instances.find({
-      stack_id: data['stack_id'],
+      stackName: data['stackName'],
     });
     if (currentStackInstances.length > 0) {
       currentStackInstances.forEach((instance: any) => {
         if (
           instance.server_id !== data.server_id &&
-          instance.server_updating_app_to !== data.server_app_version
+          instance.server_updating_app_to !== data.instanceVersion
         ) {
           db.instances.remove({ server_id: instance.server_id }, true);
         }

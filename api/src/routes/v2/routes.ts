@@ -6,6 +6,7 @@ import {
   updateGet,
   updatePost,
   getStacksAvailableForUpdate,
+  getUpdatingStacks,
 } from '../../controllers/v2/update';
 import { getMetadata } from '../../controllers/v2/metadata';
 
@@ -27,5 +28,6 @@ routerV2.post('/update', updatePost);
 // Metadata
 routerV2.get('/metadata', getMetadata);
 routerV2.get('/stacks/available-for-update', getStacksAvailableForUpdate);
+routerV2.get('/stacks/updating', getUpdatingStacks);
 
 export default routerV2;
