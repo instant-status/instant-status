@@ -3,6 +3,8 @@ const ALLOWED_DATA = <const>[
   "stack_id",
   "last_update_id",
   "stack_region",
+  "stack_environment",
+  "stack_logo",
   "stack_app_url",
   "stack_logs_url",
   "server_name",
