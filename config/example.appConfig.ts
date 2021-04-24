@@ -6,8 +6,8 @@ const APP_CONFIG = {
   GOOGLE_AUTH_URL: "https://accounts.google.com/o/oauth2/v2/auth?...",
   COOKIE_NAME: "Bearer",
   CARD_ADVANCED_MAPPING: {
-    instanceID: "ID",
-    instanceAZ: "ec2AZ",
+    server_id: "ID",
+    server_availability_zone: "ec2AZ",
   },
   DEFAULT_KEY_LOCATION: "~/.ssh/",
   DEV_MODE: true,

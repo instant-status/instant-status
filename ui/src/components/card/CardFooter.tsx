@@ -1,13 +1,13 @@
 import { transparentize } from "polished";
-import React, { useContext, useEffect } from "react";
+import React, { useContext } from "react";
 import styled from "styled-components";
 
-import { StateContext } from "../../context/StateContext";
+import { globalStoreContext } from "../../store/globalStore";
 import InstanceProps from "../../utils/InstanceProps";
-import randomString from "../../utils/randomString";
 import IconLogs from "../icons/IconLogs";
 import IconOpen from "../icons/IconOpen";
 import IconUpdate from "../icons/IconUpdate";
+import { StringParam, useQueryParams } from "use-query-params";
 
 const Footer = styled.footer`
   margin-top: auto;
@@ -15,10 +15,11 @@ const Footer = styled.footer`
   user-select: none;
 `;
 
-const Button = styled.a<{ disabled: boolean }>`
+const Button = styled.button<{ disabled: boolean }>`
   width: 33.33%;
   display: flex;
   flex-direction: column;
+  border: none;
   align-items: center;
   color: ${(props) =>
     props.disabled && props.theme.color.darkOne
@@ -33,6 +34,7 @@ const Button = styled.a<{ disabled: boolean }>`
   padding: 1rem 0;
   transition: background-color 0.15s ease-out;
   font-size: 1.5em;
+  background-color: ${({ theme }) => theme.color.darkOne};
 
   :hover {
     background-color: ${({ theme }) => theme.color.darkTwo};
@@ -46,74 +48,51 @@ const Text = styled.div`
 
 const CardFooter = (props: {
   chosenOne: InstanceProps;
-  instancesToUpdate: string[];
+  isUpdating: boolean;
 }) => {
-  const [awsUpdateUrl, setAwsUpdateUrl] = React.useState(``);
-  const { prefillReleaseWith } = useContext(StateContext);
+  const [query, setQuery] = useQueryParams({
+    stack: StringParam,
+    version: StringParam,
+    xapiVersion: StringParam,
+  });
 
-  const releaseBranch =
-    prefillReleaseWith === ``
-      ? props.chosenOne?.instanceVersion
-      : prefillReleaseWith;
-
-  const setUrl = (event?: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
-    // Check for a right click as we want to ignore these
-    if (!event || event.button === 2) {
-      return;
-    }
-
-    const urlHost = `https://${props.chosenOne.stackRegion}.console.aws.amazon.com/systems-manager/automation/execute/Update-Curatr-Version`;
-    const urlRegion = `?region=${props.chosenOne.stackRegion}`;
-    const urlInstances = `#InstanceId=${props.instancesToUpdate}`;
-    const urlRandom = `&randomString=${randomString()}${randomString()}--${
-      props.chosenOne.stackName
-    }--${randomString()}${randomString()}`;
-    const urlVersion = `&releaseBranch=${releaseBranch}`;
-    const urlOptions = `&runMigrations=true&updateEnv=true&updateConfs=true`;
-    const url = `${urlHost}${urlRegion}${urlInstances}${urlRandom}${urlVersion}${urlOptions}`;
-
-    setAwsUpdateUrl(url);
-  };
-
-  useEffect(() => {
-    if (props.chosenOne) {
-      setUrl();
-    }
-  }, [props.chosenOne && props.chosenOne.stackAppUrl]);
+  const store = useContext(globalStoreContext);
 
   return (
     <Footer>
       <Button
+        as="a"
         title="View Logs"
         target="_blank"
         rel="noreferrer noopener"
-        disabled={!props.chosenOne || !props.chosenOne.stackLogsUrl}
-        href={props.chosenOne && props.chosenOne.stackLogsUrl}
+        disabled={!props.chosenOne || !props.chosenOne.stack_logs_url}
+        href={props.chosenOne && props.chosenOne.stack_logs_url}
       >
         <IconLogs width="40px" />
         <Text>Logs</Text>
       </Button>
       <Button
+        as="a"
         title="View Site"
         target="_blank"
         rel="noreferrer noopener"
-        disabled={!props.chosenOne || !props.chosenOne.stackAppUrl}
-        href={props.chosenOne && props.chosenOne.stackAppUrl}
+        disabled={!props.chosenOne || !props.chosenOne.stack_app_url}
+        href={props.chosenOne && props.chosenOne.stack_app_url}
       >
         <IconOpen width="40px" />
         <Text>Open</Text>
       </Button>
       <Button
         title="Update Stack"
-        target="_blank"
-        rel="noreferrer noopener"
-        disabled={
-          !props.chosenOne ||
-          !props.instancesToUpdate ||
-          !props.chosenOne?.instanceVersion
-        }
-        onMouseDown={(event) => setUrl(event)}
-        href={awsUpdateUrl}
+        disabled={props.isUpdating}
+        onClick={() => {
+          store.setIsUpdateModalOpen(true);
+          setQuery({
+            stack: props.chosenOne.stack_id,
+            version: props.chosenOne.server_app_version,
+            xapiVersion: props.chosenOne.server_xapi_version,
+          });
+        }}
       >
         <IconUpdate width="40px" />
         <Text>Update</Text>

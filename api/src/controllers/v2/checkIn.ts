@@ -21,7 +21,7 @@ export const checkIn = (ctx) => {
 
   // Fetching the details of the latest update for the Stack and returning a response
   const latestUpdate = db.updates.findOne({ stack_id: body.stack_id });
-  console.log(latestUpdate);
+
   if (!latestUpdate) {
     return response(ctx, 404, {
       ok: false,

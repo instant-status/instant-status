@@ -1,227 +1,184 @@
 {
-	"info": {
-		"_postman_id": "8c8171f2-224b-404e-91af-140afdfdee45",
-		"name": "Instant Status",
-		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
-	},
-	"item": [
-		{
-			"name": "v2",
-			"item": [
-				{
-					"name": "Metadata",
-					"protocolProfileBehavior": {
-						"disabledSystemHeaders": {
-							"user-agent": true,
-							"host": true
-						}
-					},
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "http://35.179.64.115:3000/v2/metadata",
-							"protocol": "http",
-							"host": [
-								"35",
-								"179",
-								"64",
-								"115"
-							],
-							"port": "3000",
-							"path": [
-								"v2",
-								"metadata"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Update",
-					"protocolProfileBehavior": {
-						"disableBodyPruning": true,
-						"disabledSystemHeaders": {
-							"host": true,
-							"user-agent": true
-						}
-					},
-					"request": {
-						"method": "GET",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n    \"update_id\": \"fdgfiiugidrugdu\"\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "http://35.179.64.115:3000/v2/update",
-							"protocol": "http",
-							"host": [
-								"35",
-								"179",
-								"64",
-								"115"
-							],
-							"port": "3000",
-							"path": [
-								"v2",
-								"update"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Check In",
-					"protocolProfileBehavior": {
-						"disabledSystemHeaders": {
-							"host": true,
-							"user-agent": true
-						}
-					},
-					"request": {
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n  \"server_id\": \"i-1\",\n  \"stack_id\": \"fire-and-fury\",\n  \"last_update_id\": \"3\"\n}\n",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "http://35.179.64.115:3000/v2/check-in",
-							"protocol": "http",
-							"host": [
-								"35",
-								"179",
-								"64",
-								"115"
-							],
-							"port": "3000",
-							"path": [
-								"v2",
-								"check-in"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Update",
-					"protocolProfileBehavior": {
-						"disabledSystemHeaders": {
-							"host": true,
-							"user-agent": true
-						}
-					},
-					"request": {
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n  \"update_id\": \"3\",\n  \"server_id\": \"i-3\",\n  \"progress\": 5,\n  \"stage\": \"election\",\n  \"message\": \"Casting Vote\"\n}\n",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "http://35.179.64.115:3000/v2/update",
-							"protocol": "http",
-							"host": [
-								"35",
-								"179",
-								"64",
-								"115"
-							],
-							"port": "3000",
-							"path": [
-								"v2",
-								"update"
-							]
-						}
-					},
-					"response": []
-				}
-			],
-			"protocolProfileBehavior": {}
-		},
-		{
-			"name": "Instances",
-			"protocolProfileBehavior": {
-				"disabledSystemHeaders": {
-					"host": true,
-					"user-agent": true
-				}
-			},
-			"request": {
-				"method": "GET",
-				"header": [],
-				"url": {
-					"raw": "http://35.179.64.115:3000/instances",
-					"protocol": "http",
-					"host": [
-						"35",
-						"179",
-						"64",
-						"115"
-					],
-					"port": "3000",
-					"path": [
-						"instances"
-					],
-					"query": [
-						{
-							"key": "groupBy",
-							"value": "stackName",
-							"disabled": true
-						}
-					]
-				}
-			},
-			"response": []
-		}
-	],
-	"auth": {
-		"type": "bearer",
-		"bearer": [
-			{
-				"key": "token",
-				"value": "{{bearerToken}}",
-				"type": "string"
-			}
-		]
-	},
-	"event": [
-		{
-			"listen": "prerequest",
-			"script": {
-				"id": "49ef5464-2d34-409e-b09b-7333c105112f",
-				"type": "text/javascript",
-				"exec": [
-					""
-				]
-			}
-		},
-		{
-			"listen": "test",
-			"script": {
-				"id": "75efd120-f22f-47de-9a25-ed3f458147b2",
-				"type": "text/javascript",
-				"exec": [
-					""
-				]
-			}
-		}
-	],
-	"protocolProfileBehavior": {}
+  "info": {
+    "_postman_id": "8c8171f2-224b-404e-91af-140afdfdee45",
+    "name": "Instant Status",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "v2",
+      "item": [
+        {
+          "name": "Metadata",
+          "protocolProfileBehavior": {
+            "disabledSystemHeaders": {
+              "user-agent": true,
+              "host": true
+            }
+          },
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://35.179.64.115:3000/v2/metadata",
+              "protocol": "http",
+              "host": ["35", "179", "64", "115"],
+              "port": "3000",
+              "path": ["v2", "metadata"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Update",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true,
+            "disabledSystemHeaders": {
+              "host": true,
+              "user-agent": true
+            }
+          },
+          "request": {
+            "method": "GET",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"update_id\": \"fdgfiiugidrugdu\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://35.179.64.115:3000/v2/update",
+              "protocol": "http",
+              "host": ["35", "179", "64", "115"],
+              "port": "3000",
+              "path": ["v2", "update"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Check In",
+          "protocolProfileBehavior": {
+            "disabledSystemHeaders": {
+              "host": true,
+              "user-agent": true
+            }
+          },
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"server_id\": \"i-1\",\n  \"stack_id\": \"fire-and-fury\",\n  \"last_update_id\": \"3\"\n}\n",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://35.179.64.115:3000/v2/check-in",
+              "protocol": "http",
+              "host": ["35", "179", "64", "115"],
+              "port": "3000",
+              "path": ["v2", "check-in"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Update",
+          "protocolProfileBehavior": {
+            "disabledSystemHeaders": {
+              "host": true,
+              "user-agent": true
+            }
+          },
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"update_id\": \"3\",\n  \"server_id\": \"i-3\",\n  \"progress\": 5,\n  \"stage\": \"election\",\n  \"message\": \"Casting Vote\"\n}\n",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://35.179.64.115:3000/v2/update",
+              "protocol": "http",
+              "host": ["35", "179", "64", "115"],
+              "port": "3000",
+              "path": ["v2", "update"]
+            }
+          },
+          "response": []
+        }
+      ],
+      "protocolProfileBehavior": {}
+    },
+    {
+      "name": "Instances",
+      "protocolProfileBehavior": {
+        "disabledSystemHeaders": {
+          "host": true,
+          "user-agent": true
+        }
+      },
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://35.179.64.115:3000/instances",
+          "protocol": "http",
+          "host": ["35", "179", "64", "115"],
+          "port": "3000",
+          "path": ["instances"],
+          "query": [
+            {
+              "key": "groupBy",
+              "value": "stack_id",
+              "disabled": true
+            }
+          ]
+        }
+      },
+      "response": []
+    }
+  ],
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{bearerToken}}",
+        "type": "string"
+      }
+    ]
+  },
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "id": "49ef5464-2d34-409e-b09b-7333c105112f",
+        "type": "text/javascript",
+        "exec": [""]
+      }
+    },
+    {
+      "listen": "test",
+      "script": {
+        "id": "75efd120-f22f-47de-9a25-ed3f458147b2",
+        "type": "text/javascript",
+        "exec": [""]
+      }
+    }
+  ],
+  "protocolProfileBehavior": {}
 }

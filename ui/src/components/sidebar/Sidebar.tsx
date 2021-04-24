@@ -1,3 +1,4 @@
+import { useObserver } from "mobx-react-lite";
 import { lighten } from "polished";
 import React, { useContext } from "react";
 import { useQuery } from "react-query";
@@ -6,6 +7,7 @@ import styled from "styled-components";
 import APP_CONFIG from "../../../../config/appConfig";
 import { StateContext } from "../../context/StateContext";
 import fetchUrl from "../../hooks/useFetch";
+import { globalStoreContext } from "../../store/globalStore";
 import Checkbox from "./Checkbox";
 import SelectInput from "./SelectInput";
 import SidebarHeader from "./SidebarHeader";
@@ -53,15 +55,13 @@ const Sidebar = () => {
     updateUrlParams,
     updateKeyLocation,
     keyLocation,
-    updatePrefillReleaseWith,
-    prefillReleaseWith,
     updateRememberSettings,
     rememberSettings,
     showAdvanced,
     updateShowAdvanced,
-    instanceDisplayCount,
-    updateInstanceDisplayCount,
   } = useContext(StateContext);
+
+  const store = useContext(globalStoreContext);
 
   const updateOrderBy = (option: string) => {
     updateUrlParams({ key: `sortBy`, value: option });
@@ -75,7 +75,7 @@ const Sidebar = () => {
     },
   );
 
-  return (
+  return useObserver(() => (
     <>
       <Aside>
         <SidebarHeader
@@ -93,9 +93,9 @@ const Sidebar = () => {
             label="Order By"
           />
           <SliderInput
-            value={instanceDisplayCount}
+            value={store.instanceDisplayCount}
             onChange={(event) =>
-              updateInstanceDisplayCount(Number(event.target.value))
+              store.setInstanceDisplayCount(Number(event.target.value))
             }
             total={4}
             label="Display Count:"
@@ -105,11 +105,6 @@ const Sidebar = () => {
             onChange={(event) => updateKeyLocation(event.target.value)}
             onBlur={(event) => updateKeyLocation(event.target.value, true)}
             label="Key File Location:"
-          />
-          <TextInput
-            value={prefillReleaseWith}
-            onChange={(event) => updatePrefillReleaseWith(event.target.value)}
-            label="Prefill Release With:"
           />
           <Checkbox
             isChecked={showAdvanced}
@@ -137,7 +132,7 @@ const Sidebar = () => {
       </Aside>
       <AsideGhost />
     </>
-  );
+  ));
 };
 
 export default Sidebar;

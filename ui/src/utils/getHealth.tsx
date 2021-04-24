@@ -23,5 +23,5 @@ export const getHealthIcon = (healthCode: number, size?: string) => {
 };
 
 export const getHealthMessage = (instance: InstanceProps) => {
-  return instance.instanceHealthMessage;
+  return instance.server_health_message;
 };

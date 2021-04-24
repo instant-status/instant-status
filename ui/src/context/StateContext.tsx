@@ -7,7 +7,6 @@ interface InitialStateProps {
   urlVersionParams: string[];
   urlSortBy: string;
   keyLocation: string;
-  prefillReleaseWith: string;
   showAdvanced: boolean;
   instanceDisplayCount: number;
   rememberSettings: boolean;
@@ -16,18 +15,18 @@ interface InitialStateProps {
     keyLocation: string,
     checkForTrailingSlash?: boolean,
   ) => void;
-  updatePrefillReleaseWith: (prefillReleaseWith: string) => void;
   updateShowAdvanced: (show: boolean) => void;
   updateInstanceDisplayCount: (value: number) => void;
   updateUrlParams: (params: { key: string; value: string | string[] }) => void;
+  setIsUpdateModalOpen: (value: boolean) => void;
+  isUpdateModalOpen: boolean;
 }
 
 export const initialState = {
   urlEnvParams: [],
   urlVersionParams: [],
-  urlSortBy: `stackName`,
+  urlSortBy: `stack_id`,
   keyLocation: APP_CONFIG.DEFAULT_KEY_LOCATION || `~/.ssh/`,
-  prefillReleaseWith: ``,
   showAdvanced: false,
   instanceDisplayCount: 2,
   rememberSettings: false,
@@ -143,28 +142,19 @@ export const StateProvider = (props: { children: React.ReactNode }) => {
     updateUrlParams({ key: `keyLocation`, value: keyLocation });
   };
 
-  // Customise prefill release with text
-  const getInitialPrefillReleaseWith = () => {
-    return initialState.prefillReleaseWith;
-  };
-  const [prefillReleaseWith, setPrefillReleaseWith] = useState(
-    getInitialPrefillReleaseWith(),
-  );
-  const updatePrefillReleaseWith = (prefillReleaseWith: string) => {
-    setPrefillReleaseWith(prefillReleaseWith);
-  };
+  const [isUpdateModalOpen, setIsUpdateModalOpen] = useState(false);
 
   // Data to expose to rest of app
   const providerObject = {
     ...initialState,
+    isUpdateModalOpen,
+    setIsUpdateModalOpen,
     instanceDisplayCount,
     keyLocation,
-    prefillReleaseWith,
     rememberSettings,
     showAdvanced,
     updateInstanceDisplayCount,
     updateKeyLocation,
-    updatePrefillReleaseWith,
     updateRememberSettings,
     updateShowAdvanced,
     updateUrlParams,
