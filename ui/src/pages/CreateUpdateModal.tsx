@@ -13,48 +13,7 @@ import Stack from "../components/Stack";
 import { globalStoreContext } from "../store/globalStore";
 import UpdateSuccess from "./UpdateSuccess";
 import allExistIn from "../utils/allExistIn";
-
-const GhostButton = styled.button`
-  padding: 0.9rem 4rem;
-  border-radius: 12px;
-  cursor: pointer;
-  font-size: ${spacing[11]};
-  color: #fff;
-  background-color: transparent;
-  border: 4px solid #fff;
-  transition: background-color 0.3s, color 0.3s;
-
-  &:hover {
-    color: #191e2a;
-    background-color: #fff;
-  }
-`;
-
-const UpdateButton = styled.button`
-  padding: 0.9rem 4rem;
-  border-radius: 12px;
-  cursor: pointer;
-  font-size: ${spacing[11]};
-  color: #00ab4e;
-  background-color: transparent;
-  border: 4px solid #00ab4e;
-  transition: background-color 0.3s, color 0.3s;
-
-  &:hover {
-    color: #191e2a;
-    background-color: #00ab4e;
-  }
-`;
-
-const BackButton = styled.button`
-  padding: 1rem 4rem;
-  font-size: ${spacing[11]};
-  border-radius: 12px;
-  color: #fff;
-  background-color: transparent;
-  border: 2px solid #fff;
-  cursor: pointer;
-`;
+import { BackButton, GhostButton, UpdateButton } from "../components/Buttons";
 
 const Heading = styled.h2`
   margin: 0;
@@ -89,6 +48,7 @@ interface ApiGetStacksAvailableForUpdateProps {
 
 const CreateUpdateModal = () => {
   const [step, setStep] = useState(UpdateStepTypes.pickOptions);
+  const [isSafeToClose, setIsSafeToClose] = useState(false);
   const [query, setQuery] = useQueryParams({
     stack: StringParam,
     version: StringParam,
@@ -196,9 +156,11 @@ const CreateUpdateModal = () => {
   const closeModal = () => {
     let canClose = true;
 
-    canClose = confirm(
-      `You have unsaved changes. Are you sure you want to leave?`,
-    );
+    if (!isSafeToClose) {
+      canClose = confirm(
+        `You have unsaved changes. Are you sure you want to leave?`,
+      );
+    }
 
     if (canClose) {
       setQuery({
@@ -343,6 +305,7 @@ const CreateUpdateModal = () => {
               callback={onSave}
               cancel={() => setStep(UpdateStepTypes.pickOptions)}
               onClose={closeModal}
+              setIsSafeToClose={setIsSafeToClose}
             />
           )}
         </Stack>

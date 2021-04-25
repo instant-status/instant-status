@@ -1,28 +1,12 @@
 import React, { memo, useEffect, useState } from "react";
-import styled from "styled-components";
-import { spacing } from "../components/spacing";
+import { CancelButton, GhostButton } from "../components/Buttons";
 import Stack from "../components/Stack";
-
-const CancelButton = styled.button`
-  padding: 0.9rem 4rem;
-  border-radius: 12px;
-  cursor: pointer;
-  font-size: ${spacing[11]};
-  color: #ee2f01;
-  background-color: transparent;
-  border: 4px solid #ee2f01;
-  transition: background-color 0.3s, color 0.3s;
-
-  &:hover {
-    color: #191e2a;
-    background-color: #ee2f01;
-  }
-`;
 
 interface UpdateSuccessProps {
   callback: () => void;
   cancel: () => void;
   onClose: () => void;
+  setIsSafeToClose: (value: boolean) => void;
 }
 
 const UpdateSuccess = (props: UpdateSuccessProps) => {
@@ -32,6 +16,7 @@ const UpdateSuccess = (props: UpdateSuccessProps) => {
     const timer = setTimeout(() => {
       setCount(count - 1);
       if (count === 0) {
+        props.setIsSafeToClose(true);
         clearTimeout(timer);
         props.callback();
       }
@@ -42,7 +27,7 @@ const UpdateSuccess = (props: UpdateSuccessProps) => {
   return (
     <Stack justify="center" spacing={4}>
       {count <= 0 ? (
-        <CancelButton onClick={props.onClose}>Close</CancelButton>
+        <GhostButton onClick={props.onClose}>Close</GhostButton>
       ) : (
         <CancelButton onClick={props.cancel}>({count}s) Cancel...</CancelButton>
       )}
