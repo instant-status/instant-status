@@ -196,11 +196,9 @@ const CreateUpdateModal = () => {
   const closeModal = () => {
     let canClose = true;
 
-    if (step === UpdateStepTypes.coolOff || stacksToUpdate.length > 1) {
-      canClose = confirm(
-        `You have unsaved changes. Are you sure you want to leave?`,
-      );
-    }
+    canClose = confirm(
+      `You have unsaved changes. Are you sure you want to leave?`,
+    );
 
     if (canClose) {
       setQuery({
