@@ -1,4 +1,4 @@
-import React, { memo, useContext, useState } from "react";
+import React, { memo, useContext, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useMutation, useQuery } from "react-query";
 import styled from "styled-components";
@@ -12,6 +12,7 @@ import { spacing } from "../components/spacing";
 import Stack from "../components/Stack";
 import { globalStoreContext } from "../store/globalStore";
 import UpdateSuccess from "./UpdateSuccess";
+import allExistIn from "../utils/allExistIn";
 
 const GhostButton = styled.button`
   padding: 0.9rem 4rem;
@@ -79,6 +80,13 @@ enum UpdateStepTypes {
   coolOff = "coolOff",
 }
 
+interface ApiGetStacksAvailableForUpdateProps {
+  stack_id: string;
+  stackVersion: string;
+  stack_environment: string;
+  isUpdating: boolean;
+}
+
 const CreateUpdateModal = () => {
   const [step, setStep] = useState(UpdateStepTypes.pickOptions);
   const [query, setQuery] = useQueryParams({
@@ -95,6 +103,20 @@ const CreateUpdateModal = () => {
   const mutation = useMutation((payload: any) =>
     apiRoutes.apiCreateUpdate({ body: payload }),
   );
+
+  const warnAboutUnsavedChanges = (event) => {
+    if (step !== UpdateStepTypes.pickOptions) {
+      event.returnValue = `You have unsaved changes. Are you sure you want to leave?`;
+    }
+  };
+
+  useEffect(() => {
+    window.addEventListener("beforeunload", warnAboutUnsavedChanges);
+
+    return () => {
+      window.removeEventListener("beforeunload", warnAboutUnsavedChanges);
+    };
+  }, [step]);
 
   const onSubmit = (data) => {
     // console.log("data", data);
@@ -114,7 +136,7 @@ const CreateUpdateModal = () => {
     });
   };
 
-  const stacksQuery = useQuery(
+  const stacksQuery = useQuery<ApiGetStacksAvailableForUpdateProps[], Error>(
     `apiGetStacksAvailableForUpdate`,
     apiRoutes.apiGetStacksAvailableForUpdate,
     {
@@ -149,8 +171,9 @@ const CreateUpdateModal = () => {
   const stacks = [...(stacksQuery.data || [])]
     .map((environment) => {
       if (step !== UpdateStepTypes.pickOptions) {
-        const filteredStacks = environment[1].filter((stack) =>
-          stacksToUpdate.includes(stack.stack_id),
+        const filteredStacks = environment[1].filter(
+          (stack: ApiGetStacksAvailableForUpdateProps) =>
+            stacksToUpdate.includes(stack.stack_id),
         );
 
         if (filteredStacks.length) {
@@ -171,61 +194,75 @@ const CreateUpdateModal = () => {
   }
 
   const closeModal = () => {
-    setQuery({
-      stack: undefined,
-      version: undefined,
-      xapiVersion: undefined,
-    });
-    store.setIsUpdateModalOpen(false);
+    let canClose = true;
+
+    canClose = confirm(
+      `You have unsaved changes. Are you sure you want to leave?`,
+    );
+
+    if (canClose) {
+      setQuery({
+        stack: undefined,
+        version: undefined,
+        xapiVersion: undefined,
+      });
+      store.setIsUpdateModalOpen(false);
+    }
   };
 
   return (
     <ModalBase title={modalTitle} onClose={closeModal}>
       <Stack direction="down" spacing={8}>
         {stacks
-          .sort((a, b) => a[1].length > b[1].length)
-          .map((stackEnvironment) => (
-            <Stack direction="down" key={stackEnvironment[0]}>
-              <StackColumnName>
-                <Stack align="center" justify="spaceBetween">
-                  {stackEnvironment[0]}
-                  {step === UpdateStepTypes.pickOptions && (
-                    <Checkbox
-                      label="Select all"
-                      name={`select_all_${stackEnvironment[0]}`}
-                      callback={(isChecked) =>
-                        toggleAll(
-                          stackEnvironment[1].map((stack) => stack.stack_id),
-                          isChecked,
-                        )
+          .sort((a, b) => a[1].length - b[1].length)
+          .map((stackEnv) => {
+            const environment = stackEnv[0];
+            const stacks = stackEnv[1] as ApiGetStacksAvailableForUpdateProps[];
+            const stackIds = stacks.map((stack) => stack.stack_id);
+            const availableStackIds = stacks
+              .filter((stack) => !stack.isUpdating)
+              .map((stack) => stack.stack_id);
+            const allSelected = allExistIn(availableStackIds, stacksToUpdate);
+
+            return (
+              <Stack direction="down" key={environment}>
+                <StackColumnName>
+                  <Stack align="center" justify="spaceBetween">
+                    {environment}
+                    {step === UpdateStepTypes.pickOptions && (
+                      <Checkbox
+                        label="Select all"
+                        name={`select_all_${environment}`}
+                        defaultChecked={allSelected}
+                        callback={(isChecked) => toggleAll(stackIds, isChecked)}
+                      />
+                    )}
+                  </Stack>
+                </StackColumnName>
+                <Columns>
+                  {stacks.map((stack) => (
+                    <UncontrolledCheckbox
+                      key={`${stack.stack_id}-${stack.stackVersion}`}
+                      label={stack.stack_id}
+                      helperLabel={stack.stackVersion}
+                      name={stack.stack_id}
+                      disabled={
+                        step !== UpdateStepTypes.pickOptions
+                          ? true
+                          : stack.isUpdating
+                      }
+                      visuallyDisabled={stack.isUpdating}
+                      onClick={() => toggleCheckbox(stack.stack_id)}
+                      checked={
+                        !stack.isUpdating &&
+                        stacksToUpdate.includes(stack.stack_id)
                       }
                     />
-                  )}
-                </Stack>
-              </StackColumnName>
-              <Columns>
-                {stackEnvironment[1].map((stack) => (
-                  <UncontrolledCheckbox
-                    key={`${stack.stack_id}-${stack.stackVersion}`}
-                    label={stack.stack_id}
-                    helperLabel={stack.stackVersion}
-                    name={stack.stack_id}
-                    disabled={
-                      step !== UpdateStepTypes.pickOptions
-                        ? true
-                        : stack.isUpdating
-                    }
-                    visuallyDisabled={stack.isUpdating}
-                    onClick={() => toggleCheckbox(stack.stack_id)}
-                    checked={
-                      !stack.isUpdating &&
-                      stacksToUpdate.includes(stack.stack_id)
-                    }
-                  />
-                ))}
-              </Columns>
-            </Stack>
-          ))}
+                  ))}
+                </Columns>
+              </Stack>
+            );
+          })}
       </Stack>
       <Stack
         direction="down"
@@ -280,6 +317,7 @@ const CreateUpdateModal = () => {
           {step === UpdateStepTypes.pickOptions && (
             <GhostButton
               onClick={() => setStep(UpdateStepTypes.confirmOptions)}
+              disabled={stacksToUpdate.length < 1}
             >
               Next
             </GhostButton>
