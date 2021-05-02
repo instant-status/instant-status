@@ -71,6 +71,10 @@ const CreateUpdateModal = () => {
   };
 
   useEffect(() => {
+    const documentRoot = document.querySelector(`#instant-status-root`);
+    documentRoot.style.overflow = "hidden";
+    documentRoot.style.height = "100vh";
+
     window.addEventListener("beforeunload", warnAboutUnsavedChanges);
 
     return () => {
@@ -163,6 +167,10 @@ const CreateUpdateModal = () => {
     }
 
     if (canClose) {
+      const documentRoot = document.querySelector(`#instant-status-root`);
+      documentRoot.style.overflow = "auto";
+      documentRoot.style.height = "100%";
+
       setQuery({
         stack: undefined,
         version: undefined,
@@ -173,7 +181,46 @@ const CreateUpdateModal = () => {
   };
 
   return (
-    <ModalBase title={modalTitle} onClose={closeModal}>
+    <ModalBase
+      title={modalTitle}
+      onClose={closeModal}
+      actions={
+        <Stack justify="center" spacing={4}>
+          {step === UpdateStepTypes.pickOptions && (
+            <GhostButton
+              onClick={() => setStep(UpdateStepTypes.confirmOptions)}
+              disabled={stacksToUpdate.length < 1}
+            >
+              Next
+            </GhostButton>
+          )}
+          {step === UpdateStepTypes.confirmOptions && (
+            <>
+              <BackButton onClick={() => setStep(UpdateStepTypes.pickOptions)}>
+                Back
+              </BackButton>
+              <UpdateButton
+                type="button"
+                onClick={() => {
+                  setStep(UpdateStepTypes.coolOff);
+                  // onSave();
+                }}
+              >
+                Confirm Update
+              </UpdateButton>
+            </>
+          )}
+          {step === UpdateStepTypes.coolOff && (
+            <UpdateSuccess
+              callback={onSave}
+              cancel={() => setStep(UpdateStepTypes.pickOptions)}
+              onClose={closeModal}
+              setIsSafeToClose={setIsSafeToClose}
+            />
+          )}
+        </Stack>
+      }
+    >
       <Stack direction="down" spacing={8}>
         {stacks
           .sort((a, b) => a[1].length - b[1].length)
@@ -274,40 +321,6 @@ const CreateUpdateModal = () => {
               />
             </Stack>
           </Stack>
-        </Stack>
-        <Stack justify="center" spacing={4}>
-          {step === UpdateStepTypes.pickOptions && (
-            <GhostButton
-              onClick={() => setStep(UpdateStepTypes.confirmOptions)}
-              disabled={stacksToUpdate.length < 1}
-            >
-              Next
-            </GhostButton>
-          )}
-          {step === UpdateStepTypes.confirmOptions && (
-            <>
-              <BackButton onClick={() => setStep(UpdateStepTypes.pickOptions)}>
-                Back
-              </BackButton>
-              <UpdateButton
-                type="button"
-                onClick={() => {
-                  setStep(UpdateStepTypes.coolOff);
-                  // onSave();
-                }}
-              >
-                Confirm Update
-              </UpdateButton>
-            </>
-          )}
-          {step === UpdateStepTypes.coolOff && (
-            <UpdateSuccess
-              callback={onSave}
-              cancel={() => setStep(UpdateStepTypes.pickOptions)}
-              onClose={closeModal}
-              setIsSafeToClose={setIsSafeToClose}
-            />
-          )}
         </Stack>
       </Stack>
     </ModalBase>
