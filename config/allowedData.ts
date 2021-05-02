@@ -8,6 +8,7 @@ const ALLOWED_DATA = <const>[
   "stack_app_url",
   "stack_logs_url",
   "server_name",
+  "server_role",
   "server_public_ip",
   "server_updated_at",
   "server_updating_app_to",
