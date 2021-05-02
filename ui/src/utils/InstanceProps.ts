@@ -9,6 +9,7 @@ export default interface InstanceProps {
 
   // Instance Display
   server_name: string;
+  server_role: string;
   server_public_ip: string;
   instanceCreatedAt: string;
   server_updated_at: string;
