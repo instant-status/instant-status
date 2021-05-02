@@ -85,6 +85,8 @@ const CreateUpdateModal = () => {
     window.addEventListener("beforeunload", warnAboutUnsavedChanges);
 
     return () => {
+      documentRoot.style.overflow = "auto";
+      documentRoot.style.height = "100%";
       window.removeEventListener("beforeunload", warnAboutUnsavedChanges);
     };
   }, [step]);
@@ -176,12 +178,6 @@ const CreateUpdateModal = () => {
     }
 
     if (canClose) {
-      const documentRoot = document.querySelector(
-        `#instant-status-root`,
-      ) as HTMLElement;
-      documentRoot.style.overflow = "auto";
-      documentRoot.style.height = "100%";
-
       setQuery({
         stack: undefined,
         version: undefined,

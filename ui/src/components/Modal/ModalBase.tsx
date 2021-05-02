@@ -84,13 +84,15 @@ const ModalBase = (props: ModalBaseProps) => {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
+        transition={{ duration: 0.3 }}
       />
       <FocusLock className="full-width">
         <ModalContainer
           ref={modalContainerRef}
-          initial={{ scale: 0 }}
-          animate={{ scale: 1 }}
-          exit={{ scale: 0, opacity: 0 }}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 0.3 }}
         >
           <Stack direction="down" spacing={8} justify="spaceBetween">
             <Stack justify="center">
