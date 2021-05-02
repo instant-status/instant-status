@@ -3,7 +3,7 @@ import styled from "styled-components";
 
 import { InputBoxContainer, Label } from "../shared/SettingsInputs";
 
-const InputBox = styled.input`
+const InputBox = styled.input<{ $disabled?: boolean }>`
   font-size: 16px;
   background-color: ${(props) => props.theme.color.darkOne};
   padding: 8px 12px;
@@ -11,10 +11,11 @@ const InputBox = styled.input`
   color: ${(props) => props.theme.color.lightOne};
   border-radius: 6px;
   width: 100%;
+  ${(props) => props.$disabled && "pointer-events: none"};
 `;
 
 interface TextInputProps {
-  label: string;
+  label: string | React.ReactNode;
   onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
   onBlur?: (event: React.ChangeEvent<HTMLInputElement>) => void;
   value?: string;
@@ -35,7 +36,7 @@ const TextInput = forwardRef<HTMLInputElement, TextInputProps>((props, ref) => {
         defaultValue={props.defaultValue}
         name={props.name}
         ref={ref}
-        disabled={props.disabled}
+        readOnly={props.disabled}
       />
     </InputBoxContainer>
   );

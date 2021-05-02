@@ -57,7 +57,7 @@ const CreateUpdateModal = () => {
   const [stacksToUpdate, setStacksToUpdate] = useState(
     query.stack ? [query.stack] : [],
   );
-  const { register, getValues, handleSubmit } = useForm();
+  const { register, getValues } = useForm();
   const store = useContext(globalStoreContext);
 
   const mutation = useMutation((payload: any) =>
@@ -71,7 +71,9 @@ const CreateUpdateModal = () => {
   };
 
   useEffect(() => {
-    const documentRoot = document.querySelector(`#instant-status-root`);
+    const documentRoot = document.querySelector(
+      `#instant-status-root`,
+    ) as HTMLElement;
     documentRoot.style.overflow = "hidden";
     documentRoot.style.height = "100vh";
 
@@ -82,17 +84,10 @@ const CreateUpdateModal = () => {
     };
   }, [step]);
 
-  const onSubmit = (data) => {
-    // console.log("data", data);
-  };
-
   const onSave = () => {
     const formData = getValues();
 
-    // FIX THIS
-    formData.run_migrations = true;
-    formData.update_configs = true;
-    formData.update_envs = true;
+    console.log("formData", formData);
 
     mutation.mutate({
       stack_ids: stacksToUpdate,
@@ -167,7 +162,9 @@ const CreateUpdateModal = () => {
     }
 
     if (canClose) {
-      const documentRoot = document.querySelector(`#instant-status-root`);
+      const documentRoot = document.querySelector(
+        `#instant-status-root`,
+      ) as HTMLElement;
       documentRoot.style.overflow = "auto";
       documentRoot.style.height = "100%";
 
@@ -203,7 +200,6 @@ const CreateUpdateModal = () => {
                 type="button"
                 onClick={() => {
                   setStep(UpdateStepTypes.coolOff);
-                  // onSave();
                 }}
               >
                 Confirm Update
@@ -273,12 +269,7 @@ const CreateUpdateModal = () => {
             );
           })}
       </Stack>
-      <Stack
-        direction="down"
-        spacing={8}
-        as="form"
-        onSubmit={handleSubmit(onSubmit)}
-      >
+      <Stack direction="down" spacing={8} as="form">
         <Stack spacing={4} direction="down" align="center">
           <Heading>
             {step === UpdateStepTypes.pickOptions
@@ -290,33 +281,41 @@ const CreateUpdateModal = () => {
               <Checkbox
                 label="Run Migrations"
                 defaultChecked={true}
-                // disabled={step !== UpdateStepTypes.pickOptions}
+                disabled={step !== UpdateStepTypes.pickOptions}
                 {...register("run_migrations")}
               />
               <Checkbox
                 label="Update ENVs"
                 defaultChecked={true}
-                // disabled={step !== UpdateStepTypes.pickOptions}
+                disabled={step !== UpdateStepTypes.pickOptions}
                 {...register("update_envs")}
               />
               <Checkbox
                 label="Update Configs"
                 defaultChecked={true}
-                // disabled={step !== UpdateStepTypes.pickOptions}
+                disabled={step !== UpdateStepTypes.pickOptions}
                 {...register("update_configs")}
               />
             </Stack>
             <Stack spacing={6} direction="right" fullWidth={true}>
               <TextInput
-                label="Update app to:"
+                label={
+                  <>
+                    Update <b>app</b> to:
+                  </>
+                }
                 defaultValue={query.version}
-                // disabled={step !== UpdateStepTypes.pickOptions}
+                disabled={step !== UpdateStepTypes.pickOptions}
                 {...register("update_app_to")}
               />
               <TextInput
-                label="Update xAPI to:"
+                label={
+                  <>
+                    Update <b>xAPI</b> to:
+                  </>
+                }
                 defaultValue={query.xapiVersion}
-                // disabled={step !== UpdateStepTypes.pickOptions}
+                disabled={step !== UpdateStepTypes.pickOptions}
                 {...register("update_xapi_to")}
               />
             </Stack>

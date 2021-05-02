@@ -1,4 +1,4 @@
-import React, { forwardRef, useEffect } from "react";
+import React, { forwardRef } from "react";
 import styled from "styled-components";
 import useCombinedRefs from "../../hooks/useCombinedRefs";
 import Stack from "../Stack";
@@ -64,12 +64,6 @@ const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(
     const innerRef = React.useRef(null);
     const combinedRef = useCombinedRefs(forwardedRef, innerRef);
 
-    useEffect(() => {
-      if (props.defaultChecked !== undefined) {
-        setChecked(props.defaultChecked);
-      }
-    }, [props.defaultChecked]);
-
     const onChange = (event) => {
       if (!props.disabled) {
         setChecked(event.target.checked);
@@ -86,7 +80,6 @@ const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(
           ref={combinedRef}
           type="checkbox"
           name={props.name}
-          value={props.value}
           defaultChecked={checked}
           onChange={(event) => onChange(event)}
         />

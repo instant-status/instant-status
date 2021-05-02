@@ -11,4 +11,8 @@ export const InputBoxContainer = styled.label`
 export const Label = styled.span`
   font-size: 16px;
   margin-bottom: 6px;
+
+  & > b {
+    font-weight: 600;
+  }
 `;
