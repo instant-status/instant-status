@@ -1,6 +1,6 @@
 import { transparentize } from "polished";
 import React, { useContext, useEffect, useState } from "react";
-import styled from "styled-components";
+import styled, { css, keyframes } from "styled-components";
 
 import APP_CONFIG from "../../../../config/appConfig";
 import { StateContext } from "../../context/StateContext";
@@ -71,15 +71,32 @@ const SmallHealthIcon = styled.div`
   cursor: pointer;
 `;
 
-const ProgressBackground = styled.div`
+const pulseAnimation = keyframes`
+  0% {
+    box-shadow: 0 0 0 0px #ee2f01;
+  }
+  100% {
+    box-shadow: 0 0 0 10px #ee2f0100;
+  }
+`;
+
+const ProgressBackground = styled.div<{ $isFull: boolean }>`
   position: relative;
   height: 10px;
   border-radius: 4px;
-  margin: auto 4px 3px;
+  margin: auto 4px 5px;
   background: ${(props) =>
     `linear-gradient(to right, ${props.theme.color.green}, ${props.theme.color.orange}, ${props.theme.color.red})`};
   width: 100%;
   opacity: 0.75;
+  ${(props) =>
+    props.$isFull &&
+    css`
+      border: 1px solid ${(props) => props.theme.color.red};
+      animation-name: ${pulseAnimation};
+      animation-duration: 1s;
+      animation-iteration-count: infinite;
+    `};
 `;
 
 const ProgressFreeSpace = styled.div<{ width: number }>`
@@ -88,16 +105,22 @@ const ProgressFreeSpace = styled.div<{ width: number }>`
   right: 0;
   top: 0;
   bottom: 0;
-  border-left: 2px solid ${(props) => props.theme.color.darkOne};
   backdrop-filter: grayscale(1);
+  ${(props) =>
+    props.width > 3 &&
+    css`
+      border-left: 2px solid ${(props) => props.theme.color.darkOne};
+    `}
 `;
 
 const ProgressBar = (props: { total: number; used: number }) => {
   const freeSpace = 100 - Math.floor((props.used / props.total) * 100);
 
+  const freeSpaceRoundUp = freeSpace > 3 ? freeSpace : 0;
+
   return (
-    <ProgressBackground>
-      <ProgressFreeSpace width={freeSpace} />
+    <ProgressBackground $isFull={freeSpace === 0}>
+      <ProgressFreeSpace width={freeSpaceRoundUp} />
     </ProgressBackground>
   );
 };

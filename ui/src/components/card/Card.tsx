@@ -45,6 +45,9 @@ const Card = (props: { instances: InstanceProps[]; isUpdating: boolean }) => {
             }
             return a.instanceCreatedAt < b.instanceCreatedAt ? -1 : 1;
           })
+          .sort((a: InstanceProps, b: InstanceProps) => {
+            return a.server_is_chosen_one < b.server_is_chosen_one ? 1 : -1;
+          })
           .slice(0, store.instanceDisplayCount)
           .map((instance, i) => {
             if (i + 1 <= store.instanceDisplayCount) {
