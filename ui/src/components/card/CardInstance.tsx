@@ -47,6 +47,8 @@ const InstanceNumber = styled.span`
   color: ${(props) => transparentize(0.5, props.theme.color.lightOne)};
   font-size: 16px;
   margin-left: 10px;
+  text-transform: capitalize;
+  display: inline-block;
 `;
 
 const InstanceRow = styled.div`
@@ -128,10 +130,7 @@ const ProgressBar = (props: { total: number; used: number }) => {
   );
 };
 
-const CardInstance = (props: {
-  instance: InstanceProps;
-  instanceNumber: number;
-}) => {
+const CardInstance = (props: { instance: InstanceProps }) => {
   const { keyLocation, showAdvanced } = useContext(StateContext);
 
   const instanceIsBooting =
@@ -191,7 +190,7 @@ const CardInstance = (props: {
           <InstanceName>
             {props.instance.server_is_chosen_one && `👑 `}
             {props.instance.server_id}
-            <InstanceNumber>#{props.instanceNumber}</InstanceNumber>
+            <InstanceNumber>{props.instance.server_role}</InstanceNumber>
           </InstanceName>
 
           <SmallStateIcon

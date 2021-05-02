@@ -53,7 +53,7 @@ const Card = (props: { instances: InstanceProps[]; isUpdating: boolean }) => {
             if (i + 1 <= store.instanceDisplayCount) {
               return (
                 <motion.div key={instance.server_id}>
-                  <CardInstance instanceNumber={i + 1} instance={instance} />
+                  <CardInstance instance={instance} />
                 </motion.div>
               );
             }
