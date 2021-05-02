@@ -262,7 +262,7 @@ const CreateUpdateModal = () => {
               <Stack direction="down" key={environment}>
                 <StackColumnName>
                   <Stack align="center" justify="spaceBetween">
-                    {environment}
+                    <span>{environment || "Undefined"}</span>
                     {step === UpdateStepTypes.pickOptions && (
                       <Checkbox
                         label={allSelected ? "Deselect all" : "Select all"}

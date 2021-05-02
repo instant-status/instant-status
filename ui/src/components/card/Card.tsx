@@ -39,10 +39,11 @@ const Card = (props: { instances: InstanceProps[]; isUpdating: boolean }) => {
       />
       <AnimateSharedLayout>
         {props.instances
-          .sort(
-            (a: InstanceProps, b: InstanceProps) =>
-              (a.server_is_chosen_one < b.server_is_chosen_one ? 1 : -1) ||
-              a.server_public_ip.localeCompare(b.server_public_ip),
+          .sort((a: InstanceProps, b: InstanceProps) =>
+            a.server_public_ip.localeCompare(b.server_public_ip),
+          )
+          .sort((a: InstanceProps, b: InstanceProps) =>
+            a.server_is_chosen_one < b.server_is_chosen_one ? 1 : -1,
           )
           .slice(0, store.instanceDisplayCount)
           .map((instance, i) => {
