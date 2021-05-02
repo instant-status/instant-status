@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 
-const Link = styled.span<{ active: boolean }>`
+const Link = styled.span<{ active: boolean; $overflowVisible: boolean }>`
   cursor: pointer;
   padding: 0 4px;
   border-radius: 6px;
@@ -11,16 +11,17 @@ const Link = styled.span<{ active: boolean }>`
   width: 100%;
   display: flex;
   white-space: nowrap;
-  overflow: hidden;
+  ${(props) => !props.$overflowVisible && "overflow: hidden"};
   text-overflow: ellipsis;
 `;
 
 export interface CopyButtonProps {
   children: React.ReactNode | React.ReactNode[] | string;
   value: string;
+  $overflowVisible?: boolean;
 }
 
-const CopyText = ({ value, children }: CopyButtonProps) => {
+const CopyText = (props: CopyButtonProps) => {
   const [active, setActive] = useState(false);
 
   const copy = (text: string) => {
@@ -34,8 +35,13 @@ const CopyText = ({ value, children }: CopyButtonProps) => {
   };
 
   return (
-    <Link active={active} title={value} onClick={() => copy(value)}>
-      {active ? <i>Copied!</i> : children}
+    <Link
+      $overflowVisible={props.$overflowVisible}
+      active={active}
+      title={props.value}
+      onClick={() => copy(props.value)}
+    >
+      {active ? <i>Copied!</i> : props.children}
     </Link>
   );
 };

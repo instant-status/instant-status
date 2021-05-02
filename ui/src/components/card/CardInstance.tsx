@@ -71,43 +71,39 @@ const SmallHealthIcon = styled.div`
   cursor: pointer;
 `;
 
-const pulseAnimation = keyframes`
+const pulseAnimation = (props) => keyframes`
   0% {
-    box-shadow: 0 0 0 0px #ee2f01;
+    box-shadow: 0 0 0 0px ${props.$color};
   }
   100% {
-    box-shadow: 0 0 0 10px #ee2f0100;
+    box-shadow: 0 0 0 10px rgba(0,0,0,0);
   }
 `;
 
-const ProgressBackground = styled.div<{ $isFull: boolean }>`
+const ProgressBackground = styled.div<{ $warning: boolean; $color: string }>`
   position: relative;
   height: 10px;
   border-radius: 4px;
   margin: auto 4px 5px;
-  background: ${(props) =>
-    `linear-gradient(to right, ${props.theme.color.green}, ${props.theme.color.orange}, ${props.theme.color.red})`};
+  background: ${(props) => props.$color};
   width: 100%;
   opacity: 0.75;
   ${(props) =>
-    props.$isFull &&
+    props.$warning &&
     css`
-      border: 1px solid ${(props) => props.theme.color.red};
-      animation-name: ${pulseAnimation};
-      animation-duration: 1s;
-      animation-iteration-count: infinite;
+      animation: ${(props) => pulseAnimation(props)} 1s infinite;
     `};
 `;
 
-const ProgressFreeSpace = styled.div<{ width: number }>`
-  width: ${(props) => props.width}%;
+const ProgressFreeSpace = styled.div<{ $width: number }>`
+  width: ${(props) => props.$width}%;
   position: absolute;
   right: 0;
   top: 0;
   bottom: 0;
   backdrop-filter: grayscale(1);
   ${(props) =>
-    props.width > 3 &&
+    props.$width > 3 &&
     css`
       border-left: 2px solid ${(props) => props.theme.color.darkOne};
     `}
@@ -118,9 +114,16 @@ const ProgressBar = (props: { total: number; used: number }) => {
 
   const freeSpaceRoundUp = freeSpace > 3 ? freeSpace : 0;
 
+  const color =
+    freeSpace <= 20
+      ? theme.color.red
+      : freeSpace <= 50
+      ? theme.color.orange
+      : theme.color.green;
+
   return (
-    <ProgressBackground $isFull={freeSpace === 0}>
-      <ProgressFreeSpace width={freeSpaceRoundUp} />
+    <ProgressBackground $warning={freeSpace <= 30} $color={color}>
+      <ProgressFreeSpace $width={freeSpaceRoundUp} />
     </ProgressBackground>
   );
 };
@@ -243,6 +246,7 @@ const CardInstance = (props: {
             <InstanceRowKey>Disk:</InstanceRowKey>
             <CopyText
               value={`Using ${props.instance.server_disk_used_gb}Gb of ${props.instance.server_disk_total_gb}Gb total | ${props.instance.server_type}`}
+              $overflowVisible={true}
             >
               <ProgressBar
                 total={props.instance.server_disk_total_gb}
