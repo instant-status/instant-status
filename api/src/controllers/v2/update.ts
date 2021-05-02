@@ -235,11 +235,11 @@ export const getStacksAvailableForUpdate = (ctx: any) => {
 
     output[instance.stack_id] = {
       stack_id: instance.stack_id,
-      stackVersion: isUpdating
-        ? `Updating to ${update.update_app_to}`
+      stack_version: isUpdating
+        ? update.update_app_to
         : instance.server_app_version,
       stack_environment: instance.stack_environment,
-      isUpdating: isUpdating,
+      is_updating: isUpdating,
     };
   }
 

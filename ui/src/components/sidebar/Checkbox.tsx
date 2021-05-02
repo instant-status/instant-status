@@ -1,4 +1,4 @@
-import React, { forwardRef } from "react";
+import React, { forwardRef, useEffect } from "react";
 import styled from "styled-components";
 import useCombinedRefs from "../../hooks/useCombinedRefs";
 import Stack from "../Stack";
@@ -73,6 +73,12 @@ const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(
         }
       }
     };
+
+    useEffect(() => {
+      if (props.defaultChecked !== undefined) {
+        setChecked(props.defaultChecked);
+      }
+    }, [props.defaultChecked]);
 
     return (
       <CheckboxContainer $disabled={props.faded}>
