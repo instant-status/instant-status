@@ -21,24 +21,24 @@ export const getStateIcon = (stateCode: number, size?: string) => {
 export const getStateMessage = (stateCode: number, instance: InstanceProps) => {
   switch (stateCode) {
     case 0:
-      return <>Booting New Instance!</>;
+      return <>Booting New Server!</>;
     case 1:
       return (
         <>
           Spawning to:
           <br />
-          {instance.server_updating_app_to}
+          {instance.server_updating_app_to} (xAPI {instance.server_updating_xapi_to})
         </>
       );
     case 2:
-      if (instance.server_app_version !== instance.server_updating_app_to) {
+      if (instance.server_app_version !== instance.server_updating_app_to || instance.server_xapi_version !== instance.server_updating_xapi_to) {
         return (
           <>
             Updating from:
             <br />
-            <i>{instance.server_app_version}</i>
+            <i>{instance.server_app_version} (xAPI {instance.server_xapi_version})</i>
             to:
-            <i>{instance.server_updating_app_to}</i>
+            <i>{instance.server_updating_app_to} (xAPI {instance.server_updating_xapi_to})</i>
           </>
         );
       }
@@ -46,22 +46,10 @@ export const getStateMessage = (stateCode: number, instance: InstanceProps) => {
         <>
           Refreshing:
           <br />
-          <i>{instance.server_updating_app_to}</i>
+          <i>{instance.server_updating_app_to} (xAPI {instance.server_updating_xapi_to})</i>
         </>
       );
-
-    case 3:
-      return instance.server_health_message;
-    case 4:
-      return instance.server_health_message;
-    case 5:
-      return instance.server_health_message;
-    case 6:
-      return instance.server_health_message;
-    case 7:
-      return instance.server_health_message;
-    case 8:
-      return instance.server_health_message;
     default:
+      return instance.server_health_message;
   }
 };
