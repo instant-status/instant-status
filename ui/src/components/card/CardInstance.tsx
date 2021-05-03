@@ -135,11 +135,11 @@ const CardInstance = (props: { instance: InstanceProps }) => {
 
   const instanceIsBooting =
     props.instance.server_app_version === `primal` &&
-    !props.instance.server_updating_app_to;
+    !props.instance.server_updating_app_to &&
+    !props.instance.server_updating_xapi_to;
 
   const instanceIsUpdating =
-    props.instance.server_app_version !== `primal` &&
-    props.instance.server_updating_app_to !== props.instance.server_app_version;
+    props.instance.server_update_message !== "";
 
   const stateCode = instanceIsBooting ? 0 : instanceIsUpdating ? 2 : 3;
 
@@ -225,8 +225,8 @@ const CardInstance = (props: { instance: InstanceProps }) => {
           </InstanceRow>
           <InstanceRow>
             <InstanceRowKey>Version:</InstanceRowKey>
-            <CopyText value={`${props.instance.server_app_version}`}>
-              {props.instance.server_app_version}
+            <CopyText value={`${props.instance.server_app_version} (xAPI ${props.instance.server_xapi_version}`}>
+              {props.instance.server_app_version} (xAPI {props.instance.server_xapi_version})
             </CopyText>
             <IconButton
               href={`${APP_CONFIG.GITHUB_VERSION_URL}${props.instance.server_app_version}`}

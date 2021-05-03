@@ -7,7 +7,7 @@ export default interface InstanceProps {
   stack_logs_url: string;
   stack_logo: string;
 
-  // Instance Display
+  // Server Display
   server_name: string;
   server_role: string;
   server_public_ip: string;
@@ -19,15 +19,16 @@ export default interface InstanceProps {
   server_disk_total_gb: number;
   server_key_file_name: string;
   server_is_chosen_one: boolean;
+  server_update_message: string;
   server_updating_app_to: string;
   server_updating_xapi_to: string;
 
-  // Instance Display Advanced
+  // Server Display Advanced
   server_availability_zone: string;
   server_id: string;
   server_type: string;
 
-  // Instance State
+  // Server State
   instanceStateCode: number;
 
   // Health Check
