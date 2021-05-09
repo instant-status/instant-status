@@ -19,6 +19,10 @@ export default interface InstanceProps {
   server_disk_total_gb: number;
   server_key_file_name: string;
   server_is_chosen_one: boolean;
+
+  // Server Updates
+  server_update_state: string;
+  server_update_progress: string;
   server_update_message: string;
   server_updating_app_to: string;
   server_updating_xapi_to: string;
