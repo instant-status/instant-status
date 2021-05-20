@@ -4,7 +4,7 @@ import React, { useContext } from "react";
 import styled from "styled-components";
 
 import { globalStoreContext } from "../../store/globalStore";
-import InstanceProps from "../../utils/InstanceProps";
+import { InstanceProps } from "../../../../types/globalTypes";
 import CardFooter from "./CardFooter";
 import CardHeader from "./CardHeader";
 import CardInstance from "./CardInstance";
@@ -53,7 +53,7 @@ const Card = (props: { instances: InstanceProps[]; isUpdating: boolean }) => {
             if (i + 1 <= store.instanceDisplayCount) {
               return (
                 <motion.div key={instance.server_id}>
-                  <CardInstance instance={instance} />
+                  <CardInstance instance={instance} isUpdating={props.isUpdating} />
                 </motion.div>
               );
             }

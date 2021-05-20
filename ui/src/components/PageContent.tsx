@@ -8,7 +8,7 @@ import apiRoutes from "../api/apiRoutes";
 import { StateContext } from "../context/StateContext";
 import CreateUpdateModal from "../pages/CreateUpdateModal";
 import { globalStoreContext } from "../store/globalStore";
-import InstanceProps from "../utils/InstanceProps";
+import { InstanceProps } from "../../../types/globalTypes";
 import Card from "./card/Card";
 import SearchBar from "./SearchBar";
 

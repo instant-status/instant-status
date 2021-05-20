@@ -5,7 +5,7 @@ import getDate from "../../utils/getDate";
 
 import { getHealthIcon } from "../../utils/getHealth";
 import { getStateIcon } from "../../utils/getState";
-import InstanceProps from "../../utils/InstanceProps";
+import { InstanceProps } from "../../../../types/globalTypes";
 import theme from "../../utils/theme";
 import IconClose from "../icons/IconClose";
 import Stack from "../Stack";
@@ -47,6 +47,11 @@ const OverlayCloseButton = styled.button`
   padding: 4px;
 `;
 
+const OverlayHeaderText = styled.div`
+  font-weight: 700;
+  align-self: center;
+`;
+
 const RowKey = styled.div`
   width: 125px;
   text-align: right;
@@ -84,7 +89,13 @@ const ProgressUsed = styled.div<{ $width: number }>`
   top: 0;
   bottom: 0;
   backdrop-filter: grayscale(1);
-  border-left: 2px solid ${(props) => props.theme.color.darkOne};
+  transition: width 10s;
+
+  ${(props) =>
+    props.$width > 3 &&
+    css`
+      border-left: 2px solid ${(props) => props.theme.color.darkOne};
+    `}
 `;
 
 const ProgressBar = (props: { progress: number }) => {
@@ -101,18 +112,20 @@ const CardInstanceOverlay = (props: {
   stateorHealthCode: number;
   instance: InstanceProps;
 }) => {
+
   if (props.type === `health`) {
     return (
       <Stack as={Overlay} direction="down" spacing={4}>
         <Stack justify="spaceBetween">
           {getHealthIcon(props.stateorHealthCode, `40px`)}
+          <OverlayHeaderText>Server Health</OverlayHeaderText>
           <OverlayCloseButton onClick={props.onClick}>
             <IconClose />
           </OverlayCloseButton>
         </Stack>
         <Stack direction="down" spacing={1}>
           <Stack spacing={2}>
-            <RowKey>Last reported:</RowKey><div>{getDate(props.instance.server_health_updated_at)}</div>
+            <RowKey>Last Reported:</RowKey><div>{getDate(props.instance.server_health_updated_at)}</div>
           </Stack>
           <Stack spacing={2}>
             <RowKey>Message:</RowKey><div>{props.instance.server_health_message}</div>
@@ -127,6 +140,7 @@ const CardInstanceOverlay = (props: {
       <Stack as={Overlay} direction="down" spacing={4}>
         <Stack justify="spaceBetween">
           {getStateIcon(props.stateorHealthCode, `40px`)}
+          <OverlayHeaderText>Update In Progress</OverlayHeaderText>
           <OverlayCloseButton onClick={props.onClick}>
             <IconClose />
           </OverlayCloseButton>

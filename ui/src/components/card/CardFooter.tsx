@@ -3,7 +3,7 @@ import React, { useContext } from "react";
 import styled from "styled-components";
 
 import { globalStoreContext } from "../../store/globalStore";
-import InstanceProps from "../../utils/InstanceProps";
+import { InstanceProps } from "../../../../types/globalTypes";
 import IconLogs from "../icons/IconLogs";
 import IconOpen from "../icons/IconOpen";
 import IconUpdate from "../icons/IconUpdate";

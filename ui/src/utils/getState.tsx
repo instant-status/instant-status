@@ -2,7 +2,7 @@ import React from "react";
 
 import IconAdd from "../components/icons/IconAdd";
 import IconUpdating from "../components/icons/IconUpdating";
-import InstanceProps from "./InstanceProps";
+import { InstanceProps } from "../../../types/globalTypes";
 import theme from "./theme";
 
 export const getStateIcon = (stateCode: number, size?: string) => {

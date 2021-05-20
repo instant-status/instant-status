@@ -7,7 +7,7 @@ import { StateContext } from "../../context/StateContext";
 import getDate from "../../utils/getDate";
 import { getHealthIcon } from "../../utils/getHealth";
 import { getStateIcon } from "../../utils/getState";
-import InstanceProps from "../../utils/InstanceProps";
+import { InstanceProps } from "../../../../types/globalTypes";
 import theme from "../../utils/theme";
 import IconGithub from "../icons/IconGithub";
 import IconUbuntu from "../icons/IconUbuntu";
@@ -130,7 +130,7 @@ const ProgressBar = (props: { total: number; used: number }) => {
   );
 };
 
-const CardInstance = (props: { instance: InstanceProps }) => {
+const CardInstance = (props: { instance: InstanceProps, isUpdating: boolean }) => {
   const { keyLocation, showAdvanced } = useContext(StateContext);
 
   const instanceIsBooting =
@@ -138,10 +138,7 @@ const CardInstance = (props: { instance: InstanceProps }) => {
     !props.instance.server_updating_app_to &&
     !props.instance.server_updating_xapi_to;
 
-  const instanceIsUpdating =
-    props.instance.server_update_message !== "";
-
-  const stateCode = instanceIsBooting ? 0 : instanceIsUpdating ? 2 : 3;
+  const stateCode = instanceIsBooting ? 0 : props.isUpdating ? 2 : 3;
 
   const healthCode = props.instance.server_health_code || 0;
 

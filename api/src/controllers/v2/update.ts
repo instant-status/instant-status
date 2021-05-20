@@ -254,17 +254,21 @@ export const getStacksAvailableForUpdate = (ctx: any) => {
 
 export const getUpdatingStacks = (ctx: any) => {
   const servers = db.instances.find() as InstanceProps[];
+  const updates = db.updates.find();
 
   const responseBody = [];
 
   for (const server of servers) {
-    const update = db.updates.findOne({ stack_id: server.stack_id });
+    const update = updates.find(
+      (update) => update.stack_id === server.stack_id
+    );
 
     const isUpdating =
       update &&
       (update.server_completed_count === 0 ||
         update.server_count === 0 ||
-        update.server_completed_count !== update.server_count);
+        update.server_completed_count !== update.server_count ||
+        server.server_update_progress !== 100);
 
     if (isUpdating) {
       responseBody.push(server.stack_id);
