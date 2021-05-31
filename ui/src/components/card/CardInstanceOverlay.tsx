@@ -1,6 +1,6 @@
 import { transparentize } from "polished";
 import React from "react";
-import styled, { css, keyframes } from "styled-components";
+import styled from "styled-components";
 import getDate from "../../utils/getDate";
 
 import { getHealthIcon } from "../../utils/getHealth";
