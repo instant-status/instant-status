@@ -130,7 +130,7 @@ const ProgressBar = (props: { total: number; used: number }) => {
   );
 };
 
-const CardInstance = (props: { instance: InstanceProps, isUpdating: boolean }) => {
+const CardInstance = (props: { instance: InstanceProps, isUpdating: boolean, isStartingUpdate: boolean }) => {
   const { keyLocation, showAdvanced } = useContext(StateContext);
 
   const instanceIsBooting =
@@ -138,7 +138,7 @@ const CardInstance = (props: { instance: InstanceProps, isUpdating: boolean }) =
     !props.instance.server_updating_app_to &&
     !props.instance.server_updating_xapi_to;
 
-  const stateCode = instanceIsBooting ? 0 : props.isUpdating ? 2 : 3;
+  const stateCode = instanceIsBooting ? 0 : (props.isStartingUpdate || props.instance.server_update_progress !== 100 ) ? 2 : 3;
 
   const healthCode = props.instance.server_health_code || 0;
 
@@ -170,6 +170,7 @@ const CardInstance = (props: { instance: InstanceProps, isUpdating: boolean }) =
           onClick={() => setIsStateOverlayVisible(false)}
           type="state"
           stateorHealthCode={stateCode}
+          isStartingUpdate={props.isStartingUpdate}
           instance={props.instance}
         />
       )}
@@ -179,6 +180,7 @@ const CardInstance = (props: { instance: InstanceProps, isUpdating: boolean }) =
           onClick={() => setIsHealthOverlayVisible(false)}
           type="health"
           stateorHealthCode={healthCode}
+          isStartingUpdate={props.isStartingUpdate}
           instance={props.instance}
         />
       )}
@@ -191,14 +193,14 @@ const CardInstance = (props: { instance: InstanceProps, isUpdating: boolean }) =
           </InstanceName>
 
           <SmallStateIcon
-            title="Show Info"
+            title="Show Update Info"
             onClick={() => setIsStateOverlayVisible(true)}
           >
             {getStateIcon(stateCode)}
           </SmallStateIcon>
 
           <SmallHealthIcon
-            title="Show Info"
+            title="Show Health Info"
             onClick={() => setIsHealthOverlayVisible(true)}
           >
             {getHealthIcon(healthCode)}
@@ -232,7 +234,7 @@ const CardInstance = (props: { instance: InstanceProps, isUpdating: boolean }) =
             </IconButton>
           </InstanceRow>
           <InstanceRow>
-            <InstanceRowKey>Deployed:</InstanceRowKey>
+            <InstanceRowKey>Last Updated:</InstanceRowKey>
             <CopyText value={props.instance.server_updated_at}>
               {getDate(props.instance.server_updated_at)}
             </CopyText>

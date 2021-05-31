@@ -71,7 +71,7 @@ const pulseAnimation = (props) => keyframes`
 const ProgressBackground = styled.div<{ $warning: boolean; $color: string }>`
   position: relative;
   height: 14px;
-  border-radius: 10px;
+  border-radius: 7px;
   margin: 4px 8px;
   background: ${(props) => props.$color};
   width: 100%;
@@ -83,6 +83,7 @@ const ProgressBackground = styled.div<{ $warning: boolean; $color: string }>`
 `;
 
 const ProgressUsed = styled.div<{ $width: number }>`
+  border-radius: 7px;
   width: ${(props) => props.$width}%;
   position: absolute;
   right: 0;
@@ -92,7 +93,7 @@ const ProgressUsed = styled.div<{ $width: number }>`
   transition: width 10s;
 
   ${(props) =>
-    props.$width > 3 &&
+    (props.$width > 3 && props.$width < 98) &&
     css`
       border-left: 2px solid ${(props) => props.theme.color.darkOne};
     `}
@@ -110,6 +111,7 @@ const CardInstanceOverlay = (props: {
   onClick: () => void;
   type: string;
   stateorHealthCode: number;
+  isStartingUpdate: boolean;
   instance: InstanceProps;
 }) => {
 
@@ -136,6 +138,8 @@ const CardInstanceOverlay = (props: {
   };
 
   if (props.type === `state`) {
+    const updateProgress = props.isStartingUpdate ? 0 : props.instance.server_update_progress;
+    const updateMessage = props.isStartingUpdate ? 'Update Requested...' : props.instance.server_update_message;
     return (
       <Stack as={Overlay} direction="down" spacing={4}>
         <Stack justify="spaceBetween">
@@ -146,11 +150,11 @@ const CardInstanceOverlay = (props: {
           </OverlayCloseButton>
         </Stack>
         <Stack>
-          <ProgressBar progress={Number(props.instance.server_update_progress)}/>
+          <ProgressBar progress={updateProgress}/>
         </Stack>
         <Stack direction="down" spacing={1}>
           <Stack spacing={2}>
-            <RowKey>Message:</RowKey><div>{props.instance.server_update_message}</div>
+            <RowKey>Message:</RowKey><div>{updateMessage}</div>
           </Stack>
           <Stack spacing={2}>
             <RowKey>From:</RowKey><div>{props.instance.server_app_version} (xAPI {props.instance.server_xapi_version})</div>

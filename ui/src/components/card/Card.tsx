@@ -26,7 +26,7 @@ const getChosenOne = (instances?: InstanceProps[]) => {
   return chosenOne[0] || undefined;
 };
 
-const Card = (props: { instances: InstanceProps[]; isUpdating: boolean }) => {
+const Card = (props: { instances: InstanceProps[]; isUpdating: boolean; isStartingUpdate: boolean}) => {
   const store = useContext(globalStoreContext);
 
   const firstInstance = props.instances[0];
@@ -53,7 +53,7 @@ const Card = (props: { instances: InstanceProps[]; isUpdating: boolean }) => {
             if (i + 1 <= store.instanceDisplayCount) {
               return (
                 <motion.div key={instance.server_id}>
-                  <CardInstance instance={instance} isUpdating={props.isUpdating} />
+                  <CardInstance instance={instance} isUpdating={props.isUpdating} isStartingUpdate={props.isStartingUpdate} />
                 </motion.div>
               );
             }
