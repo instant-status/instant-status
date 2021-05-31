@@ -8,7 +8,7 @@ import apiRoutes from "../api/apiRoutes";
 import { StateContext } from "../context/StateContext";
 import CreateUpdateModal from "../pages/CreateUpdateModal";
 import { globalStoreContext } from "../store/globalStore";
-import InstanceProps from "../utils/InstanceProps";
+import { InstanceProps } from "../../../types/globalTypes";
 import Card from "./card/Card";
 import SearchBar from "./SearchBar";
 
@@ -41,19 +41,23 @@ const PageContent = () => {
 
   const store = useContext(globalStoreContext);
 
+  const refetchInterval = 5000; // Refetch the data every 5 seconds
+
   const stacksQuery = useQuery(`stacksData`, apiRoutes.apiGetStacks, {
-    refetchInterval: 10000, // Refetch the data every second
+    refetchInterval,
   });
 
   const stackUpdatesQuery = useQuery(
     `apiGetUpdatingStacks`,
     apiRoutes.apiGetUpdatingStacks,
     {
-      refetchInterval: 2000, // Refetch the data every second
+      refetchInterval,
     },
   );
 
-  const updatingStacks = [...(stackUpdatesQuery.data?.stacks || [])];
+  const updatingStacks = [...(stackUpdatesQuery.data?.updatingStacks || [])];
+
+  const stacksStartingUpdate = [...(stackUpdatesQuery.data?.startingUpdateStacks || [])];
 
   const stacks = Object.entries(stacksQuery?.data || []);
 
@@ -93,6 +97,7 @@ const PageContent = () => {
                   <Card
                     key={item[0]}
                     isUpdating={updatingStacks.includes(item[0])}
+                    isStartingUpdate={stacksStartingUpdate.includes(item[0])}
                     instances={item[1] as InstanceProps[]}
                   />
                 );
