@@ -17,7 +17,7 @@ const Page = styled.main`
   width: 100%;
   min-height: 100vh;
   border-radius: 40px 0 0 0;
-  padding: 30px 40px;
+  padding: 30px 16px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -27,8 +27,8 @@ const Grid = styled.div`
   width: 100%;
   display: grid;
   grid-template-columns: repeat(auto-fit, 360px);
-  grid-column-gap: 20px;
-  grid-row-gap: 20px;
+  grid-column-gap: 16px;
+  grid-row-gap: 16px;
   justify-content: center;
 
   & > img {

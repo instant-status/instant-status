@@ -59,8 +59,6 @@ const CreateUpdateModal = () => {
   );
   const [updateOptions, setUpdateOptions] = useState([
     "run_migrations",
-    "update_envs",
-    "update_configs",
   ]);
   const { register, getValues } = useForm();
   const store = useContext(globalStoreContext);
@@ -97,8 +95,6 @@ const CreateUpdateModal = () => {
     mutation.mutate({
       stack_ids: stacksToUpdate,
       run_migrations: updateOptions.includes("run_migrations"),
-      update_configs: updateOptions.includes("update_configs"),
-      update_envs: updateOptions.includes("update_envs"),
       ...formData,
     });
   };
@@ -191,14 +187,6 @@ const CreateUpdateModal = () => {
     {
       label: "Run Migrations",
       name: "run_migrations",
-    },
-    {
-      label: "Update ENVs",
-      name: "update_envs",
-    },
-    {
-      label: "Update Configs",
-      name: "update_configs",
     },
   ];
 

@@ -28,8 +28,6 @@ export const updateGet = (ctx) => {
       ok: true,
       update_id: latestUpdate.update_id,
       is_cancelled: latestUpdate.is_cancelled,
-      update_configs: latestUpdate.update_configs,
-      update_envs: latestUpdate.update_envs,
       run_migrations: latestUpdate.run_migrations,
       rollback_migrations: latestUpdate.rollback_migrations,
       update_app_to: latestUpdate.update_app_to,
@@ -61,8 +59,6 @@ export const updateCreate = (ctx) => {
     'run_migrations',
     'stack_ids',
     'update_app_to',
-    'update_configs',
-    'update_envs',
     'update_xapi_to',
   ];
 
@@ -95,8 +91,6 @@ export const updateCreate = (ctx) => {
       created_at: Date.now(),
       is_cancelled: false, // not in use
 
-      update_configs: body.update_configs,
-      update_envs: body.update_envs,
       run_migrations: body.run_migrations,
       rollback_migrations: false, // not in use
 
