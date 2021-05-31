@@ -20,3 +20,17 @@ export const getHealthIcon = (healthCode: number, size?: string) => {
     default:
   }
 };
+
+export const getHealthColor = (healthCode: number) => {
+  switch (healthCode) {
+    case 0:
+      return theme.color.green;
+    case 1:
+      return theme.color.blue;
+    case 2:
+      return theme.color.orange;
+    case 3:
+      return theme.color.red;
+    default:
+  }
+};

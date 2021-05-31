@@ -1,14 +1,14 @@
 import { transparentize } from "polished";
 import React from "react";
-import styled, { css, keyframes } from "styled-components";
+import styled from "styled-components";
 import getDate from "../../utils/getDate";
 
 import { getHealthIcon } from "../../utils/getHealth";
 import { getStateIcon } from "../../utils/getState";
 import { InstanceProps } from "../../../../types/globalTypes";
-import theme from "../../utils/theme";
 import IconClose from "../icons/IconClose";
 import Stack from "../Stack";
+import ProgressBar from "../ProgressBar";
 
 const Overlay = styled.div`
   width: 100%;
@@ -59,54 +59,6 @@ const RowKey = styled.div`
   opacity: 0.7;
 `;
 
-const pulseAnimation = (props) => keyframes`
-  0% {
-    box-shadow: 0 0 0 0px ${props.$color};
-  }
-  100% {
-    box-shadow: 0 0 0 10px rgba(0,0,0,0);
-  }
-`;
-
-const ProgressBackground = styled.div<{ $warning: boolean; $color: string }>`
-  position: relative;
-  height: 14px;
-  border-radius: 7px;
-  margin: 4px 8px;
-  background: ${(props) => props.$color};
-  width: 100%;
-  ${(props) =>
-    props.$warning &&
-    css`
-      animation: ${(props) => pulseAnimation(props)} 1s infinite;
-    `};
-`;
-
-const ProgressUsed = styled.div<{ $width: number }>`
-  border-radius: 7px;
-  width: ${(props) => props.$width}%;
-  position: absolute;
-  right: 0;
-  top: 0;
-  bottom: 0;
-  backdrop-filter: grayscale(1);
-  transition: width 10s;
-
-  ${(props) =>
-    (props.$width > 3 && props.$width < 98) &&
-    css`
-      border-left: 2px solid ${(props) => props.theme.color.darkOne};
-    `}
-`;
-
-const ProgressBar = (props: { progress: number }) => {
-  return (
-    <ProgressBackground $warning={true} $color={theme.color.purple}>
-      <ProgressUsed $width={100 - props.progress} />
-    </ProgressBackground>
-  );
-};
-
 const CardInstanceOverlay = (props: {
   onClick: () => void;
   type: string;
@@ -150,7 +102,7 @@ const CardInstanceOverlay = (props: {
           </OverlayCloseButton>
         </Stack>
         <Stack>
-          <ProgressBar progress={updateProgress}/>
+          <ProgressBar $progress={updateProgress} $pulse={true} />
         </Stack>
         <Stack direction="down" spacing={1}>
           <Stack spacing={2}>

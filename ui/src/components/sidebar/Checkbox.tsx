@@ -64,12 +64,6 @@ const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(
     const innerRef = React.useRef(null);
     const combinedRef = useCombinedRefs(forwardedRef, innerRef);
 
-    useEffect(() => {
-      if (props.defaultChecked !== undefined) {
-        setChecked(props.defaultChecked);
-      }
-    }, [props.defaultChecked]);
-
     const onChange = (event) => {
       if (!props.disabled) {
         setChecked(event.target.checked);
@@ -80,13 +74,18 @@ const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(
       }
     };
 
+    useEffect(() => {
+      if (props.defaultChecked !== undefined) {
+        setChecked(props.defaultChecked);
+      }
+    }, [props.defaultChecked]);
+
     return (
       <CheckboxContainer $disabled={props.faded}>
         <HiddenCheckbox
           ref={combinedRef}
           type="checkbox"
           name={props.name}
-          value={props.value}
           defaultChecked={checked}
           onChange={(event) => onChange(event)}
         />

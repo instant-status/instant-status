@@ -119,9 +119,11 @@ export const deleteInstance = (
   return 204;
 };
 
-export const getInstances = (urlParams: { [k: string]: string }) => {
+export const getInstances = (urlParams: {
+  [k: string]: string | string[] | undefined;
+}) => {
   if (urlParams.groupBy) {
-    const groupByValue = urlParams.groupBy;
+    const groupByValue = urlParams.groupBy.toString();
 
     delete urlParams.groupBy;
 

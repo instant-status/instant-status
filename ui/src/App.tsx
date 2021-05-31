@@ -44,6 +44,9 @@ const GlobalStyle = createGlobalStyle`
   }
   .full-width {
     width: 100%;
+    height: 100%;
+    padding: 2rem;
+    overflow: auto;
   }
 `;
 

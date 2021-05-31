@@ -5,7 +5,7 @@ import styled, { css, keyframes } from "styled-components";
 import APP_CONFIG from "../../../../config/appConfig";
 import { StateContext } from "../../context/StateContext";
 import getDate from "../../utils/getDate";
-import { getHealthIcon } from "../../utils/getHealth";
+import { getHealthColor, getHealthIcon } from "../../utils/getHealth";
 import { getStateIcon } from "../../utils/getState";
 import { InstanceProps } from "../../../../types/globalTypes";
 import theme from "../../utils/theme";
@@ -14,6 +14,7 @@ import IconUbuntu from "../icons/IconUbuntu";
 import CopyText from "../shared/CopyText";
 import IconButton from "../shared/IconButton";
 import CardInstanceOverlay from "./CardInstanceOverlay";
+import Stack from "../Stack";
 
 const InstanceWrapper = styled.article`
   position: relative;
@@ -33,21 +34,20 @@ const InstanceHeader = styled.header`
   justify-content: space-between;
 `;
 
-const InstanceName = styled.h4`
-  font-weight: 400;
-  font-size: 20px;
+const InstanceName = styled.h4<{ $color: string }>`
+  font-size: 17px;
   margin: 0;
   width: 90%;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  text-transform: capitalize;
 `;
 
 const InstanceNumber = styled.span`
   color: ${(props) => transparentize(0.5, props.theme.color.lightOne)};
+  font-weight: 400;
   font-size: 16px;
-  margin-left: 10px;
-  text-transform: capitalize;
   display: inline-block;
 `;
 
@@ -186,11 +186,11 @@ const CardInstance = (props: { instance: InstanceProps, isUpdating: boolean, isS
       )}
       <Instance>
         <InstanceHeader>
-          <InstanceName>
-            {props.instance.server_is_chosen_one && `👑 `}
-            {props.instance.server_id}
-            <InstanceNumber>{props.instance.server_role}</InstanceNumber>
-          </InstanceName>
+          <Stack as={InstanceName} spacing={2} align="baseline">
+            <span style={{color: getHealthColor(healthCode)}}>{props.instance.server_role}</span>
+            <InstanceNumber>{props.instance.server_id}</InstanceNumber>
+            <span style={{color: '#fff'}}>{props.instance.server_is_chosen_one && `👑`}</span>
+          </Stack>
 
           <SmallStateIcon
             title="Show Update Info"

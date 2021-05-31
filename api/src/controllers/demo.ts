@@ -1,7 +1,9 @@
 import db from 'diskdb';
 import ALLOWED_DATA, { AllowedDataType } from '../../../config/allowedData';
 
-export const getDemoData = (urlParams: { [k: string]: string }) => {
+export const getDemoData = (urlParams: {
+  [k: string]: string | string[] | undefined;
+}) => {
   db.connect('../data', ['demo']);
   return db.demo.find(urlParams);
 };

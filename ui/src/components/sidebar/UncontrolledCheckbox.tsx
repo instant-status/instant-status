@@ -64,6 +64,7 @@ const UncontrolledCheckbox = (props: CheckboxProps) => {
         name={props.name}
         checked={props.checked}
         onChange={() => props.onClick(props.name)}
+        disabled={props.disabled}
       />
       <Box $isChecked={props.checked} $disabled={props.visuallyDisabled} />
       <Stack direction="down">

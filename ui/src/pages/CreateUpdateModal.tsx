@@ -41,9 +41,9 @@ enum UpdateStepTypes {
 
 interface ApiGetStacksAvailableForUpdateProps {
   stack_id: string;
-  stackVersion: string;
+  stack_version: string;
   stack_environment: string;
-  isUpdating: boolean;
+  is_updating: boolean;
 }
 
 const CreateUpdateModal = () => {
@@ -57,7 +57,10 @@ const CreateUpdateModal = () => {
   const [stacksToUpdate, setStacksToUpdate] = useState(
     query.stack ? [query.stack] : [],
   );
-  const { register, getValues, handleSubmit } = useForm();
+  const [updateOptions, setUpdateOptions] = useState([
+    "run_migrations",
+  ]);
+  const { register, getValues } = useForm();
   const store = useContext(globalStoreContext);
 
   const mutation = useMutation((payload: any) =>
@@ -71,27 +74,27 @@ const CreateUpdateModal = () => {
   };
 
   useEffect(() => {
+    const documentRoot = document.querySelector(
+      `#instant-status-root`,
+    ) as HTMLElement;
+    documentRoot.style.overflow = "hidden";
+    documentRoot.style.height = "100vh";
+
     window.addEventListener("beforeunload", warnAboutUnsavedChanges);
 
     return () => {
+      documentRoot.style.overflow = "auto";
+      documentRoot.style.height = "100%";
       window.removeEventListener("beforeunload", warnAboutUnsavedChanges);
     };
   }, [step]);
 
-  const onSubmit = (data) => {
-    // console.log("data", data);
-  };
-
   const onSave = () => {
     const formData = getValues();
 
-    // FIX THIS
-    formData.run_migrations = true;
-    formData.update_configs = true;
-    formData.update_envs = true;
-
     mutation.mutate({
       stack_ids: stacksToUpdate,
+      run_migrations: updateOptions.includes("run_migrations"),
       ...formData,
     });
   };
@@ -109,6 +112,14 @@ const CreateUpdateModal = () => {
       setStacksToUpdate(stacksToUpdate.filter((stack) => stack !== stackId));
     } else {
       setStacksToUpdate([...stacksToUpdate, stackId]);
+    }
+  };
+
+  const toggleConfigCheckbox = (option: string) => {
+    if (updateOptions.includes(option)) {
+      setUpdateOptions(updateOptions.filter((stack) => stack !== option));
+    } else {
+      setUpdateOptions([...updateOptions, option]);
     }
   };
 
@@ -172,109 +183,18 @@ const CreateUpdateModal = () => {
     }
   };
 
-  return (
-    <ModalBase title={modalTitle} onClose={closeModal}>
-      <Stack direction="down" spacing={8}>
-        {stacks
-          .sort((a, b) => a[1].length - b[1].length)
-          .map((stackEnv) => {
-            const environment = stackEnv[0];
-            const stacks = stackEnv[1] as ApiGetStacksAvailableForUpdateProps[];
-            const stackIds = stacks.map((stack) => stack.stack_id);
-            const availableStackIds = stacks
-              .filter((stack) => !stack.isUpdating)
-              .map((stack) => stack.stack_id);
-            const allSelected = allExistIn(availableStackIds, stacksToUpdate);
+  const updateOptionsArray = [
+    {
+      label: "Run Migrations",
+      name: "run_migrations",
+    },
+  ];
 
-            return (
-              <Stack direction="down" key={environment}>
-                <StackColumnName>
-                  <Stack align="center" justify="spaceBetween">
-                    {environment}
-                    {step === UpdateStepTypes.pickOptions && (
-                      <Checkbox
-                        label="Select all"
-                        name={`select_all_${environment}`}
-                        defaultChecked={allSelected}
-                        callback={(isChecked) => toggleAll(stackIds, isChecked)}
-                      />
-                    )}
-                  </Stack>
-                </StackColumnName>
-                <Columns>
-                  {stacks.map((stack) => (
-                    <UncontrolledCheckbox
-                      key={`${stack.stack_id}-${stack.stackVersion}`}
-                      label={stack.stack_id}
-                      helperLabel={stack.stackVersion}
-                      name={stack.stack_id}
-                      disabled={
-                        step !== UpdateStepTypes.pickOptions
-                          ? true
-                          : stack.isUpdating
-                      }
-                      visuallyDisabled={stack.isUpdating}
-                      onClick={() => toggleCheckbox(stack.stack_id)}
-                      checked={
-                        !stack.isUpdating &&
-                        stacksToUpdate.includes(stack.stack_id)
-                      }
-                    />
-                  ))}
-                </Columns>
-              </Stack>
-            );
-          })}
-      </Stack>
-      <Stack
-        direction="down"
-        spacing={8}
-        as="form"
-        onSubmit={handleSubmit(onSubmit)}
-      >
-        <Stack spacing={4} direction="down" align="center">
-          <Heading>
-            {step === UpdateStepTypes.pickOptions
-              ? "Configure Options"
-              : "Configured Options"}
-          </Heading>
-          <Stack direction="down" spacing={6}>
-            <Stack spacing={9} justify="center">
-              <Checkbox
-                label="Run Migrations"
-                defaultChecked={true}
-                // disabled={step !== UpdateStepTypes.pickOptions}
-                {...register("run_migrations")}
-              />
-              <Checkbox
-                label="Update ENVs"
-                defaultChecked={true}
-                // disabled={step !== UpdateStepTypes.pickOptions}
-                {...register("update_envs")}
-              />
-              <Checkbox
-                label="Update Configs"
-                defaultChecked={true}
-                // disabled={step !== UpdateStepTypes.pickOptions}
-                {...register("update_configs")}
-              />
-            </Stack>
-            <Stack spacing={6} direction="right" fullWidth={true}>
-              <TextInput
-                label="Update app to:"
-                defaultValue={query.version}
-                // disabled={step !== UpdateStepTypes.pickOptions}
-                {...register("update_app_to")}
-              />
-              <TextInput
-                label="Update xAPI to:"
-                defaultValue={query.xapiVersion}
-                // disabled={step !== UpdateStepTypes.pickOptions}
-                {...register("update_xapi_to")}
-              />
-            </Stack>
-          </Stack>
-        </Stack>
+  return (
+    <ModalBase
+      title={modalTitle}
+      onClose={closeModal}
+      actions={
         <Stack justify="center" spacing={4}>
           {step === UpdateStepTypes.pickOptions && (
             <GhostButton
@@ -293,7 +213,6 @@ const CreateUpdateModal = () => {
                 type="button"
                 onClick={() => {
                   setStep(UpdateStepTypes.coolOff);
-                  // onSave();
                 }}
               >
                 Confirm Update
@@ -308,6 +227,116 @@ const CreateUpdateModal = () => {
               setIsSafeToClose={setIsSafeToClose}
             />
           )}
+        </Stack>
+      }
+    >
+      <Stack direction="down" spacing={8}>
+        {stacks
+          .sort((a, b) => a[1].length - b[1].length)
+          .map((stackEnv) => {
+            const environment = stackEnv[0];
+            const stacks = stackEnv[1] as ApiGetStacksAvailableForUpdateProps[];
+            const stackIds = stacks.map((stack) => stack.stack_id);
+            const availableStackIds = stacks
+              .filter((stack) => !stack.is_updating)
+              .map((stack) => stack.stack_id);
+            const allSelected = allExistIn(availableStackIds, stacksToUpdate);
+
+            return (
+              <Stack direction="down" key={environment}>
+                <StackColumnName>
+                  <Stack align="center" justify="spaceBetween">
+                    <span>{environment || "Undefined"}</span>
+                    {step === UpdateStepTypes.pickOptions && (
+                      <Checkbox
+                        label={allSelected ? "Deselect all" : "Select all"}
+                        name={`select_all_${environment}`}
+                        defaultChecked={allSelected}
+                        callback={(isChecked) => toggleAll(stackIds, isChecked)}
+                      />
+                    )}
+                  </Stack>
+                </StackColumnName>
+                <Columns>
+                  {stacks
+                    .sort(
+                      (a, b) =>
+                        a.stack_version.localeCompare(b.stack_version) ||
+                        a.stack_id.localeCompare(b.stack_id),
+                    )
+                    .map((stack) => (
+                      <UncontrolledCheckbox
+                        key={`${stack.stack_id}-${stack.stack_version}`}
+                        label={stack.stack_id}
+                        helperLabel={
+                          stack.is_updating
+                            ? `Updating to ${stack.stack_version}`
+                            : stack.stack_version
+                        }
+                        name={stack.stack_id}
+                        disabled={
+                          step !== UpdateStepTypes.pickOptions
+                            ? true
+                            : stack.is_updating
+                        }
+                        visuallyDisabled={stack.is_updating}
+                        onClick={() => toggleCheckbox(stack.stack_id)}
+                        checked={
+                          !stack.is_updating &&
+                          stacksToUpdate.includes(stack.stack_id)
+                        }
+                      />
+                    ))}
+                </Columns>
+              </Stack>
+            );
+          })}
+      </Stack>
+      <Stack direction="down" spacing={8} as="form">
+        <Stack spacing={4} direction="down" align="center">
+          <Heading>
+            {step === UpdateStepTypes.pickOptions
+              ? "Configure Options"
+              : "Configured Options"}
+          </Heading>
+          <Stack direction="down" spacing={6}>
+            <Stack spacing={9} justify="center">
+              {updateOptionsArray.map((option) => {
+                return (
+                  <UncontrolledCheckbox
+                    key={option.name}
+                    label={option.label}
+                    name={option.name}
+                    disabled={step !== UpdateStepTypes.pickOptions}
+                    onClick={() => toggleConfigCheckbox(option.name)}
+                    checked={updateOptions.includes(option.name)}
+                  />
+                );
+              })}
+            </Stack>
+            <Stack spacing={6} direction="right" fullWidth={true}>
+              <TextInput
+                label={
+                  <>
+                    Update <b>app</b> to:
+                  </>
+                }
+                defaultValue={query.version}
+                disabled={step !== UpdateStepTypes.pickOptions}
+                {...register("update_app_to")}
+              />
+              <TextInput
+                label={
+                  <>
+                    Update <b>xAPI</b> to:
+                  </>
+                }
+                defaultValue={query.xapiVersion}
+                disabled={step !== UpdateStepTypes.pickOptions}
+                {...register("update_xapi_to")}
+              />
+            </Stack>
+          </Stack>
         </Stack>
       </Stack>
     </ModalBase>

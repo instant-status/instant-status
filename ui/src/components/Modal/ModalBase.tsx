@@ -1,9 +1,11 @@
 import { motion } from "framer-motion";
 import React from "react";
+import { createPortal } from "react-dom";
 import FocusLock from "react-focus-lock";
 import { useHotkeys } from "react-hotkeys-hook";
 import styled from "styled-components";
 import useClickAway from "../../hooks/useClickAway";
+import usePortal from "../../hooks/usePortal";
 import IconClose from "../icons/IconClose";
 import { spacing } from "../spacing";
 import Stack from "../Stack";
@@ -17,6 +19,7 @@ const ModalContainer = styled(motion.div)`
   color: #fff;
   margin: 0 auto;
   position: relative;
+  min-height: 100%;
 `;
 
 const ModalHeader = styled.h1`
@@ -56,12 +59,18 @@ const ModalWrapper = styled(motion.div)`
   display: flex;
   align-items: center;
   justify-content: center;
+  z-index: 10000;
+`;
+
+const Actions = styled.div`
+  margin-top: auto;
 `;
 
 interface ModalBaseProps {
   title: string;
   onClose: () => void;
   children: React.ReactNode;
+  actions: React.ReactNode;
 }
 
 const ModalBase = (props: ModalBaseProps) => {
@@ -69,21 +78,23 @@ const ModalBase = (props: ModalBaseProps) => {
 
   useHotkeys("esc", props.onClose);
 
-  return (
+  const modalContent = (
     <ModalWrapper>
       <ModalScreen
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
+        transition={{ duration: 0.3 }}
       />
       <FocusLock className="full-width">
         <ModalContainer
           ref={modalContainerRef}
-          initial={{ scale: 0 }}
-          animate={{ scale: 1 }}
-          exit={{ scale: 0, opacity: 0 }}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 0.3 }}
         >
-          <Stack direction="down" spacing={8}>
+          <Stack direction="down" spacing={8} justify="spaceBetween">
             <Stack justify="center">
               <ModalHeader>{props.title}</ModalHeader>
               <ModalCloseButton onClick={props.onClose}>
@@ -91,11 +102,15 @@ const ModalBase = (props: ModalBaseProps) => {
               </ModalCloseButton>
             </Stack>
             {props.children}
+            <Actions>{props.actions}</Actions>
           </Stack>
         </ModalContainer>
       </FocusLock>
     </ModalWrapper>
   );
+
+  const target = usePortal("instant-status-modal");
+  return createPortal(modalContent, target);
 };
 
 export default ModalBase;
