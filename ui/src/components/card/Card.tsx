@@ -4,7 +4,7 @@ import React, { useContext } from "react";
 import styled from "styled-components";
 
 import { globalStoreContext } from "../../store/globalStore";
-import InstanceProps from "../../utils/InstanceProps";
+import { InstanceProps } from "../../../../types/globalTypes";
 import CardFooter from "./CardFooter";
 import CardHeader from "./CardHeader";
 import CardInstance from "./CardInstance";
@@ -26,7 +26,7 @@ const getChosenOne = (instances?: InstanceProps[]) => {
   return chosenOne[0] || undefined;
 };
 
-const Card = (props: { instances: InstanceProps[]; isUpdating: boolean }) => {
+const Card = (props: { instances: InstanceProps[]; isUpdating: boolean; isStartingUpdate: boolean}) => {
   const store = useContext(globalStoreContext);
 
   const firstInstance = props.instances[0];
@@ -50,7 +50,7 @@ const Card = (props: { instances: InstanceProps[]; isUpdating: boolean }) => {
             if (i + 1 <= store.instanceDisplayCount) {
               return (
                 <motion.div key={instance.server_id}>
-                  <CardInstance instance={instance} />
+                  <CardInstance instance={instance} isUpdating={props.isUpdating} isStartingUpdate={props.isStartingUpdate} />
                 </motion.div>
               );
             }

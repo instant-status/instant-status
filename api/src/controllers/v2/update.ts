@@ -115,11 +115,11 @@ export const updatePost = (ctx) => {
   // Ensuring we have required data in the request
   const body = ctx.request.body;
   const requiredDataKeys = [
-    'message',
-    'progress',
-    'server_id',
-    'stage',
     'update_id',
+    'server_id',
+    'server_update_progress',
+    'server_update_stage',
+    'server_update_message',
   ];
   const checkForRequiredDataKeysResult = checkForRequiredDataKeys(
     body,
@@ -143,7 +143,7 @@ export const updatePost = (ctx) => {
 
   const responseBody = {} as JsonObject;
 
-  switch (body.stage) {
+  switch (body.server_update_stage) {
     case 'election':
       if (!latestUpdate['servers'].includes(body.server_id)) {
         const serverIdsCount = latestUpdate['servers'].length;
@@ -188,7 +188,7 @@ export const updatePost = (ctx) => {
     default:
       return response(ctx, 400, {
         ok: false,
-        message: `No stage found with name: '${body.stage}'.`,
+        message: `No stage found with name: '${body.server_update_stage}'.`,
       });
   }
 
@@ -198,10 +198,10 @@ export const updatePost = (ctx) => {
     },
     {
       server_id: body.server_id,
-      server_update_stage: body.stage,
-      server_update_progress: body.progress,
-      server_update_message: body.message,
-      ...(body.stage === 'finished' && {
+      server_update_stage: body.server_update_stage,
+      server_update_progress: body.server_update_progress,
+      server_update_message: body.server_update_message,
+      ...(body.server_update_stage === 'finished' && {
         server_app_version: latestUpdate.update_app_to,
         server_xapi_version: latestUpdate.update_xapi_to,
         server_updated_at: new Date().toISOString(),
@@ -254,22 +254,26 @@ export const getStacksAvailableForUpdate = (ctx: any) => {
 
 export const getUpdatingStacks = (ctx: any) => {
   const servers = db.instances.find() as InstanceProps[];
+  const updates = db.updates.find();
 
-  const responseBody = [];
+  const updatingStacks = new Set<string>();
+  const startingUpdateStacks = new Set<string>();
 
-  for (const server of servers) {
-    const update = db.updates.findOne({ stack_id: server.stack_id });
-
-    const isUpdating =
-      update &&
-      (update.server_completed_count === 0 ||
-        update.server_count === 0 ||
-        update.server_completed_count !== update.server_count);
-
-    if (isUpdating) {
-      responseBody.push(server.stack_id);
+  for (const update of updates) {
+    if (update.server_count === 0) {
+      updatingStacks.add(update.stack_id);
+      startingUpdateStacks.add(update.stack_id);
     }
   }
 
-  return response(ctx, 200, { stacks: responseBody });
+  for (const server of servers) {
+    if (server.server_update_progress !== 100) {
+      updatingStacks.add(server.stack_id);
+    }
+  }
+
+  return response(ctx, 200, {
+    updatingStacks: [...updatingStacks],
+    startingUpdateStacks: [...startingUpdateStacks],
+  });
 };
