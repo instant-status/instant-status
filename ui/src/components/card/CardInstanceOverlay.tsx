@@ -9,6 +9,7 @@ import { InstanceProps } from "../../../../types/globalTypes";
 import IconClose from "../icons/IconClose";
 import Stack from "../Stack";
 import ProgressBar from "../ProgressBar";
+import theme from "../../utils/theme";
 
 const Overlay = styled.div`
   width: 100%;
@@ -53,7 +54,7 @@ const OverlayHeaderText = styled.div`
 `;
 
 const RowKey = styled.div`
-  width: 125px;
+  width: 110px;
   text-align: right;
   flex: none;
   opacity: 0.7;
@@ -66,7 +67,6 @@ const CardInstanceOverlay = (props: {
   isStartingUpdate: boolean;
   instance: InstanceProps;
 }) => {
-
   if (props.type === `health`) {
     return (
       <Stack as={Overlay} direction="down" spacing={4}>
@@ -79,19 +79,25 @@ const CardInstanceOverlay = (props: {
         </Stack>
         <Stack direction="down" spacing={1}>
           <Stack spacing={2}>
-            <RowKey>Last Reported:</RowKey><div>{getDate(props.instance.server_health_updated_at)}</div>
+            <RowKey>Last Reported:</RowKey>
+            <div>{getDate(props.instance.server_health_updated_at)}</div>
           </Stack>
           <Stack spacing={2}>
-            <RowKey>Message:</RowKey><div>{props.instance.server_health_message}</div>
+            <RowKey>Message:</RowKey>
+            <div>{props.instance.server_health_message}</div>
           </Stack>
         </Stack>
       </Stack>
     );
-  };
+  }
 
   if (props.type === `state`) {
-    const updateProgress = props.isStartingUpdate ? 0 : props.instance.server_update_progress;
-    const updateMessage = props.isStartingUpdate ? 'Update Requested...' : props.instance.server_update_message;
+    const updateProgress = props.isStartingUpdate
+      ? 0
+      : props.instance.server_update_progress;
+    const updateMessage = props.isStartingUpdate
+      ? "Update Requested..."
+      : props.instance.server_update_message;
     return (
       <Stack as={Overlay} direction="down" spacing={4}>
         <Stack justify="spaceBetween">
@@ -102,17 +108,30 @@ const CardInstanceOverlay = (props: {
           </OverlayCloseButton>
         </Stack>
         <Stack>
-          <ProgressBar $progress={updateProgress} $pulse={true} />
+          <ProgressBar
+            progress={updateProgress}
+            pulse={true}
+            color={theme.color.purple}
+          />
         </Stack>
         <Stack direction="down" spacing={1}>
           <Stack spacing={2}>
-            <RowKey>Message:</RowKey><div>{updateMessage}</div>
+            <RowKey>Message:</RowKey>
+            <div>{updateMessage}</div>
           </Stack>
           <Stack spacing={2}>
-            <RowKey>From:</RowKey><div>{props.instance.server_app_version} (xAPI {props.instance.server_xapi_version})</div>
+            <RowKey>From:</RowKey>
+            <div>
+              {props.instance.server_app_version} (xAPI{" "}
+              {props.instance.server_xapi_version})
+            </div>
           </Stack>
           <Stack spacing={2}>
-            <RowKey>To:</RowKey><div>{props.instance.server_updating_app_to} (xAPI {props.instance.server_updating_xapi_to})</div>
+            <RowKey>To:</RowKey>
+            <div>
+              {props.instance.server_updating_app_to} (xAPI{" "}
+              {props.instance.server_updating_xapi_to})
+            </div>
           </Stack>
         </Stack>
       </Stack>

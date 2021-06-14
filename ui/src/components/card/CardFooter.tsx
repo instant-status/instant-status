@@ -3,7 +3,6 @@ import React, { useContext } from "react";
 import styled from "styled-components";
 
 import { globalStoreContext } from "../../store/globalStore";
-import { InstanceProps } from "../../../../types/globalTypes";
 import IconLogs from "../icons/IconLogs";
 import IconOpen from "../icons/IconOpen";
 import IconUpdate from "../icons/IconUpdate";
@@ -15,8 +14,8 @@ const Footer = styled.footer`
   user-select: none;
 `;
 
-const Button = styled.button<{ disabled: boolean }>`
-  width: 33.33%;
+const FooterButton = styled.button<{ disabled: boolean }>`
+  width: 100%;
   display: flex;
   flex-direction: column;
   border: none;
@@ -46,13 +45,19 @@ const Text = styled.div`
   margin-top: 0.2em;
 `;
 
-const CardFooter = (props: {
-  chosenOne: InstanceProps;
+interface CardFooterProps {
+  stackLogsUrl?: string;
+  stackAppUrl?: string;
+  stackId?: string;
+  serverAppVersion?: string;
+  serverXapiVersion?: string;
   isUpdating: boolean;
-}) => {
-  const [query, setQuery] = useQueryParams({
-    stack: StringParam,
-    version: StringParam,
+}
+
+const CardFooter = (props: CardFooterProps) => {
+  const [_, setQuery] = useQueryParams({
+    stackId: StringParam,
+    appVersion: StringParam,
     xapiVersion: StringParam,
   });
 
@@ -60,43 +65,43 @@ const CardFooter = (props: {
 
   return (
     <Footer>
-      <Button
+      <FooterButton
         as="a"
         title="View Logs"
         target="_blank"
         rel="noreferrer noopener"
-        disabled={!props.chosenOne || !props.chosenOne.stack_logs_url}
-        href={props.chosenOne && props.chosenOne.stack_logs_url}
+        disabled={!props.stackLogsUrl}
+        href={props.stackLogsUrl}
       >
         <IconLogs width="40px" />
         <Text>Logs</Text>
-      </Button>
-      <Button
+      </FooterButton>
+      <FooterButton
         as="a"
         title="View Site"
         target="_blank"
         rel="noreferrer noopener"
-        disabled={!props.chosenOne || !props.chosenOne.stack_app_url}
-        href={props.chosenOne && props.chosenOne.stack_app_url}
+        disabled={!props.stackAppUrl}
+        href={props.stackAppUrl}
       >
         <IconOpen width="40px" />
         <Text>Open</Text>
-      </Button>
-      <Button
+      </FooterButton>
+      <FooterButton
         title="Update Stack"
         disabled={props.isUpdating}
         onClick={() => {
           store.setIsUpdateModalOpen(true);
           setQuery({
-            stack: props.chosenOne.stack_id,
-            version: props.chosenOne.server_app_version,
-            xapiVersion: props.chosenOne.server_xapi_version,
+            stackId: props.stackId,
+            appVersion: props.serverAppVersion,
+            xapiVersion: props.serverXapiVersion,
           });
         }}
       >
         <IconUpdate width="40px" />
         <Text>Update</Text>
-      </Button>
+      </FooterButton>
     </Footer>
   );
 };

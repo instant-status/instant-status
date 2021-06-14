@@ -13,6 +13,7 @@ import SelectInput from "./SelectInput";
 import SidebarHeader from "./SidebarHeader";
 import SliderInput from "./SliderInput";
 import TextInput from "./TextInput";
+import UncontrolledCheckbox from "./UncontrolledCheckbox";
 import VersionFilters from "./VersionFilters";
 
 const Aside = styled.aside`
@@ -106,17 +107,17 @@ const Sidebar = () => {
             onBlur={(event) => updateKeyLocation(event.target.value, true)}
             label="Key File Location:"
           />
-          <Checkbox
-            isChecked={showAdvanced}
-            value="true"
+          <UncontrolledCheckbox
+            checked={showAdvanced}
             label={`Show More Info`}
-            onChange={() => updateShowAdvanced(!showAdvanced)}
+            name={`showMoreInfo`}
+            onClick={() => updateShowAdvanced(!showAdvanced)}
           />
-          <Checkbox
-            isChecked={rememberSettings}
-            value="true"
-            label={rememberSettings ? `Clear Settings` : `Remember Settings`}
-            onChange={() => updateRememberSettings(!rememberSettings)}
+          <UncontrolledCheckbox
+            checked={rememberSettings}
+            label={`Remember Settings`}
+            name={`rememberSettings`}
+            onClick={() => updateRememberSettings(!rememberSettings)}
           />
         </section>
         <Footer>

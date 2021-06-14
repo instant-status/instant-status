@@ -2,6 +2,7 @@ import React, { useContext, useEffect, useState } from "react";
 
 import { StateContext } from "../../context/StateContext";
 import Checkbox from "./Checkbox";
+import UncontrolledCheckbox from "./UncontrolledCheckbox";
 
 const VersionFilters = (props: { versions: string[] }) => {
   const { urlVersionParams, updateUrlParams } = useContext(StateContext);
@@ -36,12 +37,12 @@ const VersionFilters = (props: { versions: string[] }) => {
           // If we have an empty version string, show an icon as the label
           const label = version === `` ? `👻` : version;
           return (
-            <Checkbox
+            <UncontrolledCheckbox
               key={i}
-              isChecked={isCheckedArray.includes(version)}
-              value={version}
+              checked={isCheckedArray.includes(version)}
               label={label}
-              onChange={() => toggleCheckbox(version)}
+              name={label}
+              onClick={() => toggleCheckbox(version)}
             />
           );
         })}
