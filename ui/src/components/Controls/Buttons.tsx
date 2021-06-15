@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { spacing } from "./spacing";
+import { spacing } from "../Layout/spacing";
 
 const ButtonBase = styled.button`
   padding: 0.7rem 3rem;

@@ -1,51 +1,48 @@
 import React, { useContext, useEffect, useState } from "react";
-
-import { StateContext } from "../../context/StateContext";
-import Checkbox from "./Checkbox";
+import { globalStoreContext } from "../../store/globalStore";
+import Stack from "../Layout/Stack";
+import Checkbox from "../Controls/Checkbox";
 
 const VersionFilters = (props: { versions: string[] }) => {
-  const { urlVersionParams, updateUrlParams } = useContext(StateContext);
-  const [isCheckedArray, setIsCheckedArray] = useState(
-    urlVersionParams.length > 0 ? urlVersionParams : props.versions,
-  );
+  const [isCheckedArray, setIsCheckedArray] = useState(props.versions);
+
+  const store = useContext(globalStoreContext);
 
   useEffect(() => {
-    if (urlVersionParams.length > 0) {
-      setIsCheckedArray(urlVersionParams);
-    } else {
+    if (props.versions.length) {
       setIsCheckedArray(props.versions);
     }
-  }, [props.versions, urlVersionParams.length]);
+  }, [props.versions]);
 
   const toggleCheckbox = (name: string) => {
     let newArray = [] as string[];
     if (isCheckedArray.includes(name)) {
       newArray = isCheckedArray.filter((version) => version !== name);
     } else {
-      newArray = [...isCheckedArray, name] as [];
+      newArray = [...isCheckedArray, name] as string[];
     }
     setIsCheckedArray(newArray);
-    updateUrlParams({ key: `version`, value: newArray });
+    store.setDisplayVersions(newArray);
   };
 
   return (
-    <>
+    <Stack direction="down" spacing={4}>
       {props.versions
         .filter((version: string) => version !== undefined)
         .map((version: string, i: number) => {
           // If we have an empty version string, show an icon as the label
-          const label = version === `` ? `👻` : version;
+          const name = version === `` ? `👻` : version;
           return (
             <Checkbox
               key={i}
-              isChecked={isCheckedArray.includes(version)}
-              value={version}
-              label={label}
-              onChange={() => toggleCheckbox(version)}
+              name={name}
+              label={name}
+              onClick={() => toggleCheckbox(version)}
+              checked={isCheckedArray.includes(version)}
             />
           );
         })}
-    </>
+    </Stack>
   );
 };
 

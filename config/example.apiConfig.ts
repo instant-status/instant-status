@@ -1,5 +1,5 @@
 const API_CONFIG = {
-  APP_SECRET: "your-256-bit-secret",
+  APP_SECRETS: ["your-256-bit-secret"],
   ALLOWED_USERS: {
     "user@example.com": { roles: [""] },
   },

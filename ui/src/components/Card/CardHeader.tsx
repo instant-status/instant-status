@@ -28,7 +28,7 @@ const StackLogo = styled.div<{ image: string }>`
   flex-shrink: 0;
 `;
 
-const CardHeader = (props: { stackId: string; stackLogo?: string }) => {
+const CardHeader = (props: { stackId?: string; stackLogo?: string }) => {
   return (
     <Header>
       <StackLogo image={props.stackLogo} />

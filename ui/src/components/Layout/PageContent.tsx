@@ -3,14 +3,13 @@ import { useObserver } from "mobx-react-lite";
 import React, { useContext } from "react";
 import { useQuery } from "react-query";
 import styled from "styled-components";
-import logo from "url:../assets/logo.svg";
-import apiRoutes from "../api/apiRoutes";
-import { StateContext } from "../context/StateContext";
-import CreateUpdateModal from "../pages/CreateUpdateModal";
-import { globalStoreContext } from "../store/globalStore";
-import { InstanceProps } from "../../../types/globalTypes";
-import Card from "./card/Card";
-import SearchBar from "./SearchBar";
+import logo from "../../assets/logo.svg";
+import apiRoutes from "../../api/apiRoutes";
+import CreateUpdateModal from "../../containers/UpdateSteps/CreateUpdateModal";
+import { globalStoreContext } from "../../store/globalStore";
+import { InstanceProps } from "../../../../types/globalTypes";
+import Card from "../Card/Card";
+import SearchBar from "../Controls/SearchBar";
 
 const Page = styled.main`
   background-color: ${(props) => props.theme.color.darkTwo};
@@ -37,8 +36,6 @@ const Grid = styled.div`
 `;
 
 const PageContent = () => {
-  const { urlVersionParams, urlSortBy } = useContext(StateContext);
-
   const store = useContext(globalStoreContext);
 
   const refetchInterval = 5000; // Refetch the data every 5 seconds
@@ -57,7 +54,9 @@ const PageContent = () => {
 
   const updatingStacks = [...(stackUpdatesQuery.data?.updatingStacks || [])];
 
-  const stacksStartingUpdate = [...(stackUpdatesQuery.data?.startingUpdateStacks || [])];
+  const stacksStartingUpdate = [
+    ...(stackUpdatesQuery.data?.startingUpdateStacks || []),
+  ];
 
   const stacks = Object.entries(stacksQuery?.data || []);
 
@@ -69,23 +68,20 @@ const PageContent = () => {
           {stacks.length > 0 ? (
             stacks
               .filter((item) => {
-                if (urlVersionParams.length > 0) {
-                  if (
-                    urlVersionParams.includes(item[1][0].server_app_version) ||
-                    item[1][0].server_app_version === undefined
-                  ) {
-                    return true;
-                  }
-                  return false;
-                }
-                return true;
+                return (
+                  !store?.displayVersions.length ||
+                  store.displayVersions.includes(
+                    item[1][0].server_app_version,
+                  ) ||
+                  item[1][0].server_app_version === undefined
+                );
               })
               .sort((a, b) => {
                 const item1 = a[1][0]; // First instance
                 const item2 = b[1][0]; // First instance
 
-                const sortBy = urlSortBy.replace(`!`, ``);
-                const sortByReverse = urlSortBy.startsWith(`!`);
+                const sortBy = store.orderBy.replace(`!`, ``);
+                const sortByReverse = store.orderBy.startsWith(`!`);
                 if (sortByReverse) {
                   return item1[sortBy] < item2[sortBy] ? 1 : -1;
                 } else {

@@ -1,18 +1,17 @@
-import { useObserver } from "mobx-react-lite";
+import { observer, useObserver } from "mobx-react-lite";
 import { lighten } from "polished";
 import React, { useContext } from "react";
 import { useQuery } from "react-query";
 import styled from "styled-components";
-
-import APP_CONFIG from "../../../../config/appConfig";
-import { StateContext } from "../../context/StateContext";
+import APP_CONFIG from "@config/appConfig";
 import fetchUrl from "../../hooks/useFetch";
 import { globalStoreContext } from "../../store/globalStore";
-import Checkbox from "./Checkbox";
-import SelectInput from "./SelectInput";
+import SelectInput from "../Controls/SelectInput";
+import SliderInput from "../Controls/SliderInput";
+import Checkbox from "../Controls/Checkbox";
+import Stack from "../Layout/Stack";
 import SidebarHeader from "./SidebarHeader";
-import SliderInput from "./SliderInput";
-import TextInput from "./TextInput";
+import TextInput from "../Controls/TextInput";
 import VersionFilters from "./VersionFilters";
 
 const Aside = styled.aside`
@@ -29,6 +28,10 @@ const Aside = styled.aside`
 const AsideGhost = styled.div`
   width: 290px;
   flex: none;
+`;
+
+const AsidePaddingContainer = styled.div`
+  padding-right: 20px;
 `;
 
 const SectionHeader = styled.h3`
@@ -50,22 +53,8 @@ const A = styled.a`
   color: #fff;
 `;
 
-const Sidebar = () => {
-  const {
-    updateUrlParams,
-    updateKeyLocation,
-    keyLocation,
-    updateRememberSettings,
-    rememberSettings,
-    showAdvanced,
-    updateShowAdvanced,
-  } = useContext(StateContext);
-
+const Sidebar = observer(() => {
   const store = useContext(globalStoreContext);
-
-  const updateOrderBy = (option: string) => {
-    updateUrlParams({ key: `sortBy`, value: option });
-  };
 
   const sidebarQuery = useQuery(
     `sidebarData`,
@@ -86,39 +75,42 @@ const Sidebar = () => {
           <SectionHeader>Versions</SectionHeader>
           <VersionFilters versions={sidebarQuery.data?.activeVersions || []} />
         </section>
-        <section>
+        <Stack as="section" direction="down" spacing={4}>
           <SectionHeader>Settings</SectionHeader>
-          <SelectInput
-            onChange={(event) => updateOrderBy(event.target.value)}
-            label="Order By"
-          />
-          <SliderInput
-            value={store.instanceDisplayCount}
-            onChange={(event) =>
-              store.setInstanceDisplayCount(Number(event.target.value))
-            }
-            total={4}
-            label="Display Count:"
-          />
-          <TextInput
-            value={keyLocation}
-            onChange={(event) => updateKeyLocation(event.target.value)}
-            onBlur={(event) => updateKeyLocation(event.target.value, true)}
-            label="Key File Location:"
-          />
+          <Stack as={AsidePaddingContainer} direction="down" spacing={4}>
+            <SelectInput
+              onChange={(event) => store.setOrderBy(event.target.value)}
+              label="Order By"
+            />
+            <SliderInput
+              value={store.instanceDisplayCount}
+              onChange={(event) =>
+                store.setInstanceDisplayCount(Number(event.target.value))
+              }
+              total={4}
+              label="Display Count:"
+            />
+            <TextInput
+              value={store.keyLocation}
+              onChange={(event) => store.setKeyLocation(event.target.value)}
+              onBlur={(event) => store.setKeyLocation(event.target.value, true)}
+              label="Key File Location:"
+              name="Key File Location:"
+            />
+          </Stack>
           <Checkbox
-            isChecked={showAdvanced}
-            value="true"
+            checked={store.showMoreInfo}
             label={`Show More Info`}
-            onChange={() => updateShowAdvanced(!showAdvanced)}
+            name={`Show More Info`}
+            onClick={() => store.setShowMoreInfo(!store.showMoreInfo)}
           />
           <Checkbox
-            isChecked={rememberSettings}
-            value="true"
-            label={rememberSettings ? `Clear Settings` : `Remember Settings`}
-            onChange={() => updateRememberSettings(!rememberSettings)}
+            checked={store.rememberSettings}
+            label={`Remember Settings`}
+            name={`Remember Settings`}
+            onClick={() => store.setRememberSettings(!store.rememberSettings)}
           />
-        </section>
+        </Stack>
         <Footer>
           <A
             href="https://github.com/instant-status/instant-status"
@@ -133,6 +125,6 @@ const Sidebar = () => {
       <AsideGhost />
     </>
   ));
-};
+});
 
 export default Sidebar;

@@ -1,6 +1,6 @@
 import React, { ChangeEvent } from "react";
 
-import { InputBoxContainer, Label } from "../shared/SettingsInputs";
+import { InputBoxContainer, Label } from "../Layout/SettingsInputs";
 
 const SelectInput = (props: {
   label: string;

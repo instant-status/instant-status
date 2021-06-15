@@ -1,6 +1,5 @@
 import React from "react";
 import styled, { css, keyframes } from "styled-components";
-import theme from "../utils/theme";
 
 const pulseAnimation = (props) => keyframes`
 0% {
@@ -11,12 +10,18 @@ const pulseAnimation = (props) => keyframes`
 }
 `;
 
-const ProgressBackground = styled.div<{ $warning: boolean; $color: string }>`
+const ProgressBackground = styled.div<{
+  $warning: boolean;
+  $color: string;
+  $height?: string;
+  $margin?: string;
+}>`
   border-radius: 7px;
-  margin: 4px 8px;
   width: 100%;
   background-color: #848484;
   overflow: hidden;
+  height: ${(props) => props.$height || "14px"};
+  margin: ${(props) => props.$margin || "4px 8px"};
 
   ${(props) =>
     props.$warning &&
@@ -27,21 +32,35 @@ const ProgressBackground = styled.div<{ $warning: boolean; $color: string }>`
 
 const ProgressUsed = styled.div<{ $width: number; $color: string }>`
   width: ${(props) => props.$width}%;
-  height: 14px;
+  height: 100%;
   transition: width 10s;
   background-color: ${(props) => props.$color};
 
   ${(props) =>
-    (props.$width > 3 && props.$width < 98) &&
+    props.$width > 3 &&
+    props.$width < 98 &&
     css`
       border-right: 2px solid ${(props) => props.theme.color.darkOne};
     `}
 `;
 
-const ProgressBar = (props: { $progress: number, $pulse?: boolean }) => {
+interface ProgressBarProps {
+  progress: number;
+  color: string;
+  pulse?: boolean;
+  height?: string;
+  margin?: string;
+}
+
+const ProgressBar = (props: ProgressBarProps) => {
   return (
-    <ProgressBackground $warning={props.$pulse} $color={theme.color.purple}>
-      <ProgressUsed $width={props.$progress} $color={theme.color.purple} />
+    <ProgressBackground
+      $warning={props.pulse}
+      $color={props.color}
+      $height={props.height}
+      $margin={props.margin}
+    >
+      <ProgressUsed $width={props.progress} $color={props.color} />
     </ProgressBackground>
   );
 };

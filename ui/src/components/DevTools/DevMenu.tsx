@@ -2,13 +2,13 @@ import { AnimatePresence, motion } from "framer-motion";
 import React, { useState } from "react";
 import styled from "styled-components";
 
-import APP_CONFIG from "../../../../config/appConfig";
+import APP_CONFIG from "@config/appConfig";
 import useIsLoggedIn from "../../hooks/useIsLoggedIn";
 import useClickAway from "../../hooks/useClickAway";
 import theme from "../../utils/theme";
-import IconGlasses from "../icons/IconGlasses";
-import IconLock from "../icons/IconLock";
-import IconUnlock from "../icons/IconUnlock";
+import IconGlasses from "../Icons/IconGlasses";
+import IconLock from "../Icons/IconLock";
+import IconUnlock from "../Icons/IconUnlock";
 
 const MenuButton = styled(motion.button)`
   position: fixed;

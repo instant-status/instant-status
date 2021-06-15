@@ -1,19 +1,21 @@
 import React, { memo, useContext, useEffect, useState } from "react";
-import { useForm } from "react-hook-form";
 import { useMutation, useQuery } from "react-query";
 import styled from "styled-components";
 import { StringParam, useQueryParams } from "use-query-params";
-import apiRoutes from "../api/apiRoutes";
-import ModalBase from "../components/Modal/ModalBase";
-import Checkbox from "../components/sidebar/Checkbox";
-import UncontrolledCheckbox from "../components/sidebar/UncontrolledCheckbox";
-import TextInput from "../components/sidebar/TextInput";
-import { spacing } from "../components/spacing";
-import Stack from "../components/Stack";
-import { globalStoreContext } from "../store/globalStore";
+import apiRoutes from "../../api/apiRoutes";
+import {
+  BackButton,
+  GhostButton,
+  UpdateButton,
+} from "../../components/Controls/Buttons";
+import { spacing } from "../../components/Layout/spacing";
+import Stack from "../../components/Layout/Stack";
+import ModalBase from "../../components/Modal/ModalBase";
+import TextInput from "../../components/Controls/TextInput";
+import Checkbox from "../../components/Controls/Checkbox";
+import { globalStoreContext } from "../../store/globalStore";
+import allExistIn from "../../utils/allExistIn";
 import UpdateSuccess from "./UpdateSuccess";
-import allExistIn from "../utils/allExistIn";
-import { BackButton, GhostButton, UpdateButton } from "../components/Buttons";
 
 const Heading = styled.h2`
   margin: 0;
@@ -50,17 +52,17 @@ const CreateUpdateModal = () => {
   const [step, setStep] = useState(UpdateStepTypes.pickOptions);
   const [isSafeToClose, setIsSafeToClose] = useState(false);
   const [query, setQuery] = useQueryParams({
-    stack: StringParam,
-    version: StringParam,
+    stackId: StringParam,
+    appVersion: StringParam,
     xapiVersion: StringParam,
   });
   const [stacksToUpdate, setStacksToUpdate] = useState(
-    query.stack ? [query.stack] : [],
+    query.stackId ? [query.stackId] : [],
   );
-  const [updateOptions, setUpdateOptions] = useState([
-    "run_migrations",
-  ]);
-  const { register, getValues } = useForm();
+  const [appVersion, setAppVersion] = useState(query.appVersion);
+  const [xapiVersion, setXapiVersion] = useState(query.xapiVersion);
+  const [updateOptions, setUpdateOptions] = useState(["run_migrations"]);
+
   const store = useContext(globalStoreContext);
 
   const mutation = useMutation((payload: any) =>
@@ -90,12 +92,11 @@ const CreateUpdateModal = () => {
   }, [step]);
 
   const onSave = () => {
-    const formData = getValues();
-
     mutation.mutate({
       stack_ids: stacksToUpdate,
       run_migrations: updateOptions.includes("run_migrations"),
-      ...formData,
+      update_app_to: appVersion,
+      update_xapi_to: xapiVersion,
     });
   };
 
@@ -109,7 +110,9 @@ const CreateUpdateModal = () => {
 
   const toggleCheckbox = (stackId: string) => {
     if (stacksToUpdate.includes(stackId)) {
-      setStacksToUpdate(stacksToUpdate.filter((stack) => stack !== stackId));
+      setStacksToUpdate(
+        stacksToUpdate.filter((stackIdToUpdate) => stackIdToUpdate !== stackId),
+      );
     } else {
       setStacksToUpdate([...stacksToUpdate, stackId]);
     }
@@ -175,8 +178,8 @@ const CreateUpdateModal = () => {
 
     if (canClose) {
       setQuery({
-        stack: undefined,
-        version: undefined,
+        stackId: undefined,
+        appVersion: undefined,
         xapiVersion: undefined,
       });
       store.setIsUpdateModalOpen(false);
@@ -199,7 +202,9 @@ const CreateUpdateModal = () => {
           {step === UpdateStepTypes.pickOptions && (
             <GhostButton
               onClick={() => setStep(UpdateStepTypes.confirmOptions)}
-              disabled={stacksToUpdate.length < 1}
+              disabled={
+                stacksToUpdate.length < 1 || !appVersion || !xapiVersion
+              }
             >
               Next
             </GhostButton>
@@ -251,8 +256,8 @@ const CreateUpdateModal = () => {
                       <Checkbox
                         label={allSelected ? "Deselect all" : "Select all"}
                         name={`select_all_${environment}`}
-                        defaultChecked={allSelected}
-                        callback={(isChecked) => toggleAll(stackIds, isChecked)}
+                        checked={allSelected}
+                        onClick={() => toggleAll(stackIds, allSelected)}
                       />
                     )}
                   </Stack>
@@ -265,7 +270,7 @@ const CreateUpdateModal = () => {
                         a.stack_id.localeCompare(b.stack_id),
                     )
                     .map((stack) => (
-                      <UncontrolledCheckbox
+                      <Checkbox
                         key={`${stack.stack_id}-${stack.stack_version}`}
                         label={stack.stack_id}
                         helperLabel={
@@ -300,10 +305,34 @@ const CreateUpdateModal = () => {
               : "Configured Options"}
           </Heading>
           <Stack direction="down" spacing={6}>
-            <Stack spacing={9} justify="center">
+            <Stack spacing={6} direction="right" fullWidth={true}>
+              <TextInput
+                label={
+                  <>
+                    Update <b>app</b> to:
+                  </>
+                }
+                value={appVersion}
+                disabled={step !== UpdateStepTypes.pickOptions}
+                name="update_app_to"
+                onChange={(event) => setAppVersion(event.target.value)}
+              />
+              <TextInput
+                label={
+                  <>
+                    Update <b>xAPI</b> to:
+                  </>
+                }
+                value={xapiVersion}
+                disabled={step !== UpdateStepTypes.pickOptions}
+                name="update_xapi_to"
+                onChange={(event) => setXapiVersion(event.target.value)}
+              />
+            </Stack>
+            <Stack spacing={9} justify="start">
               {updateOptionsArray.map((option) => {
                 return (
-                  <UncontrolledCheckbox
+                  <Checkbox
                     key={option.name}
                     label={option.label}
                     name={option.name}
@@ -313,28 +342,6 @@ const CreateUpdateModal = () => {
                   />
                 );
               })}
-            </Stack>
-            <Stack spacing={6} direction="right" fullWidth={true}>
-              <TextInput
-                label={
-                  <>
-                    Update <b>app</b> to:
-                  </>
-                }
-                defaultValue={query.version}
-                disabled={step !== UpdateStepTypes.pickOptions}
-                {...register("update_app_to")}
-              />
-              <TextInput
-                label={
-                  <>
-                    Update <b>xAPI</b> to:
-                  </>
-                }
-                defaultValue={query.xapiVersion}
-                disabled={step !== UpdateStepTypes.pickOptions}
-                {...register("update_xapi_to")}
-              />
             </Stack>
           </Stack>
         </Stack>

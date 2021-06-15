@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 
-import APP_CONFIG from "../../../../config/appConfig";
+import APP_CONFIG from "@config/appConfig";
 
 const Header = styled.header`
   display: flex;
@@ -13,6 +13,7 @@ const Logo = styled.div`
   width: 100%;
   max-width: 60px;
   margin-right: 10px;
+  flex-shrink: 0;
 `;
 
 const PageInfo = styled.div`

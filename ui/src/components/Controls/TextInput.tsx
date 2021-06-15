@@ -1,7 +1,7 @@
 import React, { forwardRef } from "react";
 import styled from "styled-components";
 
-import { InputBoxContainer, Label } from "../shared/SettingsInputs";
+import { InputBoxContainer, Label } from "../Layout/SettingsInputs";
 
 const InputBox = styled.input<{ $disabled?: boolean }>`
   font-size: 16px;

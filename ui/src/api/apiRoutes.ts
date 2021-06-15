@@ -1,5 +1,5 @@
 import Cookies from "js-cookie";
-import APP_CONFIG from "../../../config/appConfig";
+import APP_CONFIG from "@config/appConfig";
 
 const apiFetch = async (url: string) => {
   const response = await fetch(url, {

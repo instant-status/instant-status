@@ -1,6 +1,7 @@
+import { AnimatePresence, motion } from "framer-motion";
 import React from "react";
 import styled from "styled-components";
-import Stack from "../Stack";
+import Stack from "../Layout/Stack";
 
 const CheckboxContainer = styled.label<{ $disabled: boolean }>`
   ${(props) => props.$disabled && "font-style: italic;"};
@@ -25,16 +26,23 @@ const HiddenCheckbox = styled.input`
   width: 10px;
 `;
 
-const Box = styled.div<{ $isChecked: boolean; $disabled: boolean }>`
+const Box = styled.div<{ $disabled: boolean }>`
   width: 20px;
   height: 20px;
   border-radius: 6px;
-  margin: 8px;
-  background-color: ${(props) =>
-    props.$isChecked ? props.theme.color.lightOne : props.theme.color.darkOne};
-  transition: background-color 100ms;
+  margin-right: 8px;
   border: 1px solid ${(props) => props.theme.color.lightOne};
   ${(props) => props.$disabled && "opacity: 0.2;"};
+  display: flex;
+  align-items: center;
+  justify-content: center;
+`;
+
+const LittlePop = styled(motion.div)`
+  width: 12px;
+  height: 12px;
+  border-radius: 3px;
+  background-color: ${(props) => props.theme.color.lightOne};
 `;
 
 const Label = styled.span`
@@ -56,7 +64,24 @@ interface CheckboxProps {
   onClick: (value: string) => void;
 }
 
-const UncontrolledCheckbox = (props: CheckboxProps) => {
+const variants = {
+  active: {
+    opacity: 1,
+    scale: [1.6, 1],
+    transition: {
+      duration: 0.2,
+    },
+  },
+  inactive: {
+    scale: 0,
+    opacity: 0,
+    transition: {
+      duration: 0.2,
+    },
+  },
+};
+
+const Checkbox = (props: CheckboxProps) => {
   return (
     <CheckboxContainer $disabled={props.visuallyDisabled}>
       <HiddenCheckbox
@@ -66,7 +91,17 @@ const UncontrolledCheckbox = (props: CheckboxProps) => {
         onChange={() => props.onClick(props.name)}
         disabled={props.disabled}
       />
-      <Box $isChecked={props.checked} $disabled={props.visuallyDisabled} />
+      <Box $disabled={props.visuallyDisabled}>
+        <AnimatePresence>
+          {props.checked && (
+            <LittlePop
+              animate={props.checked ? "active" : "inactive"}
+              variants={variants}
+              exit={"inactive"}
+            />
+          )}
+        </AnimatePresence>
+      </Box>
       <Stack direction="down">
         <Label>{props.label}</Label>
         <HelperLabel>{props.helperLabel}</HelperLabel>
@@ -75,4 +110,4 @@ const UncontrolledCheckbox = (props: CheckboxProps) => {
   );
 };
 
-export default UncontrolledCheckbox;
+export default Checkbox;

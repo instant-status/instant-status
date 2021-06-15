@@ -6,9 +6,9 @@ import { useHotkeys } from "react-hotkeys-hook";
 import styled from "styled-components";
 import useClickAway from "../../hooks/useClickAway";
 import usePortal from "../../hooks/usePortal";
-import IconClose from "../icons/IconClose";
-import { spacing } from "../spacing";
-import Stack from "../Stack";
+import IconClose from "../Icons/IconClose";
+import { spacing } from "../Layout/spacing";
+import Stack from "../Layout/Stack";
 
 const ModalContainer = styled(motion.div)`
   padding: 2rem;

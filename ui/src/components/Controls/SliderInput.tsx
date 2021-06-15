@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 
-import { InputBoxContainer, Label } from "../shared/SettingsInputs";
+import { InputBoxContainer, Label } from "../Layout/SettingsInputs";
 
 const Output = styled.span`
   font-size: 12px;

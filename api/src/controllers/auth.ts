@@ -18,18 +18,25 @@ export const isRequestAllowed = (request: {
     return true;
   }
 
-  // Check if provided token is a valid JWT
-  try {
-    jwt.verify(
-      formatAuthorisationToken(request.headers.authorization),
-      API_CONFIG.APP_SECRET
-    );
-    return true;
-  } catch (err) {
-    // if not valid, catch the error and allow the app to return false below
-  }
+  let isRequestAllowed = false;
+  // Check if any of the provided tokens are valid JWTs
+  API_CONFIG.APP_SECRETS.forEach((secret) => {
+    try {
+      // If none have been valid so far...
+      if (!isRequestAllowed) {
+        jwt.verify(
+          formatAuthorisationToken(request.headers.authorization),
+          secret
+        );
 
-  return false;
+        isRequestAllowed = true;
+      }
+    } catch (err) {
+      // if this one isn't, check the rest
+    }
+  });
+
+  return isRequestAllowed;
 };
 
 export const authGoogle = async (ctx: any) => {
@@ -90,7 +97,7 @@ export const authGoogle = async (ctx: any) => {
       throw new Error('User not allowed');
     }
 
-    const authCookie = jwt.sign(validUsers, API_CONFIG.APP_SECRET, {
+    const authCookie = jwt.sign(validUsers, API_CONFIG.APP_SECRETS[0], {
       expiresIn: AUTH_VALID_FOR_SECONDS,
     });
 

@@ -1,6 +1,6 @@
 import React, { memo, useEffect, useState } from "react";
-import { CancelButton, GhostButton } from "../components/Buttons";
-import Stack from "../components/Stack";
+import { CancelButton, GhostButton } from "../../components/Controls/Buttons";
+import Stack from "../../components/Layout/Stack";
 
 interface UpdateSuccessProps {
   callback: () => void;
