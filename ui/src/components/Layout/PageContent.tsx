@@ -3,11 +3,12 @@ import { useObserver } from "mobx-react-lite";
 import React, { useContext } from "react";
 import { useQuery } from "react-query";
 import styled from "styled-components";
-import logo from "../../assets/logo.svg";
+
+import { InstanceProps } from "../../../../types/globalTypes";
 import apiRoutes from "../../api/apiRoutes";
+import logo from "../../assets/logo.svg";
 import CreateUpdateModal from "../../containers/UpdateSteps/CreateUpdateModal";
 import { globalStoreContext } from "../../store/globalStore";
-import { InstanceProps } from "../../../../types/globalTypes";
 import Card from "../Card/Card";
 import SearchBar from "../Controls/SearchBar";
 

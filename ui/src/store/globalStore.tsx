@@ -1,6 +1,6 @@
-import React, { createContext } from "react";
-import { useLocalObservable } from "mobx-react-lite";
 import APP_CONFIG from "@config/appConfig";
+import { useLocalObservable } from "mobx-react-lite";
+import React, { createContext } from "react";
 
 interface GlobalStoreContextProps {
   isUpdateModalOpen: boolean;
@@ -46,7 +46,7 @@ export const StoreProvider = ({ children }: { children: React.ReactNode }) => {
     value: string | string[] | boolean | number;
   }) => {
     urlParams.set(params.key, params.value.toString());
-    history.pushState({}, "", `?${decodeURIComponent(urlParams.toString())}`);
+    history.pushState({}, ``, `?${decodeURIComponent(urlParams.toString())}`);
   };
 
   const store = useLocalObservable(() => ({
@@ -60,21 +60,21 @@ export const StoreProvider = ({ children }: { children: React.ReactNode }) => {
     instanceDisplayCount: 2,
     setInstanceDisplayCount(value: number) {
       store.instanceDisplayCount = value;
-      updateUrlParams({ key: "instanceDisplayCount", value });
+      updateUrlParams({ key: `instanceDisplayCount`, value });
     },
 
     // Display versions
     displayVersions: [] as string[],
     setDisplayVersions(value: string[]) {
       store.displayVersions = value;
-      updateUrlParams({ key: "displayVersions", value });
+      updateUrlParams({ key: `displayVersions`, value });
     },
 
     // Display versions
     showMoreInfo: false,
     setShowMoreInfo(value: boolean) {
       store.showMoreInfo = value;
-      updateUrlParams({ key: "showMoreInfo", value });
+      updateUrlParams({ key: `showMoreInfo`, value });
     },
 
     // Display versions
@@ -84,10 +84,10 @@ export const StoreProvider = ({ children }: { children: React.ReactNode }) => {
     },
 
     // Display versions
-    orderBy: "stack_id",
+    orderBy: `stack_id`,
     setOrderBy(value: string) {
       store.orderBy = value;
-      updateUrlParams({ key: "orderBy", value });
+      updateUrlParams({ key: `orderBy`, value });
     },
 
     // Display versions
@@ -95,7 +95,7 @@ export const StoreProvider = ({ children }: { children: React.ReactNode }) => {
     setKeyLocation(value: string, checkForTrailingSlash = false) {
       if (checkForTrailingSlash && !value.endsWith(`/`)) value += `/`;
       store.keyLocation = value;
-      updateUrlParams({ key: "keyLocation", value });
+      updateUrlParams({ key: `keyLocation`, value });
     },
   }));
 

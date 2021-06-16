@@ -4,6 +4,7 @@ import { createPortal } from "react-dom";
 import FocusLock from "react-focus-lock";
 import { useHotkeys } from "react-hotkeys-hook";
 import styled from "styled-components";
+
 import useClickAway from "../../hooks/useClickAway";
 import usePortal from "../../hooks/usePortal";
 import IconClose from "../Icons/IconClose";
@@ -78,7 +79,7 @@ const ModalBase = (props: ModalBaseProps) => {
 
   useClickAway(modalContainerRef, props.onClose);
 
-  useHotkeys("esc", props.onClose);
+  useHotkeys(`esc`, props.onClose);
 
   const modalContent = (
     <ModalWrapper>
@@ -111,7 +112,7 @@ const ModalBase = (props: ModalBaseProps) => {
     </ModalWrapper>
   );
 
-  const target = usePortal("instant-status-modal");
+  const target = usePortal(`instant-status-modal`);
   return createPortal(modalContent, target);
 };
 

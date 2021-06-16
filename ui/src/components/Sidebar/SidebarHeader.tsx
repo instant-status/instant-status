@@ -1,7 +1,6 @@
+import APP_CONFIG from "@config/appConfig";
 import React from "react";
 import styled from "styled-components";
-
-import APP_CONFIG from "@config/appConfig";
 
 const Header = styled.header`
   display: flex;

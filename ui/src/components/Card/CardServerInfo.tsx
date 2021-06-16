@@ -1,18 +1,19 @@
+import APP_CONFIG from "@config/appConfig";
 import { transparentize } from "polished";
 import React, { useContext, useEffect, useState } from "react";
 import styled from "styled-components";
+
 import { InstanceProps } from "../../../../types/globalTypes";
-import APP_CONFIG from "@config/appConfig";
 import { globalStoreContext } from "../../store/globalStore";
 import getDate from "../../utils/getDate";
 import { getHealthColor, getHealthIcon } from "../../utils/getHealth";
 import { getStateIcon } from "../../utils/getState";
 import theme from "../../utils/theme";
-import IconGithub from "../Icons/IconGithub";
-import IconUbuntu from "../Icons/IconUbuntu";
-import ProgressBar from "../Controls/ProgressBar";
 import CopyText from "../Controls/CopyText";
 import IconButton from "../Controls/IconButton";
+import ProgressBar from "../Controls/ProgressBar";
+import IconGithub from "../Icons/IconGithub";
+import IconUbuntu from "../Icons/IconUbuntu";
 import Stack from "../Layout/Stack";
 import CardServerOverlay from "./CardServerOverlay";
 
@@ -195,7 +196,7 @@ const CardInstance = (props: {
             <CopyText
               value={`${props.instance.server_app_version} (xAPI ${props.instance.server_xapi_version}`}
             >
-              {props.instance.server_app_version} (xAPI{" "}
+              {props.instance.server_app_version} (xAPI{` `}
               {props.instance.server_xapi_version})
             </CopyText>
             <IconButton
@@ -221,8 +222,8 @@ const CardInstance = (props: {
                 progress={diskUsed}
                 pulse={diskUsed >= 70}
                 color={diskColor}
-                height={"10px"}
-                margin={"auto 0 4px"}
+                height={`10px`}
+                margin={`auto 0 4px`}
               />
             </CopyText>
           </ServerRow>

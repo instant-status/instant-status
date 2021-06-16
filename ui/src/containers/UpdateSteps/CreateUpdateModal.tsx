@@ -2,17 +2,18 @@ import React, { memo, useContext, useEffect, useState } from "react";
 import { useMutation, useQuery } from "react-query";
 import styled from "styled-components";
 import { StringParam, useQueryParams } from "use-query-params";
-import apiRoutes from "../../api/apiRoutes";
+
+import apiRoutes, { CreateUpdateProps } from "../../api/apiRoutes";
 import {
   BackButton,
   GhostButton,
   UpdateButton,
 } from "../../components/Controls/Buttons";
+import Checkbox from "../../components/Controls/Checkbox";
+import TextInput from "../../components/Controls/TextInput";
 import { spacing } from "../../components/Layout/spacing";
 import Stack from "../../components/Layout/Stack";
 import ModalBase from "../../components/Modal/ModalBase";
-import TextInput from "../../components/Controls/TextInput";
-import Checkbox from "../../components/Controls/Checkbox";
 import { globalStoreContext } from "../../store/globalStore";
 import allExistIn from "../../utils/allExistIn";
 import UpdateSuccess from "./UpdateSuccess";
@@ -36,9 +37,9 @@ const Columns = styled.div`
 `;
 
 enum UpdateStepTypes {
-  pickOptions = "pickOptions",
-  confirmOptions = "confirmOptions",
-  coolOff = "coolOff",
+  pickOptions = `pickOptions`,
+  confirmOptions = `confirmOptions`,
+  coolOff = `coolOff`,
 }
 
 interface ApiGetStacksAvailableForUpdateProps {
@@ -66,11 +67,11 @@ const CreateUpdateModal = () => {
   );
   const [appVersion, setAppVersion] = useState(query.appVersion);
   const [xapiVersion, setXapiVersion] = useState(query.xapiVersion);
-  const [updateOptions, setUpdateOptions] = useState(["run_migrations"]);
+  const [updateOptions, setUpdateOptions] = useState([`run_migrations`]);
 
   const store = useContext(globalStoreContext);
 
-  const mutation = useMutation((payload: any) =>
+  const mutation = useMutation((payload: CreateUpdateProps) =>
     apiRoutes.apiCreateUpdate({ body: payload }),
   );
 
@@ -84,25 +85,27 @@ const CreateUpdateModal = () => {
     const documentRoot = document.querySelector(
       `#instant-status-root`,
     ) as HTMLElement;
-    documentRoot.style.overflow = "hidden";
-    documentRoot.style.height = "100vh";
+    documentRoot.style.overflow = `hidden`;
+    documentRoot.style.height = `100vh`;
 
-    window.addEventListener("beforeunload", warnAboutUnsavedChanges);
+    window.addEventListener(`beforeunload`, warnAboutUnsavedChanges);
 
     return () => {
-      documentRoot.style.overflow = "auto";
-      documentRoot.style.height = "100%";
-      window.removeEventListener("beforeunload", warnAboutUnsavedChanges);
+      documentRoot.style.overflow = `auto`;
+      documentRoot.style.height = `100%`;
+      window.removeEventListener(`beforeunload`, warnAboutUnsavedChanges);
     };
   }, [step]);
 
   const onSave = () => {
-    mutation.mutate({
-      stack_ids: stacksToUpdate,
-      run_migrations: updateOptions.includes("run_migrations"),
-      update_app_to: appVersion,
-      update_xapi_to: xapiVersion,
-    });
+    if (appVersion && xapiVersion && stacksToUpdate) {
+      mutation.mutate({
+        stack_ids: stacksToUpdate,
+        run_migrations: updateOptions.includes(`run_migrations`),
+        update_app_to: appVersion,
+        update_xapi_to: xapiVersion,
+      });
+    }
   };
 
   const stacksQuery = useQuery(
@@ -164,12 +167,12 @@ const CreateUpdateModal = () => {
     })
     .filter((data) => data) as StacksQueryProps[];
 
-  let modalTitle = "Create Update";
+  let modalTitle = `Create Update`;
   if (step === UpdateStepTypes.confirmOptions) {
-    modalTitle = "Review Update";
+    modalTitle = `Review Update`;
   }
   if (step === UpdateStepTypes.coolOff) {
-    modalTitle = "Update Requested";
+    modalTitle = `Update Requested`;
   }
 
   const closeModal = () => {
@@ -193,8 +196,8 @@ const CreateUpdateModal = () => {
 
   const updateOptionsArray = [
     {
-      label: "Run Migrations",
-      name: "run_migrations",
+      label: `Run Migrations`,
+      name: `run_migrations`,
     },
   ];
 
@@ -244,7 +247,7 @@ const CreateUpdateModal = () => {
         {stacks
           .sort((a, b) => a[1].length - b[1].length)
           .map((stackEnv) => {
-            const environment = stackEnv[0] || "Undefined";
+            const environment = stackEnv[0] || `Undefined`;
             const stacks = stackEnv[1];
             const stackIds = stacks.map((stack) => stack.stack_id);
             const availableStackIds = stacks
@@ -259,7 +262,7 @@ const CreateUpdateModal = () => {
                     <span>{environment}</span>
                     {step === UpdateStepTypes.pickOptions && (
                       <Checkbox
-                        label={allSelected ? "Deselect all" : "Select all"}
+                        label={allSelected ? `Deselect all` : `Select all`}
                         name={`select_all_${environment}`}
                         checked={allSelected}
                         onClick={() => toggleAll(stackIds, allSelected)}
@@ -306,8 +309,8 @@ const CreateUpdateModal = () => {
         <Stack spacing={4} direction="down" align="center">
           <Heading>
             {step === UpdateStepTypes.pickOptions
-              ? "Configure Options"
-              : "Configured Options"}
+              ? `Configure Options`
+              : `Configured Options`}
           </Heading>
           <Stack direction="down" spacing={6}>
             <Stack spacing={6} direction="right" fullWidth={true}>
@@ -317,7 +320,7 @@ const CreateUpdateModal = () => {
                     Update <b>app</b> to:
                   </>
                 }
-                value={appVersion || ""}
+                value={appVersion || ``}
                 disabled={step !== UpdateStepTypes.pickOptions}
                 name="update_app_to"
                 onChange={(event) => setAppVersion(event.target.value)}
@@ -328,7 +331,7 @@ const CreateUpdateModal = () => {
                     Update <b>xAPI</b> to:
                   </>
                 }
-                value={xapiVersion || ""}
+                value={xapiVersion || ``}
                 disabled={step !== UpdateStepTypes.pickOptions}
                 name="update_xapi_to"
                 onChange={(event) => setXapiVersion(event.target.value)}

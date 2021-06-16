@@ -1,4 +1,4 @@
-import React, { forwardRef } from "react";
+import React from "react";
 import styled from "styled-components";
 
 import { InputBoxContainer, Label } from "../Layout/SettingsInputs";
@@ -11,7 +11,7 @@ const InputBox = styled.input<{ $disabled?: boolean }>`
   color: ${(props) => props.theme.color.lightOne};
   border-radius: 6px;
   width: 100%;
-  ${(props) => props.$disabled && "pointer-events: none"};
+  ${(props) => props.$disabled && `pointer-events: none`};
 `;
 
 interface TextInputProps {
@@ -24,7 +24,7 @@ interface TextInputProps {
   disabled?: boolean;
 }
 
-const TextInput = forwardRef<HTMLInputElement, TextInputProps>((props, ref) => {
+const TextInput = (props: TextInputProps) => {
   return (
     <InputBoxContainer>
       <Label>{props.label}</Label>
@@ -35,11 +35,10 @@ const TextInput = forwardRef<HTMLInputElement, TextInputProps>((props, ref) => {
         value={props.value}
         defaultValue={props.defaultValue}
         name={props.name}
-        ref={ref}
         readOnly={props.disabled}
       />
     </InputBoxContainer>
   );
-});
+};
 
 export default TextInput;

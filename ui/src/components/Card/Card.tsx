@@ -2,8 +2,9 @@ import { AnimateSharedLayout, motion } from "framer-motion";
 import { useObserver } from "mobx-react-lite";
 import React, { useContext } from "react";
 import styled from "styled-components";
-import { globalStoreContext } from "../../store/globalStore";
+
 import { InstanceProps } from "../../../../types/globalTypes";
+import { globalStoreContext } from "../../store/globalStore";
 import CardFooter from "./CardFooter";
 import CardHeader from "./CardHeader";
 import CardInstance from "./CardServerInfo";

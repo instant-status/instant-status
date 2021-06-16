@@ -11,7 +11,7 @@ const Link = styled.span<{ active: boolean; $overflowVisible?: boolean }>`
   width: 100%;
   display: flex;
   white-space: nowrap;
-  ${(props) => !props.$overflowVisible && "overflow: hidden"};
+  ${(props) => !props.$overflowVisible && `overflow: hidden`};
   text-overflow: ellipsis;
 `;
 

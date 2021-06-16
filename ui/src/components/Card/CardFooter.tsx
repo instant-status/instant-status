@@ -1,12 +1,12 @@
 import { transparentize } from "polished";
 import React, { useContext } from "react";
 import styled from "styled-components";
+import { StringParam, useQueryParams } from "use-query-params";
 
 import { globalStoreContext } from "../../store/globalStore";
 import IconLogs from "../Icons/IconLogs";
 import IconOpen from "../Icons/IconOpen";
 import IconUpdate from "../Icons/IconUpdate";
-import { StringParam, useQueryParams } from "use-query-params";
 
 const Footer = styled.footer`
   margin-top: auto;
@@ -55,7 +55,7 @@ interface CardFooterProps {
 }
 
 const CardFooter = (props: CardFooterProps) => {
-  const [_, setQuery] = useQueryParams({
+  const [, setQuery] = useQueryParams({
     stackId: StringParam,
     appVersion: StringParam,
     xapiVersion: StringParam,

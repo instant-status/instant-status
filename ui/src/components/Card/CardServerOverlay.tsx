@@ -1,15 +1,15 @@
 import { transparentize } from "polished";
 import React from "react";
 import styled from "styled-components";
-import getDate from "../../utils/getDate";
 
+import { InstanceProps } from "../../../../types/globalTypes";
+import getDate from "../../utils/getDate";
 import { getHealthIcon } from "../../utils/getHealth";
 import { getStateIcon } from "../../utils/getState";
-import { InstanceProps } from "../../../../types/globalTypes";
+import theme from "../../utils/theme";
+import ProgressBar from "../Controls/ProgressBar";
 import IconClose from "../Icons/IconClose";
 import Stack from "../Layout/Stack";
-import ProgressBar from "../Controls/ProgressBar";
-import theme from "../../utils/theme";
 
 const Overlay = styled.div`
   width: 100%;
@@ -96,7 +96,7 @@ const CardInstanceOverlay = (props: {
       ? 0
       : props.instance.server_update_progress;
     const updateMessage = props.isStartingUpdate
-      ? "Update Requested..."
+      ? `Update Requested...`
       : props.instance.server_update_message;
     return (
       <Stack as={Overlay} direction="down" spacing={4}>
@@ -122,14 +122,14 @@ const CardInstanceOverlay = (props: {
           <Stack spacing={2}>
             <RowKey>From:</RowKey>
             <div>
-              {props.instance.server_app_version} (xAPI{" "}
+              {props.instance.server_app_version} (xAPI{` `}
               {props.instance.server_xapi_version})
             </div>
           </Stack>
           <Stack spacing={2}>
             <RowKey>To:</RowKey>
             <div>
-              {props.instance.server_updating_app_to} (xAPI{" "}
+              {props.instance.server_updating_app_to} (xAPI{` `}
               {props.instance.server_updating_xapi_to})
             </div>
           </Stack>

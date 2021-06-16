@@ -1,17 +1,18 @@
+import APP_CONFIG from "@config/appConfig";
 import { observer, useObserver } from "mobx-react-lite";
 import { lighten } from "polished";
 import React, { useContext } from "react";
 import { useQuery } from "react-query";
 import styled from "styled-components";
-import APP_CONFIG from "@config/appConfig";
+
 import fetchUrl from "../../hooks/useFetch";
 import { globalStoreContext } from "../../store/globalStore";
+import Checkbox from "../Controls/Checkbox";
 import SelectInput from "../Controls/SelectInput";
 import SliderInput from "../Controls/SliderInput";
-import Checkbox from "../Controls/Checkbox";
+import TextInput from "../Controls/TextInput";
 import Stack from "../Layout/Stack";
 import SidebarHeader from "./SidebarHeader";
-import TextInput from "../Controls/TextInput";
 import VersionFilters from "./VersionFilters";
 
 const Aside = styled.aside`

@@ -1,14 +1,15 @@
 import { AnimatePresence, motion } from "framer-motion";
 import React from "react";
 import styled from "styled-components";
+
 import Stack from "../Layout/Stack";
 
 const CheckboxContainer = styled.label<{ $disabled?: boolean }>`
-  ${(props) => props.$disabled && "font-style: italic;"};
-  ${(props) => props.$disabled && "opacity: 0.7;"};
+  ${(props) => props.$disabled && `font-style: italic;`};
+  ${(props) => props.$disabled && `opacity: 0.7;`};
   align-items: center;
   break-inside: avoid;
-  cursor: ${(props) => (props.$disabled ? "not-allowed" : "pointer")};
+  cursor: ${(props) => (props.$disabled ? `not-allowed` : `pointer`)};
   display: flex;
   user-select: none;
 `;
@@ -32,7 +33,7 @@ const Box = styled.div<{ $disabled?: boolean }>`
   border-radius: 6px;
   margin-right: 8px;
   border: 1px solid ${(props) => props.theme.color.lightOne};
-  ${(props) => props.$disabled && "opacity: 0.2;"};
+  ${(props) => props.$disabled && `opacity: 0.2;`};
   display: flex;
   align-items: center;
   justify-content: center;
@@ -95,9 +96,9 @@ const Checkbox = (props: CheckboxProps) => {
         <AnimatePresence>
           {props.checked && (
             <LittlePop
-              animate={props.checked ? "active" : "inactive"}
+              animate={props.checked ? `active` : `inactive`}
               variants={variants}
-              exit={"inactive"}
+              exit={`inactive`}
             />
           )}
         </AnimatePresence>

@@ -1,20 +1,20 @@
+import APP_CONFIG from "@config/appConfig";
 import { lighten } from "polished";
 import React from "react";
 import { Helmet } from "react-helmet";
+import { QueryClient, QueryClientProvider } from "react-query";
 import { BrowserRouter, Redirect, Route, Switch } from "react-router-dom";
 import { createGlobalStyle, ThemeProvider } from "styled-components";
+import { QueryParamProvider } from "use-query-params";
 
 import DevMenu from "./components/DevTools/DevMenu";
-import APP_CONFIG from "@config/appConfig";
-import useIsLoggedIn from "./hooks/useIsLoggedIn";
 import AutoLogin from "./containers/Auth/AutoLogin";
 import Login from "./containers/Auth/Login";
 import Logout from "./containers/Auth/Logout";
 import StatusPage from "./containers/StatusPage";
-import theme from "./utils/theme";
-import { QueryClient, QueryClientProvider } from "react-query";
+import useIsLoggedIn from "./hooks/useIsLoggedIn";
 import { StoreProvider } from "./store/globalStore";
-import { QueryParamProvider } from "use-query-params";
+import theme from "./utils/theme";
 
 const GlobalStyle = createGlobalStyle`
   html {

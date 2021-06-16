@@ -2,36 +2,36 @@ import styled, { css } from "styled-components";
 
 import { spacing } from "./spacing";
 
-type DirectionProps = "up" | "down" | "left" | "right";
+type DirectionProps = `up` | `down` | `left` | `right`;
 
-type AlignProps = "start" | "end" | "center" | "fill" | "baseline";
+type AlignProps = `start` | `end` | `center` | `fill` | `baseline`;
 type JustifyProps =
-  | "start"
-  | "end"
-  | "center"
-  | "fill"
-  | "spaceBetween"
-  | "spaceAround"
-  | "spaceEvenly";
+  | `start`
+  | `end`
+  | `center`
+  | `fill`
+  | `spaceBetween`
+  | `spaceAround`
+  | `spaceEvenly`;
 
 const getFlexProps = (align?: AlignProps | JustifyProps) => {
   switch (align) {
-    case "start":
-      return "flex-start";
-    case "end":
-      return "flex-end";
-    case "center":
-      return "center";
-    case "fill":
-      return "stretch";
-    case "spaceBetween":
-      return "space-between";
-    case "spaceAround":
-      return "space-around";
-    case "spaceEvenly":
-      return "space-evenly";
-    case "baseline":
-      return "baseline";
+    case `start`:
+      return `flex-start`;
+    case `end`:
+      return `flex-end`;
+    case `center`:
+      return `center`;
+    case `fill`:
+      return `stretch`;
+    case `spaceBetween`:
+      return `space-between`;
+    case `spaceAround`:
+      return `space-around`;
+    case `spaceEvenly`:
+      return `space-evenly`;
+    case `baseline`:
+      return `baseline`;
     default:
       return undefined;
   }
@@ -39,29 +39,29 @@ const getFlexProps = (align?: AlignProps | JustifyProps) => {
 
 const getMarginFromFlexDirection = (flexDirection?: string) => {
   switch (flexDirection) {
-    case "column":
-      return "bottom";
-    case "column-reverse":
-      return "top";
-    case "row-reverse":
-      return "left";
-    case "row":
+    case `column`:
+      return `bottom`;
+    case `column-reverse`:
+      return `top`;
+    case `row-reverse`:
+      return `left`;
+    case `row`:
     default:
-      return "right";
+      return `right`;
   }
 };
 
 const getFlexDirection = (direction?: DirectionProps) => {
   switch (direction) {
-    case "up":
-      return "column-reverse";
-    case "down":
-      return "column";
-    case "left":
-      return "row-reverse";
-    case "right":
+    case `up`:
+      return `column-reverse`;
+    case `down`:
+      return `column`;
+    case `left`:
+      return `row-reverse`;
+    case `right`:
     default:
-      return "row";
+      return `row`;
   }
 };
 
@@ -83,7 +83,7 @@ const Stack = styled.div.attrs<StackProps>((props: StackProps) => ({
   wrap: props.wrap,
 }))<StackProps>`
   display: flex;
-  ${(props) => props.fullWidth && "width: 100%"};
+  ${(props) => props.fullWidth && `width: 100%`};
   ${(props) => props.direction && `flex-direction: ${props.direction}`};
   ${(props) => props.align && `align-items: ${props.align}`};
   ${(props) => props.justify && `justify-content: ${props.justify}`};
@@ -91,7 +91,7 @@ const Stack = styled.div.attrs<StackProps>((props: StackProps) => ({
   & > *:not(:last-child) {
     ${(props) =>
       props.spacing &&
-      (props.direction?.includes("column")
+      (props.direction?.includes(`column`)
         ? css`
             margin-${getMarginFromFlexDirection(props.direction)}: ${
             props.spacing

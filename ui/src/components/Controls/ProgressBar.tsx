@@ -20,8 +20,8 @@ const ProgressBackground = styled.div<{
   width: 100%;
   background-color: #848484;
   overflow: hidden;
-  height: ${(props) => props.$height || "14px"};
-  margin: ${(props) => props.$margin || "4px 8px"};
+  height: ${(props) => props.$height || `14px`};
+  margin: ${(props) => props.$margin || `4px 8px`};
 
   ${(props) =>
     props.$warning &&
