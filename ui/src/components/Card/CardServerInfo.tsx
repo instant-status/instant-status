@@ -135,7 +135,7 @@ const CardInstance = (props: {
         <CardServerOverlay
           onClick={() => setIsStateOverlayVisible(false)}
           type="state"
-          stateorHealthCode={stateCode}
+          stateOrHealthCode={stateCode}
           isStartingUpdate={props.isStartingUpdate}
           instance={props.instance}
         />
@@ -145,7 +145,7 @@ const CardInstance = (props: {
         <CardServerOverlay
           onClick={() => setIsHealthOverlayVisible(false)}
           type="health"
-          stateorHealthCode={healthCode}
+          stateOrHealthCode={healthCode}
           isStartingUpdate={props.isStartingUpdate}
           instance={props.instance}
         />
@@ -215,7 +215,7 @@ const CardInstance = (props: {
             <ServerRowKey>Disk:</ServerRowKey>
             <CopyText
               value={`Using ${props.instance.server_disk_used_gb}Gb of ${props.instance.server_disk_total_gb}Gb total | ${props.instance.server_type}`}
-              $overflowVisible={true}
+              overflowVisible={true}
             >
               <ProgressBar
                 progress={diskUsed}
@@ -234,6 +234,11 @@ const CardInstance = (props: {
             ).find((obj) => {
               return obj[0] === row[0];
             });
+
+            if (!advancedData) {
+              return null;
+            }
+
             return (
               <ServerRow key={row[0]}>
                 <ServerRowKey>{advancedData[1]}:</ServerRowKey>

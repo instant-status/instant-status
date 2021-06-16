@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 
-const Link = styled.span<{ active: boolean; $overflowVisible: boolean }>`
+const Link = styled.span<{ active: boolean; $overflowVisible?: boolean }>`
   cursor: pointer;
   padding: 0 4px;
   border-radius: 6px;
@@ -18,7 +18,7 @@ const Link = styled.span<{ active: boolean; $overflowVisible: boolean }>`
 export interface CopyButtonProps {
   children: React.ReactNode | React.ReactNode[] | string;
   value: string;
-  $overflowVisible?: boolean;
+  overflowVisible?: boolean;
 }
 
 const CopyText = (props: CopyButtonProps) => {
@@ -36,7 +36,7 @@ const CopyText = (props: CopyButtonProps) => {
 
   return (
     <Link
-      $overflowVisible={props.$overflowVisible}
+      $overflowVisible={props.overflowVisible}
       active={active}
       title={props.value}
       onClick={() => copy(props.value)}

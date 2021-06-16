@@ -63,7 +63,7 @@ const RowKey = styled.div`
 const CardInstanceOverlay = (props: {
   onClick: () => void;
   type: string;
-  stateorHealthCode: number;
+  stateOrHealthCode: number;
   isStartingUpdate: boolean;
   instance: InstanceProps;
 }) => {
@@ -71,7 +71,7 @@ const CardInstanceOverlay = (props: {
     return (
       <Stack as={Overlay} direction="down" spacing={4}>
         <Stack justify="spaceBetween">
-          {getHealthIcon(props.stateorHealthCode, `40px`)}
+          {getHealthIcon(props.stateOrHealthCode, `40px`)}
           <OverlayHeaderText>Server Health</OverlayHeaderText>
           <OverlayCloseButton onClick={props.onClick}>
             <IconClose />
@@ -101,7 +101,7 @@ const CardInstanceOverlay = (props: {
     return (
       <Stack as={Overlay} direction="down" spacing={4}>
         <Stack justify="spaceBetween">
-          {getStateIcon(props.stateorHealthCode, `40px`)}
+          {getStateIcon(props.stateOrHealthCode, `40px`)}
           <OverlayHeaderText>Update In Progress</OverlayHeaderText>
           <OverlayCloseButton onClick={props.onClick}>
             <IconClose />
@@ -137,6 +137,8 @@ const CardInstanceOverlay = (props: {
       </Stack>
     );
   }
+
+  return null;
 };
 
 export default CardInstanceOverlay;

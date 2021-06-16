@@ -27,26 +27,26 @@ interface GlobalStoreContextProps {
 
 export const globalStoreContext = createContext({} as GlobalStoreContextProps);
 
-export const StoreProvider = ({ children }) => {
+export const StoreProvider = ({ children }: { children: React.ReactNode }) => {
   const urlParams = new URLSearchParams(window.location.search);
-  const getUrlParams = () => {
-    if (urlParams.has(`env`)) {
-      setUrlEnvParams(urlParams.get(`env`).split(`,`));
-    }
-    if (urlParams.has(`version`)) {
-      setUrlVersionParams(urlParams.get(`version`).split(`,`));
-    }
-    if (urlParams.has(`sortBy`)) {
-      setUrlSortBy(urlParams.get(`sortBy`));
-    }
-  };
+  // const getUrlParams = () => {
+  //   if (urlParams.has(`env`)) {
+  //     setUrlEnvParams(urlParams.get(`env`).split(`,`));
+  //   }
+  //   if (urlParams.has(`version`)) {
+  //     setUrlVersionParams(urlParams.get(`version`).split(`,`));
+  //   }
+  //   if (urlParams.has(`sortBy`)) {
+  //     setUrlSortBy(urlParams.get(`sortBy`));
+  //   }
+  // };
 
   const updateUrlParams = (params: {
     key: string;
     value: string | string[] | boolean | number;
   }) => {
     urlParams.set(params.key, params.value.toString());
-    history.pushState({}, null, `?${decodeURIComponent(urlParams.toString())}`);
+    history.pushState({}, "", `?${decodeURIComponent(urlParams.toString())}`);
   };
 
   const store = useLocalObservable(() => ({
@@ -64,7 +64,7 @@ export const StoreProvider = ({ children }) => {
     },
 
     // Display versions
-    displayVersions: [],
+    displayVersions: [] as string[],
     setDisplayVersions(value: string[]) {
       store.displayVersions = value;
       updateUrlParams({ key: "displayVersions", value });

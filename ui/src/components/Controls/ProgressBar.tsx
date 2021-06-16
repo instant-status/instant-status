@@ -1,7 +1,7 @@
 import React from "react";
 import styled, { css, keyframes } from "styled-components";
 
-const pulseAnimation = (props) => keyframes`
+const pulseAnimation = (props: { $color: string }) => keyframes`
 0% {
   box-shadow: 0 0 0 0px ${props.$color};
 }
@@ -11,7 +11,7 @@ const pulseAnimation = (props) => keyframes`
 `;
 
 const ProgressBackground = styled.div<{
-  $warning: boolean;
+  $warning?: boolean;
   $color: string;
   $height?: string;
   $margin?: string;
@@ -26,7 +26,7 @@ const ProgressBackground = styled.div<{
   ${(props) =>
     props.$warning &&
     css`
-      animation: ${(props) => pulseAnimation(props)} 1s infinite;
+      animation: ${pulseAnimation(props)} 1s infinite;
     `};
 `;
 
@@ -40,7 +40,7 @@ const ProgressUsed = styled.div<{ $width: number; $color: string }>`
     props.$width > 3 &&
     props.$width < 98 &&
     css`
-      border-right: 2px solid ${(props) => props.theme.color.darkOne};
+      border-right: 2px solid ${props.theme.color.darkOne};
     `}
 `;
 

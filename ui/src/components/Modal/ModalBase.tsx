@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import React from "react";
+import React, { useRef } from "react";
 import { createPortal } from "react-dom";
 import FocusLock from "react-focus-lock";
 import { useHotkeys } from "react-hotkeys-hook";
@@ -74,7 +74,9 @@ interface ModalBaseProps {
 }
 
 const ModalBase = (props: ModalBaseProps) => {
-  const modalContainerRef = useClickAway(props.onClose);
+  const modalContainerRef = useRef(null);
+
+  useClickAway(modalContainerRef, props.onClose);
 
   useHotkeys("esc", props.onClose);
 

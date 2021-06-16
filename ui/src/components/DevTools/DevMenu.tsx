@@ -1,5 +1,5 @@
 import { AnimatePresence, motion } from "framer-motion";
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import styled from "styled-components";
 
 import APP_CONFIG from "@config/appConfig";
@@ -40,7 +40,8 @@ const MenuToggleButton = styled(motion.button)`
 
 const DevMenu = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const menuButtonRef = useClickAway(() => setIsMenuOpen(false));
+  const menuButtonRef = useRef(null);
+  useClickAway(menuButtonRef, () => setIsMenuOpen(false));
 
   const { isLoggedIn } = useIsLoggedIn();
 

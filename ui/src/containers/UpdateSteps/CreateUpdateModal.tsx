@@ -48,6 +48,11 @@ interface ApiGetStacksAvailableForUpdateProps {
   is_updating: boolean;
 }
 
+interface StacksQueryProps {
+  0: string;
+  1: ApiGetStacksAvailableForUpdateProps[];
+}
+
 const CreateUpdateModal = () => {
   const [step, setStep] = useState(UpdateStepTypes.pickOptions);
   const [isSafeToClose, setIsSafeToClose] = useState(false);
@@ -69,7 +74,7 @@ const CreateUpdateModal = () => {
     apiRoutes.apiCreateUpdate({ body: payload }),
   );
 
-  const warnAboutUnsavedChanges = (event) => {
+  const warnAboutUnsavedChanges = (event: BeforeUnloadEvent) => {
     if (step !== UpdateStepTypes.pickOptions) {
       event.returnValue = `You have unsaved changes. Are you sure you want to leave?`;
     }
@@ -100,7 +105,7 @@ const CreateUpdateModal = () => {
     });
   };
 
-  const stacksQuery = useQuery<ApiGetStacksAvailableForUpdateProps[], Error>(
+  const stacksQuery = useQuery(
     `apiGetStacksAvailableForUpdate`,
     apiRoutes.apiGetStacksAvailableForUpdate,
     {
@@ -157,7 +162,7 @@ const CreateUpdateModal = () => {
         return environment;
       }
     })
-    .filter((data) => data);
+    .filter((data) => data) as StacksQueryProps[];
 
   let modalTitle = "Create Update";
   if (step === UpdateStepTypes.confirmOptions) {
@@ -239,8 +244,8 @@ const CreateUpdateModal = () => {
         {stacks
           .sort((a, b) => a[1].length - b[1].length)
           .map((stackEnv) => {
-            const environment = stackEnv[0];
-            const stacks = stackEnv[1] as ApiGetStacksAvailableForUpdateProps[];
+            const environment = stackEnv[0] || "Undefined";
+            const stacks = stackEnv[1];
             const stackIds = stacks.map((stack) => stack.stack_id);
             const availableStackIds = stacks
               .filter((stack) => !stack.is_updating)
@@ -251,7 +256,7 @@ const CreateUpdateModal = () => {
               <Stack direction="down" key={environment}>
                 <StackColumnName>
                   <Stack align="center" justify="spaceBetween">
-                    <span>{environment || "Undefined"}</span>
+                    <span>{environment}</span>
                     {step === UpdateStepTypes.pickOptions && (
                       <Checkbox
                         label={allSelected ? "Deselect all" : "Select all"}
@@ -312,7 +317,7 @@ const CreateUpdateModal = () => {
                     Update <b>app</b> to:
                   </>
                 }
-                value={appVersion}
+                value={appVersion || ""}
                 disabled={step !== UpdateStepTypes.pickOptions}
                 name="update_app_to"
                 onChange={(event) => setAppVersion(event.target.value)}
@@ -323,7 +328,7 @@ const CreateUpdateModal = () => {
                     Update <b>xAPI</b> to:
                   </>
                 }
-                value={xapiVersion}
+                value={xapiVersion || ""}
                 disabled={step !== UpdateStepTypes.pickOptions}
                 name="update_xapi_to"
                 onChange={(event) => setXapiVersion(event.target.value)}

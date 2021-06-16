@@ -32,5 +32,6 @@ export const getHealthColor = (healthCode: number) => {
     case 3:
       return theme.color.red;
     default:
+      return theme.color.lightOne;
   }
 };

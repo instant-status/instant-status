@@ -15,7 +15,9 @@ const IconButton = (props: {
 
   const click = () => {
     setActive(true);
-    props.onClick();
+    if (props.onClick) {
+      props.onClick();
+    }
     setTimeout(() => {
       setActive(false);
     }, 450);

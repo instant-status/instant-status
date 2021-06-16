@@ -3,7 +3,7 @@ import React from "react";
 import styled from "styled-components";
 import Stack from "../Layout/Stack";
 
-const CheckboxContainer = styled.label<{ $disabled: boolean }>`
+const CheckboxContainer = styled.label<{ $disabled?: boolean }>`
   ${(props) => props.$disabled && "font-style: italic;"};
   ${(props) => props.$disabled && "opacity: 0.7;"};
   align-items: center;
@@ -26,7 +26,7 @@ const HiddenCheckbox = styled.input`
   width: 10px;
 `;
 
-const Box = styled.div<{ $disabled: boolean }>`
+const Box = styled.div<{ $disabled?: boolean }>`
   width: 20px;
   height: 20px;
   border-radius: 6px;

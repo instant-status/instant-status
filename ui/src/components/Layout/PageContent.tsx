@@ -35,6 +35,11 @@ const Grid = styled.div`
   }
 `;
 
+interface StacksQueryProps {
+  0: string;
+  1: InstanceProps[];
+}
+
 const PageContent = () => {
   const store = useContext(globalStoreContext);
 
@@ -58,7 +63,7 @@ const PageContent = () => {
     ...(stackUpdatesQuery.data?.startingUpdateStacks || []),
   ];
 
-  const stacks = Object.entries(stacksQuery?.data || []);
+  const stacks = Object.entries(stacksQuery?.data || []) as StacksQueryProps[];
 
   return useObserver(() => (
     <Page>
@@ -80,7 +85,10 @@ const PageContent = () => {
                 const item1 = a[1][0]; // First instance
                 const item2 = b[1][0]; // First instance
 
-                const sortBy = store.orderBy.replace(`!`, ``);
+                const sortBy = store.orderBy.replace(
+                  `!`,
+                  ``,
+                ) as keyof InstanceProps;
                 const sortByReverse = store.orderBy.startsWith(`!`);
                 if (sortByReverse) {
                   return item1[sortBy] < item2[sortBy] ? 1 : -1;
@@ -94,7 +102,7 @@ const PageContent = () => {
                     key={item[0]}
                     isUpdating={updatingStacks.includes(item[0])}
                     isStartingUpdate={stacksStartingUpdate.includes(item[0])}
-                    instances={item[1] as InstanceProps[]}
+                    instances={item[1]}
                   />
                 );
               })

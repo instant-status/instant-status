@@ -20,7 +20,7 @@ const StackId = styled.h2`
   text-overflow: ellipsis;
 `;
 
-const StackLogo = styled.div<{ image: string }>`
+const StackLogo = styled.div<{ image?: string }>`
   background: url(${(props) => props.image}) center center no-repeat;
   background-size: cover;
   height: 58px;

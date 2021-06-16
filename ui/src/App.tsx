@@ -12,7 +12,6 @@ import Login from "./containers/Auth/Login";
 import Logout from "./containers/Auth/Logout";
 import StatusPage from "./containers/StatusPage";
 import theme from "./utils/theme";
-import { StateProvider } from "./context/StateContext";
 import { QueryClient, QueryClientProvider } from "react-query";
 import { StoreProvider } from "./store/globalStore";
 import { QueryParamProvider } from "use-query-params";
@@ -77,13 +76,7 @@ const App = () => {
                       <Logout />
                     </Route>
                     <Route path="/">
-                      {isLoggedIn ? (
-                        <StateProvider>
-                          <StatusPage />
-                        </StateProvider>
-                      ) : (
-                        <Redirect to="/login" />
-                      )}
+                      {isLoggedIn ? <StatusPage /> : <Redirect to="/login" />}
                     </Route>
                   </Switch>
                 )}
