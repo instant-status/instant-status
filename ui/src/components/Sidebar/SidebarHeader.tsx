@@ -25,8 +25,8 @@ const AppInfo = styled.div`
 
 const AppName = styled.h1`
   margin: 0;
-  font-size: 24px;
-  font-weight: normal;
+  font-size: 20px;
+  font-weight: 600;
   line-height: 1em;
 `;
 
