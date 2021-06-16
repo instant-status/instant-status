@@ -1,14 +1,15 @@
 import { motion } from "framer-motion";
-import React from "react";
+import React, { useRef } from "react";
 import { createPortal } from "react-dom";
 import FocusLock from "react-focus-lock";
 import { useHotkeys } from "react-hotkeys-hook";
 import styled from "styled-components";
+
 import useClickAway from "../../hooks/useClickAway";
 import usePortal from "../../hooks/usePortal";
-import IconClose from "../icons/IconClose";
-import { spacing } from "../spacing";
-import Stack from "../Stack";
+import IconClose from "../Icons/IconClose";
+import { spacing } from "../Layout/spacing";
+import Stack from "../Layout/Stack";
 
 const ModalContainer = styled(motion.div)`
   padding: 2rem;
@@ -74,9 +75,11 @@ interface ModalBaseProps {
 }
 
 const ModalBase = (props: ModalBaseProps) => {
-  const modalContainerRef = useClickAway(props.onClose);
+  const modalContainerRef = useRef(null);
 
-  useHotkeys("esc", props.onClose);
+  useClickAway(modalContainerRef, props.onClose);
+
+  useHotkeys(`esc`, props.onClose);
 
   const modalContent = (
     <ModalWrapper>
@@ -109,7 +112,7 @@ const ModalBase = (props: ModalBaseProps) => {
     </ModalWrapper>
   );
 
-  const target = usePortal("instant-status-modal");
+  const target = usePortal(`instant-status-modal`);
   return createPortal(modalContent, target);
 };
 
