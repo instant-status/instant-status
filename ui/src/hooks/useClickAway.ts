@@ -1,21 +1,33 @@
-import { useEffect, useRef } from "react";
-type Event = MouseEvent | TouchEvent;
+import { RefObject, useEffect } from "react";
 
-export default function useClickAway(callback: () => void) {
-  const ref = useRef(null);
+type AnyEvent = MouseEvent | TouchEvent;
 
-  const handleClickOutside = (event: Event) => {
-    if (ref.current && !ref.current.contains(event.target)) callback();
-  };
-
+function useClickAway<T extends HTMLElement = HTMLElement>(
+  ref: RefObject<T>,
+  handler: (event: AnyEvent) => void,
+) {
   useEffect(() => {
-    document.addEventListener("mousedown", handleClickOutside);
-    document.addEventListener(`touchstart`, handleClickOutside);
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-      document.removeEventListener(`touchstart`, handleClickOutside);
-    };
-  }, []);
+    const listener = (event: AnyEvent) => {
+      const el = ref?.current;
 
-  return ref;
+      // Do nothing if clicking ref's element or descendent elements
+      if (!el || el.contains(event.target as Node)) {
+        return;
+      }
+
+      handler(event);
+    };
+
+    document.addEventListener(`mousedown`, listener);
+    document.addEventListener(`touchstart`, listener);
+
+    return () => {
+      document.removeEventListener(`mousedown`, listener);
+      document.removeEventListener(`touchstart`, listener);
+    };
+
+    // Reload only if ref or handler changes
+  }, [ref, handler]);
 }
+
+export default useClickAway;
