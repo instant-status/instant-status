@@ -39,6 +39,20 @@ export const isRequestAllowed = (request: {
   return isRequestAllowed;
 };
 
+export const getRequesterIdentity = (request: {
+  url: string;
+  headers: { authorization?: string };
+}) => {
+  const decodedJWT = jwt.decode(
+    formatAuthorisationToken(request.headers.authorization)
+  );
+
+  const requesterIdentity =
+    decodedJWT?.['emails']?.[0] || 'unknown.user@example.com';
+
+  return requesterIdentity;
+};
+
 export const authGoogle = async (ctx: any) => {
   try {
     const code = ctx.query.code;
