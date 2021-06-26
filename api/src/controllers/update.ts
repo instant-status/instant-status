@@ -1,10 +1,10 @@
 import db from 'diskdb';
 import { JsonObject } from 'type-fest';
-import { InstanceProps } from '../../../../types/globalTypes';
-import checkForRequiredDataKeys from '../../helpers/checkForRequiredDataKeys';
-import { getRequesterIdentity } from '../auth';
-import groupBy from '../../helpers/groupBy';
-import response from '../../helpers/returnResponse';
+import { InstanceProps } from '../../../types/globalTypes';
+import checkForRequiredDataKeys from '../helpers/checkForRequiredDataKeys';
+import { getRequesterIdentity } from './auth';
+import groupBy from '../helpers/groupBy';
+import response from '../helpers/returnResponse';
 
 export const updateGet = (ctx) => {
   // Ensuring we have required data in the request

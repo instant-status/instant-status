@@ -1,6 +1,6 @@
 import db from 'diskdb';
-import { InstanceProps } from '../../../../types/globalTypes';
-import response from '../../helpers/returnResponse';
+import { InstanceProps } from '../../../types/globalTypes';
+import response from '../helpers/returnResponse';
 
 export const getMetadata = (ctx: any) => {
   const instances = db.instances.find() as InstanceProps[];

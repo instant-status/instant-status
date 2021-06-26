@@ -1,8 +1,8 @@
 import db from 'diskdb';
 
-import ALLOWED_DATA, { AllowedDataType } from '../../../../config/allowedData';
-import checkForRequiredDataKeys from '../../helpers/checkForRequiredDataKeys';
-import response from '../../helpers/returnResponse';
+import ALLOWED_DATA, { AllowedDataType } from '../../../config/allowedData';
+import checkForRequiredDataKeys from '../helpers/checkForRequiredDataKeys';
+import response from '../helpers/returnResponse';
 
 export const checkIn = (ctx) => {
   // Ensuring we have required data in the request
