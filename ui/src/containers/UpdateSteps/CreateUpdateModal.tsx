@@ -1,3 +1,4 @@
+import { observer } from "mobx-react-lite";
 import React, { memo, useContext, useEffect, useState } from "react";
 import { useMutation, useQuery } from "react-query";
 import styled from "styled-components";
@@ -54,7 +55,7 @@ interface StacksQueryProps {
   1: ApiGetStacksAvailableForUpdateProps[];
 }
 
-const CreateUpdateModal = () => {
+const CreateUpdateModal = observer(() => {
   const [step, setStep] = useState(UpdateStepTypes.pickOptions);
   const [isSafeToClose, setIsSafeToClose] = useState(false);
   const [query, setQuery] = useQueryParams({
@@ -356,6 +357,6 @@ const CreateUpdateModal = () => {
       </Stack>
     </ModalBase>
   );
-};
+});
 
 export default memo(CreateUpdateModal);

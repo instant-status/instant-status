@@ -1,3 +1,4 @@
+import { observer } from "mobx-react-lite";
 import { transparentize } from "polished";
 import React, { useContext } from "react";
 import styled from "styled-components";
@@ -54,7 +55,7 @@ interface CardFooterProps {
   isUpdating: boolean;
 }
 
-const CardFooter = (props: CardFooterProps) => {
+const CardFooter = observer((props: CardFooterProps) => {
   const [, setQuery] = useQueryParams({
     stackId: StringParam,
     appVersion: StringParam,
@@ -104,6 +105,6 @@ const CardFooter = (props: CardFooterProps) => {
       </FooterButton>
     </Footer>
   );
-};
+});
 
 export default CardFooter;

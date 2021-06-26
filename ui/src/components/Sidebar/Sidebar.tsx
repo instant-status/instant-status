@@ -1,5 +1,5 @@
 import APP_CONFIG from "@config/appConfig";
-import { observer, useObserver } from "mobx-react-lite";
+import { observer } from "mobx-react-lite";
 import { lighten } from "polished";
 import React, { useContext } from "react";
 import { useQuery } from "react-query";
@@ -65,7 +65,7 @@ const Sidebar = observer(() => {
     },
   );
 
-  return useObserver(() => (
+  return (
     <>
       <Aside>
         <SidebarHeader
@@ -81,6 +81,7 @@ const Sidebar = observer(() => {
           <Stack as={AsidePaddingContainer} direction="down" spacing={4}>
             <SelectInput
               onChange={(event) => store.setOrderBy(event.target.value)}
+              value={store.orderBy}
               label="Order By"
             />
             <SliderInput
@@ -105,12 +106,6 @@ const Sidebar = observer(() => {
             name={`Show More Info`}
             onClick={() => store.setShowMoreInfo(!store.showMoreInfo)}
           />
-          <Checkbox
-            checked={store.rememberSettings}
-            label={`Remember Settings`}
-            name={`Remember Settings`}
-            onClick={() => store.setRememberSettings(!store.rememberSettings)}
-          />
         </Stack>
         <Footer>
           <A
@@ -125,7 +120,7 @@ const Sidebar = observer(() => {
       </Aside>
       <AsideGhost />
     </>
-  ));
+  );
 });
 
 export default Sidebar;

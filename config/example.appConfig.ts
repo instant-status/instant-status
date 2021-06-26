@@ -9,11 +9,16 @@ const APP_CONFIG = {
     server_id: "Server ID",
     server_availability_zone: "Server AZ",
   },
-  DEFAULT_KEY_LOCATION: "~/.ssh/",
   DEV_MODE: true,
   DEV_JWT:
     "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoiSW5zdGFudCBTdGF0dXMiLCJpYXQiOjE1MTYyMzkwMjJ9.Th-AFgMpPdgvUm2U3VpXCelnofPMaj1QIUSpco24yuQ",
   PORT: 3000,
+  DEFAULTS: {
+    KEY_LOCATION: "~/.ssh/",
+    SERVER_DISPLAY_COUNT: 2,
+    ORDER_BY: "stack_id",
+    SHOW_MORE_INFO: false,
+  },
 };
 
 export default APP_CONFIG;

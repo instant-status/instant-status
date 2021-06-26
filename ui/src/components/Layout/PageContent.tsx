@@ -1,5 +1,5 @@
 import { AnimatePresence, AnimateSharedLayout } from "framer-motion";
-import { useObserver } from "mobx-react-lite";
+import { observer } from "mobx-react-lite";
 import React, { useContext } from "react";
 import { useQuery } from "react-query";
 import styled from "styled-components";
@@ -41,7 +41,7 @@ interface StacksQueryProps {
   1: ServerProps[];
 }
 
-const PageContent = () => {
+const PageContent = observer(() => {
   const store = useContext(globalStoreContext);
 
   const refetchInterval = 5000; // Refetch the data every 5 seconds
@@ -66,7 +66,7 @@ const PageContent = () => {
 
   const stacks = Object.entries(stacksQuery?.data || []) as StacksQueryProps[];
 
-  return useObserver(() => (
+  return (
     <Page>
       <SearchBar />
       <AnimateSharedLayout>
@@ -75,11 +75,8 @@ const PageContent = () => {
             stacks
               .filter((item) => {
                 return (
-                  !store?.displayVersions.length ||
-                  store.displayVersions.includes(
-                    item[1][0].server_app_version,
-                  ) ||
-                  item[1][0].server_app_version === undefined
+                  store?.displayVersions === undefined ||
+                  store.displayVersions.includes(item[1][0].server_app_version)
                 );
               })
               .sort((a, b) => {
@@ -117,7 +114,7 @@ const PageContent = () => {
         {store.isUpdateModalOpen && <CreateUpdateModal />}
       </AnimatePresence>
     </Page>
-  ));
-};
+  );
+});
 
 export default PageContent;
