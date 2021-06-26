@@ -2,6 +2,7 @@ import db from 'diskdb';
 import { JsonObject } from 'type-fest';
 import { InstanceProps } from '../../../../types/globalTypes';
 import checkForRequiredDataKeys from '../../helpers/checkForRequiredDataKeys';
+import { getRequesterIdentity } from '../auth';
 import groupBy from '../../helpers/groupBy';
 import response from '../../helpers/returnResponse';
 
@@ -53,35 +54,35 @@ export const updateGet = (ctx) => {
 };
 
 export const updateCreate = (ctx) => {
+  // Ensuring we have required data in the request
   const body = ctx.request.body;
-
   const requiredDataKeys = [
     'run_migrations',
     'stack_ids',
     'update_app_to',
     'update_xapi_to',
   ];
+  const checkForRequiredDataKeysResult = checkForRequiredDataKeys(
+    body,
+    requiredDataKeys
+  );
+  if (checkForRequiredDataKeysResult.hasAllRequiredDataKeys === false) {
+    return response(ctx, 400, {
+      ok: false,
+      message: checkForRequiredDataKeysResult.message,
+    });
+  }
+
+  const updateRequestedBy = getRequesterIdentity(ctx.request);
 
   for (const stack_id of body.stack_ids) {
-    // Ensuring we have required data in the request
-
-    const checkForRequiredDataKeysResult = checkForRequiredDataKeys(
-      body,
-      requiredDataKeys
-    );
-    if (checkForRequiredDataKeysResult.hasAllRequiredDataKeys === false) {
-      return response(ctx, 400, {
-        ok: false,
-        message: checkForRequiredDataKeysResult.message,
-      });
-    }
-
     const lastUpdate = db.updates.findOne({ stack_id: stack_id });
-    const lastUpdateHistory = db.updatesHistory.save(lastUpdate);
+    const lastUpdateHistory = db.updateHistory.save(lastUpdate);
     db.updates.remove({ update_id: lastUpdateHistory?.update_id });
 
     db.updates.save({
       update_id: Date.now() + '-' + stack_id,
+      update_requested_by: updateRequestedBy,
       last_update_id: lastUpdateHistory?.update_id || undefined,
       stack_id: stack_id,
       servers: [],

@@ -23,7 +23,7 @@ app.use((ctx, next) => {
   }
 });
 
-db.connect('../data/', ['instances', 'updates', 'updatesHistory']);
+db.connect('../data/', ['instances', 'updates', 'updateHistory']);
 
 app
   .use(routerV1.routes())
