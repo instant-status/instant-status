@@ -1,4 +1,4 @@
-export interface InstanceProps {
+export interface ServerProps {
   // Stack
   stack_id: string;
   stack_environment: string;
@@ -11,7 +11,6 @@ export interface InstanceProps {
   server_name: string;
   server_role: string;
   server_public_ip: string;
-  instanceCreatedAt: string;
   server_updated_at: string;
   server_app_version: string;
   server_xapi_version: string;
@@ -31,9 +30,6 @@ export interface InstanceProps {
   server_availability_zone: string;
   server_id: string;
   server_type: string;
-
-  // Server State
-  instanceStateCode: number;
 
   // Health Check
   server_health_updated_at: string;

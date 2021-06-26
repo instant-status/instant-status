@@ -30,10 +30,7 @@ const AppName = styled.h1`
   line-height: 1em;
 `;
 
-const SidebarHeader = (props: {
-  stackCount: number;
-  instanceCount: number;
-}) => {
+const SidebarHeader = (props: { stackCount: number; serverCount: number }) => {
   return (
     <Header>
       <Logo onClick={() => (window.location.href = `/`)}>
@@ -57,7 +54,9 @@ const SidebarHeader = (props: {
       <AppInfo>
         <AppName>{APP_CONFIG.APP_NAME}</AppName>
         <PageInfo>
-          {props.stackCount} Stacks / {props.instanceCount} Instances
+          {props.stackCount} {props.stackCount !== 1 ? `Stacks` : `Stack`} /
+          {` `}
+          {props.serverCount} {props.serverCount !== 1 ? `Servers` : `Server`}
         </PageInfo>
       </AppInfo>
     </Header>

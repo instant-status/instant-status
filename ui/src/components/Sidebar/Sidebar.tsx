@@ -70,7 +70,7 @@ const Sidebar = observer(() => {
       <Aside>
         <SidebarHeader
           stackCount={sidebarQuery.data?.stackCount || 0}
-          instanceCount={sidebarQuery.data?.instanceCount || 0}
+          serverCount={sidebarQuery.data?.serverCount || 0}
         />
         <section>
           <SectionHeader>Versions</SectionHeader>
@@ -84,9 +84,9 @@ const Sidebar = observer(() => {
               label="Order By"
             />
             <SliderInput
-              value={store.instanceDisplayCount}
+              value={store.serverDisplayCount}
               onChange={(event) =>
-                store.setInstanceDisplayCount(Number(event.target.value))
+                store.setServerDisplayCount(Number(event.target.value))
               }
               total={4}
               label="Display Count:"

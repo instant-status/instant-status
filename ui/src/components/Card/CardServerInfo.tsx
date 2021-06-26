@@ -3,7 +3,7 @@ import { transparentize } from "polished";
 import React, { useContext, useEffect, useState } from "react";
 import styled from "styled-components";
 
-import { InstanceProps } from "../../../../types/globalTypes";
+import { ServerProps } from "../../../../types/globalTypes";
 import { globalStoreContext } from "../../store/globalStore";
 import getDate from "../../utils/getDate";
 import { getHealthColor, getHealthIcon } from "../../utils/getHealth";
@@ -22,7 +22,7 @@ const ServerWrapper = styled.section`
   user-select: none;
 `;
 
-const Instance = styled.article`
+const Server = styled.article`
   padding: 0 16px;
   font-size: 16px;
   margin: 20px 0;
@@ -78,27 +78,27 @@ const SmallHealthIcon = styled.div`
   cursor: pointer;
 `;
 
-const CardInstance = (props: {
-  instance: InstanceProps;
+const CardServer = (props: {
+  server: ServerProps;
   isUpdating: boolean;
   isStartingUpdate: boolean;
 }) => {
   const store = useContext(globalStoreContext);
 
-  const instanceIsBooting =
-    props.instance.server_app_version === `primal` &&
-    !props.instance.server_updating_app_to &&
-    !props.instance.server_updating_xapi_to;
+  const serverIsBooting =
+    props.server.server_app_version === `primal` &&
+    !props.server.server_updating_app_to &&
+    !props.server.server_updating_xapi_to;
 
-  const stateCode = instanceIsBooting
+  const stateCode = serverIsBooting
     ? 0
-    : props.isStartingUpdate || props.instance.server_update_progress !== 100
+    : props.isStartingUpdate || props.server.server_update_progress !== 100
     ? 2
     : 3;
 
-  const healthCode = props.instance.server_health_code || 0;
+  const healthCode = props.server.server_health_code || 0;
   const diskUsed = Math.floor(
-    (props.instance.server_disk_used_gb / props.instance.server_disk_total_gb) *
+    (props.server.server_disk_used_gb / props.server.server_disk_total_gb) *
       100,
   );
 
@@ -120,7 +120,7 @@ const CardInstance = (props: {
     setIsHealthOverlayVisible(healthCode > 1);
   }, [healthCode]);
 
-  const filteredAdvancedCardData = Object.entries(props.instance).filter(
+  const filteredAdvancedCardData = Object.entries(props.server).filter(
     (row) => {
       if (
         Object.keys(APP_CONFIG.CARD_ADVANCED_MAPPING).includes(row[0] as string)
@@ -138,7 +138,7 @@ const CardInstance = (props: {
           type="state"
           stateOrHealthCode={stateCode}
           isStartingUpdate={props.isStartingUpdate}
-          instance={props.instance}
+          server={props.server}
         />
       )}
 
@@ -148,17 +148,17 @@ const CardInstance = (props: {
           type="health"
           stateOrHealthCode={healthCode}
           isStartingUpdate={props.isStartingUpdate}
-          instance={props.instance}
+          server={props.server}
         />
       )}
-      <Instance>
+      <Server>
         <ServerHeader>
           <Stack as={ServerName} spacing={2} align="baseline">
             <ServerRole $color={getHealthColor(healthCode)}>
-              {props.instance.server_role}
+              {props.server.server_role}
             </ServerRole>
-            <ServerId>{props.instance.server_id}</ServerId>
-            <span>{props.instance.server_is_chosen_one && `👑`}</span>
+            <ServerId>{props.server.server_id}</ServerId>
+            <span>{props.server.server_is_chosen_one && `👑`}</span>
           </Stack>
 
           <SmallStateIcon
@@ -178,13 +178,13 @@ const CardInstance = (props: {
         <div>
           <ServerRow>
             <ServerRowKey>IP:</ServerRowKey>
-            <CopyText value={props.instance.server_public_ip}>
-              {props.instance.server_public_ip}
+            <CopyText value={props.server.server_public_ip}>
+              {props.server.server_public_ip}
             </CopyText>
             <IconButton
               onClick={() =>
                 navigator.clipboard.writeText(
-                  `ssh ubuntu@${props.instance.server_public_ip} -i '${store.keyLocation}${props.instance.server_key_file_name}.pem'`,
+                  `ssh ubuntu@${props.server.server_public_ip} -i '${store.keyLocation}${props.server.server_key_file_name}.pem'`,
                 )
               }
             >
@@ -194,28 +194,28 @@ const CardInstance = (props: {
           <ServerRow>
             <ServerRowKey>Version:</ServerRowKey>
             <CopyText
-              value={`${props.instance.server_app_version} (xAPI ${props.instance.server_xapi_version}`}
+              value={`${props.server.server_app_version} (xAPI ${props.server.server_xapi_version}`}
             >
-              {props.instance.server_app_version} (xAPI{` `}
-              {props.instance.server_xapi_version})
+              {props.server.server_app_version} (xAPI{` `}
+              {props.server.server_xapi_version})
             </CopyText>
             <IconButton
-              href={`${APP_CONFIG.GITHUB_VERSION_URL}${props.instance.server_app_version}`}
+              href={`${APP_CONFIG.GITHUB_VERSION_URL}${props.server.server_app_version}`}
             >
               <IconGithub color={theme.color.lightOne} width="1em" />
             </IconButton>
           </ServerRow>
           <ServerRow>
             <ServerRowKey>Last Updated:</ServerRowKey>
-            <CopyText value={props.instance.server_updated_at}>
-              {getDate(props.instance.server_updated_at)}
+            <CopyText value={props.server.server_updated_at}>
+              {getDate(props.server.server_updated_at)}
             </CopyText>
           </ServerRow>
           <ServerRow>
             {/* invert value and use background filter */}
             <ServerRowKey>Disk:</ServerRowKey>
             <CopyText
-              value={`Using ${props.instance.server_disk_used_gb}Gb of ${props.instance.server_disk_total_gb}Gb total | ${props.instance.server_type}`}
+              value={`Using ${props.server.server_disk_used_gb}Gb of ${props.server.server_disk_total_gb}Gb total | ${props.server.server_type}`}
               overflowVisible={true}
             >
               <ProgressBar
@@ -247,9 +247,9 @@ const CardInstance = (props: {
               </ServerRow>
             );
           })}
-      </Instance>
+      </Server>
     </ServerWrapper>
   );
 };
 
-export default CardInstance;
+export default CardServer;

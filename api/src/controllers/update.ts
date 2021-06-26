@@ -1,6 +1,6 @@
 import db from 'diskdb';
 import { JsonObject } from 'type-fest';
-import { InstanceProps } from '../../../types/globalTypes';
+import { ServerProps } from '../../../types/globalTypes';
 import checkForRequiredDataKeys from '../helpers/checkForRequiredDataKeys';
 import { getRequesterIdentity } from './auth';
 import groupBy from '../helpers/groupBy';
@@ -187,7 +187,7 @@ export const updatePost = (ctx) => {
       });
   }
 
-  db.instances.update(
+  db.servers.update(
     {
       server_id: body.server_id,
     },
@@ -215,12 +215,12 @@ export const updatePost = (ctx) => {
 };
 
 export const getStacksAvailableForUpdate = (ctx: any) => {
-  const instances = db.instances.find() as InstanceProps[];
+  const servers = db.servers.find() as ServerProps[];
 
   const output = {};
 
-  for (const instance of instances) {
-    const update = db.updates.findOne({ stack_id: instance.stack_id });
+  for (const server of servers) {
+    const update = db.updates.findOne({ stack_id: server.stack_id });
 
     const isUpdating =
       update &&
@@ -228,12 +228,12 @@ export const getStacksAvailableForUpdate = (ctx: any) => {
         update.server_count === 0 ||
         update.server_completed_count !== update.server_count);
 
-    output[instance.stack_id] = {
-      stack_id: instance.stack_id,
+    output[server.stack_id] = {
+      stack_id: server.stack_id,
       stack_version: isUpdating
         ? update.update_app_to
-        : instance.server_app_version,
-      stack_environment: instance.stack_environment,
+        : server.server_app_version,
+      stack_environment: server.stack_environment,
       is_updating: isUpdating,
     };
   }
@@ -248,7 +248,7 @@ export const getStacksAvailableForUpdate = (ctx: any) => {
 };
 
 export const getUpdatingStacks = (ctx: any) => {
-  const servers = db.instances.find() as InstanceProps[];
+  const servers = db.servers.find() as ServerProps[];
   const updates = db.updates.find();
 
   const updatingStacks = new Set<string>();

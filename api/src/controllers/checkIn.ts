@@ -49,7 +49,7 @@ export const checkIn = (ctx) => {
     }
   });
 
-  db.instances.update({ server_id: body.server_id }, data, {
+  db.servers.update({ server_id: body.server_id }, data, {
     upsert: true,
   });
 

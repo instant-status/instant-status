@@ -2,7 +2,7 @@ import { transparentize } from "polished";
 import React from "react";
 import styled from "styled-components";
 
-import { InstanceProps } from "../../../../types/globalTypes";
+import { ServerProps } from "../../../../types/globalTypes";
 import getDate from "../../utils/getDate";
 import { getHealthIcon } from "../../utils/getHealth";
 import { getStateIcon } from "../../utils/getState";
@@ -60,12 +60,12 @@ const RowKey = styled.div`
   opacity: 0.7;
 `;
 
-const CardInstanceOverlay = (props: {
+const CardServerOverlay = (props: {
   onClick: () => void;
   type: string;
   stateOrHealthCode: number;
   isStartingUpdate: boolean;
-  instance: InstanceProps;
+  server: ServerProps;
 }) => {
   if (props.type === `health`) {
     return (
@@ -80,11 +80,11 @@ const CardInstanceOverlay = (props: {
         <Stack direction="down" spacing={1}>
           <Stack spacing={2}>
             <RowKey>Last Reported:</RowKey>
-            <div>{getDate(props.instance.server_health_updated_at)}</div>
+            <div>{getDate(props.server.server_health_updated_at)}</div>
           </Stack>
           <Stack spacing={2}>
             <RowKey>Message:</RowKey>
-            <div>{props.instance.server_health_message}</div>
+            <div>{props.server.server_health_message}</div>
           </Stack>
         </Stack>
       </Stack>
@@ -94,10 +94,10 @@ const CardInstanceOverlay = (props: {
   if (props.type === `state`) {
     const updateProgress = props.isStartingUpdate
       ? 0
-      : props.instance.server_update_progress;
+      : props.server.server_update_progress;
     const updateMessage = props.isStartingUpdate
       ? `Update Requested...`
-      : props.instance.server_update_message;
+      : props.server.server_update_message;
     return (
       <Stack as={Overlay} direction="down" spacing={4}>
         <Stack justify="spaceBetween">
@@ -122,15 +122,15 @@ const CardInstanceOverlay = (props: {
           <Stack spacing={2}>
             <RowKey>From:</RowKey>
             <div>
-              {props.instance.server_app_version} (xAPI{` `}
-              {props.instance.server_xapi_version})
+              {props.server.server_app_version} (xAPI{` `}
+              {props.server.server_xapi_version})
             </div>
           </Stack>
           <Stack spacing={2}>
             <RowKey>To:</RowKey>
             <div>
-              {props.instance.server_updating_app_to} (xAPI{` `}
-              {props.instance.server_updating_xapi_to})
+              {props.server.server_updating_app_to} (xAPI{` `}
+              {props.server.server_updating_xapi_to})
             </div>
           </Stack>
         </Stack>
@@ -141,4 +141,4 @@ const CardInstanceOverlay = (props: {
   return null;
 };
 
-export default CardInstanceOverlay;
+export default CardServerOverlay;

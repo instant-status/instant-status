@@ -10,7 +10,7 @@ import {
 } from '../controllers/update';
 import { getMetadata } from '../controllers/metadata';
 
-import { deleteInstance, getInstances } from '../controllers/instances';
+import { deleteServer, getServers } from '../controllers/servers';
 
 import { authGoogle } from '../controllers/auth';
 
@@ -23,13 +23,13 @@ router.get('/', (ctx) => (ctx.body = { version: '2.0.0' }));
 router.get('/auth/google/callback', authGoogle);
 
 // UI
-router.get('/v2/instances', getInstances);
+router.get('/v2/servers', getServers);
 
 // Server Communication
 router.get('/v2/update', updateGet);
 router.post('/v2/update', updatePost);
 router.post('/v2/check-in', checkIn);
-router.delete('/v2/server/delete', deleteInstance);
+router.delete('/v2/server/delete', deleteServer);
 
 // Update
 router.post('/v2/update/create', updateCreate);

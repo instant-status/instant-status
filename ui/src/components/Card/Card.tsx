@@ -3,11 +3,11 @@ import { useObserver } from "mobx-react-lite";
 import React, { useContext } from "react";
 import styled from "styled-components";
 
-import { InstanceProps } from "../../../../types/globalTypes";
+import { ServerProps } from "../../../../types/globalTypes";
 import { globalStoreContext } from "../../store/globalStore";
 import CardFooter from "./CardFooter";
 import CardHeader from "./CardHeader";
-import CardInstance from "./CardServerInfo";
+import CardServer from "./CardServerInfo";
 
 const CardBackground = styled(motion.div)`
   background: ${(props) => props.theme.color.darkOne};
@@ -20,49 +20,47 @@ const CardBackground = styled(motion.div)`
 `;
 
 const Card = (props: {
-  instances: InstanceProps[];
+  servers: ServerProps[];
   isUpdating: boolean;
   isStartingUpdate: boolean;
 }) => {
   const store = useContext(globalStoreContext);
 
-  const stackLogsUrl = props.instances.find(
-    (instance) => instance.stack_logs_url,
+  const stackLogsUrl = props.servers.find(
+    (server) => server.stack_logs_url,
   )?.stack_logs_url;
-  const stackAppUrl = props.instances.find(
-    (instance) => instance.stack_app_url,
+  const stackAppUrl = props.servers.find(
+    (server) => server.stack_app_url,
   )?.stack_app_url;
-  const stackId = props.instances.find(
-    (instance) => instance.stack_id,
-  )?.stack_id;
-  const stackLogo = props.instances.find(
-    (instance) => instance.stack_logo,
+  const stackId = props.servers.find((server) => server.stack_id)?.stack_id;
+  const stackLogo = props.servers.find(
+    (server) => server.stack_logo,
   )?.stack_logo;
-  const serverAppVersion = props.instances.find(
-    (instance) => instance.server_app_version,
+  const serverAppVersion = props.servers.find(
+    (server) => server.server_app_version,
   )?.server_app_version;
-  const serverXapiVersion = props.instances.find(
-    (instance) => instance.server_xapi_version,
+  const serverXapiVersion = props.servers.find(
+    (server) => server.server_xapi_version,
   )?.server_xapi_version;
 
   return useObserver(() => (
     <CardBackground layout>
       <CardHeader stackId={stackId} stackLogo={stackLogo} />
       <AnimateSharedLayout>
-        {props.instances
-          .sort((a: InstanceProps, b: InstanceProps) =>
+        {props.servers
+          .sort((a: ServerProps, b: ServerProps) =>
             a.server_public_ip.localeCompare(b.server_public_ip),
           )
-          .sort((a: InstanceProps, b: InstanceProps) =>
+          .sort((a: ServerProps, b: ServerProps) =>
             a.server_is_chosen_one < b.server_is_chosen_one ? 1 : -1,
           )
-          .slice(0, store.instanceDisplayCount)
-          .map((instance, i) => {
-            if (i + 1 <= store.instanceDisplayCount) {
+          .slice(0, store.serverDisplayCount)
+          .map((server, i) => {
+            if (i + 1 <= store.serverDisplayCount) {
               return (
-                <motion.div key={instance.server_id}>
-                  <CardInstance
-                    instance={instance}
+                <motion.div key={server.server_id}>
+                  <CardServer
+                    server={server}
                     isUpdating={props.isUpdating}
                     isStartingUpdate={props.isStartingUpdate}
                   />

@@ -4,7 +4,7 @@ import React, { useContext } from "react";
 import { useQuery } from "react-query";
 import styled from "styled-components";
 
-import { InstanceProps } from "../../../../types/globalTypes";
+import { ServerProps } from "../../../../types/globalTypes";
 import apiRoutes from "../../api/apiRoutes";
 import logo from "../../assets/logo.svg";
 import CreateUpdateModal from "../../containers/UpdateSteps/CreateUpdateModal";
@@ -38,7 +38,7 @@ const Grid = styled.div`
 
 interface StacksQueryProps {
   0: string;
-  1: InstanceProps[];
+  1: ServerProps[];
 }
 
 const PageContent = () => {
@@ -83,13 +83,13 @@ const PageContent = () => {
                 );
               })
               .sort((a, b) => {
-                const item1 = a[1][0]; // First instance
-                const item2 = b[1][0]; // First instance
+                const item1 = a[1][0]; // First server
+                const item2 = b[1][0]; // First server
 
                 const sortBy = store.orderBy.replace(
                   `!`,
                   ``,
-                ) as keyof InstanceProps;
+                ) as keyof ServerProps;
                 const sortByReverse = store.orderBy.startsWith(`!`);
                 if (sortByReverse) {
                   return item1[sortBy] < item2[sortBy] ? 1 : -1;
@@ -103,7 +103,7 @@ const PageContent = () => {
                     key={item[0]}
                     isUpdating={updatingStacks.includes(item[0])}
                     isStartingUpdate={stacksStartingUpdate.includes(item[0])}
-                    instances={item[1]}
+                    servers={item[1]}
                   />
                 );
               })

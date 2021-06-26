@@ -30,7 +30,7 @@ const apiPost = async <T>(url: string, body: T) => {
 };
 
 const apiGetStacks = () => {
-  return apiFetch(`${APP_CONFIG.DATA_URL}/v2/instances?groupBy=stack_id`);
+  return apiFetch(`${APP_CONFIG.DATA_URL}/v2/servers?groupBy=stack_id`);
 };
 
 export interface CreateUpdateProps {

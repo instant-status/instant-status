@@ -124,7 +124,7 @@
       "protocolProfileBehavior": {}
     },
     {
-      "name": "Instances",
+      "name": "Servers",
       "protocolProfileBehavior": {
         "disabledSystemHeaders": {
           "host": true,
@@ -135,11 +135,11 @@
         "method": "GET",
         "header": [],
         "url": {
-          "raw": "http://35.179.64.115:3000/instances",
+          "raw": "http://35.179.64.115:3000/servers",
           "protocol": "http",
           "host": ["35", "179", "64", "115"],
           "port": "3000",
-          "path": ["instances"],
+          "path": ["servers"],
           "query": [
             {
               "key": "groupBy",

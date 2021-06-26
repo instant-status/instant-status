@@ -6,8 +6,8 @@ interface GlobalStoreContextProps {
   isUpdateModalOpen: boolean;
   setIsUpdateModalOpen: (value: boolean) => void;
 
-  instanceDisplayCount: number;
-  setInstanceDisplayCount: (value: number) => void;
+  serverDisplayCount: number;
+  setServerDisplayCount: (value: number) => void;
 
   displayVersions: string[];
   setDisplayVersions: (value: string[]) => void;
@@ -57,10 +57,10 @@ export const StoreProvider = ({ children }: { children: React.ReactNode }) => {
     },
 
     // Display count
-    instanceDisplayCount: 2,
-    setInstanceDisplayCount(value: number) {
-      store.instanceDisplayCount = value;
-      updateUrlParams({ key: `instanceDisplayCount`, value });
+    serverDisplayCount: 2,
+    setServerDisplayCount(value: number) {
+      store.serverDisplayCount = value;
+      updateUrlParams({ key: `serverDisplayCount`, value });
     },
 
     // Display versions
