@@ -45,10 +45,10 @@ export const getRequesterIdentity = (request: {
 }) => {
   const decodedJWT = jwt.decode(
     formatAuthorisationToken(request.headers.authorization)
-  );
+  ) as { emails: string[] };
 
   const requesterIdentity =
-    decodedJWT?.['emails']?.[0] || 'unknown.user@example.com';
+    decodedJWT?.emails?.[0] || 'unknown.user@example.com';
 
   return requesterIdentity;
 };
