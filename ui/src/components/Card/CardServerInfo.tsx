@@ -87,8 +87,8 @@ const CardServer = (props: {
 
   const serverIsBooting =
     props.server.server_app_version === `primal` &&
-    !props.server.server_updating_app_to &&
-    !props.server.server_updating_xapi_to;
+    !props.server.server_app_updating_to_version &&
+    !props.server.server_xapi_updating_to_version;
 
   const stateCode = serverIsBooting
     ? 0

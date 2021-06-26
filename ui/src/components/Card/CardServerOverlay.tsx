@@ -129,8 +129,8 @@ const CardServerOverlay = (props: {
           <Stack spacing={2}>
             <RowKey>To:</RowKey>
             <div>
-              {props.server.server_updating_app_to} (xAPI{` `}
-              {props.server.server_updating_xapi_to})
+              {props.server.server_app_updating_to_version} (xAPI{` `}
+              {props.server.server_xapi_updating_to_version})
             </div>
           </Stack>
         </Stack>

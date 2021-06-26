@@ -10,7 +10,7 @@ const Header = styled.header`
 
 const Logo = styled.div`
   width: 100%;
-  max-width: 60px;
+  max-width: 50px;
   margin-right: 10px;
   flex-shrink: 0;
 `;

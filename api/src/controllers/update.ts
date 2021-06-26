@@ -201,8 +201,8 @@ export const updatePost = (ctx) => {
         server_xapi_version: latestUpdate.update_xapi_to,
         server_updated_at: new Date().toISOString(),
       }),
-      server_updating_app_to: latestUpdate.update_app_to,
-      server_updating_xapi_to: latestUpdate.update_xapi_to,
+      server_app_updating_to_version: latestUpdate.update_app_to,
+      server_xapi_updating_to_version: latestUpdate.update_xapi_to,
       server_is_chosen_one:
         body.server_id === latestUpdate.chosen_one ? true : false,
     },

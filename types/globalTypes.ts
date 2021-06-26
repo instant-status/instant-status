@@ -23,8 +23,8 @@ export interface ServerProps {
   server_update_state: string;
   server_update_progress: number;
   server_update_message: string;
-  server_updating_app_to: string;
-  server_updating_xapi_to: string;
+  server_app_updating_to_version: string;
+  server_xapi_updating_to_version: string;
 
   // Server Display Advanced
   server_availability_zone: string;
