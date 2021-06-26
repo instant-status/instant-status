@@ -29,7 +29,7 @@ export const StoreProvider = ({ children }: { children: React.ReactNode }) => {
     localValue: string,
     defaultValue: string | boolean | number,
   ) => {
-    return localStorage.getItem(localValue) !== undefined
+    return localStorage.getItem(localValue) !== null
       ? localStorage.getItem(localValue)
       : defaultValue;
   };
