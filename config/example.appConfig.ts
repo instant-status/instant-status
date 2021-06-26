@@ -3,7 +3,7 @@ const APP_CONFIG = {
   APP_URL: "http://localhost:1234",
   DATA_URL: "http://localhost:3000",
   GITHUB_VERSION_URL: "https://github.com/instant-status/instant-status/tree/",
-  GOOGLE_AUTH_URL: "https://accounts.google.com/o/oauth2/v2/auth?...",
+  // GOOGLE_AUTH_URL: "https://accounts.google.com/o/oauth2/v2/auth?...",
   COOKIE_NAME: "Bearer",
   CARD_ADVANCED_MAPPING: {
     server_id: "Server ID",
