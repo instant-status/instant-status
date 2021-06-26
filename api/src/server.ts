@@ -5,7 +5,7 @@ import cors from '@koa/cors';
 
 import db from 'diskdb';
 
-import { routerV1, routerV2 } from './routes/routes';
+import router from './routes/routes';
 import { isRequestAllowed } from './controllers/auth';
 import APP_CONFIG from '../../config/appConfig';
 
@@ -25,10 +25,7 @@ app.use((ctx, next) => {
 
 db.connect('../data/', ['instances', 'updates', 'updateHistory']);
 
-app
-  .use(routerV1.routes())
-  .use(routerV2.routes())
-  .use(routerV1.allowedMethods());
+app.use(router.routes()).use(router.allowedMethods());
 
 const port = APP_CONFIG.PORT || 3000;
 app.listen(port, () =>
