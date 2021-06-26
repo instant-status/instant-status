@@ -70,7 +70,15 @@ const App = () => {
                       {!isLoggedIn ? <AutoLogin /> : <Redirect to="/" />}
                     </Route>
                     <Route exact path="/login">
-                      {!isLoggedIn ? <Login /> : <Redirect to="/" />}
+                      {!isLoggedIn ? (
+                        APP_CONFIG.GOOGLE_AUTH_URL ? (
+                          <Redirect to="/google" />
+                        ) : (
+                          <Login />
+                        )
+                      ) : (
+                        <Redirect to="/" />
+                      )}
                     </Route>
                     <Route exact path="/logout">
                       <Logout />
