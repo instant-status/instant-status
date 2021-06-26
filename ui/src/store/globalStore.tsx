@@ -57,24 +57,23 @@ export const StoreProvider = ({ children }: { children: React.ReactNode }) => {
       store.displayVersions = value;
     },
 
-    // Display versions
-    showMoreInfo: getDefaultValue(
-      `showMoreInfo`,
-      APP_CONFIG.DEFAULTS.SHOW_MORE_INFO,
-    ),
+    // Display more info
+    showMoreInfo:
+      getDefaultValue(`showMoreInfo`, APP_CONFIG.DEFAULTS.SHOW_MORE_INFO) ===
+      `true`,
     setShowMoreInfo(value: boolean) {
       store.showMoreInfo = value;
       localStorage.setItem(`showMoreInfo`, value.toString());
     },
 
-    // Display versions
+    // Server order
     orderBy: getDefaultValue(`orderBy`, APP_CONFIG.DEFAULTS.ORDER_BY),
     setOrderBy(value: string) {
       store.orderBy = value;
       localStorage.setItem(`orderBy`, value);
     },
 
-    // Display versions
+    // Key file location
     keyLocation: getDefaultValue(
       `keyLocation`,
       APP_CONFIG.DEFAULTS.KEY_LOCATION,
