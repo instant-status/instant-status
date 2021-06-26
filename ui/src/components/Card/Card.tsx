@@ -1,5 +1,5 @@
-import { AnimateSharedLayout, motion } from "framer-motion";
-import { useObserver } from "mobx-react-lite";
+import { motion } from "framer-motion";
+import { observer } from "mobx-react-lite";
 import React, { useContext } from "react";
 import styled from "styled-components";
 
@@ -19,34 +19,34 @@ const CardBackground = styled(motion.div)`
   flex-direction: column;
 `;
 
-const Card = (props: {
-  servers: ServerProps[];
-  isUpdating: boolean;
-  isStartingUpdate: boolean;
-}) => {
-  const store = useContext(globalStoreContext);
+const Card = observer(
+  (props: {
+    servers: ServerProps[];
+    isUpdating: boolean;
+    isStartingUpdate: boolean;
+  }) => {
+    const store = useContext(globalStoreContext);
 
-  const stackLogsUrl = props.servers.find(
-    (server) => server.stack_logs_url,
-  )?.stack_logs_url;
-  const stackAppUrl = props.servers.find(
-    (server) => server.stack_app_url,
-  )?.stack_app_url;
-  const stackId = props.servers.find((server) => server.stack_id)?.stack_id;
-  const stackLogo = props.servers.find(
-    (server) => server.stack_logo,
-  )?.stack_logo;
-  const serverAppVersion = props.servers.find(
-    (server) => server.server_app_version,
-  )?.server_app_version;
-  const serverXapiVersion = props.servers.find(
-    (server) => server.server_xapi_version,
-  )?.server_xapi_version;
+    const stackLogsUrl = props.servers.find(
+      (server) => server.stack_logs_url,
+    )?.stack_logs_url;
+    const stackAppUrl = props.servers.find(
+      (server) => server.stack_app_url,
+    )?.stack_app_url;
+    const stackId = props.servers.find((server) => server.stack_id)?.stack_id;
+    const stackLogo = props.servers.find(
+      (server) => server.stack_logo,
+    )?.stack_logo;
+    const serverAppVersion = props.servers.find(
+      (server) => server.server_app_version,
+    )?.server_app_version;
+    const serverXapiVersion = props.servers.find(
+      (server) => server.server_xapi_version,
+    )?.server_xapi_version;
 
-  return useObserver(() => (
-    <CardBackground layout>
-      <CardHeader stackId={stackId} stackLogo={stackLogo} />
-      <AnimateSharedLayout>
+    return (
+      <CardBackground layout>
+        <CardHeader stackId={stackId} stackLogo={stackLogo} />
         {props.servers
           .sort((a: ServerProps, b: ServerProps) =>
             a.server_public_ip.localeCompare(b.server_public_ip),
@@ -58,27 +58,26 @@ const Card = (props: {
           .map((server, i) => {
             if (i + 1 <= store.serverDisplayCount) {
               return (
-                <motion.div key={server.server_id}>
-                  <CardServer
-                    server={server}
-                    isUpdating={props.isUpdating}
-                    isStartingUpdate={props.isStartingUpdate}
-                  />
-                </motion.div>
+                <CardServer
+                  key={server.server_id}
+                  server={server}
+                  isUpdating={props.isUpdating}
+                  isStartingUpdate={props.isStartingUpdate}
+                />
               );
             }
           })}
-      </AnimateSharedLayout>
-      <CardFooter
-        stackLogsUrl={stackLogsUrl}
-        stackAppUrl={stackAppUrl}
-        stackId={stackId}
-        serverAppVersion={serverAppVersion}
-        serverXapiVersion={serverXapiVersion}
-        isUpdating={props.isUpdating}
-      />
-    </CardBackground>
-  ));
-};
+        <CardFooter
+          stackLogsUrl={stackLogsUrl}
+          stackAppUrl={stackAppUrl}
+          stackId={stackId}
+          serverAppVersion={serverAppVersion}
+          serverXapiVersion={serverXapiVersion}
+          isUpdating={props.isUpdating}
+        />
+      </CardBackground>
+    );
+  },
+);
 
 export default Card;

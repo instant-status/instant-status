@@ -9,14 +9,11 @@ interface GlobalStoreContextProps {
   serverDisplayCount: number;
   setServerDisplayCount: (value: number) => void;
 
-  displayVersions: string[];
+  displayVersions: string[] | undefined;
   setDisplayVersions: (value: string[]) => void;
 
   showMoreInfo: boolean;
   setShowMoreInfo: (value: boolean) => void;
-
-  rememberSettings: boolean;
-  setRememberSettings: (value: boolean) => void;
 
   orderBy: string;
   setOrderBy: (value: string) => void;
@@ -28,25 +25,13 @@ interface GlobalStoreContextProps {
 export const globalStoreContext = createContext({} as GlobalStoreContextProps);
 
 export const StoreProvider = ({ children }: { children: React.ReactNode }) => {
-  const urlParams = new URLSearchParams(window.location.search);
-  // const getUrlParams = () => {
-  //   if (urlParams.has(`env`)) {
-  //     setUrlEnvParams(urlParams.get(`env`).split(`,`));
-  //   }
-  //   if (urlParams.has(`version`)) {
-  //     setUrlVersionParams(urlParams.get(`version`).split(`,`));
-  //   }
-  //   if (urlParams.has(`sortBy`)) {
-  //     setUrlSortBy(urlParams.get(`sortBy`));
-  //   }
-  // };
-
-  const updateUrlParams = (params: {
-    key: string;
-    value: string | string[] | boolean | number;
-  }) => {
-    urlParams.set(params.key, params.value.toString());
-    history.pushState({}, ``, `?${decodeURIComponent(urlParams.toString())}`);
+  const getDefaultValue = (
+    localValue: string,
+    defaultValue: string | boolean | number,
+  ) => {
+    return localStorage.getItem(localValue) !== undefined
+      ? localStorage.getItem(localValue)
+      : defaultValue;
   };
 
   const store = useLocalObservable(() => ({
@@ -57,45 +42,47 @@ export const StoreProvider = ({ children }: { children: React.ReactNode }) => {
     },
 
     // Display count
-    serverDisplayCount: 2,
+    serverDisplayCount: getDefaultValue(
+      `serverDisplayCount`,
+      APP_CONFIG.DEFAULTS.SERVER_DISPLAY_COUNT,
+    ),
     setServerDisplayCount(value: number) {
       store.serverDisplayCount = value;
-      updateUrlParams({ key: `serverDisplayCount`, value });
+      localStorage.setItem(`serverDisplayCount`, value.toString());
     },
 
     // Display versions
-    displayVersions: [] as string[],
-    setDisplayVersions(value: string[]) {
+    displayVersions: undefined as string[] | undefined,
+    setDisplayVersions(value: string[] | undefined) {
       store.displayVersions = value;
-      updateUrlParams({ key: `displayVersions`, value });
     },
 
     // Display versions
-    showMoreInfo: false,
+    showMoreInfo: getDefaultValue(
+      `showMoreInfo`,
+      APP_CONFIG.DEFAULTS.SHOW_MORE_INFO,
+    ),
     setShowMoreInfo(value: boolean) {
       store.showMoreInfo = value;
-      updateUrlParams({ key: `showMoreInfo`, value });
+      localStorage.setItem(`showMoreInfo`, value.toString());
     },
 
     // Display versions
-    rememberSettings: false,
-    setRememberSettings(value: boolean) {
-      store.rememberSettings = value;
-    },
-
-    // Display versions
-    orderBy: `stack_id`,
+    orderBy: getDefaultValue(`orderBy`, APP_CONFIG.DEFAULTS.ORDER_BY),
     setOrderBy(value: string) {
       store.orderBy = value;
-      updateUrlParams({ key: `orderBy`, value });
+      localStorage.setItem(`orderBy`, value);
     },
 
     // Display versions
-    keyLocation: APP_CONFIG.DEFAULT_KEY_LOCATION || `~/.ssh/`,
+    keyLocation: getDefaultValue(
+      `keyLocation`,
+      APP_CONFIG.DEFAULTS.KEY_LOCATION,
+    ),
     setKeyLocation(value: string, checkForTrailingSlash = false) {
       if (checkForTrailingSlash && !value.endsWith(`/`)) value += `/`;
       store.keyLocation = value;
-      updateUrlParams({ key: `keyLocation`, value });
+      localStorage.setItem(`keyLocation`, value);
     },
   }));
 
