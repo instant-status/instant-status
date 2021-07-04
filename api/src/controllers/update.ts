@@ -231,11 +231,14 @@ export const getStacksAvailableForUpdate = (ctx: any) => {
 
     output[server.stack_id] = {
       stack_id: server.stack_id,
-      stack_version: isUpdating
+      stack_app_version_display: isUpdating
         ? update.update_app_to
         : server.server_app_version,
+      stack_xapi_version_display: isUpdating
+        ? update.update_xapi_to
+        : server.server_xapi_version,
       stack_environment: server.stack_environment,
-      is_updating: isUpdating,
+      stack_is_updating: isUpdating,
     };
   }
 

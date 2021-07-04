@@ -45,9 +45,10 @@ enum UpdateStepTypes {
 
 interface ApiGetStacksAvailableForUpdateProps {
   stack_id: string;
-  stack_version: string;
+  stack_app_version_display: string;
+  stack_xapi_version_display: string;
   stack_environment: string;
-  is_updating: boolean;
+  stack_is_updating: boolean;
 }
 
 interface StacksQueryProps {
@@ -199,8 +200,8 @@ const CreateUpdateModal = observer(() => {
     },
   ];
 
-  const trimWhiteSpace = (value: string) => {
-    return value.trim();
+  const removeWhiteSpace = (value: string) => {
+    return value.replace(/ /g, ``);
   };
 
   return (
@@ -253,7 +254,7 @@ const CreateUpdateModal = observer(() => {
             const stacks = stackEnv[1];
             const stackIds = stacks.map((stack) => stack.stack_id);
             const availableStackIds = stacks
-              .filter((stack) => !stack.is_updating)
+              .filter((stack) => !stack.stack_is_updating)
               .map((stack) => stack.stack_id);
             const allSelected = allExistIn(availableStackIds, stacksToUpdate);
 
@@ -276,28 +277,29 @@ const CreateUpdateModal = observer(() => {
                   {stacks
                     .sort(
                       (a, b) =>
-                        a.stack_version.localeCompare(b.stack_version) ||
-                        a.stack_id.localeCompare(b.stack_id),
+                        a.stack_app_version_display.localeCompare(
+                          b.stack_app_version_display,
+                        ) || a.stack_id.localeCompare(b.stack_id),
                     )
                     .map((stack) => (
                       <Checkbox
-                        key={`${stack.stack_id}-${stack.stack_version}`}
+                        key={`${stack.stack_id}-${stack.stack_app_version_display}`}
                         label={stack.stack_id}
                         helperLabel={
-                          stack.is_updating
-                            ? `Updating to ${stack.stack_version}`
-                            : stack.stack_version
+                          stack.stack_is_updating
+                            ? `Updating to ${stack.stack_app_version_display} (xAPI ${stack.stack_xapi_version_display})`
+                            : `${stack.stack_app_version_display} (xAPI ${stack.stack_xapi_version_display})`
                         }
                         name={stack.stack_id}
                         disabled={
                           step !== UpdateStepTypes.pickOptions
                             ? true
-                            : stack.is_updating
+                            : stack.stack_is_updating
                         }
-                        visuallyDisabled={stack.is_updating}
+                        visuallyDisabled={stack.stack_is_updating}
                         onClick={() => toggleCheckbox(stack.stack_id)}
                         checked={
-                          !stack.is_updating &&
+                          !stack.stack_is_updating &&
                           stacksToUpdate.includes(stack.stack_id)
                         }
                       />
@@ -326,7 +328,7 @@ const CreateUpdateModal = observer(() => {
                 disabled={step !== UpdateStepTypes.pickOptions}
                 name="update_app_to"
                 onChange={(event) =>
-                  setAppVersion(trimWhiteSpace(event.target.value))
+                  setAppVersion(removeWhiteSpace(event.target.value))
                 }
               />
               <TextInput
@@ -339,7 +341,7 @@ const CreateUpdateModal = observer(() => {
                 disabled={step !== UpdateStepTypes.pickOptions}
                 name="update_xapi_to"
                 onChange={(event) =>
-                  setXapiVersion(trimWhiteSpace(event.target.value))
+                  setXapiVersion(removeWhiteSpace(event.target.value))
                 }
               />
             </Stack>
