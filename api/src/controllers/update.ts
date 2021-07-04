@@ -102,6 +102,15 @@ export const updateCreate = (ctx) => {
       chosen_one: '',
       switch_code_at_date: 0,
     });
+
+    db.servers.update(
+      { stack_id: stack_id },
+      {
+        server_app_updating_to_version: body.update_app_to,
+        server_xapi_updating_to_version: body.update_xapi_to,
+      },
+      { multi: true }
+    );
   }
 
   return response(ctx, 202, {});
