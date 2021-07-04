@@ -78,10 +78,11 @@ export const updateCreate = (ctx) => {
   for (const stack_id of body.stack_ids) {
     const lastUpdate = db.updates.findOne({ stack_id: stack_id });
     const lastUpdateHistory = db.updateHistory.save(lastUpdate);
+    const date = new Date();
     db.updates.remove({ update_id: lastUpdateHistory?.update_id });
 
     db.updates.save({
-      update_id: Date.now() + '-' + stack_id,
+      update_id: date.getTime() + '-' + stack_id,
       update_requested_by: updateRequestedBy,
       last_update_id: lastUpdateHistory?.update_id || undefined,
       stack_id: stack_id,
@@ -89,7 +90,7 @@ export const updateCreate = (ctx) => {
       servers_completed: [],
       server_count: 0,
       server_completed_count: 0,
-      created_at: Date.now(),
+      created_at: date.toISOString(),
       is_cancelled: false, // not in use
 
       run_migrations: body.run_migrations,
