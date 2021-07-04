@@ -7,9 +7,9 @@ const ButtonBase = styled.button`
   border-radius: 12px;
   cursor: pointer;
   font-size: ${spacing[9]};
-  color: #fff;
+  color: ${(props) => props.theme.color.lightOne};
   background-color: transparent;
-  border: 4px solid #fff;
+  border: 4px solid ${(props) => props.theme.color.lightOne};
   transition: background-color 0.3s, color 0.3s;
 
   &:disabled {
@@ -20,18 +20,29 @@ const ButtonBase = styled.button`
 
 export const GhostButton = styled(ButtonBase)`
   &:hover:not(:disabled) {
-    color: #191e2a;
-    background-color: #fff;
+    color: ${(props) => props.theme.color.darkTwo};
+    background-color: ${(props) => props.theme.color.lightOne};
+  }
+`;
+
+export const SidebarButton = styled(ButtonBase)`
+  padding: 0.4rem 1rem;
+  border-width: 2px;
+  font-size: 16px;
+
+  &:hover:not(:disabled) {
+    color: ${(props) => props.theme.color.darkTwo};
+    background-color: ${(props) => props.theme.color.lightOne};
   }
 `;
 
 export const UpdateButton = styled(ButtonBase)`
-  color: #00ab4e;
-  border: 4px solid #00ab4e;
+  color: ${(props) => props.theme.color.green};
+  border: 4px solid ${(props) => props.theme.color.green};
 
   &:hover:not(:disabled) {
-    color: #191e2a;
-    background-color: #00ab4e;
+    color: ${(props) => props.theme.color.darkTwo};
+    background-color: ${(props) => props.theme.color.green};
   }
 `;
 
@@ -40,11 +51,11 @@ export const BackButton = styled(GhostButton)`
 `;
 
 export const CancelButton = styled(GhostButton)`
-  color: #ee2f01;
-  border: 4px solid #ee2f01;
+  color: ${(props) => props.theme.color.red};
+  border: 4px solid ${(props) => props.theme.color.red};
 
   &:hover:not(:disabled) {
-    color: #191e2a;
-    background-color: #ee2f01;
+    color: ${(props) => props.theme.color.darkTwo};
+    background-color: ${(props) => props.theme.color.red};
   }
 `;

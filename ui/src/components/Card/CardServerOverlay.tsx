@@ -42,11 +42,11 @@ const Overlay = styled.div`
 `;
 
 const OverlayCloseButton = styled.button`
-  fill: #fff;
+  fill: ${(props) => props.theme.color.lightOne};
   cursor: pointer;
   border-radius: 50%;
   background-color: ${(props) => props.theme.color.darkTwo};
-  border: 1px solid #fff;
+  border: 1px solid ${(props) => props.theme.color.lightOne};
   width: 24px;
   height: 24px;
   padding: 4px;

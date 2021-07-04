@@ -17,7 +17,7 @@ const ModalContainer = styled(motion.div)`
   width: 100%;
   max-width: 1000px;
   box-shadow: 4px 4px 20px rgba(0, 0, 0, 0.6), 0px 0px 40px rgba(0, 0, 0, 0.2);
-  color: #fff;
+  color: ${(props) => props.theme.color.lightOne};
   margin: 0 auto;
   position: relative;
   min-height: 100%;
@@ -32,7 +32,7 @@ const ModalCloseButton = styled.button`
   width: 60px;
   height: 60px;
   border-radius: 50%;
-  fill: #fff;
+  fill: ${(props) => props.theme.color.lightOne};
   background-color: ${(props) => props.theme.color.darkOne};
   border: 6px solid ${(props) => props.theme.color.darkTwo};
   position: absolute;

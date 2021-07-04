@@ -6,7 +6,7 @@ const StyledSearchBar = styled.input`
   border-radius: 10px;
   border: none;
   box-shadow: ${({ theme }) => theme.shadow.card};
-  color: #fff;
+  color: ${(props) => props.theme.color.lightOne};
   font-size: 24px;
   height: 40px;
   margin-bottom: 30px;

@@ -7,6 +7,7 @@ import styled from "styled-components";
 
 import fetchUrl from "../../hooks/useFetch";
 import { globalStoreContext } from "../../store/globalStore";
+import { SidebarButton } from "../Controls/Buttons";
 import Checkbox from "../Controls/Checkbox";
 import SelectInput from "../Controls/SelectInput";
 import SliderInput from "../Controls/SliderInput";
@@ -20,7 +21,7 @@ const Aside = styled.aside`
   width: 290px;
   height: 100vh;
   position: fixed;
-  color: #fff;
+  color: ${(props) => props.theme.color.lightOne};
   padding: 20px 0 20px 20px;
   display: flex;
   flex-direction: column;
@@ -51,7 +52,7 @@ const Footer = styled.footer`
 `;
 
 const A = styled.a`
-  color: #fff;
+  color: ${(props) => props.theme.color.lightOne};
 `;
 
 const Sidebar = observer(() => {
@@ -64,6 +65,12 @@ const Sidebar = observer(() => {
       refetchInterval: 10000, // Refetch the data every second
     },
   );
+
+  const hasCustomSettings =
+    store.keyLocation !== APP_CONFIG.DEFAULTS.KEY_LOCATION ||
+    store.serverDisplayCount !== APP_CONFIG.DEFAULTS.SERVER_DISPLAY_COUNT ||
+    store.orderBy !== APP_CONFIG.DEFAULTS.ORDER_BY ||
+    store.showMoreInfo !== APP_CONFIG.DEFAULTS.SHOW_MORE_INFO;
 
   return (
     <>
@@ -82,7 +89,7 @@ const Sidebar = observer(() => {
             <SelectInput
               onChange={(event) => store.setOrderBy(event.target.value)}
               value={store.orderBy}
-              label="Order By"
+              label="Order By:"
             />
             <SliderInput
               value={store.serverDisplayCount}
@@ -100,12 +107,20 @@ const Sidebar = observer(() => {
               name="Key File Location:"
             />
           </Stack>
-          <Checkbox
-            checked={store.showMoreInfo}
-            label={`Show More Info`}
-            name={`Show More Info`}
-            onClick={() => store.setShowMoreInfo(!store.showMoreInfo)}
-          />
+          <Stack as={AsidePaddingContainer} direction="down" spacing={9}>
+            <Checkbox
+              checked={store.showMoreInfo}
+              label={`Show More Info`}
+              name={`Show More Info`}
+              onClick={() => store.setShowMoreInfo(!store.showMoreInfo)}
+            />
+            <SidebarButton
+              onClick={() => store.resetToDefaultValues()}
+              disabled={!hasCustomSettings}
+            >
+              Clear Custom Settings
+            </SidebarButton>
+          </Stack>
         </Stack>
         <Footer>
           <A

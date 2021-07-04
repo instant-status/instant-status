@@ -20,6 +20,8 @@ interface GlobalStoreContextProps {
 
   keyLocation: string;
   setKeyLocation: (value: string, checkForTrailingSlash?: boolean) => void;
+
+  resetToDefaultValues: () => void;
 }
 
 export const globalStoreContext = createContext({} as GlobalStoreContextProps);
@@ -82,6 +84,17 @@ export const StoreProvider = ({ children }: { children: React.ReactNode }) => {
       if (checkForTrailingSlash && !value.endsWith(`/`)) value += `/`;
       store.keyLocation = value;
       localStorage.setItem(`keyLocation`, value);
+    },
+
+    resetToDefaultValues() {
+      store.setServerDisplayCount(APP_CONFIG.DEFAULTS.SERVER_DISPLAY_COUNT);
+      store.setShowMoreInfo(APP_CONFIG.DEFAULTS.SHOW_MORE_INFO);
+      store.setOrderBy(APP_CONFIG.DEFAULTS.ORDER_BY);
+      store.setKeyLocation(APP_CONFIG.DEFAULTS.KEY_LOCATION);
+      localStorage.removeItem(`keyLocation`);
+      localStorage.removeItem(`orderBy`);
+      localStorage.removeItem(`showMoreInfo`);
+      localStorage.removeItem(`serverDisplayCount`);
     },
   }));
 
