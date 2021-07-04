@@ -202,6 +202,10 @@ const CreateUpdateModal = observer(() => {
     },
   ];
 
+  const trimWhiteSpace = (value: string) => {
+    return value.trim();
+  };
+
   return (
     <ModalBase
       title={modalTitle}
@@ -324,7 +328,9 @@ const CreateUpdateModal = observer(() => {
                 value={appVersion || ``}
                 disabled={step !== UpdateStepTypes.pickOptions}
                 name="update_app_to"
-                onChange={(event) => setAppVersion(event.target.value)}
+                onChange={(event) =>
+                  setAppVersion(trimWhiteSpace(event.target.value))
+                }
               />
               <TextInput
                 label={
@@ -335,7 +341,9 @@ const CreateUpdateModal = observer(() => {
                 value={xapiVersion || ``}
                 disabled={step !== UpdateStepTypes.pickOptions}
                 name="update_xapi_to"
-                onChange={(event) => setXapiVersion(event.target.value)}
+                onChange={(event) =>
+                  setXapiVersion(trimWhiteSpace(event.target.value))
+                }
               />
             </Stack>
             <Stack spacing={9} justify="start">
