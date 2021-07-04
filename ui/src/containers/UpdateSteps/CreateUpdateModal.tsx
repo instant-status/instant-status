@@ -83,17 +83,14 @@ const CreateUpdateModal = observer(() => {
   };
 
   useEffect(() => {
-    const documentRoot = document.querySelector(
-      `#instant-status-root`,
-    ) as HTMLElement;
+    const documentRoot = document.querySelector(`#body`) as HTMLElement;
     documentRoot.style.overflow = `hidden`;
-    documentRoot.style.height = `100vh`;
 
     window.addEventListener(`beforeunload`, warnAboutUnsavedChanges);
 
     return () => {
       documentRoot.style.overflow = `auto`;
-      documentRoot.style.height = `100%`;
+
       window.removeEventListener(`beforeunload`, warnAboutUnsavedChanges);
     };
   }, [step]);
