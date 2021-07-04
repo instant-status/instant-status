@@ -35,6 +35,10 @@ const Overlay = styled.div`
     text-overflow: ellipsis;
     width: 100%;
   }
+
+  & > div > svg {
+    height: 40px;
+  }
 `;
 
 const OverlayCloseButton = styled.button`

@@ -105,7 +105,7 @@ const PageContent = observer(() => {
                 );
               })
           ) : (
-            <img src={logo} alt="Loading..." />
+            <img src={logo} alt="Loading..." width="400px" />
           )}
         </Grid>
       </AnimateSharedLayout>

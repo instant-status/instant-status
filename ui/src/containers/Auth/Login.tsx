@@ -21,7 +21,7 @@ const LoadingLogo = styled.img`
 const Login = () => {
   return (
     <SplashContent>
-      <LoadingLogo src={logo} alt="Loading pulse" />
+      <LoadingLogo src={logo} alt="Loading pulse" width="400px" />
     </SplashContent>
   );
 };
