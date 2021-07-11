@@ -2,7 +2,7 @@ import prisma from '../../prisma/prismaClient';
 import response from '../helpers/returnResponse';
 
 export const getMetadata = async (ctx: any) => {
-  const servers = await prisma.server.findMany();
+  const servers = await prisma.servers.findMany();
 
   const stacks = new Set(servers.map((server) => server.stack_id));
   const versions = new Set(servers.map((server) => server.server_app_version));

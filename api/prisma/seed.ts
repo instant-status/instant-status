@@ -2,7 +2,7 @@ import { PrismaClient } from '@prisma/client';
 const prisma = new PrismaClient();
 
 async function main() {
-  await prisma.server.upsert({
+  await prisma.servers.upsert({
     where: { server_id: 'i-09bd3cebd759ddaa9' },
     update: {},
     create: {
@@ -37,7 +37,7 @@ async function main() {
       server_updated_at: '2021-06-26T16:41:07.102Z',
     },
   });
-  await prisma.server.upsert({
+  await prisma.servers.upsert({
     where: { server_id: 'i-09bd3cebd759ddaa8' },
     update: {},
     create: {
@@ -72,7 +72,7 @@ async function main() {
       server_updated_at: '2021-06-26T16:41:07.102Z',
     },
   });
-  await prisma.server.upsert({
+  await prisma.servers.upsert({
     where: { server_id: 'i-09bd3cebd759ddaa7' },
     update: {},
     create: {
