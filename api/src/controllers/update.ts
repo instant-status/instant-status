@@ -5,6 +5,7 @@ import checkForRequiredDataKeys from '../helpers/checkForRequiredDataKeys';
 import { getRequesterIdentity } from './auth';
 import groupBy from '../helpers/groupBy';
 import response from '../helpers/returnResponse';
+import isStackUpdating from '../helpers/isStackUpdating';
 
 export const updateGet = (ctx) => {
   // Ensuring we have required data in the request
@@ -34,7 +35,8 @@ export const updateGet = (ctx) => {
       update_app_to: latestUpdate.update_app_to,
       update_xapi_to: latestUpdate.update_xapi_to,
       server_count: latestUpdate.server_count,
-      server_completed_count: latestUpdate.server_completed_count,
+      server_ready_to_switch_count: latestUpdate.server_ready_to_switch_count,
+      server_finished_count: latestUpdate.server_finished_count,
     } as JsonObject;
 
     if (latestUpdate.chosen_one) {
@@ -77,6 +79,12 @@ export const updateCreate = (ctx) => {
 
   for (const stack_id of body.stack_ids) {
     const lastUpdate = db.updates.findOne({ stack_id: stack_id });
+    const isUpdating = isStackUpdating(lastUpdate);
+
+    if (isUpdating) {
+      continue;
+    }
+
     const lastUpdateHistory = db.updateHistory.save(lastUpdate);
     const date = new Date();
     db.updates.remove({ update_id: lastUpdateHistory?.update_id });
@@ -87,9 +95,11 @@ export const updateCreate = (ctx) => {
       last_update_id: lastUpdateHistory?.update_id || undefined,
       stack_id: stack_id,
       servers: [],
-      servers_completed: [],
+      servers_ready_to_switch: [],
+      servers_finished: [],
       server_count: 0,
-      server_completed_count: 0,
+      server_ready_to_switch_count: 0,
+      server_finished_count: 0,
       created_at: date.toISOString(),
       is_cancelled: false, // not in use
 
@@ -158,6 +168,7 @@ export const updatePost = (ctx) => {
         latestUpdate['servers'].push(body.server_id);
         latestUpdate['server_count'] = serverIdsCount + 1;
       }
+
       db.updates.update({ update_id: body.update_id }, latestUpdate);
       break;
 
@@ -171,10 +182,10 @@ export const updatePost = (ctx) => {
       // Server update below is required, so we don't quit out.
       break;
 
-    case 'completion':
-      if (!latestUpdate['servers_completed'].includes(body.server_id)) {
-        latestUpdate['servers_completed'].push(body.server_id);
-        latestUpdate['server_completed_count'] += 1;
+    case 'ready-to-switch':
+      if (!latestUpdate['servers_ready_to_switch'].includes(body.server_id)) {
+        latestUpdate['servers_ready_to_switch'].push(body.server_id);
+        latestUpdate['server_ready_to_switch_count'] += 1;
       }
 
       if (latestUpdate['chosen_one'] === body.server_id) {
@@ -186,8 +197,12 @@ export const updatePost = (ctx) => {
       break;
 
     case 'finished':
-      // We don't need to do anything special for this stage.
-      // Server update below is required, so we don't quit out.
+      if (!latestUpdate['servers_finished'].includes(body.server_id)) {
+        latestUpdate['servers_finished'].push(body.server_id);
+        latestUpdate['server_finished_count'] += 1;
+      }
+
+      db.updates.update({ update_id: body.update_id }, latestUpdate);
       break;
 
     default:
@@ -232,11 +247,7 @@ export const getStacksAvailableForUpdate = (ctx: any) => {
   for (const server of servers) {
     const update = db.updates.findOne({ stack_id: server.stack_id });
 
-    const isUpdating =
-      update &&
-      (update.server_completed_count === 0 ||
-        update.server_count === 0 ||
-        update.server_completed_count !== update.server_count);
+    const isUpdating = isStackUpdating(update);
 
     output[server.stack_id] = {
       stack_id: server.stack_id,
