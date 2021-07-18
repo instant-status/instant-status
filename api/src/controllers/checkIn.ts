@@ -52,8 +52,6 @@ export const checkIn = async (ctx) => {
     }
   });
 
-  // // @ts-ignore
-  // delete data.last_update_id;
   data.last_update_id = Number(data.last_update_id) || null;
 
   await prisma.servers.upsert({
