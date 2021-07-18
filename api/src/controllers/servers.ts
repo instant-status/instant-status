@@ -1,5 +1,4 @@
 import prisma from '../../prisma/prismaClient';
-import { logEvent } from './logs';
 import groupBy from '../helpers/groupBy';
 import response from '../helpers/returnResponse';
 import { Servers } from '@prisma/client';
@@ -11,7 +10,6 @@ export const deleteServer = async (ctx) => {
     return response(ctx, 400);
   }
   await prisma.servers.delete({ where: { server_id: body.server_id } });
-  logEvent({ event: 'Server Deleted', payload: body.server_id });
   return response(ctx, 204);
 };
 

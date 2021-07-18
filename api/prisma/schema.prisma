@@ -1,6 +1,12 @@
 // This is your Prisma schema file,
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
+datasource db {
+  provider          = "postgres"
+  url               = env("DATABASE_URL")
+  shadowDatabaseUrl = env("SHADOW_DATABASE_URL")
+}
+
 generator client {
   provider = "prisma-client-js"
 }
@@ -9,6 +15,7 @@ model Servers {
   id                              Int       @id @default(autoincrement())
   server_id                       String    @unique
   stack_id                        String
+  last_update_id                  Int?
   stack_region                    String
   stack_environment               String
   stack_logo                      String
@@ -33,13 +40,15 @@ model Servers {
   server_app_updating_to_version  String?
   server_xapi_updating_to_version String?
   server_is_chosen_one            Boolean?
+  server_created_at               DateTime  @default(now())
   server_updated_at               DateTime?
+  lastUpdateId                    Updates?  @relation(fields: [last_update_id], references: [id])
 }
 
 model Updates {
   id                           Int       @id @default(autoincrement())
   update_requested_by          String?
-  last_update_id               Updates?  @relation("UpdatesToUpdates", fields: [id], references: [id])
+  last_update_id               Int?      @unique
   stack_id                     String
   servers                      String[]
   servers_ready_to_switch      String[]
@@ -47,7 +56,6 @@ model Updates {
   server_count                 Int
   server_ready_to_switch_count Int
   server_finished_count        Int
-  created_at                   DateTime
   is_cancelled                 Boolean
   run_migrations               Boolean
   rollback_migrations          Boolean
@@ -55,5 +63,8 @@ model Updates {
   update_xapi_to               String
   chosen_one                   String
   switch_code_at_date          Int
-  Updates                      Updates[] @relation("UpdatesToUpdates")
+  created_at                   DateTime  @default(now())
+  lastUpdateId                 Updates?  @relation("UpdatesToUpdates", fields: [last_update_id], references: [id])
+  nextUpdateId                 Updates[] @relation("UpdatesToUpdates")
+  serversWithThisUpdate        Servers[]
 }

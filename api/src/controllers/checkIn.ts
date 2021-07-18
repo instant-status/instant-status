@@ -1,4 +1,4 @@
-import { Servers } from '.prisma/client';
+import { Servers } from '@prisma/client';
 import ALLOWED_DATA, { AllowedDataType } from '../../../config/allowedData';
 import prisma from '../../prisma/prismaClient';
 import checkForRequiredDataKeys from '../helpers/checkForRequiredDataKeys';
@@ -52,8 +52,9 @@ export const checkIn = async (ctx) => {
     }
   });
 
-  // @ts-ignore
-  delete data.last_update_id;
+  // // @ts-ignore
+  // delete data.last_update_id;
+  data.last_update_id = Number(data.last_update_id) || null;
 
   await prisma.servers.upsert({
     where: { server_id: body.server_id },

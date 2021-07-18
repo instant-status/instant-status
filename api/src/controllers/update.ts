@@ -1,12 +1,11 @@
-import db from 'diskdb';
 import { JsonObject } from 'type-fest';
-import { ServerProps } from '../../../types/globalTypes';
 import checkForRequiredDataKeys from '../helpers/checkForRequiredDataKeys';
 import { getRequesterIdentity } from './auth';
 import groupBy from '../helpers/groupBy';
 import response from '../helpers/returnResponse';
 import isStackUpdating from '../helpers/isStackUpdating';
 import prisma from '../../prisma/prismaClient';
+import { Servers, Updates } from '@prisma/client';
 
 export const updateGet = async (ctx) => {
   // Ensuring we have required data in the request
@@ -28,8 +27,6 @@ export const updateGet = async (ctx) => {
     where: { id: Number(body.update_id) },
     orderBy: { id: 'desc' },
   });
-
-  console.log('latestUpdate', latestUpdate);
 
   if (latestUpdate) {
     let responseBody = {
@@ -94,31 +91,30 @@ export const updateCreate = async (ctx) => {
       continue;
     }
 
-    const date = new Date();
+    const data = {
+      update_requested_by: updateRequestedBy,
+      last_update_id: lastUpdate?.id || null,
+      stack_id: stack_id,
+      servers: [],
+      servers_ready_to_switch: [],
+      servers_finished: [],
+      server_count: 0,
+      server_ready_to_switch_count: 0,
+      server_finished_count: 0,
+      is_cancelled: false, // not in use
+
+      run_migrations: body.run_migrations,
+      rollback_migrations: false, // not in use
+
+      update_app_to: body.update_app_to,
+      update_xapi_to: body.update_xapi_to,
+
+      chosen_one: '',
+      switch_code_at_date: 0,
+    } as Updates;
 
     await prisma.updates.create({
-      data: {
-        update_requested_by: updateRequestedBy,
-        // last_update_id: lastUpdate?.id || undefined,
-        stack_id: stack_id,
-        servers: [],
-        servers_ready_to_switch: [],
-        servers_finished: [],
-        server_count: 0,
-        server_ready_to_switch_count: 0,
-        server_finished_count: 0,
-        created_at: date.toISOString(),
-        is_cancelled: false, // not in use
-
-        run_migrations: body.run_migrations,
-        rollback_migrations: false, // not in use
-
-        update_app_to: body.update_app_to,
-        update_xapi_to: body.update_xapi_to,
-
-        chosen_one: '',
-        switch_code_at_date: 0,
-      },
+      data,
     });
 
     await prisma.servers.updateMany({
@@ -133,7 +129,7 @@ export const updateCreate = async (ctx) => {
   return response(ctx, 202, {});
 };
 
-export const updatePost = (ctx) => {
+export const updatePost = async (ctx) => {
   // Ensuring we have required data in the request
   const body = ctx.request.body;
   const requiredDataKeys = [
@@ -155,7 +151,11 @@ export const updatePost = (ctx) => {
   }
 
   // Fetching the details of the given update and returning a response
-  const latestUpdate = db.updates.findOne({ update_id: body.update_id });
+  const latestUpdate = await prisma.updates.findFirst({
+    where: { id: Number(body.update_id) },
+    orderBy: { id: 'desc' },
+  });
+
   if (!latestUpdate) {
     return response(ctx, 404, {
       ok: false,
@@ -176,7 +176,10 @@ export const updatePost = (ctx) => {
         latestUpdate['server_count'] = serverIdsCount + 1;
       }
 
-      db.updates.update({ update_id: body.update_id }, latestUpdate);
+      await prisma.updates.update({
+        where: { id: Number(body.update_id) },
+        data: latestUpdate,
+      });
       break;
 
     case 'installation':
@@ -200,7 +203,10 @@ export const updatePost = (ctx) => {
           Math.floor(Date.now() / 1000) + 20;
       }
 
-      db.updates.update({ update_id: body.update_id }, latestUpdate);
+      await prisma.updates.update({
+        where: { id: Number(body.update_id) },
+        data: latestUpdate,
+      });
       break;
 
     case 'finished':
@@ -209,7 +215,10 @@ export const updatePost = (ctx) => {
         latestUpdate['server_finished_count'] += 1;
       }
 
-      db.updates.update({ update_id: body.update_id }, latestUpdate);
+      await prisma.updates.update({
+        where: { id: Number(body.update_id) },
+        data: latestUpdate,
+      });
       break;
 
     default:
@@ -219,27 +228,26 @@ export const updatePost = (ctx) => {
       });
   }
 
-  db.servers.update(
-    {
-      server_id: body.server_id,
-    },
-    {
-      server_id: body.server_id,
-      server_update_stage: body.server_update_stage,
-      server_update_progress: body.server_update_progress,
-      server_update_message: body.server_update_message,
-      ...(body.server_update_stage === 'finished' && {
-        server_app_version: latestUpdate.update_app_to,
-        server_xapi_version: latestUpdate.update_xapi_to,
-        server_updated_at: new Date().toISOString(),
-      }),
-      server_app_updating_to_version: latestUpdate.update_app_to,
-      server_xapi_updating_to_version: latestUpdate.update_xapi_to,
-      server_is_chosen_one:
-        body.server_id === latestUpdate.chosen_one ? true : false,
-    },
-    { upsert: true }
-  );
+  const data = {
+    server_id: body.server_id,
+    server_update_stage: body.server_update_stage,
+    server_update_progress: body.server_update_progress,
+    server_update_message: body.server_update_message,
+    ...(body.server_update_stage === 'finished' && {
+      server_app_version: latestUpdate.update_app_to,
+      server_xapi_version: latestUpdate.update_xapi_to,
+      server_updated_at: new Date(),
+    }),
+    server_app_updating_to_version: latestUpdate.update_app_to,
+    server_xapi_updating_to_version: latestUpdate.update_xapi_to,
+    server_is_chosen_one:
+      body.server_id === latestUpdate.chosen_one ? true : false,
+  } as Servers;
+
+  await prisma.servers.update({
+    where: { server_id: body.server_id },
+    data,
+  });
 
   responseBody.ok = true;
 

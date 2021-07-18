@@ -44,7 +44,7 @@ interface StacksQueryProps {
 const PageContent = observer(() => {
   const store = useContext(globalStoreContext);
 
-  const refetchInterval = 5000; // Refetch the data every 5 seconds
+  const refetchInterval = 8000; // Refetch the data every 5 seconds
 
   const stacksQuery = useQuery(`stacksData`, apiRoutes.apiGetStacks, {
     refetchInterval,
