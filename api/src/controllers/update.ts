@@ -1,13 +1,13 @@
-import db from 'diskdb';
 import { JsonObject } from 'type-fest';
-import { ServerProps } from '../../../types/globalTypes';
 import checkForRequiredDataKeys from '../helpers/checkForRequiredDataKeys';
 import { getRequesterIdentity } from './auth';
 import groupBy from '../helpers/groupBy';
 import response from '../helpers/returnResponse';
 import isStackUpdating from '../helpers/isStackUpdating';
+import prisma from '../../prisma/prismaClient';
+import { Servers, Updates } from '@prisma/client';
 
-export const updateGet = (ctx) => {
+export const updateGet = async (ctx) => {
   // Ensuring we have required data in the request
   const body = ctx.request.body;
   const requiredDataKeys = ['update_id'];
@@ -23,12 +23,15 @@ export const updateGet = (ctx) => {
   }
 
   // Fetching the details of the update and returning a response
-  const latestUpdate = db.updates.findOne({ update_id: body.update_id });
+  const latestUpdate = await prisma.updates.findFirst({
+    where: { id: Number(body.update_id) },
+    orderBy: { id: 'desc' },
+  });
 
   if (latestUpdate) {
     let responseBody = {
       ok: true,
-      update_id: latestUpdate.update_id,
+      update_id: latestUpdate.id,
       is_cancelled: latestUpdate.is_cancelled,
       run_migrations: latestUpdate.run_migrations,
       rollback_migrations: latestUpdate.rollback_migrations,
@@ -55,7 +58,7 @@ export const updateGet = (ctx) => {
   }
 };
 
-export const updateCreate = (ctx) => {
+export const updateCreate = async (ctx) => {
   // Ensuring we have required data in the request
   const body = ctx.request.body;
   const requiredDataKeys = [
@@ -78,21 +81,19 @@ export const updateCreate = (ctx) => {
   const updateRequestedBy = getRequesterIdentity(ctx.request);
 
   for (const stack_id of body.stack_ids) {
-    const lastUpdate = db.updates.findOne({ stack_id: stack_id });
+    const lastUpdate = await prisma.updates.findFirst({
+      where: { stack_id: stack_id },
+      orderBy: { id: 'desc' },
+    });
     const isUpdating = isStackUpdating(lastUpdate);
 
     if (isUpdating) {
       continue;
     }
 
-    const lastUpdateHistory = db.updateHistory.save(lastUpdate);
-    const date = new Date();
-    db.updates.remove({ update_id: lastUpdateHistory?.update_id });
-
-    db.updates.save({
-      update_id: date.getTime() + '-' + stack_id,
+    const data = {
       update_requested_by: updateRequestedBy,
-      last_update_id: lastUpdateHistory?.update_id || undefined,
+      last_update_id: lastUpdate?.id || null,
       stack_id: stack_id,
       servers: [],
       servers_ready_to_switch: [],
@@ -100,7 +101,6 @@ export const updateCreate = (ctx) => {
       server_count: 0,
       server_ready_to_switch_count: 0,
       server_finished_count: 0,
-      created_at: date.toISOString(),
       is_cancelled: false, // not in use
 
       run_migrations: body.run_migrations,
@@ -111,22 +111,25 @@ export const updateCreate = (ctx) => {
 
       chosen_one: '',
       switch_code_at_date: 0,
+    } as Updates;
+
+    await prisma.updates.create({
+      data,
     });
 
-    db.servers.update(
-      { stack_id: stack_id },
-      {
+    await prisma.servers.updateMany({
+      where: { stack_id: stack_id },
+      data: {
         server_app_updating_to_version: body.update_app_to,
         server_xapi_updating_to_version: body.update_xapi_to,
       },
-      { multi: true }
-    );
+    });
   }
 
   return response(ctx, 202, {});
 };
 
-export const updatePost = (ctx) => {
+export const updatePost = async (ctx) => {
   // Ensuring we have required data in the request
   const body = ctx.request.body;
   const requiredDataKeys = [
@@ -148,7 +151,11 @@ export const updatePost = (ctx) => {
   }
 
   // Fetching the details of the given update and returning a response
-  const latestUpdate = db.updates.findOne({ update_id: body.update_id });
+  const latestUpdate = await prisma.updates.findFirst({
+    where: { id: Number(body.update_id) },
+    orderBy: { id: 'desc' },
+  });
+
   if (!latestUpdate) {
     return response(ctx, 404, {
       ok: false,
@@ -169,7 +176,10 @@ export const updatePost = (ctx) => {
         latestUpdate['server_count'] = serverIdsCount + 1;
       }
 
-      db.updates.update({ update_id: body.update_id }, latestUpdate);
+      await prisma.updates.update({
+        where: { id: Number(body.update_id) },
+        data: latestUpdate,
+      });
       break;
 
     case 'installation':
@@ -193,7 +203,10 @@ export const updatePost = (ctx) => {
           Math.floor(Date.now() / 1000) + 20;
       }
 
-      db.updates.update({ update_id: body.update_id }, latestUpdate);
+      await prisma.updates.update({
+        where: { id: Number(body.update_id) },
+        data: latestUpdate,
+      });
       break;
 
     case 'finished':
@@ -202,7 +215,10 @@ export const updatePost = (ctx) => {
         latestUpdate['server_finished_count'] += 1;
       }
 
-      db.updates.update({ update_id: body.update_id }, latestUpdate);
+      await prisma.updates.update({
+        where: { id: Number(body.update_id) },
+        data: latestUpdate,
+      });
       break;
 
     default:
@@ -212,40 +228,42 @@ export const updatePost = (ctx) => {
       });
   }
 
-  db.servers.update(
-    {
-      server_id: body.server_id,
-    },
-    {
-      server_id: body.server_id,
-      server_update_stage: body.server_update_stage,
-      server_update_progress: body.server_update_progress,
-      server_update_message: body.server_update_message,
-      ...(body.server_update_stage === 'finished' && {
-        server_app_version: latestUpdate.update_app_to,
-        server_xapi_version: latestUpdate.update_xapi_to,
-        server_updated_at: new Date().toISOString(),
-      }),
-      server_app_updating_to_version: latestUpdate.update_app_to,
-      server_xapi_updating_to_version: latestUpdate.update_xapi_to,
-      server_is_chosen_one:
-        body.server_id === latestUpdate.chosen_one ? true : false,
-    },
-    { upsert: true }
-  );
+  const data = {
+    server_id: body.server_id,
+    server_update_stage: body.server_update_stage,
+    server_update_progress: body.server_update_progress,
+    server_update_message: body.server_update_message,
+    ...(body.server_update_stage === 'finished' && {
+      server_app_version: latestUpdate.update_app_to,
+      server_xapi_version: latestUpdate.update_xapi_to,
+      server_updated_at: new Date(),
+    }),
+    server_app_updating_to_version: latestUpdate.update_app_to,
+    server_xapi_updating_to_version: latestUpdate.update_xapi_to,
+    server_is_chosen_one:
+      body.server_id === latestUpdate.chosen_one ? true : false,
+  } as Servers;
+
+  await prisma.servers.update({
+    where: { server_id: body.server_id },
+    data,
+  });
 
   responseBody.ok = true;
 
   return response(ctx, 200, responseBody);
 };
 
-export const getStacksAvailableForUpdate = (ctx: any) => {
-  const servers = db.servers.find() as ServerProps[];
+export const getStacksAvailableForUpdate = async (ctx: any) => {
+  const servers = await prisma.servers.findMany();
 
   const output = {};
 
   for (const server of servers) {
-    const update = db.updates.findOne({ stack_id: server.stack_id });
+    const update = await prisma.updates.findFirst({
+      where: { stack_id: server.stack_id },
+      orderBy: { id: 'desc' },
+    });
 
     const isUpdating = isStackUpdating(update);
 
@@ -271,9 +289,9 @@ export const getStacksAvailableForUpdate = (ctx: any) => {
   return response(ctx, 200, responseBody);
 };
 
-export const getUpdatingStacks = (ctx: any) => {
-  const servers = db.servers.find() as ServerProps[];
-  const updates = db.updates.find();
+export const getUpdatingStacks = async (ctx: any) => {
+  const servers = await prisma.servers.findMany();
+  const updates = await prisma.updates.findMany();
 
   const updatingStacks = new Set<string>();
   const startingUpdateStacks = new Set<string>();

@@ -1,20 +1,19 @@
-import db from 'diskdb';
-import { logEvent } from './logs';
+import prisma from '../../prisma/prismaClient';
 import groupBy from '../helpers/groupBy';
 import response from '../helpers/returnResponse';
+import { Servers } from '@prisma/client';
 
-export const deleteServer = (ctx) => {
+export const deleteServer = async (ctx) => {
   const body = ctx.request.body;
 
   if (!body.server_id) {
     return response(ctx, 400);
   }
-  db.servers.remove({ server_id: body.server_id }, true);
-  logEvent({ event: 'Server Deleted', payload: body.server_id });
+  await prisma.servers.delete({ where: { server_id: body.server_id } });
   return response(ctx, 204);
 };
 
-export const getServers = (ctx) => {
+export const getServers = async (ctx) => {
   const urlParams = ctx.query;
 
   if (urlParams.groupBy) {
@@ -22,14 +21,15 @@ export const getServers = (ctx) => {
 
     delete urlParams.groupBy;
 
-    const stacks = db.servers.find(urlParams);
+    const stacks = await prisma.servers.findMany({ where: urlParams });
 
-    return response(
+    return response<{ [stackId: string]: Servers[] }[]>(
       ctx,
       200,
       groupBy(stacks, (server) => server[groupByValue])
     );
   } else {
-    return response(ctx, 200, db.servers.find(urlParams));
+    const data = await prisma.servers.findMany({ where: urlParams });
+    return response<Servers[]>(ctx, 200, data);
   }
 };

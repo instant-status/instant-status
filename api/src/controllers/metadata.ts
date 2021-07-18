@@ -1,9 +1,9 @@
-import db from 'diskdb';
-import { ServerProps } from '../../../types/globalTypes';
+import prisma from '../../prisma/prismaClient';
 import response from '../helpers/returnResponse';
 
-export const getMetadata = (ctx: any) => {
-  const servers = db.servers.find() as ServerProps[];
+export const getMetadata = async (ctx: any) => {
+  const servers = await prisma.servers.findMany();
+
   const stacks = new Set(servers.map((server) => server.stack_id));
   const versions = new Set(servers.map((server) => server.server_app_version));
 

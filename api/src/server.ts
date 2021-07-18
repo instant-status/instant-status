@@ -3,8 +3,6 @@ import json from 'koa-json';
 import bodyParser from 'koa-bodyparser';
 import cors from '@koa/cors';
 
-import db from 'diskdb';
-
 import router from './routes/routes';
 import { isRequestAllowed } from './controllers/auth';
 import APP_CONFIG from '../../config/appConfig';
@@ -22,8 +20,6 @@ app.use((ctx, next) => {
     ctx.status = 401;
   }
 });
-
-db.connect('../data/', ['servers', 'updates', 'updateHistory']);
 
 app.use(router.routes()).use(router.allowedMethods());
 

@@ -37,12 +37,12 @@ export const SidebarButton = styled(ButtonBase)`
 `;
 
 export const UpdateButton = styled(ButtonBase)`
-  color: ${(props) => props.theme.color.green};
-  border: 4px solid ${(props) => props.theme.color.green};
+  color: ${(props) => props.theme.color.purple};
+  border: 4px solid ${(props) => props.theme.color.purple};
 
   &:hover:not(:disabled) {
     color: ${(props) => props.theme.color.darkTwo};
-    background-color: ${(props) => props.theme.color.green};
+    background-color: ${(props) => props.theme.color.purple};
   }
 `;
 
