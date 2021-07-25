@@ -47,8 +47,7 @@ export const getRequesterIdentity = (request: {
     formatAuthorisationToken(request.headers.authorization)
   ) as { emails: string[] };
 
-  const requesterIdentity =
-    decodedJWT?.emails?.[0] || 'unknown.user@example.com';
+  const requesterIdentity = decodedJWT?.emails?.[0] || null;
 
   return requesterIdentity;
 };

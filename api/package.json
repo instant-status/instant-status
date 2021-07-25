@@ -4,8 +4,8 @@
   "description": "API",
   "main": "src/server.ts",
   "scripts": {
-    "dev": "ts-node-dev --respawn src/server.ts",
-    "start": "ts-node src/server.ts",
+    "dev": "dotenv -e ../config/.prisma.env -- ts-node-dev --respawn src/server.ts",
+    "start": "dotenv -e ../config/.prisma.env -- ts-node src/server.ts",
     "db:dev-push": "dotenv -e ../config/.prisma.env -- prisma db push",
     "db:dev-migrate": "dotenv -e ../config/.prisma.env -- prisma migrate dev",
     "db:dev-seed": "dotenv -e ../config/.prisma.env -- prisma db seed --preview-feature",

@@ -23,9 +23,8 @@ export const updateGet = async (ctx) => {
   }
 
   // Fetching the details of the update and returning a response
-  const latestUpdate = await prisma.updates.findFirst({
+  const latestUpdate = await prisma.updates.findUnique({
     where: { id: Number(body.update_id) },
-    orderBy: { id: 'desc' },
   });
 
   if (latestUpdate) {
@@ -151,9 +150,8 @@ export const updatePost = async (ctx) => {
   }
 
   // Fetching the details of the given update and returning a response
-  const latestUpdate = await prisma.updates.findFirst({
+  const latestUpdate = await prisma.updates.findUnique({
     where: { id: Number(body.update_id) },
-    orderBy: { id: 'desc' },
   });
 
   if (!latestUpdate) {
@@ -168,18 +166,19 @@ export const updatePost = async (ctx) => {
   switch (body.server_update_stage) {
     case 'election':
       if (!latestUpdate['servers'].includes(body.server_id)) {
-        const serverIdsCount = latestUpdate['servers'].length;
-        if (serverIdsCount < 1) {
-          latestUpdate['chosen_one'] = body.server_id;
-        }
-        latestUpdate['servers'].push(body.server_id);
-        latestUpdate['server_count'] = serverIdsCount + 1;
-      }
+        const doesChosenOneExist = latestUpdate['chosen_one'];
 
-      await prisma.updates.update({
-        where: { id: Number(body.update_id) },
-        data: latestUpdate,
-      });
+        await prisma.updates.update({
+          where: { id: Number(body.update_id) },
+          data: {
+            servers: { push: body.server_id },
+            server_count: {
+              increment: 1,
+            },
+            ...(!doesChosenOneExist && { chosen_one: body.server_id }),
+          },
+        });
+      }
       break;
 
     case 'installation':
@@ -194,31 +193,35 @@ export const updatePost = async (ctx) => {
 
     case 'ready-to-switch':
       if (!latestUpdate['servers_ready_to_switch'].includes(body.server_id)) {
-        latestUpdate['servers_ready_to_switch'].push(body.server_id);
-        latestUpdate['server_ready_to_switch_count'] += 1;
-      }
+        const isServerChosenOne = latestUpdate['chosen_one'] === body.server_id;
 
-      if (latestUpdate['chosen_one'] === body.server_id) {
-        latestUpdate['switch_code_at_date'] =
-          Math.floor(Date.now() / 1000) + 20;
+        await prisma.updates.update({
+          where: { id: Number(body.update_id) },
+          data: {
+            servers_ready_to_switch: { push: body.server_id },
+            server_ready_to_switch_count: {
+              increment: 1,
+            },
+            ...(isServerChosenOne && {
+              switch_code_at_date: Math.floor(Date.now() / 1000) + 20,
+            }),
+          },
+        });
       }
-
-      await prisma.updates.update({
-        where: { id: Number(body.update_id) },
-        data: latestUpdate,
-      });
       break;
 
     case 'finished':
       if (!latestUpdate['servers_finished'].includes(body.server_id)) {
-        latestUpdate['servers_finished'].push(body.server_id);
-        latestUpdate['server_finished_count'] += 1;
+        await prisma.updates.update({
+          where: { id: Number(body.update_id) },
+          data: {
+            servers_finished: { push: body.server_id },
+            server_finished_count: {
+              increment: 1,
+            },
+          },
+        });
       }
-
-      await prisma.updates.update({
-        where: { id: Number(body.update_id) },
-        data: latestUpdate,
-      });
       break;
 
     default:
