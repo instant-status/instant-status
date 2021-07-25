@@ -8,6 +8,7 @@ import { createGlobalStyle, ThemeProvider } from "styled-components";
 import { QueryParamProvider } from "use-query-params";
 
 import DevMenu from "./components/DevTools/DevMenu";
+import AdminStacks from "./containers/Admin/AdminStacks";
 import AutoLogin from "./containers/Auth/AutoLogin";
 import Login from "./containers/Auth/Login";
 import Logout from "./containers/Auth/Logout";
@@ -84,7 +85,18 @@ const App = () => {
                       <Logout />
                     </Route>
                     <Route path="/">
-                      {isLoggedIn ? <StatusPage /> : <Redirect to="/login" />}
+                      {isLoggedIn ? (
+                        <Switch location={location} key={location.pathname}>
+                          <Route path="/" exact>
+                            <StatusPage />
+                          </Route>
+                          <Route path="/admin/stacks">
+                            <AdminStacks />
+                          </Route>
+                        </Switch>
+                      ) : (
+                        <Redirect to="/login" />
+                      )}
                     </Route>
                   </Switch>
                 )}
