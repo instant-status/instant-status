@@ -1,8 +1,8 @@
 import React, { useContext, useEffect, useState } from "react";
 
+import Checkbox from "../../components/Controls/Checkbox";
+import Stack from "../../components/Layout/Stack";
 import { globalStoreContext } from "../../store/globalStore";
-import Checkbox from "../Controls/Checkbox";
-import Stack from "../Layout/Stack";
 
 const VersionFilters = (props: { versions: string[] }) => {
   const [isCheckedArray, setIsCheckedArray] = useState(props.versions);

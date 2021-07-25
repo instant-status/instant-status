@@ -8,12 +8,12 @@ import { createGlobalStyle, ThemeProvider } from "styled-components";
 import { QueryParamProvider } from "use-query-params";
 
 import DevMenu from "./components/DevTools/DevMenu";
-import AdminStacks from "./containers/Admin/AdminStacks";
-import AutoLogin from "./containers/Auth/AutoLogin";
-import Login from "./containers/Auth/Login";
-import Logout from "./containers/Auth/Logout";
-import StatusPage from "./containers/StatusPage";
 import useIsLoggedIn from "./hooks/useIsLoggedIn";
+import AdminStacks from "./pages/Admin/AdminStacks";
+import AutoLogin from "./pages/Auth/AutoLogin";
+import Login from "./pages/Auth/Login";
+import Logout from "./pages/Auth/Logout";
+import StatusPage from "./pages/StatusOverview/StatusPage";
 import { StoreProvider } from "./store/globalStore";
 import theme from "./utils/theme";
 

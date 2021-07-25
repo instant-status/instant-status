@@ -7,21 +7,11 @@ import styled from "styled-components";
 import { ServerProps } from "../../../../types/globalTypes";
 import apiRoutes from "../../api/apiRoutes";
 import logo from "../../assets/logo.svg";
-import CreateUpdateModal from "../../containers/UpdateSteps/CreateUpdateModal";
+import CreateUpdateModal from "../../pages/UpdateSteps/CreateUpdateModal";
 import { globalStoreContext } from "../../store/globalStore";
 import Card from "../Card/Card";
 import SearchBar from "../Controls/SearchBar";
-
-const Page = styled.main`
-  background-color: ${(props) => props.theme.color.darkTwo};
-  width: 100%;
-  min-height: 100vh;
-  border-radius: 40px 0 0 0;
-  padding: 30px 16px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-`;
+import Page from "./Page";
 
 const Grid = styled.div`
   width: 100%;
