@@ -39,7 +39,7 @@
   "devDependencies": {
     "@types/jsonwebtoken": "8.5.4",
     "@types/koa": "2.13.4",
-    "@types/koa-bodyparser": "4.3.2",
+    "@types/koa-bodyparser": "4.3.3",
     "@types/koa-json": "2.0.20",
     "@types/koa__cors": "3.0.3",
     "@types/koa__router": "8.0.7",
