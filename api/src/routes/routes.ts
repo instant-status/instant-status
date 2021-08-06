@@ -7,6 +7,7 @@ import {
   updatePost,
   getStacksAvailableForUpdate,
   getUpdatingStacks,
+  updateGetLatest,
 } from '../controllers/update';
 import { getMetadata } from '../controllers/metadata';
 
@@ -32,6 +33,7 @@ router.post('/v2/check-in', checkIn);
 router.delete('/v2/server/delete', deleteServer);
 
 // Update
+router.get('/v2/updates/latest', updateGetLatest);
 router.post('/v2/update/create', updateCreate);
 
 // Metadata

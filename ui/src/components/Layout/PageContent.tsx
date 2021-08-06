@@ -2,16 +2,19 @@ import { AnimatePresence, AnimateSharedLayout } from "framer-motion";
 import { observer } from "mobx-react-lite";
 import React, { useContext } from "react";
 import { useQuery } from "react-query";
+import { useHistory } from "react-router";
 import styled from "styled-components";
 
 import { ServerProps } from "../../../../types/globalTypes";
 import apiRoutes from "../../api/apiRoutes";
 import logo from "../../assets/logo.svg";
+import { SmallButton } from "../../components/Controls/Buttons";
 import CreateUpdateModal from "../../pages/UpdateSteps/CreateUpdateModal";
 import { globalStoreContext } from "../../store/globalStore";
+import theme from "../../utils/theme";
 import Card from "../Card/Card";
-import SearchBar from "../Controls/SearchBar";
 import Page from "./Page";
+import PageHeader from "./PageHeader";
 
 const Grid = styled.div`
   width: 100%;
@@ -36,6 +39,8 @@ const PageContent = observer(() => {
 
   const refetchInterval = 8000; // Refetch the data every 8 seconds
 
+  const history = useHistory();
+
   const stacksQuery = useQuery(`stacksData`, apiRoutes.apiGetStacks, {
     refetchInterval,
   });
@@ -58,7 +63,17 @@ const PageContent = observer(() => {
 
   return (
     <Page>
-      <SearchBar />
+      <PageHeader
+      // contentRight={
+      //   <SmallButton
+      //     onClick={() => history.push(`/admin/stacks`)}
+      //     $color={theme.color.lightOne}
+      //     $variant="ghost"
+      //   >
+      //     Administration
+      //   </SmallButton>
+      // }
+      />
       <AnimateSharedLayout>
         <Grid>
           {stacks.length > 0 ? (

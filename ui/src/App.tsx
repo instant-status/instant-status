@@ -9,6 +9,7 @@ import { QueryParamProvider } from "use-query-params";
 
 import DevMenu from "./components/DevTools/DevMenu";
 import useIsLoggedIn from "./hooks/useIsLoggedIn";
+import Admin from "./pages/Admin/Admin";
 import AdminStacks from "./pages/Admin/AdminStacks";
 import AutoLogin from "./pages/Auth/AutoLogin";
 import Login from "./pages/Auth/Login";
@@ -87,12 +88,13 @@ const App = () => {
                     <Route path="/">
                       {isLoggedIn ? (
                         <Switch location={location} key={location.pathname}>
-                          <Route path="/" exact>
-                            <StatusPage />
-                          </Route>
-                          <Route path="/admin/stacks">
-                            <AdminStacks />
-                          </Route>
+                          <Route exact path="/admin" component={Admin} />
+                          <Route
+                            exact
+                            path="/admin/stacks"
+                            component={AdminStacks}
+                          />
+                          <Route path="*" component={StatusPage} />
                         </Switch>
                       ) : (
                         <Redirect to="/login" />

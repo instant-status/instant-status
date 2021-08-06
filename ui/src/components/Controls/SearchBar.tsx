@@ -10,7 +10,6 @@ const StyledSearchBar = styled.input`
   font-size: 24px;
   height: 40px;
   margin-bottom: 30px;
-  max-width: 570px;
   text-align: center;
   width: 100%;
 `;

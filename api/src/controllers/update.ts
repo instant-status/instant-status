@@ -7,6 +7,26 @@ import isStackUpdating from '../helpers/isStackUpdating';
 import prisma from '../../prisma/prismaClient';
 import { Servers, Updates } from '@prisma/client';
 
+export const updateGetLatest = async (ctx) => {
+  // Ensuring we have required data in the request
+  const body = ctx.request.body;
+
+  // Fetching the details of the update and returning a response
+  const latestUpdates = await prisma.updates.findMany({
+    distinct: ['stack_id'],
+    orderBy: { id: 'desc' },
+  });
+
+  if (latestUpdates) {
+    return response(ctx, 200, latestUpdates);
+  } else {
+    return response(ctx, 404, {
+      ok: false,
+      message: `No updates found.`,
+    });
+  }
+};
+
 export const updateGet = async (ctx) => {
   // Ensuring we have required data in the request
   const body = ctx.request.body;

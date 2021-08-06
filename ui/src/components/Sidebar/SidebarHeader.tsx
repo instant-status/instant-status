@@ -1,19 +1,23 @@
 import APP_CONFIG from "@config/appConfig";
 import React from "react";
+import { Link } from "react-router-dom";
 import styled from "styled-components";
+
 import theme from "../../utils/theme";
 
 const Header = styled.header`
   display: flex;
   align-items: center;
   margin-bottom: 30px;
+  padding-left: 20px;
 `;
 
-const Logo = styled.div`
+const Logo = styled(Link)`
   width: 100%;
   max-width: 50px;
   margin-right: 10px;
   flex-shrink: 0;
+  cursor: pointer;
 `;
 
 const PageInfo = styled.div`
@@ -34,7 +38,7 @@ const AppName = styled.h1`
 const SidebarHeader = (props: { stackCount: number; serverCount: number }) => {
   return (
     <Header>
-      <Logo onClick={() => (window.location.href = `/`)}>
+      <Logo to={`/`}>
         <svg
           xmlns="http://www.w3.org/2000/svg"
           xmlnsXlink="http://www.w3.org/1999/xlink"

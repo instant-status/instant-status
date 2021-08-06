@@ -35,14 +35,17 @@ const StatusSidebar = observer(() => {
 
   return (
     <Sidebar
-      stackCount={sidebarQuery.data?.stackCount || 0}
-      serverCount={sidebarQuery.data?.serverCount || 0}
+      stackCount={sidebarQuery.data?.stackCount}
+      serverCount={sidebarQuery.data?.serverCount}
     >
-      <section>
+      <Stack
+        as="section"
+        direction="down"
+        spacing={4}
+        style={{ paddingLeft: `20px` }}
+      >
         <SidebarSectionHeader>Versions</SidebarSectionHeader>
         <VersionFilters versions={sidebarQuery.data?.activeVersions || []} />
-      </section>
-      <Stack as="section" direction="down" spacing={4}>
         <SidebarSectionHeader>Settings</SidebarSectionHeader>
         <Stack as={SidebarPaddingContainer} direction="down" spacing={4}>
           <SelectInput
