@@ -1,8 +1,8 @@
 import React, { memo } from "react";
 import styled from "styled-components";
 
-import PageContent from "../components/Layout/PageContent";
-import Sidebar from "../components/Sidebar/Sidebar";
+import PageContent from "../../components/Layout/PageContent";
+import StatusSidebar from "./StatusSidebar";
 
 const Wrapper = styled.div`
   display: flex;
@@ -11,7 +11,7 @@ const Wrapper = styled.div`
 const StatusPage = () => {
   return (
     <Wrapper>
-      <Sidebar />
+      <StatusSidebar />
       <PageContent />
     </Wrapper>
   );

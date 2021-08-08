@@ -8,11 +8,13 @@ import { createGlobalStyle, ThemeProvider } from "styled-components";
 import { QueryParamProvider } from "use-query-params";
 
 import DevMenu from "./components/DevTools/DevMenu";
-import AutoLogin from "./containers/Auth/AutoLogin";
-import Login from "./containers/Auth/Login";
-import Logout from "./containers/Auth/Logout";
-import StatusPage from "./containers/StatusPage";
 import useIsLoggedIn from "./hooks/useIsLoggedIn";
+import Admin from "./pages/Admin/Admin";
+import AdminStacks from "./pages/Admin/AdminStacks";
+import AutoLogin from "./pages/Auth/AutoLogin";
+import Login from "./pages/Auth/Login";
+import Logout from "./pages/Auth/Logout";
+import StatusPage from "./pages/StatusOverview/StatusPage";
 import { StoreProvider } from "./store/globalStore";
 import theme from "./utils/theme";
 
@@ -84,7 +86,19 @@ const App = () => {
                       <Logout />
                     </Route>
                     <Route path="/">
-                      {isLoggedIn ? <StatusPage /> : <Redirect to="/login" />}
+                      {isLoggedIn ? (
+                        <Switch location={location} key={location.pathname}>
+                          <Route exact path="/admin" component={Admin} />
+                          <Route
+                            exact
+                            path="/admin/stacks"
+                            component={AdminStacks}
+                          />
+                          <Route path="*" component={StatusPage} />
+                        </Switch>
+                      ) : (
+                        <Redirect to="/login" />
+                      )}
                     </Route>
                   </Switch>
                 )}

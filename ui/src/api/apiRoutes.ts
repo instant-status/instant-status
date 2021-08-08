@@ -40,6 +40,10 @@ export interface CreateUpdateProps {
   update_xapi_to: string;
 }
 
+const apiGetLatestUpdates = () => {
+  return apiFetch(`${APP_CONFIG.DATA_URL}/v2/updates/latest`);
+};
+
 const apiCreateUpdate = (payload: { body: CreateUpdateProps }) => {
   return apiPost(`${APP_CONFIG.DATA_URL}/v2/update/create`, payload.body);
 };
@@ -54,6 +58,7 @@ const apiGetUpdatingStacks = () => {
 
 export default {
   apiGetStacks,
+  apiGetLatestUpdates,
   apiCreateUpdate,
   apiGetStacksAvailableForUpdate,
   apiGetUpdatingStacks,
