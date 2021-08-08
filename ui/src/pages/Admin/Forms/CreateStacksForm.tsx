@@ -93,7 +93,7 @@ const CreateStacksForm = (props: CreateStacksFormProps) => {
       <Stack justify="center">
         <TagInput
           name="stackIds"
-          label="Stack IDs"
+          label="Stack IDs:"
           onKeyUp={setStackName}
           values={stackNames}
           removeValue={removeStackName}

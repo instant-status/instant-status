@@ -61,7 +61,7 @@ const StatusPage = () => {
                   $color={theme.color.lightOne}
                   $variant="primary"
                 >
-                  Create Stack
+                  Create Stacks
                 </SmallButton>
               )}
             </Stack>
