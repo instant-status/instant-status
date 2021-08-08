@@ -1,4 +1,3 @@
-import { lighten } from "polished";
 import { NavLink } from "react-router-dom";
 import styled from "styled-components";
 
@@ -7,6 +6,7 @@ import theme from "../../utils/theme";
 const SidebarListTab = styled(NavLink).attrs({
   activeStyle: {
     backgroundColor: theme.color.darkTwo,
+    color: theme.color.lightOne,
   },
 })`
   cursor: pointer;
@@ -14,7 +14,6 @@ const SidebarListTab = styled(NavLink).attrs({
 
   padding: 0.6rem 1.4rem;
   font-size: 1.13rem;
-  /* font-weight: 600; */
   text-decoration: none;
   color: lightseagreen;
 

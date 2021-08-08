@@ -18,9 +18,6 @@ const AdminSidebar = () => {
       serverCount={sidebarQuery.data?.serverCount}
     >
       <Stack direction="down" spacing={4}>
-        <SidebarListTab to={`/`} exact={true}>
-          Status Page
-        </SidebarListTab>
         <SidebarListTab to={`/admin/stacks`}>Manage Stacks</SidebarListTab>
       </Stack>
     </Sidebar>

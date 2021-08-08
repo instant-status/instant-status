@@ -6,7 +6,9 @@ import theme from "../../utils/theme";
 
 const Tab = styled(NavLink).attrs({
   activeStyle: {
-    backgroundColor: theme.color.darkTwo,
+    backgroundColor: theme.color.lightOne,
+    color: theme.color.darkTwo,
+    fill: theme.color.darkTwo,
   },
 })`
   width: 100%;
@@ -14,11 +16,11 @@ const Tab = styled(NavLink).attrs({
   flex-direction: column;
   border: none;
   align-items: center;
-  color: lightseagreen;
-  fill: lightseagreen;
   cursor: pointer;
+  color: ${({ theme }) => theme.color.lightOne};
+  fill: ${({ theme }) => theme.color.lightOne};
   text-decoration: none;
-  padding: 1rem 0;
+  padding: 0.5rem 0;
   transition: background-color 0.15s ease-out;
   font-size: 1.5em;
   background-color: ${({ theme }) => theme.color.darkOne};
@@ -30,7 +32,9 @@ const Tab = styled(NavLink).attrs({
 
 const Text = styled.div`
   font-size: 0.6em;
-  margin-top: 0.2em;
+  font-weight: 600;
+  font-size: 14px;
+  letter-spacing: 0.4px;
 `;
 
 interface SidebarTabProps {
