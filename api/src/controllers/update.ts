@@ -8,9 +8,6 @@ import prisma from '../../prisma/prismaClient';
 import { Servers, Updates } from '@prisma/client';
 
 export const updateGetLatest = async (ctx) => {
-  // Ensuring we have required data in the request
-  const body = ctx.request.body;
-
   // Fetching the details of the update and returning a response
   const latestUpdates = await prisma.updates.findMany({
     distinct: ['stack_id'],
