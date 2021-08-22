@@ -4,7 +4,7 @@ const ALLOWED_DATA = <const>[
   "last_update_id",
   "stack_region",
   "stack_environment",
-  "stack_logo",
+  "stack_logo_url",
   "stack_app_url",
   "stack_logs_url",
   "server_name",

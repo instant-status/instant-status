@@ -27,7 +27,7 @@ const CreateStacksForm = (props: CreateStacksFormProps) => {
   const [xapiVersion, setXapiVersion] = useState(``);
 
   const mutation = useMutation((payload: CreateUpdateProps) =>
-    apiRoutes.apiCreateUpdate({ body: payload }),
+    apiRoutes.apiCreateStack({ body: payload }),
   );
 
   const clearForm = () => {

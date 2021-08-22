@@ -35,7 +35,7 @@ const TableHeader = styled.th`
 `;
 
 interface AdminStacksTable {
-  stacks: { stack_id: string; created_at: string }[];
+  stacks: { id: number; name: string; created_at: string }[];
 }
 
 const AdminStacksTable = (props: AdminStacksTable) => {
@@ -51,8 +51,8 @@ const AdminStacksTable = (props: AdminStacksTable) => {
         {props.stacks
           .sort((a, b) => b.created_at.localeCompare(a.created_at))
           .map((update) => (
-            <TableRow key={update.stack_id}>
-              <TableCell>{update.stack_id}</TableCell>
+            <TableRow key={update.id}>
+              <TableCell>{update.name}</TableCell>
               <TableCell>
                 <SmallButton
                   $color="red"

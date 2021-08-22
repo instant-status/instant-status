@@ -3,7 +3,7 @@ import { observer } from "mobx-react-lite";
 import React, { useContext } from "react";
 import styled from "styled-components";
 
-import { ServerProps } from "../../../../types/globalTypes";
+import { ServerProps, StackProps } from "../../../../types/globalTypes";
 import { globalStoreContext } from "../../store/globalStore";
 import CardFooter from "./CardFooter";
 import CardHeader from "./CardHeader";
@@ -19,65 +19,60 @@ const CardBackground = styled(motion.div)`
   flex-direction: column;
 `;
 
-const Card = observer(
-  (props: {
-    servers: ServerProps[];
-    isUpdating: boolean;
-    isStartingUpdate: boolean;
-  }) => {
-    const store = useContext(globalStoreContext);
+const Card = observer((props: { stack: StackProps }) => {
+  const store = useContext(globalStoreContext);
 
-    const stackLogsUrl = props.servers.find(
-      (server) => server.stack_logs_url,
-    )?.stack_logs_url;
-    const stackAppUrl = props.servers.find(
-      (server) => server.stack_app_url,
-    )?.stack_app_url;
-    const stackId = props.servers.find((server) => server.stack_id)?.stack_id;
-    const stackLogo = props.servers.find(
-      (server) => server.stack_logo,
-    )?.stack_logo;
-    const serverAppVersion = props.servers.find(
-      (server) => server.server_app_version,
-    )?.server_app_version;
-    const serverXapiVersion = props.servers.find(
-      (server) => server.server_xapi_version,
-    )?.server_xapi_version;
+  const servers = props.stack.servers;
 
-    return (
-      <CardBackground layout>
-        <CardHeader stackId={stackId} stackLogo={stackLogo} />
-        {props.servers
-          .sort((a: ServerProps, b: ServerProps) =>
-            a.server_public_ip.localeCompare(b.server_public_ip),
-          )
-          .sort((a: ServerProps, b: ServerProps) =>
-            a.server_is_chosen_one < b.server_is_chosen_one ? 1 : -1,
-          )
-          .slice(0, store.serverDisplayCount)
-          .map((server, i) => {
-            if (i + 1 <= store.serverDisplayCount) {
-              return (
-                <CardServer
-                  key={server.server_id}
-                  server={server}
-                  isUpdating={props.isUpdating}
-                  isStartingUpdate={props.isStartingUpdate}
-                />
-              );
-            }
-          })}
-        <CardFooter
-          stackLogsUrl={stackLogsUrl}
-          stackAppUrl={stackAppUrl}
-          stackId={stackId}
-          serverAppVersion={serverAppVersion}
-          serverXapiVersion={serverXapiVersion}
-          isUpdating={props.isUpdating}
-        />
-      </CardBackground>
-    );
-  },
-);
+  const isStartingUpdate = Boolean(
+    props.stack.updates.find((update) => update.server_count === 0),
+  );
+
+  const isUpdating = Boolean(
+    servers.find((server) => server.server_update_progress !== 100) ||
+      props.stack.updates.find((update) => update.server_count === 0),
+  );
+
+  const serverAppVersion = servers.find(
+    (server) => server.server_app_version,
+  )?.server_app_version;
+  const serverXapiVersion = servers.find(
+    (server) => server.server_xapi_version,
+  )?.server_xapi_version;
+
+  return (
+    <CardBackground layout>
+      <CardHeader stackId={props.stack.name} stackLogo={props.stack.logo_url} />
+      {servers
+        .sort((a: ServerProps, b: ServerProps) =>
+          a.server_public_ip.localeCompare(b.server_public_ip),
+        )
+        .sort((a: ServerProps, b: ServerProps) =>
+          a.server_is_chosen_one < b.server_is_chosen_one ? 1 : -1,
+        )
+        .slice(0, store.serverDisplayCount)
+        .map((server, i) => {
+          if (i + 1 <= store.serverDisplayCount) {
+            return (
+              <CardServer
+                key={server.server_id}
+                server={server}
+                isUpdating={isUpdating}
+                isStartingUpdate={isStartingUpdate}
+              />
+            );
+          }
+        })}
+      <CardFooter
+        stackLogsUrl={props.stack.logs_url}
+        stackAppUrl={props.stack.app_url}
+        stackId={props.stack.id}
+        serverAppVersion={serverAppVersion}
+        serverXapiVersion={serverXapiVersion}
+        isUpdating={isUpdating}
+      />
+    </CardBackground>
+  );
+});
 
 export default Card;

@@ -44,6 +44,14 @@ const apiGetLatestUpdates = () => {
   return apiFetch(`${APP_CONFIG.DATA_URL}/v2/updates/latest`);
 };
 
+const apiGetStacksList = () => {
+  return apiFetch(`${APP_CONFIG.DATA_URL}/v2/stacks`);
+};
+
+const apiCreateStack = (payload: { body: CreateUpdateProps }) => {
+  return apiPost(`${APP_CONFIG.DATA_URL}/v2/stack`, payload.body);
+};
+
 const apiCreateUpdate = (payload: { body: CreateUpdateProps }) => {
   return apiPost(`${APP_CONFIG.DATA_URL}/v2/update/create`, payload.body);
 };
@@ -57,6 +65,8 @@ const apiGetUpdatingStacks = () => {
 };
 
 export default {
+  apiGetStacksList,
+  apiCreateStack,
   apiGetStacks,
   apiGetLatestUpdates,
   apiCreateUpdate,

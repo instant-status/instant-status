@@ -11,6 +11,12 @@ import {
 } from '../controllers/update';
 import { getMetadata } from '../controllers/metadata';
 
+import {
+  listStacks,
+  getIdByName,
+  createStack,
+  deleteStack,
+} from '../controllers/stack';
 import { deleteServer, getServers } from '../controllers/servers';
 
 import { authGoogle } from '../controllers/auth';
@@ -25,6 +31,12 @@ router.get('/auth/google/callback', authGoogle);
 
 // UI
 router.get('/v2/servers', getServers);
+
+// Stack
+router.get('/v2/stacks', listStacks);
+router.get('/v2/stack/get-id', getIdByName);
+router.post('/v2/stack', createStack);
+router.delete('/v2/stack', deleteStack);
 
 // Server Communication
 router.get('/v2/update', updateGet);

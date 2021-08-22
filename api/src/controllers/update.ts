@@ -98,7 +98,7 @@ export const updateCreate = async (ctx) => {
 
   for (const stack_id of body.stack_ids) {
     const lastUpdate = await prisma.updates.findFirst({
-      where: { stack_id: stack_id },
+      where: { stack_id: Number(stack_id) },
       orderBy: { id: 'desc' },
     });
     const isUpdating = isStackUpdating(lastUpdate);
@@ -110,7 +110,7 @@ export const updateCreate = async (ctx) => {
     const data = {
       update_requested_by: updateRequestedBy,
       last_update_id: lastUpdate?.id || null,
-      stack_id: stack_id,
+      stack_id: Number(stack_id),
       servers: [],
       servers_ready_to_switch: [],
       servers_finished: [],
@@ -134,7 +134,7 @@ export const updateCreate = async (ctx) => {
     });
 
     await prisma.servers.updateMany({
-      where: { stack_id: stack_id },
+      where: { stack_id: Number(stack_id) },
       data: {
         server_app_updating_to_version: body.update_app_to,
         server_xapi_updating_to_version: body.update_xapi_to,
@@ -313,8 +313,8 @@ export const getUpdatingStacks = async (ctx: any) => {
   const servers = await prisma.servers.findMany();
   const updates = await prisma.updates.findMany();
 
-  const updatingStacks = new Set<string>();
-  const startingUpdateStacks = new Set<string>();
+  const updatingStacks = new Set<number>();
+  const startingUpdateStacks = new Set<number>();
 
   for (const update of updates) {
     if (update.server_count === 0) {

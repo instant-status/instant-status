@@ -107,7 +107,7 @@ const CreateUpdateModal = observer(() => {
     }
   };
 
-  const stacksQuery = useQuery(
+  const oldStacksQuery = useQuery(
     `apiGetStacksAvailableForUpdate`,
     apiRoutes.apiGetStacksAvailableForUpdate,
     {
@@ -149,7 +149,7 @@ const CreateUpdateModal = observer(() => {
     setStacksToUpdate(stacks);
   };
 
-  const stacks = [...(stacksQuery.data || [])]
+  const stacks = [...(oldStacksQuery.data || [])]
     .map((environment) => {
       if (step !== UpdateStepTypes.pickOptions) {
         const filteredStacks = environment[1].filter(
@@ -174,6 +174,8 @@ const CreateUpdateModal = observer(() => {
     modalTitle = `Update Requested`;
   }
 
+  const stacksQuery = useQuery(`stacksData`, apiRoutes.apiGetStacksList);
+
   const closeModal = () => {
     let canClose = true;
 
@@ -190,6 +192,7 @@ const CreateUpdateModal = observer(() => {
         xapiVersion: undefined,
       });
       store.setIsUpdateModalOpen(false);
+      stacksQuery.refetch();
     }
   };
 

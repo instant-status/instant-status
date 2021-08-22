@@ -2,7 +2,7 @@ import { observer } from "mobx-react-lite";
 import { transparentize } from "polished";
 import React, { useContext } from "react";
 import styled from "styled-components";
-import { StringParam, useQueryParams } from "use-query-params";
+import { NumberParam, StringParam, useQueryParams } from "use-query-params";
 
 import { globalStoreContext } from "../../store/globalStore";
 import IconLogs from "../Icons/IconLogs";
@@ -49,7 +49,7 @@ const Text = styled.div`
 interface CardFooterProps {
   stackLogsUrl?: string;
   stackAppUrl?: string;
-  stackId?: string;
+  stackId?: number;
   serverAppVersion?: string;
   serverXapiVersion?: string;
   isUpdating: boolean;
@@ -57,7 +57,7 @@ interface CardFooterProps {
 
 const CardFooter = observer((props: CardFooterProps) => {
   const [, setQuery] = useQueryParams({
-    stackId: StringParam,
+    stackId: NumberParam,
     appVersion: StringParam,
     xapiVersion: StringParam,
   });
