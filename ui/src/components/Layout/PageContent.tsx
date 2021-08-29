@@ -48,7 +48,7 @@ const PageContent = observer(() => {
                 return (
                   store?.displayVersions === undefined ||
                   store.displayVersions.includes(
-                    stack?.servers[0].server_app_version,
+                    stack?.servers[0]?.server_app_version,
                   )
                 );
               })

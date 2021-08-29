@@ -29,11 +29,6 @@ model Servers {
   server_id                       String    @unique
   stack_id                        Int
   last_update_id                  Int?
-  stack_region                    String
-  stack_environment               String
-  stack_logo_url                  String
-  stack_app_url                   String
-  stack_logs_url                  String
   server_name                     String
   server_role                     String
   server_public_ip                String

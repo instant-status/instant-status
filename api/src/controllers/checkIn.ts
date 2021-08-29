@@ -84,6 +84,8 @@ export const checkIn = async (ctx) => {
         logs_url: body.stack_logs_url,
         logo_url: body.stack_logo_url,
         app_url: body.stack_app_url,
+        region: body.stack_region,
+        environment: body.stack_environment,
       },
     });
   }

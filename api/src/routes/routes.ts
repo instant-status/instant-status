@@ -5,8 +5,6 @@ import {
   updateCreate,
   updateGet,
   updatePost,
-  getStacksAvailableForUpdate,
-  getUpdatingStacks,
   updateGetLatest,
 } from '../controllers/update';
 import { getMetadata } from '../controllers/metadata';
@@ -50,7 +48,5 @@ router.post('/v2/update/create', updateCreate);
 
 // Metadata
 router.get('/v2/metadata', getMetadata);
-router.get('/v2/stacks/available-for-update', getStacksAvailableForUpdate);
-router.get('/v2/stacks/updating', getUpdatingStacks);
 
 export default router;

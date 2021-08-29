@@ -25,11 +25,13 @@ const Card = observer((props: { stack: StackProps }) => {
   const servers = props.stack.servers;
 
   const isStartingUpdate = Boolean(
-    props.stack.updates.find((update) => update.server_count === 0),
+    !servers.length ||
+      props.stack.updates.find((update) => update.server_count === 0),
   );
 
   const isUpdating = Boolean(
-    servers.find((server) => server.server_update_progress !== 100) ||
+    !servers.length ||
+      servers.find((server) => server.server_update_progress !== 100) ||
       props.stack.updates.find((update) => update.server_count === 0),
   );
 

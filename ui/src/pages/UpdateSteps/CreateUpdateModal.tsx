@@ -32,9 +32,8 @@ const StackColumnName = styled.h3`
 
 const Columns = styled.div`
   column-count: 4;
-  break-inside: avoid;
   & > * {
-    margin-bottom: 0.2rem;
+    padding-bottom: 0.2rem;
   }
 `;
 
@@ -186,7 +185,11 @@ const CreateUpdateModal = observer(() => {
       ...(groupedStack[stack.environment] || []),
       stack,
     ];
-    return groupedStack;
+
+    if (stack.servers.length > 0) {
+      return groupedStack;
+    }
+    return {};
   }, {} as { [key: string]: any });
 
   const groupedStacksArray = Object.entries(groupedStacks) as {
@@ -358,9 +361,10 @@ const CreateUpdateModal = observer(() => {
                 value={appVersion || ``}
                 disabled={step !== UpdateStepTypes.pickOptions}
                 name="update_app_to"
-                onChange={(event) =>
-                  setAppVersion(removeWhiteSpace(event.target.value))
-                }
+                onChange={(event) => {
+                  setAppVersion(removeWhiteSpace(event.target.value));
+                  setIsSafeToClose(false);
+                }}
               />
               <TextInput
                 label={
@@ -371,9 +375,10 @@ const CreateUpdateModal = observer(() => {
                 value={xapiVersion || ``}
                 disabled={step !== UpdateStepTypes.pickOptions}
                 name="update_xapi_to"
-                onChange={(event) =>
-                  setXapiVersion(removeWhiteSpace(event.target.value))
-                }
+                onChange={(event) => {
+                  setXapiVersion(removeWhiteSpace(event.target.value));
+                  setIsSafeToClose(false);
+                }}
               />
             </Stack>
             <Stack spacing={9} justify="start">
@@ -384,7 +389,10 @@ const CreateUpdateModal = observer(() => {
                     label={option.label}
                     name={option.name}
                     disabled={step !== UpdateStepTypes.pickOptions}
-                    onClick={() => toggleConfigCheckbox(option.name)}
+                    onClick={() => {
+                      toggleConfigCheckbox(option.name);
+                      setIsSafeToClose(false);
+                    }}
                     checked={updateOptions.includes(option.name)}
                   />
                 );

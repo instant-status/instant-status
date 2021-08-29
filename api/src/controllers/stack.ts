@@ -74,8 +74,6 @@ export const createStack = async (ctx) => {
       data: { name: stack_id },
     });
 
-    console.log(stack);
-
     const lastUpdate = await prisma.updates.findFirst({
       where: { stack_id: stack.id },
       orderBy: { id: 'desc' },
