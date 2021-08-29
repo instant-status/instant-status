@@ -34,7 +34,7 @@ const apiGetStacks = () => {
 };
 
 export interface CreateUpdateProps {
-  stack_ids: string[];
+  stack_ids: number[];
   run_migrations: boolean;
   update_app_to: string;
   update_xapi_to: string;

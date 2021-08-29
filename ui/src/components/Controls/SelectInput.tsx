@@ -11,10 +11,10 @@ const SelectInput = (props: {
     <InputBoxContainer>
       <Label>{props.label}</Label>
       <select onChange={props.onChange} value={props.value}>
-        <option value="stack_id">Stack A{`->`}Z</option>
-        <option value="!stack_id">Stack Z{`->`}A</option>
-        <option value="server_app_version">Version New{`->`}Old</option>
-        <option value="!server_app_version">Version Old{`->`}New</option>
+        <option value="name">Stack A{`->`}Z</option>
+        <option value="!name">Stack Z{`->`}A</option>
+        <option value="!stack.server_app_version">Version New{`->`}Old</option>
+        <option value="stack.server_app_version">Version Old{`->`}New</option>
       </select>
     </InputBoxContainer>
   );

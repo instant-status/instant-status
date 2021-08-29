@@ -52,23 +52,27 @@ const PageContent = observer(() => {
                   )
                 );
               })
-              // .sort((a, b) => {
-              //   console.log(a.servers[0]);
+              .sort((a, b) => {
+                let item1 = a; // First server
+                let item2 = b; // First server
 
-              //   const item1 = a.servers[0]; // First server
-              //   const item2 = b.servers[0]; // First server
+                let sortBy = store.orderBy.replace(`!`, ``);
 
-              //   const sortBy = store.orderBy.replace(
-              //     `!`,
-              //     ``,
-              //   ) as keyof ServerProps;
-              //   const sortByReverse = store.orderBy.startsWith(`!`);
-              //   if (sortByReverse) {
-              //     return item1[sortBy] < item2[sortBy] ? 1 : -1;
-              //   } else {
-              //     return item1[sortBy] > item2[sortBy] ? 1 : -1;
-              //   }
-              // })
+                if (sortBy.startsWith(`stack.`)) {
+                  item1 = a.servers[0]; // First server
+                  item2 = b.servers[0]; // First server
+
+                  sortBy = sortBy.replace(`stack.`, ``);
+                }
+
+                const sortByReverse = store.orderBy.startsWith(`!`);
+
+                if (sortByReverse) {
+                  return item1[sortBy] < item2[sortBy] ? 1 : -1;
+                } else {
+                  return item1[sortBy] > item2[sortBy] ? 1 : -1;
+                }
+              })
               .map((stack) => {
                 return <Card key={stack.id} stack={stack} />;
               })
