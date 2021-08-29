@@ -37,6 +37,28 @@ export interface ServerProps {
   server_health_message: string;
 }
 
+export interface UpdateProps {
+  id: number;
+  update_requested_by: string;
+  last_update_id: number;
+  stack_id: number;
+  servers: string[];
+  servers_ready_to_switch: string[];
+  servers_finished: string[];
+  server_count: number;
+  server_ready_to_switch_count: number;
+  server_finished_count: number;
+  is_cancelled: Boolean;
+  run_migrations: Boolean;
+  rollback_migrations: Boolean;
+  update_app_to: string;
+  update_xapi_to: string;
+  chosen_one: string;
+  switch_code_at_date: number;
+  created_at: string;
+  serversWithThisUpdate: string[];
+}
+
 export interface StackProps {
   id: number;
   name: string;
@@ -45,6 +67,8 @@ export interface StackProps {
   logs_url: string;
   logo_url: string;
   environment: string;
+  created_at: string;
 
   servers: ServerProps[];
+  updates: UpdateProps[];
 }

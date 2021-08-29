@@ -8,7 +8,7 @@ import { Updates } from '@prisma/client';
 export const listStacks = async (ctx) => {
   const stackList = await prisma.stacks.findMany({
     orderBy: { id: 'desc' },
-    include: { servers: true, updates: true },
+    include: { servers: true, updates: { orderBy: { created_at: 'desc' } } },
   });
 
   return response(ctx, 202, stackList || []);

@@ -1,7 +1,9 @@
+import moment from "moment";
 import { transparentize } from "polished";
 import React, { memo } from "react";
 import styled from "styled-components";
 
+import { StackProps } from "../../../../../types/globalTypes";
 import { SmallButton } from "../../../components/Controls/Buttons";
 import theme from "../../../utils/theme";
 
@@ -15,7 +17,6 @@ const Table = styled.table`
 
 const TableCell = styled.td`
   padding: 6px 12px;
-  width: 100%;
   border-bottom: 1px solid ${transparentize(0.8, theme.color.lightOne)};
   border-top: 0;
 `;
@@ -34,8 +35,13 @@ const TableHeader = styled.th`
   text-align: left;
 `;
 
+const HelperLabel = styled.span`
+  font-size: 14px;
+  opacity: 0.6;
+`;
+
 interface AdminStacksTable {
-  stacks: { id: number; name: string; created_at: string }[];
+  stacks: StackProps[];
 }
 
 const AdminStacksTable = (props: AdminStacksTable) => {
@@ -44,28 +50,78 @@ const AdminStacksTable = (props: AdminStacksTable) => {
       <thead>
         <tr>
           <TableHeader>Stack ID</TableHeader>
+          <TableHeader>App version</TableHeader>
+          <TableHeader>xAPI version</TableHeader>
+          <TableHeader>Created at</TableHeader>
           <TableHeader>Actions</TableHeader>
         </tr>
       </thead>
       <tbody>
         {props.stacks
           .sort((a, b) => b.created_at.localeCompare(a.created_at))
-          .map((update) => (
-            <TableRow key={update.id}>
-              <TableCell>{update.name}</TableCell>
-              <TableCell>
-                <SmallButton
-                  $color="red"
-                  $variant="ghost"
-                  $size="small"
-                  disabled={true}
-                  onClick={() => console.log(`Delete stack`)}
-                >
-                  Delete
-                </SmallButton>
-              </TableCell>
-            </TableRow>
-          ))}
+          .map((stack) => {
+            const runningAppVersion =
+              stack.servers.find((server) => server.server_app_version)
+                ?.server_app_version || ``;
+            const runningXAPIVersion =
+              stack.servers.find((server) => server.server_xapi_version)
+                ?.server_xapi_version || ``;
+
+            const updatingToAppVersion =
+              stack.updates.find((update) => update.update_app_to)
+                ?.update_app_to || ``;
+            const updatingToXAPIVersion =
+              stack.updates.find((update) => update.update_xapi_to)
+                ?.update_xapi_to || ``;
+
+            const isUpdating = Boolean(
+              stack.servers.find(
+                (server) => server.server_update_progress !== 100,
+              ) || stack.updates.find((update) => update.server_count === 0),
+            );
+
+            return (
+              <TableRow key={stack.id}>
+                <TableCell>{stack.name}</TableCell>
+                <TableCell>
+                  {runningAppVersion}
+                  {isUpdating ? (
+                    <>
+                      <br />
+                      <HelperLabel>
+                        (updating to {updatingToAppVersion})
+                      </HelperLabel>
+                    </>
+                  ) : null}
+                </TableCell>
+                <TableCell>
+                  {runningXAPIVersion}
+                  {isUpdating ? (
+                    <>
+                      <br />
+                      <HelperLabel>
+                        (updating to {updatingToXAPIVersion})
+                      </HelperLabel>
+                    </>
+                  ) : null}
+                </TableCell>
+                <TableCell title={stack.created_at}>
+                  {moment(stack.created_at).fromNow()}
+                </TableCell>
+                <TableCell>
+                  <SmallButton
+                    $color="red"
+                    $variant="ghost"
+                    $size="small"
+                    disabled={true}
+                    onClick={() => console.log(`Delete stack`)}
+                  >
+                    Delete
+                  </SmallButton>
+                </TableCell>
+              </TableRow>
+            );
+          })}
       </tbody>
     </Table>
   );
