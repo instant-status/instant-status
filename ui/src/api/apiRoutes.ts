@@ -29,37 +29,27 @@ const apiPost = async <T>(url: string, body: T) => {
   return await response.json();
 };
 
-const apiGetStacks = () => {
-  return apiFetch(`${APP_CONFIG.DATA_URL}/v2/servers?groupBy=stack_id`);
-};
-
 export interface CreateUpdateProps {
-  stack_ids: string[];
+  stack_ids: number[];
   run_migrations: boolean;
   update_app_to: string;
   update_xapi_to: string;
 }
 
-const apiGetLatestUpdates = () => {
-  return apiFetch(`${APP_CONFIG.DATA_URL}/v2/updates/latest`);
+const apiGetStacksList = () => {
+  return apiFetch(`${APP_CONFIG.DATA_URL}/v2/stacks`);
+};
+
+const apiCreateStack = (payload: { body: CreateUpdateProps }) => {
+  return apiPost(`${APP_CONFIG.DATA_URL}/v2/stack`, payload.body);
 };
 
 const apiCreateUpdate = (payload: { body: CreateUpdateProps }) => {
   return apiPost(`${APP_CONFIG.DATA_URL}/v2/update/create`, payload.body);
 };
 
-const apiGetStacksAvailableForUpdate = () => {
-  return apiFetch(`${APP_CONFIG.DATA_URL}/v2/stacks/available-for-update`);
-};
-
-const apiGetUpdatingStacks = () => {
-  return apiFetch(`${APP_CONFIG.DATA_URL}/v2/stacks/updating`);
-};
-
 export default {
-  apiGetStacks,
-  apiGetLatestUpdates,
+  apiGetStacksList,
+  apiCreateStack,
   apiCreateUpdate,
-  apiGetStacksAvailableForUpdate,
-  apiGetUpdatingStacks,
 };

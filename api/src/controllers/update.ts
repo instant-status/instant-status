@@ -1,7 +1,6 @@
 import { JsonObject } from 'type-fest';
 import checkForRequiredDataKeys from '../helpers/checkForRequiredDataKeys';
 import { getRequesterIdentity } from './auth';
-import groupBy from '../helpers/groupBy';
 import response from '../helpers/returnResponse';
 import isStackUpdating from '../helpers/isStackUpdating';
 import prisma from '../../prisma/prismaClient';
@@ -97,8 +96,10 @@ export const updateCreate = async (ctx) => {
   const updateRequestedBy = getRequesterIdentity(ctx.request);
 
   for (const stack_id of body.stack_ids) {
+    const stackId = Number(stack_id);
+
     const lastUpdate = await prisma.updates.findFirst({
-      where: { stack_id: stack_id },
+      where: { stack_id: stackId },
       orderBy: { id: 'desc' },
     });
     const isUpdating = isStackUpdating(lastUpdate);
@@ -110,7 +111,7 @@ export const updateCreate = async (ctx) => {
     const data = {
       update_requested_by: updateRequestedBy,
       last_update_id: lastUpdate?.id || null,
-      stack_id: stack_id,
+      stack_id: stackId,
       servers: [],
       servers_ready_to_switch: [],
       servers_finished: [],
@@ -134,7 +135,7 @@ export const updateCreate = async (ctx) => {
     });
 
     await prisma.servers.updateMany({
-      where: { stack_id: stack_id },
+      where: { stack_id: stackId },
       data: {
         server_app_updating_to_version: body.update_app_to,
         server_xapi_updating_to_version: body.update_xapi_to,
@@ -272,65 +273,4 @@ export const updatePost = async (ctx) => {
   responseBody.ok = true;
 
   return response(ctx, 200, responseBody);
-};
-
-export const getStacksAvailableForUpdate = async (ctx: any) => {
-  const servers = await prisma.servers.findMany();
-
-  const output = {};
-
-  for (const server of servers) {
-    const update = await prisma.updates.findFirst({
-      where: { stack_id: server.stack_id },
-      orderBy: { id: 'desc' },
-    });
-
-    const isUpdating = isStackUpdating(update);
-
-    output[server.stack_id] = {
-      stack_id: server.stack_id,
-      stack_app_version_display: isUpdating
-        ? update.update_app_to
-        : server.server_app_version,
-      stack_xapi_version_display: isUpdating
-        ? update.update_xapi_to
-        : server.server_xapi_version,
-      stack_environment: server.stack_environment,
-      stack_is_updating: isUpdating,
-    };
-  }
-
-  const stackInfo = Object.values(output);
-
-  const responseBody = Object.entries(
-    groupBy(stackInfo, (data) => data.stack_environment)
-  ) as any;
-
-  return response(ctx, 200, responseBody);
-};
-
-export const getUpdatingStacks = async (ctx: any) => {
-  const servers = await prisma.servers.findMany();
-  const updates = await prisma.updates.findMany();
-
-  const updatingStacks = new Set<string>();
-  const startingUpdateStacks = new Set<string>();
-
-  for (const update of updates) {
-    if (update.server_count === 0) {
-      updatingStacks.add(update.stack_id);
-      startingUpdateStacks.add(update.stack_id);
-    }
-  }
-
-  for (const server of servers) {
-    if (server.server_update_progress !== 100) {
-      updatingStacks.add(server.stack_id);
-    }
-  }
-
-  return response(ctx, 200, {
-    updatingStacks: [...updatingStacks],
-    startingUpdateStacks: [...startingUpdateStacks],
-  });
 };

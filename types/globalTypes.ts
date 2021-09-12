@@ -1,11 +1,11 @@
 export interface ServerProps {
   // Stack
-  stack_id: string;
+  stack_id: number;
   stack_environment: string;
   stack_region: string;
   stack_app_url: string;
   stack_logs_url: string;
-  stack_logo: string;
+  stack_logo_url: string;
 
   // Server Display
   server_name: string;
@@ -35,4 +35,40 @@ export interface ServerProps {
   server_health_updated_at: string;
   server_health_code: number;
   server_health_message: string;
+}
+
+export interface UpdateProps {
+  id: number;
+  update_requested_by: string;
+  last_update_id: number;
+  stack_id: number;
+  servers: string[];
+  servers_ready_to_switch: string[];
+  servers_finished: string[];
+  server_count: number;
+  server_ready_to_switch_count: number;
+  server_finished_count: number;
+  is_cancelled: Boolean;
+  run_migrations: Boolean;
+  rollback_migrations: Boolean;
+  update_app_to: string;
+  update_xapi_to: string;
+  chosen_one: string;
+  switch_code_at_date: number;
+  created_at: string;
+  serversWithThisUpdate: string[];
+}
+
+export interface StackProps {
+  id: number;
+  name: string;
+  region: string;
+  app_url: string;
+  logs_url: string;
+  logo_url: string;
+  environment: string;
+  created_at: string;
+
+  servers: ServerProps[];
+  updates: UpdateProps[];
 }

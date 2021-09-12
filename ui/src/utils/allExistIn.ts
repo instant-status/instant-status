@@ -1,4 +1,4 @@
-const allExistIn = (array1: string[], array2: string[]) => {
+const allExistIn = (array1: number[], array2: number[]) => {
   let count = 0;
 
   for (const item of array1) {

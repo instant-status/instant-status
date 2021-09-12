@@ -4,7 +4,7 @@
   "description": "API",
   "main": "src/server.ts",
   "scripts": {
-    "dev": "dotenv -e ../config/.prisma.env -- ts-node-dev --respawn src/server.ts",
+    "dev": "dotenv -e ../config/.prisma.env -- nodemon --watch src",
     "start": "dotenv -e ../config/.prisma.env -- ts-node src/server.ts",
     "db:dev-push": "dotenv -e ../config/.prisma.env -- prisma db push",
     "db:dev-migrate": "dotenv -e ../config/.prisma.env -- prisma migrate dev",
@@ -48,6 +48,7 @@
     "eslint": "7.32.0",
     "eslint-config-prettier": "8.3.0",
     "eslint-plugin-prettier": "3.4.0",
+    "nodemon": "2.0.12",
     "prettier": "2.3.2",
     "prisma": "2.28.0",
     "ts-node": "10.1.0",

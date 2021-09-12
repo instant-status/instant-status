@@ -19,18 +19,37 @@ export const checkIn = async (ctx) => {
     });
   }
 
-  // Fetching the details of the latest update for the Stack and returning a response
-  const latestUpdate = await prisma.updates.findFirst({
-    where: { stack_id: body.stack_id },
-    orderBy: { id: 'desc' },
-  });
+  body.stack_id = Number(body.stack_id) || null;
+  body.last_update_id = Number(body.last_update_id) || null;
 
-  if (!latestUpdate) {
+  if (!body.stack_id) {
     return response(ctx, 404, {
       ok: false,
       message: `'${body.stack_id}' is not a known Stack.`,
     });
   }
+
+  // Fetching the details of the latest update for the Stack and returning a response
+  const stack = await prisma.stacks.findUnique({
+    where: { id: body.stack_id },
+    include: { servers: true, updates: { orderBy: { id: 'desc' }, take: 1 } },
+  });
+
+  if (!stack) {
+    return response(ctx, 404, {
+      ok: false,
+      message: `'${body.stack_id}' is not a known Stack.`,
+    });
+  }
+
+  const isServerChosenOne = Boolean(
+    stack.servers.find(
+      (server) =>
+        server.server_id === body.server_id && server.server_is_chosen_one
+    )
+  );
+
+  const latestUpdate = stack.updates[0];
 
   const updateIsAvailable =
     !latestUpdate.servers.includes(body.server_id) &&
@@ -52,13 +71,24 @@ export const checkIn = async (ctx) => {
     }
   });
 
-  data.last_update_id = Number(data.last_update_id) || null;
-
   await prisma.servers.upsert({
     where: { server_id: body.server_id },
     create: data,
     update: data,
   });
+
+  if (isServerChosenOne) {
+    await prisma.stacks.update({
+      where: { id: Number(body.stack_id) },
+      data: {
+        logs_url: body.stack_logs_url,
+        logo_url: body.stack_logo_url,
+        app_url: body.stack_app_url,
+        region: body.stack_region,
+        environment: body.stack_environment,
+      },
+    });
+  }
 
   return response(ctx, 200, responseBody);
 };

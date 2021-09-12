@@ -11,16 +11,24 @@ generator client {
   provider = "prisma-client-js"
 }
 
+model Stacks {
+  id          Int       @id @default(autoincrement())
+  name        String    @unique
+  region      String?
+  environment String?
+  logo_url    String?
+  app_url     String?
+  logs_url    String?
+  created_at  DateTime  @default(now())
+  servers     Servers[]
+  updates     Updates[]
+}
+
 model Servers {
   id                              Int       @id @default(autoincrement())
   server_id                       String    @unique
-  stack_id                        String
+  stack_id                        Int
   last_update_id                  Int?
-  stack_region                    String
-  stack_environment               String
-  stack_logo                      String
-  stack_app_url                   String
-  stack_logs_url                  String
   server_name                     String
   server_role                     String
   server_public_ip                String
@@ -43,13 +51,14 @@ model Servers {
   server_created_at               DateTime  @default(now())
   server_updated_at               DateTime?
   lastUpdateId                    Updates?  @relation(fields: [last_update_id], references: [id])
+  stackId                         Stacks?   @relation(fields: [stack_id], references: [id])
 }
 
 model Updates {
   id                           Int       @id @default(autoincrement())
   update_requested_by          String?
   last_update_id               Int?      @unique
-  stack_id                     String
+  stack_id                     Int
   servers                      String[]
   servers_ready_to_switch      String[]
   servers_finished             String[]
@@ -67,4 +76,5 @@ model Updates {
   lastUpdateId                 Updates?  @relation("UpdatesToUpdates", fields: [last_update_id], references: [id])
   nextUpdateId                 Updates[] @relation("UpdatesToUpdates")
   serversWithThisUpdate        Servers[]
+  stackId                      Stacks?   @relation(fields: [stack_id], references: [id])
 }

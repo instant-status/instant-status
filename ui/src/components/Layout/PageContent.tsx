@@ -4,7 +4,7 @@ import React, { useContext } from "react";
 import { useQuery } from "react-query";
 import styled from "styled-components";
 
-import { ServerProps } from "../../../../types/globalTypes";
+import { StackProps } from "../../../../types/globalTypes";
 import apiRoutes from "../../api/apiRoutes";
 import logo from "../../assets/logo.svg";
 import CreateUpdateModal from "../../pages/UpdateSteps/CreateUpdateModal";
@@ -26,35 +26,16 @@ const Grid = styled.div`
   }
 `;
 
-interface StacksQueryProps {
-  0: string;
-  1: ServerProps[];
-}
-
 const PageContent = observer(() => {
   const store = useContext(globalStoreContext);
 
   const refetchInterval = 8000; // Refetch the data every 8 seconds
 
-  const stacksQuery = useQuery(`stacksData`, apiRoutes.apiGetStacks, {
+  const stacksQuery = useQuery(`stacksData`, apiRoutes.apiGetStacksList, {
     refetchInterval,
   });
 
-  const stackUpdatesQuery = useQuery(
-    `apiGetUpdatingStacks`,
-    apiRoutes.apiGetUpdatingStacks,
-    {
-      refetchInterval,
-    },
-  );
-
-  const updatingStacks = [...(stackUpdatesQuery.data?.updatingStacks || [])];
-
-  const stacksStartingUpdate = [
-    ...(stackUpdatesQuery.data?.startingUpdateStacks || []),
-  ];
-
-  const stacks = Object.entries(stacksQuery?.data || []) as StacksQueryProps[];
+  const stacks = (stacksQuery?.data || []) as StackProps[];
 
   return (
     <Page>
@@ -63,36 +44,37 @@ const PageContent = observer(() => {
         <Grid>
           {stacks.length > 0 ? (
             stacks
-              .filter((item) => {
+              .filter((stack) => {
                 return (
                   store?.displayVersions === undefined ||
-                  store.displayVersions.includes(item[1][0].server_app_version)
+                  store.displayVersions.includes(
+                    stack?.servers[0]?.server_app_version,
+                  )
                 );
               })
               .sort((a, b) => {
-                const item1 = a[1][0]; // First server
-                const item2 = b[1][0]; // First server
+                let item1 = a; // First server
+                let item2 = b; // First server
 
-                const sortBy = store.orderBy.replace(
-                  `!`,
-                  ``,
-                ) as keyof ServerProps;
+                let sortBy = store.orderBy.replace(`!`, ``);
+
+                if (sortBy.startsWith(`stack.`)) {
+                  item1 = a.servers[0]; // First server
+                  item2 = b.servers[0]; // First server
+
+                  sortBy = sortBy.replace(`stack.`, ``);
+                }
+
                 const sortByReverse = store.orderBy.startsWith(`!`);
+
                 if (sortByReverse) {
                   return item1[sortBy] < item2[sortBy] ? 1 : -1;
                 } else {
                   return item1[sortBy] > item2[sortBy] ? 1 : -1;
                 }
               })
-              .map((item) => {
-                return (
-                  <Card
-                    key={item[0]}
-                    isUpdating={updatingStacks.includes(item[0])}
-                    isStartingUpdate={stacksStartingUpdate.includes(item[0])}
-                    servers={item[1]}
-                  />
-                );
+              .map((stack) => {
+                return <Card key={stack.id} stack={stack} />;
               })
           ) : (
             <img src={logo} alt="Loading..." width="400px" />

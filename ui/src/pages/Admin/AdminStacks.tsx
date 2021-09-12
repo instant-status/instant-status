@@ -31,10 +31,11 @@ const MaxWidth = styled.div`
 const StatusPage = () => {
   const [isCreateOpen, setIsCreateOpen] = useState(false);
 
-  const updatesQuery = useQuery(`updatesData`, apiRoutes.apiGetLatestUpdates);
-  const updatesList = updatesQuery?.data || [];
-  const existingStackIds = updatesList.map((update: { stack_id: string }) =>
-    update.stack_id.toLowerCase(),
+  const updatesQuery = useQuery(`stacksData`, apiRoutes.apiGetStacksList);
+
+  const stacksList = updatesQuery.isFetching ? [] : updatesQuery?.data;
+  const existingStackIds = stacksList.map((update: { name: string }) =>
+    update.name.toLowerCase(),
   );
 
   const onNewStackSuccess = () => {
@@ -76,7 +77,7 @@ const StatusPage = () => {
                 />
               )}
             </AnimatePresence>
-            <AdminStacksTable stacks={updatesList} />
+            <AdminStacksTable stacks={stacksList} />
           </Stack>
         </MaxWidth>
       </Page>

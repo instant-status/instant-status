@@ -4,6 +4,7 @@ import { useMutation, useQuery } from "react-query";
 import styled from "styled-components";
 import { StringParam, useQueryParams } from "use-query-params";
 
+import { StackProps } from "../../../../types/globalTypes";
 import apiRoutes, { CreateUpdateProps } from "../../api/apiRoutes";
 import {
   BackButton,
@@ -31,9 +32,8 @@ const StackColumnName = styled.h3`
 
 const Columns = styled.div`
   column-count: 4;
-  break-inside: avoid;
   & > * {
-    margin-bottom: 0.2rem;
+    padding-bottom: 0.2rem;
   }
 `;
 
@@ -43,35 +43,30 @@ enum UpdateStepTypes {
   coolOff = `coolOff`,
 }
 
-interface ApiGetStacksAvailableForUpdateProps {
-  stack_id: string;
-  stack_app_version_display: string;
-  stack_xapi_version_display: string;
-  stack_environment: string;
-  stack_is_updating: boolean;
-}
-
-interface StacksQueryProps {
-  0: string;
-  1: ApiGetStacksAvailableForUpdateProps[];
-}
-
 const CreateUpdateModal = observer(() => {
   const [step, setStep] = useState(UpdateStepTypes.pickOptions);
-  const [isSafeToClose, setIsSafeToClose] = useState(false);
+  const [isSafeToClose, setIsSafeToClose] = useState(true);
   const [query, setQuery] = useQueryParams({
     stackId: StringParam,
     appVersion: StringParam,
     xapiVersion: StringParam,
   });
   const [stacksToUpdate, setStacksToUpdate] = useState(
-    query.stackId ? [query.stackId] : [],
+    query.stackId ? [Number(query.stackId)] : [],
   );
   const [appVersion, setAppVersion] = useState(query.appVersion);
   const [xapiVersion, setXapiVersion] = useState(query.xapiVersion);
   const [updateOptions, setUpdateOptions] = useState([`run_migrations`]);
 
   const store = useContext(globalStoreContext);
+
+  const stacksQuery = useQuery(`stacksData`, apiRoutes.apiGetStacksList);
+
+  const stacks = [...(stacksQuery.data || [])].filter((stack) =>
+    step !== UpdateStepTypes.pickOptions
+      ? stacksToUpdate.includes(stack.id)
+      : stack,
+  );
 
   const mutation = useMutation((payload: CreateUpdateProps) =>
     apiRoutes.apiCreateUpdate({ body: payload }),
@@ -107,15 +102,7 @@ const CreateUpdateModal = observer(() => {
     }
   };
 
-  const stacksQuery = useQuery(
-    `apiGetStacksAvailableForUpdate`,
-    apiRoutes.apiGetStacksAvailableForUpdate,
-    {
-      refetchInterval: 2000, // Refetch the data every second
-    },
-  );
-
-  const toggleCheckbox = (stackId: string) => {
+  const toggleCheckbox = (stackId: number) => {
     if (stacksToUpdate.includes(stackId)) {
       setStacksToUpdate(
         stacksToUpdate.filter((stackIdToUpdate) => stackIdToUpdate !== stackId),
@@ -123,6 +110,8 @@ const CreateUpdateModal = observer(() => {
     } else {
       setStacksToUpdate([...stacksToUpdate, stackId]);
     }
+
+    setIsSafeToClose(false);
   };
 
   const toggleConfigCheckbox = (option: string) => {
@@ -131,9 +120,11 @@ const CreateUpdateModal = observer(() => {
     } else {
       setUpdateOptions([...updateOptions, option]);
     }
+
+    setIsSafeToClose(false);
   };
 
-  const toggleAll = (stackIds: string[], isChecked: boolean) => {
+  const toggleAll = (stackIds: number[], isChecked: boolean) => {
     let stacks = stacksToUpdate;
 
     for (const stackId of stackIds) {
@@ -147,24 +138,8 @@ const CreateUpdateModal = observer(() => {
     }
 
     setStacksToUpdate(stacks);
+    setIsSafeToClose(false);
   };
-
-  const stacks = [...(stacksQuery.data || [])]
-    .map((environment) => {
-      if (step !== UpdateStepTypes.pickOptions) {
-        const filteredStacks = environment[1].filter(
-          (stack: ApiGetStacksAvailableForUpdateProps) =>
-            stacksToUpdate.includes(stack.stack_id),
-        );
-
-        if (filteredStacks.length) {
-          return [environment[0], filteredStacks];
-        }
-      } else {
-        return environment;
-      }
-    })
-    .filter((data) => data) as StacksQueryProps[];
 
   let modalTitle = `Create Update`;
   if (step === UpdateStepTypes.confirmOptions) {
@@ -190,6 +165,7 @@ const CreateUpdateModal = observer(() => {
         xapiVersion: undefined,
       });
       store.setIsUpdateModalOpen(false);
+      stacksQuery.refetch();
     }
   };
 
@@ -203,6 +179,23 @@ const CreateUpdateModal = observer(() => {
   const removeWhiteSpace = (value: string) => {
     return value.replace(/ /g, ``);
   };
+
+  const groupedStacks = stacks.reduce((groupedStack, stack) => {
+    groupedStack[stack.environment] = [
+      ...(groupedStack[stack.environment] || []),
+      stack,
+    ];
+
+    if (stack.servers.length > 0) {
+      return groupedStack;
+    }
+    return {};
+  }, {} as { [key: string]: any });
+
+  const groupedStacksArray = Object.entries(groupedStacks) as {
+    [0]: string;
+    [1]: StackProps[];
+  }[];
 
   return (
     <ModalBase
@@ -247,15 +240,20 @@ const CreateUpdateModal = observer(() => {
       }
     >
       <Stack direction="down" spacing={8}>
-        {stacks
+        {groupedStacksArray
           .sort((a, b) => a[1].length - b[1].length)
-          .map((stackEnv) => {
-            const environment = stackEnv[0] || `Undefined`;
-            const stacks = stackEnv[1];
-            const stackIds = stacks.map((stack) => stack.stack_id);
-            const availableStackIds = stacks
-              .filter((stack) => !stack.stack_is_updating)
-              .map((stack) => stack.stack_id);
+          .map((stackGroup) => {
+            const environment = stackGroup[0] || `Undefined`;
+            const stacks = stackGroup[1];
+            const availableStacks = stacks.filter((stack) => {
+              return !(
+                stack.servers.find(
+                  (server) => server.server_update_progress !== 100,
+                ) || stack.updates.find((update) => update.server_count === 0)
+              );
+            });
+            const availableStackIds = availableStacks.map((stack) => stack.id);
+
             const allSelected = allExistIn(availableStackIds, stacksToUpdate);
 
             return (
@@ -265,45 +263,81 @@ const CreateUpdateModal = observer(() => {
                     <span>{environment}</span>
                     {step === UpdateStepTypes.pickOptions && (
                       <Checkbox
-                        label={allSelected ? `Deselect all` : `Select all`}
+                        label={
+                          availableStackIds.length && allSelected
+                            ? `Deselect all`
+                            : `Select all`
+                        }
                         name={`select_all_${environment}`}
-                        checked={allSelected}
-                        onClick={() => toggleAll(stackIds, allSelected)}
+                        checked={
+                          !availableStackIds.length ? false : allSelected
+                        }
+                        disabled={!availableStackIds.length || false}
+                        visuallyDisabled={!availableStackIds.length || false}
+                        onClick={() =>
+                          toggleAll(availableStackIds, allSelected)
+                        }
                       />
                     )}
                   </Stack>
                 </StackColumnName>
                 <Columns>
-                  {stacks
-                    .sort(
-                      (a, b) =>
-                        a.stack_app_version_display.localeCompare(
-                          b.stack_app_version_display,
-                        ) || a.stack_id.localeCompare(b.stack_id),
-                    )
-                    .map((stack) => (
-                      <Checkbox
-                        key={`${stack.stack_id}-${stack.stack_app_version_display}`}
-                        label={stack.stack_id}
-                        helperLabel={
-                          stack.stack_is_updating
-                            ? `Updating to ${stack.stack_app_version_display} (xAPI ${stack.stack_xapi_version_display})`
-                            : `${stack.stack_app_version_display} (xAPI ${stack.stack_xapi_version_display})`
-                        }
-                        name={stack.stack_id}
-                        disabled={
-                          step !== UpdateStepTypes.pickOptions
-                            ? true
-                            : stack.stack_is_updating
-                        }
-                        visuallyDisabled={stack.stack_is_updating}
-                        onClick={() => toggleCheckbox(stack.stack_id)}
-                        checked={
-                          !stack.stack_is_updating &&
-                          stacksToUpdate.includes(stack.stack_id)
-                        }
-                      />
-                    ))}
+                  {(step === UpdateStepTypes.pickOptions
+                    ? stacks
+                    : stacks.filter((stack) =>
+                        stacksToUpdate.includes(stack.id),
+                      )
+                  )
+                    .sort((a, b) => a.name.localeCompare(b.name))
+                    .map((stack) => {
+                      const runningAppVersion =
+                        stack.servers.find(
+                          (server) => server.server_app_version,
+                        )?.server_app_version || ``;
+                      const runningXAPIVersion =
+                        stack.servers.find(
+                          (server) => server.server_xapi_version,
+                        )?.server_xapi_version || ``;
+
+                      const updatingToAppVersion =
+                        stack.updates.find((update) => update.update_app_to)
+                          ?.update_app_to || ``;
+                      const updatingToXAPIVersion =
+                        stack.updates.find((update) => update.update_xapi_to)
+                          ?.update_xapi_to || ``;
+
+                      const isUpdating = Boolean(
+                        stack.servers.find(
+                          (server) => server.server_update_progress !== 100,
+                        ) ||
+                          stack.updates.find(
+                            (update) => update.server_count === 0,
+                          ),
+                      );
+
+                      return (
+                        <Checkbox
+                          key={`${stack.id}`}
+                          label={stack.name}
+                          helperLabel={
+                            isUpdating
+                              ? `Updating to ${updatingToAppVersion} (xAPI ${updatingToXAPIVersion})`
+                              : `${runningAppVersion} (xAPI ${runningXAPIVersion})`
+                          }
+                          name={stack.name}
+                          disabled={
+                            step !== UpdateStepTypes.pickOptions
+                              ? true
+                              : isUpdating
+                          }
+                          visuallyDisabled={isUpdating}
+                          onClick={() => toggleCheckbox(stack.id)}
+                          checked={
+                            !isUpdating && stacksToUpdate.includes(stack.id)
+                          }
+                        />
+                      );
+                    })}
                 </Columns>
               </Stack>
             );
@@ -327,9 +361,10 @@ const CreateUpdateModal = observer(() => {
                 value={appVersion || ``}
                 disabled={step !== UpdateStepTypes.pickOptions}
                 name="update_app_to"
-                onChange={(event) =>
-                  setAppVersion(removeWhiteSpace(event.target.value))
-                }
+                onChange={(event) => {
+                  setAppVersion(removeWhiteSpace(event.target.value));
+                  setIsSafeToClose(false);
+                }}
               />
               <TextInput
                 label={
@@ -340,9 +375,10 @@ const CreateUpdateModal = observer(() => {
                 value={xapiVersion || ``}
                 disabled={step !== UpdateStepTypes.pickOptions}
                 name="update_xapi_to"
-                onChange={(event) =>
-                  setXapiVersion(removeWhiteSpace(event.target.value))
-                }
+                onChange={(event) => {
+                  setXapiVersion(removeWhiteSpace(event.target.value));
+                  setIsSafeToClose(false);
+                }}
               />
             </Stack>
             <Stack spacing={9} justify="start">
@@ -353,7 +389,10 @@ const CreateUpdateModal = observer(() => {
                     label={option.label}
                     name={option.name}
                     disabled={step !== UpdateStepTypes.pickOptions}
-                    onClick={() => toggleConfigCheckbox(option.name)}
+                    onClick={() => {
+                      toggleConfigCheckbox(option.name);
+                      setIsSafeToClose(false);
+                    }}
                     checked={updateOptions.includes(option.name)}
                   />
                 );
