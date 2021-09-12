@@ -1,7 +1,6 @@
 import { JsonObject } from 'type-fest';
 import checkForRequiredDataKeys from '../helpers/checkForRequiredDataKeys';
 import { getRequesterIdentity } from './auth';
-import groupBy from '../helpers/groupBy';
 import response from '../helpers/returnResponse';
 import isStackUpdating from '../helpers/isStackUpdating';
 import prisma from '../../prisma/prismaClient';
@@ -97,8 +96,10 @@ export const updateCreate = async (ctx) => {
   const updateRequestedBy = getRequesterIdentity(ctx.request);
 
   for (const stack_id of body.stack_ids) {
+    const stackId = Number(stack_id);
+
     const lastUpdate = await prisma.updates.findFirst({
-      where: { stack_id: Number(stack_id) },
+      where: { stack_id: stackId },
       orderBy: { id: 'desc' },
     });
     const isUpdating = isStackUpdating(lastUpdate);
@@ -110,7 +111,7 @@ export const updateCreate = async (ctx) => {
     const data = {
       update_requested_by: updateRequestedBy,
       last_update_id: lastUpdate?.id || null,
-      stack_id: Number(stack_id),
+      stack_id: stackId,
       servers: [],
       servers_ready_to_switch: [],
       servers_finished: [],
@@ -134,7 +135,7 @@ export const updateCreate = async (ctx) => {
     });
 
     await prisma.servers.updateMany({
-      where: { stack_id: Number(stack_id) },
+      where: { stack_id: stackId },
       data: {
         server_app_updating_to_version: body.update_app_to,
         server_xapi_updating_to_version: body.update_xapi_to,

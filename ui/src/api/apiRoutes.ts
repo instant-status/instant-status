@@ -29,10 +29,6 @@ const apiPost = async <T>(url: string, body: T) => {
   return await response.json();
 };
 
-const apiGetStacks = () => {
-  return apiFetch(`${APP_CONFIG.DATA_URL}/v2/servers?groupBy=stack_id`);
-};
-
 export interface CreateUpdateProps {
   stack_ids: number[];
   run_migrations: boolean;
@@ -55,6 +51,5 @@ const apiCreateUpdate = (payload: { body: CreateUpdateProps }) => {
 export default {
   apiGetStacksList,
   apiCreateStack,
-  apiGetStacks,
   apiCreateUpdate,
 };

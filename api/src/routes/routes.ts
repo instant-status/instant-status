@@ -15,7 +15,7 @@ import {
   createStack,
   deleteStack,
 } from '../controllers/stack';
-import { deleteServer, getServers } from '../controllers/servers';
+import { deleteServer } from '../controllers/servers';
 
 import { authGoogle } from '../controllers/auth';
 
@@ -26,9 +26,6 @@ router.get('/', (ctx) => (ctx.body = { version: '2.0.0' }));
 
 // Google Auth
 router.get('/auth/google/callback', authGoogle);
-
-// UI
-router.get('/v2/servers', getServers);
 
 // Stack
 router.get('/v2/stacks', listStacks);
