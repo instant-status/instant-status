@@ -25,7 +25,7 @@ export const checkIn = async (ctx) => {
   if (!body.stack_id) {
     return response(ctx, 404, {
       ok: false,
-      message: `'${body.stack_name}' is not a known Stack.`,
+      message: `'${body.stack_id}' is not a known Stack.`,
     });
   }
 
@@ -38,7 +38,7 @@ export const checkIn = async (ctx) => {
   if (!stack) {
     return response(ctx, 404, {
       ok: false,
-      message: `'${body.stack_name}' is not a known Stack.`,
+      message: `'${body.stack_id}' is not a known Stack.`,
     });
   }
 
