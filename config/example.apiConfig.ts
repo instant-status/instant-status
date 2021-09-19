@@ -1,8 +1,5 @@
 const API_CONFIG = {
   APP_SECRETS: ["your-256-bit-secret"],
-  ALLOWED_USERS: {
-    "user@example.com": { roles: [""] },
-  },
   GOOGLE_AUTH: {
     CLIENT_ID: "",
     CLIENT_SECRET: "",

@@ -100,27 +100,6 @@ export const authGoogle = async (ctx: any) => {
       roles: ['ADMIN'],
     };
 
-    // // Go get valid emails with roles
-    // const validUsers = emails.reduce(
-    //   (curr, emailData) => {
-    //     const email = emailData.value;
-    //     console.log(`Checking if ${email} is valid...`);
-
-    //     if (API_CONFIG.ALLOWED_USERS[email]) {
-    //       curr.emails.push(email);
-    //       curr.roles = [
-    //         ...curr.roles,
-    //         ...API_CONFIG.ALLOWED_USERS[email].roles,
-    //       ];
-    //     }
-    //     return curr;
-    //   },
-    //   {
-    //     emails: [],
-    //     roles: [],
-    //   }
-    // );
-
     console.log('Valid user:', validUser);
 
     const authCookie = jwt.sign(validUser, API_CONFIG.APP_SECRETS[0], {
