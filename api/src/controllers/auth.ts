@@ -83,7 +83,7 @@ export const authGoogle = async (ctx: any) => {
       throw Error('No emails returned in peopleResult');
     }
 
-    console.log(emails);
+    // console.log(emails);
 
     const userEmails = emails.map((user) => user.value);
 
@@ -100,7 +100,7 @@ export const authGoogle = async (ctx: any) => {
       roles: ['ADMIN'],
     };
 
-    console.log('Valid user:', validUser);
+    // console.log('Valid user:', validUser);
 
     const authCookie = jwt.sign(validUser, API_CONFIG.APP_SECRETS[0], {
       expiresIn: AUTH_VALID_FOR_SECONDS,
