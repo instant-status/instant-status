@@ -1,8 +1,8 @@
-import APP_CONFIG from "@config/appConfig";
 import { AnimatePresence, motion } from "framer-motion";
 import React, { useRef, useState } from "react";
 import styled from "styled-components";
 
+import APP_CONFIG from "../../../appConfig";
 import useClickAway from "../../hooks/useClickAway";
 import useIsLoggedIn from "../../hooks/useIsLoggedIn";
 import theme from "../../utils/theme";

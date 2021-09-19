@@ -1,6 +1,7 @@
-import APP_CONFIG from "@config/appConfig";
 import { useLocalObservable } from "mobx-react-lite";
 import React, { createContext } from "react";
+
+import APP_CONFIG from "../../appConfig";
 
 interface GlobalStoreContextProps {
   isUpdateModalOpen: boolean;
@@ -99,6 +100,8 @@ export const StoreProvider = ({ children }: { children: React.ReactNode }) => {
   }));
 
   return (
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
     <globalStoreContext.Provider value={store}>
       {children}
     </globalStoreContext.Provider>

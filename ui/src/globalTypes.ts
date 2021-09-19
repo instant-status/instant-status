@@ -48,9 +48,9 @@ export interface UpdateProps {
   server_count: number;
   server_ready_to_switch_count: number;
   server_finished_count: number;
-  is_cancelled: Boolean;
-  run_migrations: Boolean;
-  rollback_migrations: Boolean;
+  is_cancelled: boolean;
+  run_migrations: boolean;
+  rollback_migrations: boolean;
   update_app_to: string;
   update_xapi_to: string;
   chosen_one: string;

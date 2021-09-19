@@ -3,8 +3,8 @@ import { transparentize } from "polished";
 import React, { memo } from "react";
 import styled from "styled-components";
 
-import { StackProps } from "../../../../../types/globalTypes";
 import { SmallButton } from "../../../components/Controls/Buttons";
+import { StackProps } from "../../../globalTypes";
 import theme from "../../../utils/theme";
 
 const Table = styled.table`

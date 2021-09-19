@@ -1,5 +1,6 @@
-import APP_CONFIG from "@config/appConfig";
 import Cookies from "js-cookie";
+
+import APP_CONFIG from "../../appConfig";
 
 const apiFetch = async (url: string) => {
   const response = await fetch(url, {
@@ -36,11 +37,18 @@ export interface CreateUpdateProps {
   update_xapi_to: string;
 }
 
+export interface CreateStackProps {
+  stack_names: string[];
+  run_migrations: boolean;
+  update_app_to: string;
+  update_xapi_to: string;
+}
+
 const apiGetStacksList = () => {
   return apiFetch(`${APP_CONFIG.DATA_URL}/v2/stacks`);
 };
 
-const apiCreateStack = (payload: { body: CreateUpdateProps }) => {
+const apiCreateStack = (payload: { body: CreateStackProps }) => {
   return apiPost(`${APP_CONFIG.DATA_URL}/v2/stack`, payload.body);
 };
 

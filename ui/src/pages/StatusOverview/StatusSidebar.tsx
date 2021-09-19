@@ -1,8 +1,8 @@
-import APP_CONFIG from "@config/appConfig";
 import { observer } from "mobx-react-lite";
 import React, { useContext } from "react";
 import { useQuery } from "react-query";
 
+import APP_CONFIG from "../../../appConfig";
 import { SidebarButton } from "../../components/Controls/Buttons";
 import Checkbox from "../../components/Controls/Checkbox";
 import SelectInput from "../../components/Controls/SelectInput";

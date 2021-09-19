@@ -4,7 +4,6 @@ import { useMutation, useQuery } from "react-query";
 import styled from "styled-components";
 import { StringParam, useQueryParams } from "use-query-params";
 
-import { StackProps } from "../../../../types/globalTypes";
 import apiRoutes, { CreateUpdateProps } from "../../api/apiRoutes";
 import {
   BackButton,
@@ -16,6 +15,7 @@ import TextInput from "../../components/Controls/TextInput";
 import { spacing } from "../../components/Layout/spacing";
 import Stack from "../../components/Layout/Stack";
 import ModalBase from "../../components/Modal/ModalBase";
+import { StackProps } from "../../globalTypes";
 import { globalStoreContext } from "../../store/globalStore";
 import allExistIn from "../../utils/allExistIn";
 import UpdateSuccess from "./UpdateSuccess";

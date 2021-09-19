@@ -5,7 +5,7 @@ import cors from '@koa/cors';
 
 import router from './routes/routes';
 import { isRequestAllowed } from './controllers/auth';
-import APP_CONFIG from '../../config/appConfig';
+import API_CONFIG from '../../config/apiConfig';
 
 const app = new Koa();
 
@@ -23,7 +23,7 @@ app.use((ctx, next) => {
 
 app.use(router.routes()).use(router.allowedMethods());
 
-const port = APP_CONFIG.PORT || 3000;
+const port = API_CONFIG.PORT || 3000;
 app.listen(port, () =>
   console.info(`Server started on http://localhost:${port}`)
 );

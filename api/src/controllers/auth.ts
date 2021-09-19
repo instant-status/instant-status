@@ -1,8 +1,8 @@
 import { google } from 'googleapis';
 import jwt from 'jsonwebtoken';
-import APP_CONFIG from '../../../config/appConfig';
 import API_CONFIG from '../../../config/apiConfig';
 import formatAuthorisationToken from '../helpers/formatAuthorisationToken';
+import prisma from '../../prisma/prismaClient';
 
 const CLIENT_ID = API_CONFIG.GOOGLE_AUTH.CLIENT_ID;
 const CLIENT_SECRET = API_CONFIG.GOOGLE_AUTH.CLIENT_SECRET;
@@ -45,9 +45,9 @@ export const getRequesterIdentity = (request: {
 }) => {
   const decodedJWT = jwt.decode(
     formatAuthorisationToken(request.headers.authorization)
-  ) as { emails: string[] };
+  ) as { email: string };
 
-  const requesterIdentity = decodedJWT?.emails?.[0] || null;
+  const requesterIdentity = decodedJWT?.email || null;
 
   return requesterIdentity;
 };
@@ -85,42 +85,34 @@ export const authGoogle = async (ctx: any) => {
 
     // console.log(emails);
 
-    // Go get valid emails with roles
-    const validUsers = emails.reduce(
-      (curr, emailData) => {
-        const email = emailData.value;
-        // console.log(`Checking if ${email} is valid...`);
-        if (API_CONFIG.ALLOWED_USERS[email]) {
-          curr.emails.push(email);
-          curr.roles = [
-            ...curr.roles,
-            ...API_CONFIG.ALLOWED_USERS[email].roles,
-          ];
-        }
-        return curr;
-      },
-      {
-        emails: [],
-        roles: [],
-      }
-    );
-    // console.log('Valid emails:', validUsers);
+    const userEmails = emails.map((user) => user.value);
 
-    if (validUsers.emails.length === 0) {
+    const matchingUser = await prisma.users.findFirst({
+      where: { email: { in: userEmails } },
+    });
+
+    if (!matchingUser) {
       throw new Error('User not allowed');
     }
 
-    const authCookie = jwt.sign(validUsers, API_CONFIG.APP_SECRETS[0], {
+    const validUser = {
+      email: matchingUser.email,
+      roles: ['ADMIN'],
+    };
+
+    // console.log('Valid user:', validUser);
+
+    const authCookie = jwt.sign(validUser, API_CONFIG.APP_SECRETS[0], {
       expiresIn: AUTH_VALID_FOR_SECONDS,
     });
 
     // Redirect them back to the home page with a valid bearer in their cookie
-    ctx.cookies.set(APP_CONFIG.COOKIE_NAME, authCookie, {
+    ctx.cookies.set(API_CONFIG.COOKIE_NAME, authCookie, {
       maxAge: 1000 * AUTH_VALID_FOR_SECONDS,
       httpOnly: false,
     });
-    ctx.body = `Redirecting to ${APP_CONFIG.APP_NAME}...`;
-    ctx.response.redirect(APP_CONFIG.APP_URL);
+    ctx.body = `Redirecting to ${API_CONFIG.APP_NAME}...`;
+    ctx.response.redirect(API_CONFIG.APP_URL);
     return;
   } catch (err) {
     console.log('Error in auth', err);
