@@ -3,7 +3,7 @@ import { observer } from "mobx-react-lite";
 import React, { useContext } from "react";
 import styled from "styled-components";
 
-import { ServerProps, StackProps } from "../../../../types/globalTypes";
+import { ServerProps, StackProps } from "../../globalTypes";
 import { globalStoreContext } from "../../store/globalStore";
 import CardFooter from "./CardFooter";
 import CardHeader from "./CardHeader";

@@ -1,4 +1,3 @@
-import APP_CONFIG from "@config/appConfig";
 import { lighten } from "polished";
 import React from "react";
 import { Helmet } from "react-helmet";
@@ -7,6 +6,7 @@ import { BrowserRouter, Redirect, Route, Switch } from "react-router-dom";
 import { createGlobalStyle, ThemeProvider } from "styled-components";
 import { QueryParamProvider } from "use-query-params";
 
+import APP_CONFIG from "../appConfig";
 import DevMenu from "./components/DevTools/DevMenu";
 import useIsLoggedIn from "./hooks/useIsLoggedIn";
 import Admin from "./pages/Admin/Admin";

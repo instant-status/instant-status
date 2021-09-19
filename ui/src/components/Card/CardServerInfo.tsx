@@ -1,10 +1,10 @@
-import APP_CONFIG from "@config/appConfig";
 import { observer } from "mobx-react-lite";
 import { transparentize } from "polished";
 import React, { useContext, useEffect, useState } from "react";
 import styled from "styled-components";
 
-import { ServerProps } from "../../../../types/globalTypes";
+import APP_CONFIG from "../../../appConfig";
+import { ServerProps } from "../../globalTypes";
 import { globalStoreContext } from "../../store/globalStore";
 import getDate from "../../utils/getDate";
 import { getHealthColor, getHealthIcon } from "../../utils/getHealth";

@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import { useMutation } from "react-query";
 import styled from "styled-components";
 
-import apiRoutes, { CreateUpdateProps } from "../../../api/apiRoutes";
+import apiRoutes, { CreateStackProps } from "../../../api/apiRoutes";
 import { SmallButton } from "../../../components/Controls/Buttons";
 import TagInput from "../../../components/Controls/TagInput";
 import TextInput from "../../../components/Controls/TextInput";
@@ -26,7 +26,7 @@ const CreateStacksForm = (props: CreateStacksFormProps) => {
   const [appVersion, setAppVersion] = useState(``);
   const [xapiVersion, setXapiVersion] = useState(``);
 
-  const mutation = useMutation((payload: CreateUpdateProps) =>
+  const mutation = useMutation((payload: CreateStackProps) =>
     apiRoutes.apiCreateStack({ body: payload }),
   );
 
@@ -67,7 +67,7 @@ const CreateStacksForm = (props: CreateStacksFormProps) => {
     if (appVersion && xapiVersion && stackNames.length) {
       mutation.mutate(
         {
-          stack_ids: stackNames,
+          stack_names: stackNames,
           run_migrations: false,
           update_app_to: appVersion,
           update_xapi_to: xapiVersion,

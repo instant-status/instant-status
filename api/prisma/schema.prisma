@@ -78,3 +78,11 @@ model Updates {
   serversWithThisUpdate        Servers[]
   stackId                      Stacks?   @relation(fields: [stack_id], references: [id])
 }
+
+model Users {
+  id         Int      @id @default(autoincrement())
+  email      String   @unique
+  first_name String
+  last_name  String
+  created_at DateTime @default(now())
+}

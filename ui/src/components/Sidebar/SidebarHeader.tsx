@@ -1,8 +1,8 @@
-import APP_CONFIG from "@config/appConfig";
 import React from "react";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 
+import APP_CONFIG from "../../../appConfig";
 import theme from "../../utils/theme";
 
 const Header = styled.header`

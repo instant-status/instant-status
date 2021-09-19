@@ -2,7 +2,7 @@ import { transparentize } from "polished";
 import React from "react";
 import styled from "styled-components";
 
-import { ServerProps } from "../../../../types/globalTypes";
+import { ServerProps } from "../../globalTypes";
 import getDate from "../../utils/getDate";
 import { getHealthIcon } from "../../utils/getHealth";
 import { getStateIcon } from "../../utils/getState";

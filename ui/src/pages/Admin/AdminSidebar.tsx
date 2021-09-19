@@ -1,7 +1,7 @@
-import APP_CONFIG from "@config/appConfig";
 import React, { memo } from "react";
 import { useQuery } from "react-query";
 
+import APP_CONFIG from "../../../appConfig";
 import Stack from "../../components/Layout/Stack";
 import Sidebar from "../../components/Sidebar/Sidebar";
 import SidebarListTab from "../../components/Sidebar/SidebarListTab";
