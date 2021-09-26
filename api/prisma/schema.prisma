@@ -12,16 +12,18 @@ generator client {
 }
 
 model Stacks {
-  id          Int       @id @default(autoincrement())
-  name        String    @unique
-  region      String?
-  environment String?
-  logo_url    String?
-  app_url     String?
-  logs_url    String?
-  created_at  DateTime  @default(now())
-  servers     Servers[]
-  updates     Updates[]
+  id                       Int       @id @default(autoincrement())
+  name                     String    @unique
+  region                   String?
+  environment              String?
+  logo_url                 String?
+  app_url                  String?
+  logs_url                 String?
+  created_at               DateTime  @default(now())
+  servers                  Servers[]
+  updates                  Updates[]
+  rolesWithThisStackUpdate Roles[]   @relation("UsersToStacksView")
+  rolesWithThisStackView   Roles[]   @relation("UsersToStacksUpdate")
 }
 
 model Servers {
@@ -80,9 +82,21 @@ model Updates {
 }
 
 model Users {
-  id         Int      @id @default(autoincrement())
-  email      String   @unique
-  first_name String
-  last_name  String
-  created_at DateTime @default(now())
+  id             Int      @id @default(autoincrement())
+  email          String   @unique
+  first_name     String
+  last_name      String
+  is_super_admin Boolean  @default(false)
+  roles          Roles[]  @relation("UsersToRoles")
+  created_at     DateTime @default(now())
+}
+
+model Roles {
+  id                       Int      @id @default(autoincrement())
+  name                     String   @unique
+  view_stacks              Stacks[] @relation("UsersToStacksView")
+  update_stacks            Stacks[] @relation("UsersToStacksUpdate")
+  view_stack_enviroments   String[]
+  update_stack_enviroments String[]
+  usersWithThisRole        Users[]  @relation("UsersToRoles")
 }
