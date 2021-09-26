@@ -5,6 +5,6 @@ import { defineConfig } from "vite";
 export default defineConfig({
   plugins: [reactRefresh()],
   server: {
-    port: 1235,
+    port: 1234,
   },
 });
