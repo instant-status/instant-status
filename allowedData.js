@@ -4,6 +4,7 @@ export default [
   "stackEnvironment",
   "stackAppUrl",
   "stackLogsUrl",
+  "stackUpdateUrl",
   "instanceName",
   "instancePublicIP",
   "instanceUpdatedAt",
@@ -19,5 +20,5 @@ export default [
   "instanceType",
   "instanceLastHealthyAt",
   "instanceHealthCode",
-  "instanceHealthMessage"
+  "instanceHealthMessage",
 ];

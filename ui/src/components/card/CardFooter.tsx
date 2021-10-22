@@ -62,7 +62,9 @@ const CardFooter = (props: {
       return;
     }
 
-    const urlHost = `https://${props.chosenOne.stackRegion}.console.aws.amazon.com/systems-manager/automation/execute/Update-Curatr-Version`;
+    const urlHost =
+      props.chosenOne.stackUpdateUrl ||
+      `https://${props.chosenOne.stackRegion}.console.aws.amazon.com/systems-manager/automation/execute/Update-Curatr-Version`;
     const urlRegion = `?region=${props.chosenOne.stackRegion}`;
     const urlInstances = `#InstanceId=${props.instancesToUpdate}`;
     const urlRandom = `&randomString=${randomString()}${randomString()}--${

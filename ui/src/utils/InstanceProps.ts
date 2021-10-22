@@ -5,6 +5,7 @@ export default interface InstanceProps {
   stackRegion: string;
   stackAppUrl: string;
   stackLogsUrl: string;
+  stackUpdateUrl: string;
 
   // Instance Display
   instanceName: string;
