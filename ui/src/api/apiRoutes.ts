@@ -12,7 +12,13 @@ const apiFetch = async (url: string) => {
       }`,
     },
   });
-  return await response.json();
+  const data = await response;
+
+  if (data.status === 401) {
+    localStorage.removeItem(`bearer`);
+    window.location.href = `/`;
+  }
+  return data.json();
 };
 
 const apiPost = async <T>(url: string, body: T) => {
@@ -27,7 +33,13 @@ const apiPost = async <T>(url: string, body: T) => {
       }`,
     },
   });
-  return await response.json();
+  const data = await response;
+
+  if (data.status === 401) {
+    localStorage.removeItem(`bearer`);
+    window.location.href = `/`;
+  }
+  return data.json();
 };
 
 export interface CreateUpdateProps {

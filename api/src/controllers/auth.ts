@@ -1,8 +1,10 @@
 import { google } from 'googleapis';
 import jwt from 'jsonwebtoken';
+// @ts-ignore
 import API_CONFIG from '../../../config/apiConfig';
 import formatAuthorisationToken from '../helpers/formatAuthorisationToken';
 import prisma from '../../prisma/prismaClient';
+import { isJWTStale } from '../helpers/jwt';
 
 const CLIENT_ID = API_CONFIG.GOOGLE_AUTH.CLIENT_ID;
 const CLIENT_SECRET = API_CONFIG.GOOGLE_AUTH.CLIENT_SECRET;
@@ -29,7 +31,9 @@ export const isRequestAllowed = (request: {
           secret
         );
 
-        isRequestAllowed = true;
+        if (!isJWTStale(request.headers.authorization)) {
+          isRequestAllowed = true;
+        }
       }
     } catch (err) {
       // if this one isn't, check the rest
@@ -97,7 +101,10 @@ export const authGoogle = async (ctx: any) => {
 
     const validUser = {
       email: matchingUser.email,
-      roles: ['ADMIN'],
+      roles: {
+        view_stacks: [],
+        update_stacks: [],
+      },
     };
 
     // console.log('Valid user:', validUser);

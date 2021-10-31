@@ -4,6 +4,7 @@ import response from '../helpers/returnResponse';
 import isStackUpdating from '../helpers/isStackUpdating';
 import prisma from '../../prisma/prismaClient';
 import { Updates } from '@prisma/client';
+import { makeJWTsStale } from '../helpers/jwt';
 
 export const listStacks = async (ctx) => {
   const stackList = await prisma.stacks.findMany({
@@ -52,7 +53,7 @@ export const createStack = async (ctx) => {
   const body = ctx.request.body;
   const requiredDataKeys = [
     'run_migrations',
-    'stack_ids',
+    'stack_names',
     'update_app_to',
     'update_xapi_to',
   ];
@@ -69,9 +70,9 @@ export const createStack = async (ctx) => {
 
   const updateRequestedBy = getRequesterIdentity(ctx.request);
 
-  for (const stack_id of body.stack_ids) {
+  for (const stack_name of body.stack_names) {
     const stack = await prisma.stacks.create({
-      data: { name: stack_id },
+      data: { name: stack_name },
     });
 
     const lastUpdate = await prisma.updates.findFirst({
@@ -119,6 +120,7 @@ export const createStack = async (ctx) => {
     });
   }
 
+  makeJWTsStale();
   return response(ctx, 202, {});
 };
 
