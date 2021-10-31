@@ -72,7 +72,7 @@ export const createStack = async (ctx) => {
 
   for (const stack_name of body.stack_names) {
     const stack = await prisma.stacks.create({
-      data: { name: stack_name },
+      data: { name: stack_name.toLowerCase() },
     });
 
     const lastUpdate = await prisma.updates.findFirst({
