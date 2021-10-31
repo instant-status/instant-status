@@ -43,13 +43,24 @@ export const isRequestAllowed = (request: {
   return isRequestAllowed;
 };
 
-export const getRequesterIdentity = (request: {
-  url: string;
+export const getRequesterDecodedJWT = (request: {
   headers: { authorization?: string };
 }) => {
   const decodedJWT = jwt.decode(
     formatAuthorisationToken(request.headers.authorization)
-  ) as { email: string };
+  ) as {
+    email: string;
+    roles: {
+      view_stacks?: number[];
+      update_stacks?: number[];
+    };
+  };
+
+  return decodedJWT;
+};
+
+export const getRequesterIdentity = (request: any) => {
+  const decodedJWT = getRequesterDecodedJWT(request);
 
   const requesterIdentity = decodedJWT?.email || null;
 

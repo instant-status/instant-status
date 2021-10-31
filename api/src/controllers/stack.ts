@@ -1,5 +1,5 @@
 import checkForRequiredDataKeys from '../helpers/checkForRequiredDataKeys';
-import { getRequesterIdentity } from './auth';
+import { getRequesterDecodedJWT, getRequesterIdentity } from './auth';
 import response from '../helpers/returnResponse';
 import isStackUpdating from '../helpers/isStackUpdating';
 import prisma from '../../prisma/prismaClient';
@@ -7,10 +7,22 @@ import { Updates } from '@prisma/client';
 import { makeJWTsStale } from '../helpers/jwt';
 
 export const listStacks = async (ctx) => {
+  const userJWT = getRequesterDecodedJWT(ctx.request);
+
+  if (!userJWT.roles) {
+    return response(ctx, 202, []);
+  }
+
   const stackList = await prisma.stacks.findMany({
     orderBy: { id: 'desc' },
     include: { servers: true, updates: { orderBy: { created_at: 'desc' } } },
+    where: { id: { in: userJWT.roles?.view_stacks || [] } },
   });
+
+  for (const stack of stackList) {
+    // @ts-ignore
+    stack.canUpdate = (userJWT.roles?.update_stacks || []).includes(stack.id);
+  }
 
   return response(ctx, 202, stackList || []);
 };

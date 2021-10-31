@@ -1,6 +1,6 @@
 import { JsonObject } from 'type-fest';
 import checkForRequiredDataKeys from '../helpers/checkForRequiredDataKeys';
-import { getRequesterIdentity } from './auth';
+import { getRequesterDecodedJWT, getRequesterIdentity } from './auth';
 import response from '../helpers/returnResponse';
 import isStackUpdating from '../helpers/isStackUpdating';
 import prisma from '../../prisma/prismaClient';
@@ -74,6 +74,12 @@ export const updateGet = async (ctx) => {
 };
 
 export const updateCreate = async (ctx) => {
+  const userJWT = getRequesterDecodedJWT(ctx.request);
+
+  if (!userJWT.roles) {
+    return response(ctx, 202, []);
+  }
+
   // Ensuring we have required data in the request
   const body = ctx.request.body;
   const requiredDataKeys = [
@@ -97,6 +103,10 @@ export const updateCreate = async (ctx) => {
 
   for (const stack_id of body.stack_ids) {
     const stackId = Number(stack_id);
+
+    if (!(userJWT.roles?.update_stacks || []).includes(stackId)) {
+      return response(ctx, 401, {});
+    }
 
     const lastUpdate = await prisma.updates.findFirst({
       where: { stack_id: stackId },

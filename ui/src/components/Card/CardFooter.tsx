@@ -53,6 +53,7 @@ interface CardFooterProps {
   serverAppVersion?: string;
   serverXapiVersion?: string;
   isUpdating: boolean;
+  canUpdate: boolean;
 }
 
 const CardFooter = observer((props: CardFooterProps) => {
@@ -90,7 +91,7 @@ const CardFooter = observer((props: CardFooterProps) => {
       </FooterButton>
       <FooterButton
         title="Update Stack"
-        disabled={props.isUpdating}
+        disabled={props.isUpdating || !props.canUpdate}
         onClick={() => {
           store.setIsUpdateModalOpen(true);
           setQuery({
