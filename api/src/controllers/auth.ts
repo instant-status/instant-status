@@ -5,6 +5,7 @@ import API_CONFIG from '../../../config/apiConfig';
 import formatAuthorisationToken from '../helpers/formatAuthorisationToken';
 import prisma from '../../prisma/prismaClient';
 import { isJWTStale } from '../helpers/jwt';
+import constructUserStackPermissions from '../helpers/constructUserStackPermissions';
 
 const CLIENT_ID = API_CONFIG.GOOGLE_AUTH.CLIENT_ID;
 const CLIENT_SECRET = API_CONFIG.GOOGLE_AUTH.CLIENT_SECRET;
@@ -104,6 +105,38 @@ export const authGoogle = async (ctx: any) => {
 
     const matchingUser = await prisma.users.findFirst({
       where: { email: { in: userEmails } },
+      select: {
+        id: true,
+        email: true,
+        roles: {
+          select: {
+            view_stacks: {
+              select: {
+                id: true,
+              },
+            },
+            view_stack_enviroments: true,
+            update_stacks: {
+              select: {
+                id: true,
+              },
+            },
+            update_stack_enviroments: true,
+          },
+        },
+      },
+    });
+
+    const allStacks = await prisma.stacks.findMany({
+      select: {
+        id: true,
+        environment: true,
+      },
+    });
+
+    const userStackPermissions = constructUserStackPermissions({
+      user: matchingUser,
+      allStacks,
     });
 
     if (!matchingUser) {
@@ -113,8 +146,8 @@ export const authGoogle = async (ctx: any) => {
     const validUser = {
       email: matchingUser.email,
       roles: {
-        view_stacks: [],
-        update_stacks: [],
+        view_stacks: userStackPermissions.canViewStackIds,
+        update_stacks: userStackPermissions.canUpdateStackIds,
       },
     };
 
