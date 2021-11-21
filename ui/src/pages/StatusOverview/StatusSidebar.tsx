@@ -21,7 +21,6 @@ const StatusSidebar = observer(() => {
 
   const sidebarQuery = useQuery(`sidebarData`, apiRoutes.apiGetStacksMetadata, {
     refetchInterval: 10000, // Refetch the data every 10 seconds
-    enabled: false,
   });
 
   const hasCustomSettings =
