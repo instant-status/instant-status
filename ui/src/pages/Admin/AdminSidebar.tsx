@@ -1,16 +1,13 @@
 import React, { memo } from "react";
 import { useQuery } from "react-query";
 
-import APP_CONFIG from "../../../appConfig";
+import apiRoutes from "../../api/apiRoutes";
 import Stack from "../../components/Layout/Stack";
 import Sidebar from "../../components/Sidebar/Sidebar";
 import SidebarListTab from "../../components/Sidebar/SidebarListTab";
-import fetchUrl from "../../hooks/useFetch";
 
 const AdminSidebar = () => {
-  const sidebarQuery = useQuery(`sidebarData`, () =>
-    fetchUrl(`${APP_CONFIG.DATA_URL}/v2/metadata`),
-  );
+  const sidebarQuery = useQuery(`sidebarData`, apiRoutes.apiGetStacksMetadata);
 
   return (
     <Sidebar

@@ -53,6 +53,7 @@ const GlobalStyle = createGlobalStyle`
 
 const App = () => {
   const { isLoggedIn } = useIsLoggedIn();
+
   const queryClient = new QueryClient();
 
   return (
