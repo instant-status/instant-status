@@ -16,6 +16,13 @@ export const isRequestAllowed = (request: {
   url: string;
   headers: { authorization?: string };
 }) => {
+  const isRequestFromServer =
+    getRequesterIdentity(request) === `server@InstantStatus`;
+  // Only allow servers to use check-in
+  if (request.url.includes('/v2/check-in') && !isRequestFromServer) {
+    return false;
+  }
+
   // Don't require auth if user is trying to log in
   if (request.url.includes('/auth/google/callback')) {
     return true;
@@ -32,7 +39,7 @@ export const isRequestAllowed = (request: {
           secret
         );
 
-        if (!isJWTStale(request.headers.authorization)) {
+        if (isRequestFromServer || !isJWTStale(request.headers.authorization)) {
           isRequestAllowed = true;
         }
       }

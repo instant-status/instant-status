@@ -1,8 +1,23 @@
 import prisma from '../../prisma/prismaClient';
 import response from '../helpers/returnResponse';
+import { getRequesterDecodedJWT } from './auth';
 
 export const getMetadata = async (ctx: any) => {
-  const servers = await prisma.servers.findMany();
+  const userJWT = getRequesterDecodedJWT(ctx.request);
+
+  if (!userJWT.roles) {
+    return response(ctx, 202, {
+      activeVersions: [],
+      serverCount: 0,
+      stackCount: 0,
+      stacks: [],
+      maxServerCount: 0,
+    });
+  }
+
+  const servers = await prisma.servers.findMany({
+    where: { stack_id: { in: userJWT.roles?.view_stacks || [] } },
+  });
 
   const stacks = new Set(servers.map((server) => server.stack_id));
   const versions = new Set(servers.map((server) => server.server_app_version));

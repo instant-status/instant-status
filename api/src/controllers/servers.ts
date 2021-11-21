@@ -1,12 +1,24 @@
 import prisma from '../../prisma/prismaClient';
 import response from '../helpers/returnResponse';
+import { getRequesterDecodedJWT } from './auth';
 
 export const deleteServer = async (ctx) => {
+  const userJWT = getRequesterDecodedJWT(ctx.request);
+
+  if (!userJWT.roles) {
+    return response(ctx, 401);
+  }
   const body = ctx.request.body;
 
   if (!body.server_id) {
     return response(ctx, 400);
   }
-  await prisma.servers.delete({ where: { server_id: body.server_id } });
+
+  await prisma.servers.deleteMany({
+    where: {
+      server_id: body.server_id,
+      stack_id: { in: userJWT.roles?.update_stacks || [] },
+    },
+  });
   return response(ctx, 204);
 };
