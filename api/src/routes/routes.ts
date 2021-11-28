@@ -1,23 +1,18 @@
 import KoaRouter from '@koa/router';
 
-import { checkIn } from '../controllers/checkIn';
-import {
-  updateCreate,
-  updateGet,
-  updatePost,
-  updateGetLatest,
-} from '../controllers/update';
-import { getMetadata } from '../controllers/metadata';
+import * as checkInController from '../controllers/checkIn';
+import * as updateController from '../controllers/update';
+import * as metadataController from '../controllers/metadata';
+import * as stackController from '../controllers/stack';
+import * as serverController from '../controllers/server';
+import * as authController from '../controllers/auth';
 
-import {
-  listStacks,
-  getIdByName,
-  createStack,
-  deleteStack,
-} from '../controllers/stack';
-import { deleteServer } from '../controllers/servers';
-
-import { authGoogle } from '../controllers/auth';
+const serverOnly = (ctx: KoaRouter.RouterContext, next: () => void) => {
+  const isRequestFromServer =
+    authController.getRequesterIdentity(ctx.request) === `server@InstantStatus`;
+  if (!isRequestFromServer) ctx.throw(401);
+  return next();
+};
 
 const router = new KoaRouter();
 
@@ -25,25 +20,24 @@ const router = new KoaRouter();
 router.get('/', (ctx) => (ctx.body = { version: '2.0.0' }));
 
 // Google Auth
-router.get('/auth/google/callback', authGoogle);
+router.get('/auth/google/callback', authController.authGoogle);
 
 // Stack
-router.get('/v2/stacks', listStacks);
-router.get('/v2/stack/get-id', getIdByName);
-router.post('/v2/stack', createStack);
-router.delete('/v2/stack', deleteStack);
+router.get('/v2/stacks', stackController.listStacks);
+router.get('/v2/stack/get-id', serverOnly, stackController.getIdByName);
+router.post('/v2/stack', stackController.createStack);
+router.delete('/v2/stack', stackController.deleteStack);
 
 // Server Communication
-router.get('/v2/update', updateGet);
-router.post('/v2/update', updatePost);
-router.post('/v2/check-in', checkIn);
-router.delete('/v2/server/delete', deleteServer);
+router.get('/v2/update', serverOnly, updateController.updateGet);
+router.post('/v2/update', serverOnly, updateController.updateServerProgress);
+router.post('/v2/check-in', serverOnly, checkInController.checkIn);
+router.delete('/v2/server/delete', serverController.deleteServer);
 
 // Update
-router.get('/v2/updates/latest', updateGetLatest);
-router.post('/v2/update/create', updateCreate);
+router.post('/v2/update/create', updateController.updateCreate);
 
 // Metadata
-router.get('/v2/metadata', getMetadata);
+router.get('/v2/metadata', metadataController.getMetadata);
 
 export default router;

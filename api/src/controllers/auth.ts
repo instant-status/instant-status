@@ -18,10 +18,6 @@ export const isRequestAllowed = (request: {
 }) => {
   const isRequestFromServer =
     getRequesterIdentity(request) === `server@InstantStatus`;
-  // Only allow servers to use check-in
-  if (request.url.includes('/v2/check-in') && !isRequestFromServer) {
-    return false;
-  }
 
   // Don't require auth if user is trying to log in
   if (request.url.includes('/auth/google/callback')) {
@@ -58,6 +54,7 @@ export const getRequesterDecodedJWT = (request: {
     formatAuthorisationToken(request.headers.authorization)
   ) as {
     email: string;
+    is_super_admin: boolean;
     roles: {
       view_stacks?: number[];
       update_stacks?: number[];
@@ -115,6 +112,7 @@ export const authGoogle = async (ctx: any) => {
       select: {
         id: true,
         email: true,
+        is_super_admin: true,
         roles: {
           select: {
             view_stacks: {
@@ -134,6 +132,10 @@ export const authGoogle = async (ctx: any) => {
       },
     });
 
+    if (!matchingUser) {
+      throw new Error('User not allowed');
+    }
+
     const allStacks = await prisma.stacks.findMany({
       select: {
         id: true,
@@ -146,12 +148,9 @@ export const authGoogle = async (ctx: any) => {
       allStacks,
     });
 
-    if (!matchingUser) {
-      throw new Error('User not allowed');
-    }
-
     const validUser = {
       email: matchingUser.email,
+      is_super_admin: matchingUser.is_super_admin,
       roles: {
         view_stacks: userStackPermissions.canViewStackIds,
         update_stacks: userStackPermissions.canUpdateStackIds,

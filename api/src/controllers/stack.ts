@@ -61,6 +61,12 @@ export const getIdByName = async (ctx) => {
 };
 
 export const createStack = async (ctx) => {
+  const userJWT = getRequesterDecodedJWT(ctx.request);
+
+  if (!userJWT.is_super_admin) {
+    return response(ctx, 401, {});
+  }
+
   // Ensuring we have required data in the request
   const body = ctx.request.body;
   const requiredDataKeys = [
@@ -137,5 +143,11 @@ export const createStack = async (ctx) => {
 };
 
 export const deleteStack = async (ctx) => {
+  const userJWT = getRequesterDecodedJWT(ctx.request);
+
+  if (!userJWT.is_super_admin) {
+    return response(ctx, 401, {});
+  }
+
   console.log('todo');
 };

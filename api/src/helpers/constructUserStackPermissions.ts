@@ -7,6 +7,7 @@ const constructUserStackPermissions = ({
   user: {
     id: number;
     email: string;
+    is_super_admin: boolean;
     roles: {
       view_stacks: {
         id: number;
@@ -20,6 +21,14 @@ const constructUserStackPermissions = ({
   };
   allStacks: { id: Stacks['id']; environment: Stacks['environment'] }[];
 }) => {
+  if (user.is_super_admin) {
+    const allStackIds = allStacks.map((stack) => stack.id);
+    return {
+      canViewStackIds: allStackIds,
+      canUpdateStackIds: allStackIds,
+    };
+  }
+
   // All stacks by ID that a user can view from their roles
   const userCanViewStackIds = user.roles
     .flatMap((role) => role.view_stacks)
