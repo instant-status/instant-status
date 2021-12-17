@@ -54,10 +54,10 @@ interface SidebarProps {
 }
 
 const Sidebar = observer((props: SidebarProps) => {
-  const locaction = useLocation();
+  const location = useLocation();
 
   if (
-    locaction.pathname.startsWith(`/admin`) &&
+    location.pathname.startsWith(`/admin`) &&
     !props.isLoading &&
     !props.isSuperAdmin
   ) {
