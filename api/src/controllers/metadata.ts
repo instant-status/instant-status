@@ -23,6 +23,7 @@ export const getMetadata = async (ctx: any) => {
   const versions = new Set(servers.map((server) => server.server_app_version));
 
   const responseBody = {
+    isSuperAdmin: userJWT.is_super_admin,
     activeVersions: [...versions],
     serverCount: servers.length,
     stackCount: [...stacks].length,

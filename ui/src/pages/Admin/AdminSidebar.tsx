@@ -13,6 +13,8 @@ const AdminSidebar = () => {
     <Sidebar
       stackCount={sidebarQuery.data?.stackCount}
       serverCount={sidebarQuery.data?.serverCount}
+      isSuperAdmin={sidebarQuery.data?.isSuperAdmin}
+      isLoading={sidebarQuery.isLoading}
     >
       <Stack direction="down" spacing={4}>
         <SidebarListTab to={`/admin/stacks`}>Manage Stacks</SidebarListTab>

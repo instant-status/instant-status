@@ -33,6 +33,8 @@ const StatusSidebar = observer(() => {
     <Sidebar
       stackCount={sidebarQuery.data?.stackCount}
       serverCount={sidebarQuery.data?.serverCount}
+      isSuperAdmin={sidebarQuery.data?.isSuperAdmin}
+      isLoading={sidebarQuery.isLoading}
     >
       <Stack
         as="section"
