@@ -7,6 +7,7 @@ export const getMetadata = async (ctx: any) => {
 
   if (!userJWT.roles) {
     return response(ctx, 202, {
+      isSuperAdmin: false,
       activeVersions: [],
       serverCount: 0,
       stackCount: 0,
