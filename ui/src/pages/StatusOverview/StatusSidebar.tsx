@@ -3,6 +3,7 @@ import React, { useContext } from "react";
 import { useQuery } from "react-query";
 
 import APP_CONFIG from "../../../appConfig";
+import apiRoutes from "../../api/apiRoutes";
 import { SidebarButton } from "../../components/Controls/Buttons";
 import Checkbox from "../../components/Controls/Checkbox";
 import SelectInput from "../../components/Controls/SelectInput";
@@ -12,20 +13,15 @@ import Stack from "../../components/Layout/Stack";
 import Sidebar from "../../components/Sidebar/Sidebar";
 import SidebarPaddingContainer from "../../components/Sidebar/SidebarPaddingContainer";
 import SidebarSectionHeader from "../../components/Sidebar/SidebarSectionHeader";
-import fetchUrl from "../../hooks/useFetch";
 import { globalStoreContext } from "../../store/globalStore";
 import VersionFilters from "./VersionFilters";
 
 const StatusSidebar = observer(() => {
   const store = useContext(globalStoreContext);
 
-  const sidebarQuery = useQuery(
-    `sidebarData`,
-    () => fetchUrl(`${APP_CONFIG.DATA_URL}/v2/metadata`),
-    {
-      refetchInterval: 10000, // Refetch the data every 10 seconds
-    },
-  );
+  const sidebarQuery = useQuery(`sidebarData`, apiRoutes.apiGetStacksMetadata, {
+    refetchInterval: 10000, // Refetch the data every 10 seconds
+  });
 
   const hasCustomSettings =
     store.keyLocation !== APP_CONFIG.DEFAULTS.KEY_LOCATION ||
@@ -37,6 +33,8 @@ const StatusSidebar = observer(() => {
     <Sidebar
       stackCount={sidebarQuery.data?.stackCount}
       serverCount={sidebarQuery.data?.serverCount}
+      isSuperAdmin={sidebarQuery.data?.isSuperAdmin}
+      isLoading={sidebarQuery.isLoading}
     >
       <Stack
         as="section"

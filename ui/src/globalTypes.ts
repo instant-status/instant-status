@@ -68,6 +68,7 @@ export interface StackProps {
   logo_url: string;
   environment: string;
   created_at: string;
+  canUpdate: boolean;
 
   servers: ServerProps[];
   updates: UpdateProps[];

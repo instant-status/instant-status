@@ -1,9 +1,11 @@
 import Cookies from "js-cookie";
 
+import APP_CONFIG from "../../appConfig";
+
 const useIsLoggedIn = () => {
   const isLoggedIn =
     Boolean(localStorage.getItem(`bearer`)) ||
-    Boolean(Cookies.get(`Auth-Bearer`));
+    Boolean(Cookies.get(APP_CONFIG.COOKIE_NAME));
   return { isLoggedIn };
 };
 

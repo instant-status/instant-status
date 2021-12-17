@@ -1,8 +1,11 @@
 import { google } from 'googleapis';
 import jwt from 'jsonwebtoken';
+// @ts-ignore
 import API_CONFIG from '../../../config/apiConfig';
 import formatAuthorisationToken from '../helpers/formatAuthorisationToken';
 import prisma from '../../prisma/prismaClient';
+import { isJWTStale } from '../helpers/jwt';
+import constructUserStackPermissions from '../helpers/constructUserStackPermissions';
 
 const CLIENT_ID = API_CONFIG.GOOGLE_AUTH.CLIENT_ID;
 const CLIENT_SECRET = API_CONFIG.GOOGLE_AUTH.CLIENT_SECRET;
@@ -13,6 +16,9 @@ export const isRequestAllowed = (request: {
   url: string;
   headers: { authorization?: string };
 }) => {
+  const isRequestFromServer =
+    getRequesterIdentity(request) === `server@InstantStatus`;
+
   // Don't require auth if user is trying to log in
   if (request.url.includes('/auth/google/callback')) {
     return true;
@@ -29,7 +35,9 @@ export const isRequestAllowed = (request: {
           secret
         );
 
-        isRequestAllowed = true;
+        if (isRequestFromServer || !isJWTStale(request.headers.authorization)) {
+          isRequestAllowed = true;
+        }
       }
     } catch (err) {
       // if this one isn't, check the rest
@@ -39,13 +47,25 @@ export const isRequestAllowed = (request: {
   return isRequestAllowed;
 };
 
-export const getRequesterIdentity = (request: {
-  url: string;
+export const getRequesterDecodedJWT = (request: {
   headers: { authorization?: string };
 }) => {
   const decodedJWT = jwt.decode(
     formatAuthorisationToken(request.headers.authorization)
-  ) as { email: string };
+  ) as {
+    email: string;
+    is_super_admin: boolean;
+    roles: {
+      view_stacks?: number[];
+      update_stacks?: number[];
+    };
+  };
+
+  return decodedJWT;
+};
+
+export const getRequesterIdentity = (request: any) => {
+  const decodedJWT = getRequesterDecodedJWT(request);
 
   const requesterIdentity = decodedJWT?.email || null;
 
@@ -89,15 +109,52 @@ export const authGoogle = async (ctx: any) => {
 
     const matchingUser = await prisma.users.findFirst({
       where: { email: { in: userEmails } },
+      select: {
+        id: true,
+        email: true,
+        is_super_admin: true,
+        roles: {
+          select: {
+            view_stacks: {
+              select: {
+                id: true,
+              },
+            },
+            view_stack_enviroments: true,
+            update_stacks: {
+              select: {
+                id: true,
+              },
+            },
+            update_stack_enviroments: true,
+          },
+        },
+      },
     });
 
     if (!matchingUser) {
       throw new Error('User not allowed');
     }
 
+    const allStacks = await prisma.stacks.findMany({
+      select: {
+        id: true,
+        environment: true,
+      },
+    });
+
+    const userStackPermissions = constructUserStackPermissions({
+      user: matchingUser,
+      allStacks,
+    });
+
     const validUser = {
       email: matchingUser.email,
-      roles: ['ADMIN'],
+      is_super_admin: matchingUser.is_super_admin,
+      roles: {
+        view_stacks: userStackPermissions.canViewStackIds,
+        update_stacks: userStackPermissions.canUpdateStackIds,
+      },
     };
 
     // console.log('Valid user:', validUser);

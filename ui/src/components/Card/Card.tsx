@@ -72,6 +72,7 @@ const Card = observer((props: { stack: StackProps }) => {
         serverAppVersion={serverAppVersion}
         serverXapiVersion={serverXapiVersion}
         isUpdating={isUpdating}
+        canUpdate={props.stack.canUpdate}
       />
     </CardBackground>
   );

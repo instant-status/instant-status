@@ -1,15 +1,28 @@
 import checkForRequiredDataKeys from '../helpers/checkForRequiredDataKeys';
-import { getRequesterIdentity } from './auth';
+import { getRequesterDecodedJWT, getRequesterIdentity } from './auth';
 import response from '../helpers/returnResponse';
 import isStackUpdating from '../helpers/isStackUpdating';
 import prisma from '../../prisma/prismaClient';
 import { Updates } from '@prisma/client';
+import { makeJWTsStale } from '../helpers/jwt';
 
 export const listStacks = async (ctx) => {
+  const userJWT = getRequesterDecodedJWT(ctx.request);
+
+  if (!userJWT.roles) {
+    return response(ctx, 202, []);
+  }
+
   const stackList = await prisma.stacks.findMany({
     orderBy: { id: 'desc' },
     include: { servers: true, updates: { orderBy: { created_at: 'desc' } } },
+    where: { id: { in: userJWT.roles?.view_stacks || [] } },
   });
+
+  for (const stack of stackList) {
+    // @ts-ignore
+    stack.canUpdate = (userJWT.roles?.update_stacks || []).includes(stack.id);
+  }
 
   return response(ctx, 202, stackList || []);
 };
@@ -48,11 +61,17 @@ export const getIdByName = async (ctx) => {
 };
 
 export const createStack = async (ctx) => {
+  const userJWT = getRequesterDecodedJWT(ctx.request);
+
+  if (!userJWT.is_super_admin) {
+    return response(ctx, 401, {});
+  }
+
   // Ensuring we have required data in the request
   const body = ctx.request.body;
   const requiredDataKeys = [
     'run_migrations',
-    'stack_ids',
+    'stack_names',
     'update_app_to',
     'update_xapi_to',
   ];
@@ -69,9 +88,9 @@ export const createStack = async (ctx) => {
 
   const updateRequestedBy = getRequesterIdentity(ctx.request);
 
-  for (const stack_id of body.stack_ids) {
+  for (const stack_name of body.stack_names) {
     const stack = await prisma.stacks.create({
-      data: { name: stack_id },
+      data: { name: stack_name.toLowerCase() },
     });
 
     const lastUpdate = await prisma.updates.findFirst({
@@ -119,9 +138,16 @@ export const createStack = async (ctx) => {
     });
   }
 
+  makeJWTsStale();
   return response(ctx, 202, {});
 };
 
 export const deleteStack = async (ctx) => {
+  const userJWT = getRequesterDecodedJWT(ctx.request);
+
+  if (!userJWT.is_super_admin) {
+    return response(ctx, 401, {});
+  }
+
   console.log('todo');
 };

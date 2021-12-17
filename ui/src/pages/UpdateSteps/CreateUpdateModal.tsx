@@ -180,17 +180,19 @@ const CreateUpdateModal = observer(() => {
     return value.replace(/ /g, ``);
   };
 
-  const groupedStacks = stacks.reduce((groupedStack, stack) => {
-    groupedStack[stack.environment] = [
-      ...(groupedStack[stack.environment] || []),
-      stack,
-    ];
+  const groupedStacks = stacks
+    .filter((stack) => stack.canUpdate)
+    .reduce((groupedStack, stack) => {
+      groupedStack[stack.environment] = [
+        ...(groupedStack[stack.environment] || []),
+        stack,
+      ];
 
-    if (stack.servers.length > 0) {
-      return groupedStack;
-    }
-    return {};
-  }, {} as { [key: string]: any });
+      if (stack.servers.length > 0) {
+        return groupedStack;
+      }
+      return {};
+    }, {} as { [key: string]: any });
 
   const groupedStacksArray = Object.entries(groupedStacks) as {
     [0]: string;

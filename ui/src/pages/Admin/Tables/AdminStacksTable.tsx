@@ -49,7 +49,7 @@ const AdminStacksTable = (props: AdminStacksTable) => {
     <Table>
       <thead>
         <tr>
-          <TableHeader>Stack ID</TableHeader>
+          <TableHeader>Stack Names</TableHeader>
           <TableHeader>app Version</TableHeader>
           <TableHeader>xAPI Version</TableHeader>
           <TableHeader>Created</TableHeader>

@@ -1,5 +1,6 @@
 import { observer } from "mobx-react-lite";
 import React from "react";
+import { Redirect, useLocation } from "react-router";
 import styled from "styled-components";
 
 import IconAdmin from "../Icons/IconAdmin";
@@ -47,10 +48,22 @@ const A = styled.a`
 interface SidebarProps {
   stackCount: number;
   serverCount: number;
+  isSuperAdmin: boolean;
+  isLoading?: boolean;
   children: React.ReactNode;
 }
 
 const Sidebar = observer((props: SidebarProps) => {
+  const location = useLocation();
+
+  if (
+    location.pathname.startsWith(`/admin`) &&
+    !props.isLoading &&
+    !props.isSuperAdmin
+  ) {
+    return <Redirect to="/" />;
+  }
+
   return (
     <>
       <Aside>
@@ -72,11 +85,13 @@ const Sidebar = observer((props: SidebarProps) => {
                 label="History"
                 icon={<IconHistory width="30px" />}
               />
-              <SidebarTab
-                to="/admin"
-                label="Admin"
-                icon={<IconAdmin width="30px" />}
-              />
+              {props.isSuperAdmin && (
+                <SidebarTab
+                  to="/admin"
+                  label="Admin"
+                  icon={<IconAdmin width="30px" />}
+                />
+              )}
             </Stack>
             <Stack justify="center" align="baseline" as={Footer}>
               <A

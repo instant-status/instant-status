@@ -1,27 +1,10 @@
 import { JsonObject } from 'type-fest';
 import checkForRequiredDataKeys from '../helpers/checkForRequiredDataKeys';
-import { getRequesterIdentity } from './auth';
+import { getRequesterDecodedJWT, getRequesterIdentity } from './auth';
 import response from '../helpers/returnResponse';
 import isStackUpdating from '../helpers/isStackUpdating';
 import prisma from '../../prisma/prismaClient';
 import { Servers, Updates } from '@prisma/client';
-
-export const updateGetLatest = async (ctx) => {
-  // Fetching the details of the update and returning a response
-  const latestUpdates = await prisma.updates.findMany({
-    distinct: ['stack_id'],
-    orderBy: { id: 'desc' },
-  });
-
-  if (latestUpdates) {
-    return response(ctx, 200, latestUpdates);
-  } else {
-    return response(ctx, 404, {
-      ok: false,
-      message: `No updates found.`,
-    });
-  }
-};
 
 export const updateGet = async (ctx) => {
   // Ensuring we have required data in the request
@@ -74,6 +57,12 @@ export const updateGet = async (ctx) => {
 };
 
 export const updateCreate = async (ctx) => {
+  const userJWT = getRequesterDecodedJWT(ctx.request);
+
+  if (!userJWT.roles) {
+    return response(ctx, 202, []);
+  }
+
   // Ensuring we have required data in the request
   const body = ctx.request.body;
   const requiredDataKeys = [
@@ -97,6 +86,10 @@ export const updateCreate = async (ctx) => {
 
   for (const stack_id of body.stack_ids) {
     const stackId = Number(stack_id);
+
+    if (!(userJWT.roles?.update_stacks || []).includes(stackId)) {
+      return response(ctx, 401, {});
+    }
 
     const lastUpdate = await prisma.updates.findFirst({
       where: { stack_id: stackId },
@@ -146,7 +139,7 @@ export const updateCreate = async (ctx) => {
   return response(ctx, 202, {});
 };
 
-export const updatePost = async (ctx) => {
+export const updateServerProgress = async (ctx) => {
   // Ensuring we have required data in the request
   const body = ctx.request.body;
   const requiredDataKeys = [
