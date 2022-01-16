@@ -18,6 +18,8 @@ const AdminSidebar = () => {
     >
       <Stack direction="down" spacing={4}>
         <SidebarListTab to={`/admin/stacks`}>Manage Stacks</SidebarListTab>
+        <SidebarListTab to={`/admin/roles`}>Manage Roles</SidebarListTab>
+        <SidebarListTab to={`/admin/users`}>Manage Users</SidebarListTab>
       </Stack>
     </Sidebar>
   );

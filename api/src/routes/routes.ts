@@ -6,6 +6,7 @@ import * as metadataController from '../controllers/metadata';
 import * as stackController from '../controllers/stack';
 import * as serverController from '../controllers/server';
 import * as authController from '../controllers/auth';
+import * as adminController from '../controllers/admin';
 
 const serverOnly = (ctx: KoaRouter.RouterContext, next: () => void) => {
   const isRequestFromServer =
@@ -39,5 +40,9 @@ router.post('/v2/update/create', updateController.updateCreate);
 
 // Metadata
 router.get('/v2/metadata', metadataController.getMetadata);
+
+// Admin
+router.get('/v2/admin/users', adminController.getUsers);
+router.get('/v2/admin/roles', adminController.getRoles);
 
 export default router;

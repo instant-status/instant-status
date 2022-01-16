@@ -10,7 +10,9 @@ import APP_CONFIG from "../appConfig";
 import DevMenu from "./components/DevTools/DevMenu";
 import useIsLoggedIn from "./hooks/useIsLoggedIn";
 import Admin from "./pages/Admin/Admin";
+import AdminRoles from "./pages/Admin/AdminRoles";
 import AdminStacks from "./pages/Admin/AdminStacks";
+import AdminUsers from "./pages/Admin/AdminUsers";
 import AutoLogin from "./pages/Auth/AutoLogin";
 import Login from "./pages/Auth/Login";
 import Logout from "./pages/Auth/Logout";
@@ -94,6 +96,16 @@ const App = () => {
                             exact
                             path="/admin/stacks"
                             component={AdminStacks}
+                          />
+                          <Route
+                            exact
+                            path="/admin/roles"
+                            component={AdminRoles}
+                          />
+                          <Route
+                            exact
+                            path="/admin/users"
+                            component={AdminUsers}
                           />
                           <Route path="*" component={StatusPage} />
                         </Switch>

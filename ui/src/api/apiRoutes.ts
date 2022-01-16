@@ -64,6 +64,14 @@ const apiGetStacksMetadata = () => {
   return apiFetch(`${APP_CONFIG.DATA_URL}/v2/metadata`);
 };
 
+const apiGetAdminRoles = () => {
+  return apiFetch(`${APP_CONFIG.DATA_URL}/v2/admin/roles`);
+};
+
+const apiGetAdminUsers = () => {
+  return apiFetch(`${APP_CONFIG.DATA_URL}/v2/admin/users`);
+};
+
 const apiCreateStack = (payload: { body: CreateStackProps }) => {
   return apiPost(`${APP_CONFIG.DATA_URL}/v2/stack`, payload.body);
 };
@@ -75,6 +83,8 @@ const apiCreateUpdate = (payload: { body: CreateUpdateProps }) => {
 export default {
   apiGetStacksList,
   apiGetStacksMetadata,
+  apiGetAdminRoles,
+  apiGetAdminUsers,
   apiCreateStack,
   apiCreateUpdate,
 };

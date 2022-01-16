@@ -1,4 +1,3 @@
-import { AnimatePresence } from "framer-motion";
 import React, { memo, useState } from "react";
 import { useQuery } from "react-query";
 import styled from "styled-components";
@@ -10,7 +9,6 @@ import PageHeader from "../../components/Layout/PageHeader";
 import Stack from "../../components/Layout/Stack";
 import theme from "../../utils/theme";
 import AdminSidebar from "./AdminSidebar";
-import CreateStacksForm from "./Forms/CreateStacksForm";
 import AdminStacksTable from "./Tables/AdminStacksTable";
 
 const Wrapper = styled.div`
@@ -28,24 +26,12 @@ const MaxWidth = styled.div`
   width: 100%;
 `;
 
-const AdminStacksPage = () => {
+const AdminRolesPage = () => {
   const [isCreateOpen, setIsCreateOpen] = useState(false);
 
-  const updatesQuery = useQuery(`stacksData`, apiRoutes.apiGetStacksList);
+  const updatesQuery = useQuery(`adminRoles`, apiRoutes.apiGetAdminRoles);
 
-  const stacksList = updatesQuery.isFetching ? [] : updatesQuery?.data;
-  const existingStackIds = stacksList.map((update: { name: string }) =>
-    update.name.toLowerCase(),
-  );
-
-  const onNewStackSuccess = () => {
-    setIsCreateOpen(false);
-    updatesQuery.refetch();
-  };
-
-  const onNewStackAbort = () => {
-    setIsCreateOpen(false);
-  };
+  const roles = updatesQuery.isFetching ? [] : updatesQuery?.data;
 
   return (
     <Wrapper>
@@ -55,7 +41,7 @@ const AdminStacksPage = () => {
         <MaxWidth>
           <PageTitle>
             <Stack spacing={8} align="center" justify="spaceBetween">
-              <h1>Manage Stacks</h1>
+              <h1>Roles</h1>
               {!isCreateOpen && (
                 <SmallButton
                   onClick={() => setIsCreateOpen(true)}
@@ -68,7 +54,24 @@ const AdminStacksPage = () => {
             </Stack>
           </PageTitle>
           <Stack direction="down" spacing={8} fullWidth={true}>
-            <AnimatePresence>
+            {roles.map((role) => (
+              <div key={role.id} style={{ color: `#fff` }}>
+                <div>
+                  <b>Role Name: </b>
+                  {role.name}
+                </div>
+                <div>
+                  <b>Can view stacks: </b>
+                  {role.view_stacks.map((stack) => stack.name).join(`, `)}
+                </div>
+                <div>
+                  <b>Can update stacks: </b>
+                  {role.update_stacks.map((stack) => stack.name).join(`, `)}
+                </div>
+              </div>
+            ))}
+
+            {/* <AnimatePresence>
               {isCreateOpen && (
                 <CreateStacksForm
                   existingStackIds={existingStackIds}
@@ -76,8 +79,8 @@ const AdminStacksPage = () => {
                   onAbort={onNewStackAbort}
                 />
               )}
-            </AnimatePresence>
-            <AdminStacksTable stacks={stacksList} />
+            </AnimatePresence> */}
+            {/* <AdminStacksTable stacks={users} /> */}
           </Stack>
         </MaxWidth>
       </Page>
@@ -85,4 +88,4 @@ const AdminStacksPage = () => {
   );
 };
 
-export default memo(AdminStacksPage);
+export default memo(AdminRolesPage);
