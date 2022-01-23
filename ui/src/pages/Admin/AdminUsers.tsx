@@ -1,41 +1,48 @@
-import React, { memo, useState } from "react";
-import Select from "react-dropdown-select";
+import React, { memo, useCallback, useState } from "react";
 import { useQuery } from "react-query";
 import styled from "styled-components";
 
 import apiRoutes from "../../api/apiRoutes";
 import { SmallButton } from "../../components/Controls/Buttons";
+import AdminPageTitle from "../../components/Layout/AdminPageTitle";
+import MaxWidth from "../../components/Layout/MaxWidth";
 import Page from "../../components/Layout/Page";
 import PageHeader from "../../components/Layout/PageHeader";
 import Stack from "../../components/Layout/Stack";
+import useToggle from "../../hooks/useToggle";
 import theme from "../../utils/theme";
 import AdminSidebar from "./AdminSidebar";
+import AdminUsersTable, { NewUserProps } from "./Tables/AdminUsersTable";
 
 const Wrapper = styled.div`
   display: flex;
 `;
 
-const PageTitle = styled.header`
-  color: ${theme.color.lightOne};
-  width: 100%;
-  padding: 0 32px;
-`;
-
-const MaxWidth = styled.div`
-  max-width: 1000px;
-  width: 100%;
-`;
-
 const AdminUsersPage = () => {
-  const [isCreateOpen, setIsCreateOpen] = useState(false);
+  const [isCreateOpen, toggleIsCreateOpen] = useToggle(false);
+  const [newRow, setNewRow] = useState<NewUserProps[]>([]);
 
-  const adminUsersQuery = useQuery(`adminUsers`, apiRoutes.apiGetAdminUsers);
+  const adminGetUsersQuery = useQuery(`adminGetUsers`, apiRoutes.apiGetUsers, {
+    refetchOnWindowFocus: false,
+  });
 
-  const users = adminUsersQuery.isFetching ? [] : adminUsersQuery?.data;
+  const users = adminGetUsersQuery.isFetching ? [] : adminGetUsersQuery?.data;
 
-  const adminRolesQuery = useQuery(`adminRoles`, apiRoutes.apiGetAdminRoles);
+  const adminRolesQuery = useQuery(`adminRoles`, apiRoutes.apiGetAdminRoles, {
+    refetchOnWindowFocus: false,
+  });
 
   const roles = adminRolesQuery.isFetching ? [] : adminRolesQuery?.data;
+
+  const onCreateOpen = useCallback(() => {
+    toggleIsCreateOpen();
+    setNewRow([{ isInCreateMode: true }]);
+  }, []);
+
+  const onCreateClose = useCallback(() => {
+    toggleIsCreateOpen();
+    setNewRow([]);
+  }, []);
 
   return (
     <Wrapper>
@@ -43,50 +50,26 @@ const AdminUsersPage = () => {
       <Page>
         <PageHeader />
         <MaxWidth>
-          <PageTitle>
+          <AdminPageTitle>
             <Stack spacing={8} align="center" justify="spaceBetween">
-              <h1>Users</h1>
+              <h1>Manage Users</h1>
               {!isCreateOpen && (
                 <SmallButton
-                  onClick={() => setIsCreateOpen(true)}
+                  onClick={onCreateOpen}
                   $color={theme.color.lightOne}
                   $variant="primary"
                 >
-                  Create Stacks
+                  Add User
                 </SmallButton>
               )}
             </Stack>
-          </PageTitle>
-          <Stack direction="down" spacing={8} fullWidth={true}>
-            {users.map((user) => (
-              <div key={user.id}>
-                <h3 style={{ color: `#fff` }}>
-                  {user.first_name} {user.last_name}
-                </h3>
-                <div style={{ color: `#fff` }}>{user.email}</div>
-                <div style={{ color: `#fff` }}>
-                  {user.is_super_admin
-                    ? `is_super_admin: true`
-                    : `is_super_admin: false`}
-                </div>
-                <Select
-                  addPlaceholder="test"
-                  multi={true}
-                  searchable={true}
-                  options={roles.map((role) => ({
-                    label: role.name,
-                    value: role.id,
-                  }))}
-                  onChange={(values) => {}}
-                  values={(user.roles || []).map((role) => ({
-                    label: role.name,
-                    value: role.id,
-                  }))}
-                />
-                <div></div>
-              </div>
-            ))}
-          </Stack>
+          </AdminPageTitle>
+          <AdminUsersTable
+            users={[...newRow, ...users]}
+            availableRoles={roles}
+            onSuccess={adminGetUsersQuery.refetch}
+            onCancel={onCreateClose}
+          />
         </MaxWidth>
       </Page>
     </Wrapper>

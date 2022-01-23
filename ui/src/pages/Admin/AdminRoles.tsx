@@ -4,26 +4,16 @@ import styled from "styled-components";
 
 import apiRoutes from "../../api/apiRoutes";
 import { SmallButton } from "../../components/Controls/Buttons";
+import AdminPageTitle from "../../components/Layout/AdminPageTitle";
+import MaxWidth from "../../components/Layout/MaxWidth";
 import Page from "../../components/Layout/Page";
 import PageHeader from "../../components/Layout/PageHeader";
 import Stack from "../../components/Layout/Stack";
 import theme from "../../utils/theme";
 import AdminSidebar from "./AdminSidebar";
-import AdminStacksTable from "./Tables/AdminStacksTable";
 
 const Wrapper = styled.div`
   display: flex;
-`;
-
-const PageTitle = styled.header`
-  color: ${theme.color.lightOne};
-  width: 100%;
-  padding: 0 32px;
-`;
-
-const MaxWidth = styled.div`
-  max-width: 1000px;
-  width: 100%;
 `;
 
 const AdminRolesPage = () => {
@@ -39,20 +29,20 @@ const AdminRolesPage = () => {
       <Page>
         <PageHeader />
         <MaxWidth>
-          <PageTitle>
+          <AdminPageTitle>
             <Stack spacing={8} align="center" justify="spaceBetween">
-              <h1>Roles</h1>
+              <h1>Manage Roles</h1>
               {!isCreateOpen && (
                 <SmallButton
                   onClick={() => setIsCreateOpen(true)}
                   $color={theme.color.lightOne}
                   $variant="primary"
                 >
-                  Create Stacks
+                  Add Role
                 </SmallButton>
               )}
             </Stack>
-          </PageTitle>
+          </AdminPageTitle>
           <Stack direction="down" spacing={8} fullWidth={true}>
             {roles.map((role) => (
               <div key={role.id} style={{ color: `#fff` }}>

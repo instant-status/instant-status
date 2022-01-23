@@ -18,7 +18,7 @@ const SidebarListTab = styled(NavLink).attrs({
   color: lightseagreen;
 
   &:hover:not(:disabled) {
-    color: #fff;
+    color: ${(props) => props.theme.color.lightOne};
     background-color: ${(props) => props.theme.color.darkTwo};
   }
 

@@ -56,8 +56,30 @@ export interface CreateStackProps {
   update_xapi_to: string;
 }
 
+export interface UpdateUserProps {
+  id: number;
+  first_name: string;
+  last_name: string;
+  email: string;
+  roles: number[];
+}
+
+export type CreateUserProps = Omit<UpdateUserProps, `id`>;
+
 const apiGetStacksList = () => {
   return apiFetch(`${APP_CONFIG.DATA_URL}/v2/stacks`);
+};
+
+const apiGetUsers = () => {
+  return apiFetch(`${APP_CONFIG.DATA_URL}/v2/admin/users`);
+};
+
+const apiCreateUser = (payload: { body: CreateUserProps }) => {
+  return apiPost(`${APP_CONFIG.DATA_URL}/v2/admin/user/create`, payload.body);
+};
+
+const apiEditUser = (payload: { body: UpdateUserProps }) => {
+  return apiPost(`${APP_CONFIG.DATA_URL}/v2/admin/user/edit`, payload.body);
 };
 
 const apiGetStacksMetadata = () => {
@@ -66,10 +88,6 @@ const apiGetStacksMetadata = () => {
 
 const apiGetAdminRoles = () => {
   return apiFetch(`${APP_CONFIG.DATA_URL}/v2/admin/roles`);
-};
-
-const apiGetAdminUsers = () => {
-  return apiFetch(`${APP_CONFIG.DATA_URL}/v2/admin/users`);
 };
 
 const apiCreateStack = (payload: { body: CreateStackProps }) => {
@@ -84,7 +102,9 @@ export default {
   apiGetStacksList,
   apiGetStacksMetadata,
   apiGetAdminRoles,
-  apiGetAdminUsers,
+  apiCreateUser,
+  apiEditUser,
+  apiGetUsers,
   apiCreateStack,
   apiCreateUpdate,
 };

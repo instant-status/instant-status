@@ -65,6 +65,7 @@ const StatusSidebar = observer(() => {
             onBlur={(event) => store.setKeyLocation(event.target.value, true)}
             label="Key File Location:"
             name="Key File Location:"
+            theme="dark"
           />
         </Stack>
         <Stack as={SidebarPaddingContainer} direction="down" spacing={9}>

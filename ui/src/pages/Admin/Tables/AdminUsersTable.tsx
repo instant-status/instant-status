@@ -1,127 +1,242 @@
 import moment from "moment";
-import { transparentize } from "polished";
-import React, { memo } from "react";
-import styled from "styled-components";
+import React, { memo, useState } from "react";
+import { useMutation } from "react-query";
 
+import apiRoutes, {
+  CreateUserProps,
+  UpdateUserProps,
+} from "../../../api/apiRoutes";
 import { SmallButton } from "../../../components/Controls/Buttons";
-import { StackProps } from "../../../globalTypes";
+import MultiSelectInput from "../../../components/Controls/MultiSelectInput";
+import TextInput from "../../../components/Controls/TextInput";
+import Stack from "../../../components/Layout/Stack";
+import {
+  Table,
+  TableCell,
+  TableHeader,
+  TableRow,
+} from "../../../components/Tables/AdminTable";
 import theme from "../../../utils/theme";
+export interface NewUserProps {
+  isInCreateMode?: boolean;
+}
 
-const Table = styled.table`
-  background-color: ${theme.color.darkOne};
-  width: 100%;
-  padding: 14px 20px;
-  border-radius: 10px;
-  color: ${theme.color.lightOne};
-`;
-
-const TableCell = styled.td`
-  padding: 6px 12px;
-  border-bottom: 1px solid ${transparentize(0.8, theme.color.lightOne)};
-  border-top: 0;
-`;
-
-const TableRow = styled.tr`
-  &:hover {
-    background-color: ${transparentize(0.9, theme.color.lightOne)};
-  }
-`;
-
-const TableHeader = styled.th`
-  font-weight: 600;
-  font-size: 1.3rem;
-  padding: 6px 12px;
-  border-bottom: 1px solid ${transparentize(0.8, theme.color.lightOne)};
-  text-align: left;
-`;
-
-const HelperLabel = styled.span`
-  font-size: 14px;
-  opacity: 0.6;
-`;
+export interface UserProps extends NewUserProps {
+  id: number;
+  email: string;
+  first_name: string;
+  last_name: string;
+  is_super_admin: boolean;
+  roles: { id: number; name: string }[];
+  created_at: string;
+}
 
 interface AdminUsersTableProps {
-  users: any;
+  users: UserProps[];
+  availableRoles: { id: number; name: string }[];
+  onSuccess: () => void;
+  onCancel?: () => void;
 }
+
+const UserRow = (props: {
+  user: UserProps;
+  availableRoles: AdminUsersTableProps[`availableRoles`];
+  onSuccess: AdminUsersTableProps[`onSuccess`];
+  onCancel: AdminUsersTableProps[`onCancel`];
+}) => {
+  const [isInEditMode, setIsEditMode] = useState(props.user.isInCreateMode);
+
+  const [firstName, setFirstName] = useState(props.user.first_name);
+  const [lastName, setLastName] = useState(props.user.last_name);
+  const [email, setEmail] = useState(props.user.email);
+  const [roles, setRoles] = useState(
+    (props.user.roles || []).map((role) => ({
+      label: role.name,
+      value: role.id,
+    })),
+  );
+
+  const updateUserMutation = useMutation((payload: UpdateUserProps) =>
+    apiRoutes.apiEditUser({ body: payload }),
+  );
+
+  const createUserMutation = useMutation((payload: CreateUserProps) =>
+    apiRoutes.apiCreateUser({ body: payload }),
+  );
+
+  const clearForm = () => {
+    setFirstName(props.user.first_name);
+    setLastName(props.user.last_name);
+    setEmail(props.user.email);
+    setRoles(
+      (props.user.roles || []).map((role) => ({
+        label: role.name,
+        value: role.id,
+      })),
+    );
+    setIsEditMode(false);
+    props.onCancel?.();
+  };
+
+  const updateOrCreateUser = () => {
+    if (firstName && lastName && email) {
+      if (props.user.isInCreateMode) {
+        createUserMutation.mutate(
+          {
+            first_name: firstName,
+            last_name: lastName,
+            email,
+            roles: roles.map((role) => role.value),
+          },
+          {
+            onSuccess: () => {
+              props.onSuccess && props.onSuccess();
+              clearForm();
+            },
+          },
+        );
+      } else {
+        updateUserMutation.mutate(
+          {
+            id: props.user.id,
+            first_name: firstName,
+            last_name: lastName,
+            email,
+            roles: roles.map((role) => role.value),
+          },
+          {
+            onSuccess: () => {
+              props.onSuccess && props.onSuccess();
+              clearForm();
+            },
+          },
+        );
+      }
+    }
+  };
+
+  return (
+    <TableRow>
+      <TableCell>{props.user.is_super_admin ? `👑 ` : ``}</TableCell>
+      <TableCell>
+        {isInEditMode ? (
+          <TextInput
+            value={firstName}
+            name="firstName"
+            onChange={(event) => setFirstName(event.target.value)}
+            label="First Name"
+            required={true}
+          />
+        ) : (
+          props.user.first_name
+        )}
+      </TableCell>
+      <TableCell>
+        {isInEditMode ? (
+          <TextInput
+            value={lastName}
+            name="lastName"
+            onChange={(event) => setLastName(event.target.value)}
+            label="Last Name"
+            required={true}
+          />
+        ) : (
+          props.user.last_name
+        )}
+      </TableCell>
+      <TableCell>
+        {isInEditMode ? (
+          <TextInput
+            value={email}
+            name="email"
+            type="email"
+            onChange={(event) => setEmail(event.target.value)}
+            label="Email"
+            required={true}
+          />
+        ) : (
+          props.user.email
+        )}
+      </TableCell>
+      <TableCell>
+        {isInEditMode ? (
+          <MultiSelectInput
+            label="Roles"
+            options={props.availableRoles.map((role) => ({
+              label: role.name,
+              value: role.id,
+            }))}
+            onChange={setRoles}
+            value={roles}
+          />
+        ) : (
+          props.user.roles?.map((role) => role.name).join(`, `)
+        )}
+      </TableCell>
+      <TableCell title={props.user.created_at}>
+        {props.user.created_at ? moment(props.user.created_at).fromNow() : ``}
+      </TableCell>
+      <TableCell>
+        {isInEditMode ? (
+          <Stack spacing={2}>
+            <SmallButton
+              $color={theme.color.lightOne}
+              $variant="primary"
+              $size="small"
+              onClick={updateOrCreateUser}
+            >
+              {props.user.isInCreateMode ? `Add` : `Save`}
+            </SmallButton>
+            <SmallButton
+              $color={theme.color.lightOne}
+              $variant="ghost"
+              $size="small"
+              onClick={clearForm}
+            >
+              Cancel
+            </SmallButton>
+          </Stack>
+        ) : (
+          <SmallButton
+            $color={theme.color.lightOne}
+            $variant="ghost"
+            $size="small"
+            onClick={() => setIsEditMode(true)}
+          >
+            Edit
+          </SmallButton>
+        )}
+      </TableCell>
+    </TableRow>
+  );
+};
 
 const AdminUsersTable = (props: AdminUsersTableProps) => {
   return (
     <Table>
       <thead>
         <tr>
-          <TableHeader>First Name</TableHeader>
-          <TableHeader>Last Name</TableHeader>
-          <TableHeader>Email</TableHeader>
-          <TableHeader>Super Admin</TableHeader>
-          <TableHeader>Roles</TableHeader>
-          <TableHeader>Created At</TableHeader>
-          <TableHeader>Actions</TableHeader>
+          <TableHeader></TableHeader>
+          <TableHeader width="15%">First Name</TableHeader>
+          <TableHeader width="15%">Last Name</TableHeader>
+          <TableHeader width="25%">Email</TableHeader>
+          <TableHeader width="25%">Roles</TableHeader>
+          <TableHeader width="10%">Created At</TableHeader>
+          <TableHeader width="10%">Actions</TableHeader>
         </tr>
       </thead>
       <tbody>
         {props.users
-          .sort((a, b) => b.created_at.localeCompare(a.created_at))
-          .map((stack) => {
-            // const runningAppVersion =
-            //   stack.servers.find((server) => server.server_app_version)
-            //     ?.server_app_version || ``;
-            // const runningXAPIVersion =
-            //   stack.servers.find((server) => server.server_xapi_version)
-            //     ?.server_xapi_version || ``;
-
-            // const updatingToAppVersion =
-            //   stack.updates.find((update) => update.update_app_to)
-            //     ?.update_app_to || ``;
-            // const updatingToXAPIVersion =
-            //   stack.updates.find((update) => update.update_xapi_to)
-            //     ?.update_xapi_to || ``;
-
-            // const isUpdating = Boolean(
-            //   stack.servers.find(
-            //     (server) => server.server_update_progress !== 100,
-            //   ) || stack.updates.find((update) => update.server_count === 0),
-            // );
-
+          .sort((a, b) => a.id - b.id)
+          .map((user) => {
             return (
-              <TableRow key={stack.id}>
-                <TableCell>{stack.name}</TableCell>
-                <TableCell>
-                  {runningAppVersion}
-                  {isUpdating ? (
-                    <>
-                      <br />
-                      <HelperLabel>
-                        (updating to {updatingToAppVersion})
-                      </HelperLabel>
-                    </>
-                  ) : null}
-                </TableCell>
-                <TableCell>
-                  {runningXAPIVersion}
-                  {isUpdating ? (
-                    <>
-                      <br />
-                      <HelperLabel>
-                        (updating to {updatingToXAPIVersion})
-                      </HelperLabel>
-                    </>
-                  ) : null}
-                </TableCell>
-                <TableCell title={stack.created_at}>
-                  {moment(stack.created_at).fromNow()}
-                </TableCell>
-                <TableCell>
-                  <SmallButton
-                    $color="red"
-                    $variant="ghost"
-                    $size="small"
-                    disabled={true}
-                    onClick={() => console.log(`Delete stack`)}
-                  >
-                    Delete
-                  </SmallButton>
-                </TableCell>
-              </TableRow>
+              <UserRow
+                key={user.id || `new`}
+                user={user}
+                availableRoles={props.availableRoles}
+                onSuccess={props.onSuccess}
+                onCancel={props.onCancel}
+              />
             );
           })}
       </tbody>

@@ -63,7 +63,7 @@ export const getIdByName = async (ctx) => {
 export const createStack = async (ctx) => {
   const userJWT = getRequesterDecodedJWT(ctx.request);
 
-  if (!userJWT.is_super_admin) {
+  if (userJWT.is_super_admin !== true) {
     return response(ctx, 401, {});
   }
 
@@ -145,7 +145,7 @@ export const createStack = async (ctx) => {
 export const deleteStack = async (ctx) => {
   const userJWT = getRequesterDecodedJWT(ctx.request);
 
-  if (!userJWT.is_super_admin) {
+  if (userJWT.is_super_admin !== true) {
     return response(ctx, 401, {});
   }
 
