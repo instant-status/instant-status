@@ -25,7 +25,7 @@ const theme: DefaultTheme = {
     darkOne: `#1f2430`,
     darkTwo: `#191e2a`,
     lightOne: `#fff1e5`,
-    red: `#ee2f01`,
+    red: `#ff5555`,
     green: `#00ab4e`,
     blue: `#26a8ff`,
     orange: `#fcaf17`,

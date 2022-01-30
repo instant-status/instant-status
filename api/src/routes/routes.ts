@@ -7,7 +7,7 @@ import * as stackController from '../controllers/stack';
 import * as serverController from '../controllers/server';
 import * as userController from '../controllers/user';
 import * as authController from '../controllers/auth';
-import * as adminController from '../controllers/admin';
+import * as roleController from '../controllers/role';
 
 const serverOnly = (ctx: KoaRouter.RouterContext, next: () => void) => {
   const isRequestFromServer =
@@ -29,6 +29,10 @@ router.get('/v2/stacks', stackController.listStacks);
 router.get('/v2/stack/get-id', serverOnly, stackController.getIdByName);
 router.post('/v2/stack', stackController.createStack);
 router.delete('/v2/stack/delete', stackController.deleteStack);
+router.get(
+  '/v2/stack/get-available-stacks-and-environments',
+  stackController.getAvailableStacksAndEnvironments
+);
 
 // Server Communication
 router.get('/v2/update', serverOnly, updateController.updateGet);
@@ -46,9 +50,11 @@ router.get('/v2/metadata', metadataController.getMetadata);
 router.get('/v2/admin/users', userController.getUsers);
 router.post('/v2/admin/user/create', userController.createUser);
 router.post('/v2/admin/user/edit', userController.editUser);
-router.delete('/v2/admin/user/delete', userController.deleteUser);
+router.post('/v2/admin/users/delete', userController.deleteUsers);
 
-// Admin
-router.get('/v2/admin/roles', adminController.getRoles);
+// Roles
+router.get('/v2/admin/roles', roleController.getRoles);
+router.post('/v2/admin/role/create', roleController.createRole);
+router.post('/v2/admin/role/edit', roleController.editRole);
 
 export default router;

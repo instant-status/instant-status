@@ -4,6 +4,7 @@ import { useMutation } from "react-query";
 
 import apiRoutes, {
   CreateUserProps,
+  DeleteUsersProps,
   UpdateUserProps,
 } from "../../../api/apiRoutes";
 import { SmallButton } from "../../../components/Controls/Buttons";
@@ -64,6 +65,10 @@ const UserRow = (props: {
     apiRoutes.apiCreateUser({ body: payload }),
   );
 
+  const deleteUsersMutation = useMutation((payload: DeleteUsersProps) =>
+    apiRoutes.apiDeleteUsers({ body: payload }),
+  );
+
   const clearForm = () => {
     setFirstName(props.user.first_name);
     setLastName(props.user.last_name);
@@ -112,6 +117,16 @@ const UserRow = (props: {
           },
         );
       }
+    }
+  };
+
+  const deleteUser = () => {
+    const canDelete = confirm(
+      `Are you sure you want to delete ${props.user.email}`,
+    );
+    if (canDelete) {
+      deleteUsersMutation.mutate({ user_ids: [props.user.id] });
+      props.onSuccess?.();
     }
   };
 
@@ -197,14 +212,24 @@ const UserRow = (props: {
             </SmallButton>
           </Stack>
         ) : (
-          <SmallButton
-            $color={theme.color.lightOne}
-            $variant="ghost"
-            $size="small"
-            onClick={() => setIsEditMode(true)}
-          >
-            Edit
-          </SmallButton>
+          <Stack spacing={2}>
+            <SmallButton
+              $color={theme.color.lightOne}
+              $variant="ghost"
+              $size="small"
+              onClick={() => setIsEditMode(true)}
+            >
+              Edit
+            </SmallButton>
+            <SmallButton
+              $color={theme.color.red}
+              $variant="ghost"
+              $size="small"
+              onClick={deleteUser}
+            >
+              Delete
+            </SmallButton>
+          </Stack>
         )}
       </TableCell>
     </TableRow>

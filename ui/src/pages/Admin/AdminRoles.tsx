@@ -1,4 +1,4 @@
-import React, { memo, useState } from "react";
+import React, { memo, useCallback, useState } from "react";
 import { useQuery } from "react-query";
 import styled from "styled-components";
 
@@ -9,19 +9,48 @@ import MaxWidth from "../../components/Layout/MaxWidth";
 import Page from "../../components/Layout/Page";
 import PageHeader from "../../components/Layout/PageHeader";
 import Stack from "../../components/Layout/Stack";
+import AdminSidebar from "../../components/Sidebar/AdminSidebar";
+import useToggle from "../../hooks/useToggle";
 import theme from "../../utils/theme";
-import AdminSidebar from "./AdminSidebar";
+import AdminRolesTable from "./Tables/AdminRolesTable";
+import { NewUserProps } from "./Tables/AdminUsersTable";
 
 const Wrapper = styled.div`
   display: flex;
 `;
 
 const AdminRolesPage = () => {
-  const [isCreateOpen, setIsCreateOpen] = useState(false);
+  const [isCreateOpen, toggleIsCreateOpen] = useToggle(false);
+  const [newRow, setNewRow] = useState<NewUserProps[]>([]);
 
-  const updatesQuery = useQuery(`adminRoles`, apiRoutes.apiGetAdminRoles);
+  const getAdminRolesQuery = useQuery(`adminRoles`, apiRoutes.apiGetRoles, {
+    refetchOnWindowFocus: false,
+  });
 
-  const roles = updatesQuery.isFetching ? [] : updatesQuery?.data;
+  const roles = getAdminRolesQuery.isFetching ? [] : getAdminRolesQuery?.data;
+
+  const apiGetAvailableStacksAndEnvironmentsQuery = useQuery(
+    `availableStacksAndEnvironments`,
+    apiRoutes.apiGetAvailableStacksAndEnvironments,
+    {
+      refetchOnWindowFocus: false,
+    },
+  );
+
+  const { availableStacks, availableEnvironments } =
+    apiGetAvailableStacksAndEnvironmentsQuery.isFetching
+      ? { availableStacks: [], availableEnvironments: [] }
+      : apiGetAvailableStacksAndEnvironmentsQuery?.data;
+
+  const onCreateOpen = useCallback(() => {
+    toggleIsCreateOpen();
+    setNewRow([{ isInCreateMode: true }]);
+  }, []);
+
+  const onCreateClose = useCallback(() => {
+    toggleIsCreateOpen(false);
+    setNewRow([]);
+  }, []);
 
   return (
     <Wrapper>
@@ -34,7 +63,7 @@ const AdminRolesPage = () => {
               <h1>Manage Roles</h1>
               {!isCreateOpen && (
                 <SmallButton
-                  onClick={() => setIsCreateOpen(true)}
+                  onClick={onCreateOpen}
                   $color={theme.color.lightOne}
                   $variant="primary"
                 >
@@ -43,35 +72,13 @@ const AdminRolesPage = () => {
               )}
             </Stack>
           </AdminPageTitle>
-          <Stack direction="down" spacing={8} fullWidth={true}>
-            {roles.map((role) => (
-              <div key={role.id} style={{ color: `#fff` }}>
-                <div>
-                  <b>Role Name: </b>
-                  {role.name}
-                </div>
-                <div>
-                  <b>Can view stacks: </b>
-                  {role.view_stacks.map((stack) => stack.name).join(`, `)}
-                </div>
-                <div>
-                  <b>Can update stacks: </b>
-                  {role.update_stacks.map((stack) => stack.name).join(`, `)}
-                </div>
-              </div>
-            ))}
-
-            {/* <AnimatePresence>
-              {isCreateOpen && (
-                <CreateStacksForm
-                  existingStackIds={existingStackIds}
-                  onSuccess={onNewStackSuccess}
-                  onAbort={onNewStackAbort}
-                />
-              )}
-            </AnimatePresence> */}
-            {/* <AdminStacksTable stacks={users} /> */}
-          </Stack>
+          <AdminRolesTable
+            roles={[...newRow, ...roles]}
+            availableStacks={availableStacks}
+            availableEnvironments={availableEnvironments}
+            onSuccess={getAdminRolesQuery.refetch}
+            onCancel={onCreateClose}
+          />
         </MaxWidth>
       </Page>
     </Wrapper>

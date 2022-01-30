@@ -4,8 +4,8 @@ import styled from "styled-components";
 import Page from "../../components/Layout/Page";
 import PageHeader from "../../components/Layout/PageHeader";
 import Stack from "../../components/Layout/Stack";
+import AdminSidebar from "../../components/Sidebar/AdminSidebar";
 import theme from "../../utils/theme";
-import AdminSidebar from "./AdminSidebar";
 
 const Wrapper = styled.div`
   display: flex;

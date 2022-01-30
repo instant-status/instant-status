@@ -10,6 +10,7 @@ import {
   TableRow,
 } from "../../../components/Tables/AdminTable";
 import { StackProps } from "../../../globalTypes";
+import theme from "../../../utils/theme";
 
 const HelperLabel = styled.span`
   font-size: 14px;
@@ -86,7 +87,7 @@ const AdminStacksTable = (props: AdminStacksTable) => {
                 </TableCell>
                 <TableCell>
                   <SmallButton
-                    $color="red"
+                    $color={theme.color.red}
                     $variant="ghost"
                     $size="small"
                     disabled={true}

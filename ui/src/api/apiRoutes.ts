@@ -66,8 +66,29 @@ export interface UpdateUserProps {
 
 export type CreateUserProps = Omit<UpdateUserProps, `id`>;
 
+export interface UpdateRoleProps {
+  id: number;
+  name: string;
+  view_stacks: string[];
+  update_stacks: string[];
+  view_stack_enviroments: string[];
+  update_stack_enviroments: string[];
+}
+
+export type CreateRoleProps = Omit<UpdateRoleProps, `id`>;
+
+export interface DeleteUsersProps {
+  user_ids: number[];
+}
+
 const apiGetStacksList = () => {
   return apiFetch(`${APP_CONFIG.DATA_URL}/v2/stacks`);
+};
+
+const apiGetAvailableStacksAndEnvironments = () => {
+  return apiFetch(
+    `${APP_CONFIG.DATA_URL}/v2/stack/get-available-stacks-and-environments`,
+  );
 };
 
 const apiGetUsers = () => {
@@ -82,12 +103,24 @@ const apiEditUser = (payload: { body: UpdateUserProps }) => {
   return apiPost(`${APP_CONFIG.DATA_URL}/v2/admin/user/edit`, payload.body);
 };
 
+const apiDeleteUsers = (payload: { body: DeleteUsersProps }) => {
+  return apiPost(`${APP_CONFIG.DATA_URL}/v2/admin/users/delete`, payload.body);
+};
+
 const apiGetStacksMetadata = () => {
   return apiFetch(`${APP_CONFIG.DATA_URL}/v2/metadata`);
 };
 
-const apiGetAdminRoles = () => {
+const apiGetRoles = () => {
   return apiFetch(`${APP_CONFIG.DATA_URL}/v2/admin/roles`);
+};
+
+const apiCreateRole = (payload: { body: CreateRoleProps }) => {
+  return apiPost(`${APP_CONFIG.DATA_URL}/v2/admin/role/create`, payload.body);
+};
+
+const apiUpdateRole = (payload: { body: UpdateRoleProps }) => {
+  return apiPost(`${APP_CONFIG.DATA_URL}/v2/admin/role/edit`, payload.body);
 };
 
 const apiCreateStack = (payload: { body: CreateStackProps }) => {
@@ -101,10 +134,14 @@ const apiCreateUpdate = (payload: { body: CreateUpdateProps }) => {
 export default {
   apiGetStacksList,
   apiGetStacksMetadata,
-  apiGetAdminRoles,
+  apiGetAvailableStacksAndEnvironments,
   apiCreateUser,
+  apiGetRoles,
+  apiCreateRole,
+  apiUpdateRole,
   apiEditUser,
   apiGetUsers,
+  apiDeleteUsers,
   apiCreateStack,
   apiCreateUpdate,
 };

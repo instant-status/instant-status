@@ -41,7 +41,7 @@ export const editUser = async (ctx) => {
     });
   }
 
-  if (Array.isArray(body.roles.length)) {
+  if (!Array.isArray(body.roles)) {
     return response(ctx, 400, {
       ok: false,
       message: "'roles' property is malformed, should be an array of role ids.",
@@ -87,7 +87,7 @@ export const createUser = async (ctx) => {
     });
   }
 
-  if (Array.isArray(body.roles.length)) {
+  if (!Array.isArray(body.roles)) {
     return response(ctx, 400, {
       ok: false,
       message: "'roles' property is malformed, should be an array of role ids.",
@@ -105,16 +105,46 @@ export const createUser = async (ctx) => {
     },
   });
 
-  makeJWTsStale();
+  // makeJWTsStale();
   return response(ctx, 202, {});
 };
 
-export const deleteUser = async (ctx) => {
+export const deleteUsers = async (ctx) => {
   const userJWT = getRequesterDecodedJWT(ctx.request);
 
   if (userJWT.is_super_admin !== true) {
     return response(ctx, 401, {});
   }
 
-  console.log('todo');
+  // Ensuring we have required data in the request
+  const body = ctx.request.body;
+  const requiredDataKeys = ['user_ids'];
+  const checkForRequiredDataKeysResult = checkForRequiredDataKeys(
+    body,
+    requiredDataKeys
+  );
+
+  if (checkForRequiredDataKeysResult.hasAllRequiredDataKeys === false) {
+    return response(ctx, 400, {
+      ok: false,
+      message: checkForRequiredDataKeysResult.message,
+    });
+  }
+
+  if (!Array.isArray(body.user_ids)) {
+    return response(ctx, 400, {
+      ok: false,
+      message:
+        "'user_ids' property is malformed, should be an array of user ids.",
+    });
+  }
+
+  await prisma.users.deleteMany({
+    where: {
+      id: { in: body.user_ids.map((id: number) => Number(id)) },
+    },
+  });
+
+  // makeJWTsStale();
+  return response(ctx, 202, {});
 };

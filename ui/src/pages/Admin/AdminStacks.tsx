@@ -10,8 +10,8 @@ import MaxWidth from "../../components/Layout/MaxWidth";
 import Page from "../../components/Layout/Page";
 import PageHeader from "../../components/Layout/PageHeader";
 import Stack from "../../components/Layout/Stack";
+import AdminSidebar from "../../components/Sidebar/AdminSidebar";
 import theme from "../../utils/theme";
-import AdminSidebar from "./AdminSidebar";
 import CreateStacksForm from "./Forms/CreateStacksForm";
 import AdminStacksTable from "./Tables/AdminStacksTable";
 

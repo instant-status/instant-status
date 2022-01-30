@@ -9,9 +9,9 @@ import MaxWidth from "../../components/Layout/MaxWidth";
 import Page from "../../components/Layout/Page";
 import PageHeader from "../../components/Layout/PageHeader";
 import Stack from "../../components/Layout/Stack";
+import AdminSidebar from "../../components/Sidebar/AdminSidebar";
 import useToggle from "../../hooks/useToggle";
 import theme from "../../utils/theme";
-import AdminSidebar from "./AdminSidebar";
 import AdminUsersTable, { NewUserProps } from "./Tables/AdminUsersTable";
 
 const Wrapper = styled.div`
@@ -28,7 +28,7 @@ const AdminUsersPage = () => {
 
   const users = adminGetUsersQuery.isFetching ? [] : adminGetUsersQuery?.data;
 
-  const adminRolesQuery = useQuery(`adminRoles`, apiRoutes.apiGetAdminRoles, {
+  const adminRolesQuery = useQuery(`adminRoles`, apiRoutes.apiGetRoles, {
     refetchOnWindowFocus: false,
   });
 
@@ -40,7 +40,7 @@ const AdminUsersPage = () => {
   }, []);
 
   const onCreateClose = useCallback(() => {
-    toggleIsCreateOpen();
+    toggleIsCreateOpen(false);
     setNewRow([]);
   }, []);
 
