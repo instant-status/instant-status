@@ -162,12 +162,42 @@ export const createRole = async (ctx) => {
   return response(ctx, 202, {});
 };
 
-export const deleteRole = async (ctx) => {
+export const deleteRoles = async (ctx) => {
   const userJWT = getRequesterDecodedJWT(ctx.request);
 
   if (userJWT.is_super_admin !== true) {
     return response(ctx, 401, {});
   }
 
-  console.log('todo');
+  // Ensuring we have required data in the request
+  const body = ctx.request.body;
+  const requiredDataKeys = ['role_ids'];
+  const checkForRequiredDataKeysResult = checkForRequiredDataKeys(
+    body,
+    requiredDataKeys
+  );
+
+  if (checkForRequiredDataKeysResult.hasAllRequiredDataKeys === false) {
+    return response(ctx, 400, {
+      ok: false,
+      message: checkForRequiredDataKeysResult.message,
+    });
+  }
+
+  if (!Array.isArray(body.role_ids)) {
+    return response(ctx, 400, {
+      ok: false,
+      message:
+        "'role_ids' property is malformed, should be an array of role ids.",
+    });
+  }
+
+  await prisma.roles.deleteMany({
+    where: {
+      id: { in: body.role_ids.map((id: number) => Number(id)) },
+    },
+  });
+
+  // makeJWTsStale();
+  return response(ctx, 202, {});
 };

@@ -3,6 +3,7 @@ import { useMutation } from "react-query";
 
 import apiRoutes, {
   CreateRoleProps,
+  DeleteRolesProps,
   UpdateRoleProps,
 } from "../../../api/apiRoutes";
 import { SmallButton } from "../../../components/Controls/Buttons";
@@ -87,6 +88,10 @@ const UserRow = (props: {
     apiRoutes.apiCreateRole({ body: payload }),
   );
 
+  const deleteRolesMutation = useMutation((payload: DeleteRolesProps) =>
+    apiRoutes.apiDeleteRoles({ body: payload }),
+  );
+
   const clearForm = () => {
     setName(props.role.name);
     setViewStackEnviroments(
@@ -161,6 +166,18 @@ const UserRow = (props: {
           },
         );
       }
+    }
+  };
+
+  const deleteRole = () => {
+    const canDelete = confirm(
+      `Are you sure you want to delete "${props.role.name}"`,
+    );
+    if (canDelete) {
+      deleteRolesMutation.mutate(
+        { role_ids: [props.role.id] },
+        { onSuccess: () => props.onSuccess?.() },
+      );
     }
   };
 
@@ -270,14 +287,24 @@ const UserRow = (props: {
             </SmallButton>
           </Stack>
         ) : (
-          <SmallButton
-            $color={theme.color.lightOne}
-            $variant="ghost"
-            $size="small"
-            onClick={() => setIsEditMode(true)}
-          >
-            Edit
-          </SmallButton>
+          <Stack spacing={2}>
+            <SmallButton
+              $color={theme.color.lightOne}
+              $variant="ghost"
+              $size="small"
+              onClick={() => setIsEditMode(true)}
+            >
+              Edit
+            </SmallButton>
+            <SmallButton
+              $color={theme.color.red}
+              $variant="ghost"
+              $size="small"
+              onClick={deleteRole}
+            >
+              Delete
+            </SmallButton>
+          </Stack>
         )}
       </TableCell>
     </TableRow>

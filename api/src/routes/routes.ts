@@ -56,5 +56,6 @@ router.post('/v2/admin/users/delete', userController.deleteUsers);
 router.get('/v2/admin/roles', roleController.getRoles);
 router.post('/v2/admin/role/create', roleController.createRole);
 router.post('/v2/admin/role/edit', roleController.editRole);
+router.post('/v2/admin/roles/delete', roleController.deleteRoles);
 
 export default router;

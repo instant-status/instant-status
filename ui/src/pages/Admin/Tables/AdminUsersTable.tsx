@@ -122,11 +122,13 @@ const UserRow = (props: {
 
   const deleteUser = () => {
     const canDelete = confirm(
-      `Are you sure you want to delete ${props.user.email}`,
+      `Are you sure you want to delete "${props.user.email}"`,
     );
     if (canDelete) {
-      deleteUsersMutation.mutate({ user_ids: [props.user.id] });
-      props.onSuccess?.();
+      deleteUsersMutation.mutate(
+        { user_ids: [props.user.id] },
+        { onSuccess: () => props.onSuccess?.() },
+      );
     }
   };
 

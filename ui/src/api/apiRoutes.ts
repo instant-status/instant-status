@@ -66,6 +66,10 @@ export interface UpdateUserProps {
 
 export type CreateUserProps = Omit<UpdateUserProps, `id`>;
 
+export interface DeleteUsersProps {
+  user_ids: number[];
+}
+
 export interface UpdateRoleProps {
   id: number;
   name: string;
@@ -77,8 +81,8 @@ export interface UpdateRoleProps {
 
 export type CreateRoleProps = Omit<UpdateRoleProps, `id`>;
 
-export interface DeleteUsersProps {
-  user_ids: number[];
+export interface DeleteRolesProps {
+  role_ids: number[];
 }
 
 const apiGetStacksList = () => {
@@ -123,6 +127,10 @@ const apiUpdateRole = (payload: { body: UpdateRoleProps }) => {
   return apiPost(`${APP_CONFIG.DATA_URL}/v2/admin/role/edit`, payload.body);
 };
 
+const apiDeleteRoles = (payload: { body: DeleteRolesProps }) => {
+  return apiPost(`${APP_CONFIG.DATA_URL}/v2/admin/roles/delete`, payload.body);
+};
+
 const apiCreateStack = (payload: { body: CreateStackProps }) => {
   return apiPost(`${APP_CONFIG.DATA_URL}/v2/stack`, payload.body);
 };
@@ -139,6 +147,7 @@ export default {
   apiGetRoles,
   apiCreateRole,
   apiUpdateRole,
+  apiDeleteRoles,
   apiEditUser,
   apiGetUsers,
   apiDeleteUsers,
