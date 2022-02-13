@@ -52,7 +52,7 @@
     "nodemon": "2.0.13",
     "prettier": "2.4.1",
     "prisma": "3.9.2",
-    "ts-node": "10.2.1",
+    "ts-node": "10.5.0",
     "ts-node-dev": "1.1.8",
     "type-fest": "2.3.4"
   }
