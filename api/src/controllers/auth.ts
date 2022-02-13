@@ -120,13 +120,13 @@ export const authGoogle = async (ctx: any) => {
                 id: true,
               },
             },
-            view_stack_enviroments: true,
+            view_stack_environments: true,
             update_stacks: {
               select: {
                 id: true,
               },
             },
-            update_stack_enviroments: true,
+            update_stack_environments: true,
           },
         },
       },

@@ -6,6 +6,35 @@ import prisma from '../../prisma/prismaClient';
 import { Updates } from '@prisma/client';
 import { makeJWTsStale } from '../helpers/jwt';
 
+export const getAvailableStacksAndEnvironments = async (ctx) => {
+  const userJWT = getRequesterDecodedJWT(ctx.request);
+
+  if (userJWT.is_super_admin !== true) {
+    return response(ctx, 202, []);
+  }
+
+  const stackList = await prisma.stacks.findMany({
+    orderBy: { id: 'desc' },
+    select: { id: true, name: true, environment: true },
+  });
+
+  const availableEnvironments = new Set();
+
+  for (const stack of stackList) {
+    availableEnvironments.add(stack.environment);
+  }
+
+  const availableStacks = stackList.map((stack) => ({
+    id: stack.id,
+    name: stack.name,
+  }));
+
+  return response(ctx, 202, {
+    availableStacks,
+    availableEnvironments: Array.from(availableEnvironments),
+  });
+};
+
 export const listStacks = async (ctx) => {
   const userJWT = getRequesterDecodedJWT(ctx.request);
 
@@ -63,7 +92,7 @@ export const getIdByName = async (ctx) => {
 export const createStack = async (ctx) => {
   const userJWT = getRequesterDecodedJWT(ctx.request);
 
-  if (!userJWT.is_super_admin) {
+  if (userJWT.is_super_admin !== true) {
     return response(ctx, 401, {});
   }
 
@@ -145,7 +174,7 @@ export const createStack = async (ctx) => {
 export const deleteStack = async (ctx) => {
   const userJWT = getRequesterDecodedJWT(ctx.request);
 
-  if (!userJWT.is_super_admin) {
+  if (userJWT.is_super_admin !== true) {
     return response(ctx, 401, {});
   }
 

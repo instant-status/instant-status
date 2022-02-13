@@ -56,12 +56,79 @@ export interface CreateStackProps {
   update_xapi_to: string;
 }
 
+export interface UpdateUserProps {
+  id: number;
+  first_name: string;
+  last_name: string;
+  email: string;
+  roles: number[];
+}
+
+export type CreateUserProps = Omit<UpdateUserProps, `id`>;
+
+export interface DeleteUsersProps {
+  user_ids: number[];
+}
+
+export interface UpdateRoleProps {
+  id: number;
+  name: string;
+  view_stacks: string[];
+  update_stacks: string[];
+  view_stack_environments: string[];
+  update_stack_environments: string[];
+}
+
+export type CreateRoleProps = Omit<UpdateRoleProps, `id`>;
+
+export interface DeleteRolesProps {
+  role_ids: number[];
+}
+
 const apiGetStacksList = () => {
   return apiFetch(`${APP_CONFIG.DATA_URL}/v2/stacks`);
 };
 
+const apiGetAvailableStacksAndEnvironments = () => {
+  return apiFetch(
+    `${APP_CONFIG.DATA_URL}/v2/stack/get-available-stacks-and-environments`,
+  );
+};
+
+const apiGetUsers = () => {
+  return apiFetch(`${APP_CONFIG.DATA_URL}/v2/admin/users`);
+};
+
+const apiCreateUser = (payload: { body: CreateUserProps }) => {
+  return apiPost(`${APP_CONFIG.DATA_URL}/v2/admin/user/create`, payload.body);
+};
+
+const apiEditUser = (payload: { body: UpdateUserProps }) => {
+  return apiPost(`${APP_CONFIG.DATA_URL}/v2/admin/user/edit`, payload.body);
+};
+
+const apiDeleteUsers = (payload: { body: DeleteUsersProps }) => {
+  return apiPost(`${APP_CONFIG.DATA_URL}/v2/admin/users/delete`, payload.body);
+};
+
 const apiGetStacksMetadata = () => {
   return apiFetch(`${APP_CONFIG.DATA_URL}/v2/metadata`);
+};
+
+const apiGetRoles = () => {
+  return apiFetch(`${APP_CONFIG.DATA_URL}/v2/admin/roles`);
+};
+
+const apiCreateRole = (payload: { body: CreateRoleProps }) => {
+  return apiPost(`${APP_CONFIG.DATA_URL}/v2/admin/role/create`, payload.body);
+};
+
+const apiUpdateRole = (payload: { body: UpdateRoleProps }) => {
+  return apiPost(`${APP_CONFIG.DATA_URL}/v2/admin/role/edit`, payload.body);
+};
+
+const apiDeleteRoles = (payload: { body: DeleteRolesProps }) => {
+  return apiPost(`${APP_CONFIG.DATA_URL}/v2/admin/roles/delete`, payload.body);
 };
 
 const apiCreateStack = (payload: { body: CreateStackProps }) => {
@@ -75,6 +142,15 @@ const apiCreateUpdate = (payload: { body: CreateUpdateProps }) => {
 export default {
   apiGetStacksList,
   apiGetStacksMetadata,
+  apiGetAvailableStacksAndEnvironments,
+  apiCreateUser,
+  apiGetRoles,
+  apiCreateRole,
+  apiUpdateRole,
+  apiDeleteRoles,
+  apiEditUser,
+  apiGetUsers,
+  apiDeleteUsers,
   apiCreateStack,
   apiCreateUpdate,
 };

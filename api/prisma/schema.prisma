@@ -92,11 +92,11 @@ model Users {
 }
 
 model Roles {
-  id                       Int      @id @default(autoincrement())
-  name                     String   @unique
-  view_stacks              Stacks[] @relation("UsersToStacksView")
-  update_stacks            Stacks[] @relation("UsersToStacksUpdate")
-  view_stack_enviroments   String[]
-  update_stack_enviroments String[]
-  usersWithThisRole        Users[]  @relation("UsersToRoles")
+  id                        Int      @id @default(autoincrement())
+  name                      String   @unique
+  view_stacks               Stacks[] @relation("UsersToStacksView")
+  update_stacks             Stacks[] @relation("UsersToStacksUpdate")
+  view_stack_environments   String[]
+  update_stack_environments String[]
+  usersWithThisRole         Users[]  @relation("UsersToRoles")
 }

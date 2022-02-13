@@ -5,7 +5,9 @@ import * as updateController from '../controllers/update';
 import * as metadataController from '../controllers/metadata';
 import * as stackController from '../controllers/stack';
 import * as serverController from '../controllers/server';
+import * as userController from '../controllers/user';
 import * as authController from '../controllers/auth';
+import * as roleController from '../controllers/role';
 
 const serverOnly = (ctx: KoaRouter.RouterContext, next: () => void) => {
   const isRequestFromServer =
@@ -26,7 +28,11 @@ router.get('/auth/google/callback', authController.authGoogle);
 router.get('/v2/stacks', stackController.listStacks);
 router.get('/v2/stack/get-id', serverOnly, stackController.getIdByName);
 router.post('/v2/stack', stackController.createStack);
-router.delete('/v2/stack', stackController.deleteStack);
+router.delete('/v2/stack/delete', stackController.deleteStack);
+router.get(
+  '/v2/stack/get-available-stacks-and-environments',
+  stackController.getAvailableStacksAndEnvironments
+);
 
 // Server Communication
 router.get('/v2/update', serverOnly, updateController.updateGet);
@@ -39,5 +45,17 @@ router.post('/v2/update/create', updateController.updateCreate);
 
 // Metadata
 router.get('/v2/metadata', metadataController.getMetadata);
+
+// User
+router.get('/v2/admin/users', userController.getUsers);
+router.post('/v2/admin/user/create', userController.createUser);
+router.post('/v2/admin/user/edit', userController.editUser);
+router.post('/v2/admin/users/delete', userController.deleteUsers);
+
+// Roles
+router.get('/v2/admin/roles', roleController.getRoles);
+router.post('/v2/admin/role/create', roleController.createRole);
+router.post('/v2/admin/role/edit', roleController.editRole);
+router.post('/v2/admin/roles/delete', roleController.deleteRoles);
 
 export default router;

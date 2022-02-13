@@ -5,11 +5,13 @@ import styled from "styled-components";
 
 import apiRoutes from "../../api/apiRoutes";
 import { SmallButton } from "../../components/Controls/Buttons";
+import AdminPageTitle from "../../components/Layout/AdminPageTitle";
+import MaxWidth from "../../components/Layout/MaxWidth";
 import Page from "../../components/Layout/Page";
 import PageHeader from "../../components/Layout/PageHeader";
 import Stack from "../../components/Layout/Stack";
+import AdminSidebar from "../../components/Sidebar/AdminSidebar";
 import theme from "../../utils/theme";
-import AdminSidebar from "./AdminSidebar";
 import CreateStacksForm from "./Forms/CreateStacksForm";
 import AdminStacksTable from "./Tables/AdminStacksTable";
 
@@ -17,18 +19,7 @@ const Wrapper = styled.div`
   display: flex;
 `;
 
-const PageTitle = styled.header`
-  color: ${theme.color.lightOne};
-  width: 100%;
-  padding: 0 32px;
-`;
-
-const MaxWidth = styled.div`
-  max-width: 1000px;
-  width: 100%;
-`;
-
-const StatusPage = () => {
+const AdminStacksPage = () => {
   const [isCreateOpen, setIsCreateOpen] = useState(false);
 
   const updatesQuery = useQuery(`stacksData`, apiRoutes.apiGetStacksList);
@@ -53,7 +44,7 @@ const StatusPage = () => {
       <Page>
         <PageHeader />
         <MaxWidth>
-          <PageTitle>
+          <AdminPageTitle>
             <Stack spacing={8} align="center" justify="spaceBetween">
               <h1>Manage Stacks</h1>
               {!isCreateOpen && (
@@ -62,11 +53,11 @@ const StatusPage = () => {
                   $color={theme.color.lightOne}
                   $variant="primary"
                 >
-                  Create Stacks
+                  Add Stack
                 </SmallButton>
               )}
             </Stack>
-          </PageTitle>
+          </AdminPageTitle>
           <Stack direction="down" spacing={8} fullWidth={true}>
             <AnimatePresence>
               {isCreateOpen && (
@@ -85,4 +76,4 @@ const StatusPage = () => {
   );
 };
 
-export default memo(StatusPage);
+export default memo(AdminStacksPage);

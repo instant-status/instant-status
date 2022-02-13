@@ -2,9 +2,9 @@ import React, { memo } from "react";
 import { useQuery } from "react-query";
 
 import apiRoutes from "../../api/apiRoutes";
-import Stack from "../../components/Layout/Stack";
-import Sidebar from "../../components/Sidebar/Sidebar";
-import SidebarListTab from "../../components/Sidebar/SidebarListTab";
+import Stack from "../Layout/Stack";
+import Sidebar from "./Sidebar";
+import SidebarListTab from "./SidebarListTab";
 
 const AdminSidebar = () => {
   const sidebarQuery = useQuery(`sidebarData`, apiRoutes.apiGetStacksMetadata);
@@ -18,6 +18,8 @@ const AdminSidebar = () => {
     >
       <Stack direction="down" spacing={4}>
         <SidebarListTab to={`/admin/stacks`}>Manage Stacks</SidebarListTab>
+        <SidebarListTab to={`/admin/roles`}>Manage Roles</SidebarListTab>
+        <SidebarListTab to={`/admin/users`}>Manage Users</SidebarListTab>
       </Stack>
     </Sidebar>
   );

@@ -5,8 +5,8 @@ import { getRequesterDecodedJWT } from './auth';
 export const deleteServer = async (ctx) => {
   const userJWT = getRequesterDecodedJWT(ctx.request);
 
-  if (!userJWT.roles) {
-    return response(ctx, 401);
+  if (userJWT.is_super_admin !== true) {
+    return response(ctx, 401, {});
   }
   const body = ctx.request.body;
 

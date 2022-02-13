@@ -70,19 +70,6 @@ export const CancelButton = styled(GhostButton)`
   }
 `;
 
-export const DeleteButton = styled(GhostButton)`
-  color: ${(props) => props.theme.color.red};
-  border: 2px solid ${(props) => props.theme.color.red};
-  font-size: 16px;
-  padding: 0.4rem 1rem;
-  font-weight: 600;
-
-  &:hover:not(:disabled) {
-    color: ${(props) => props.theme.color.darkTwo};
-    background-color: ${(props) => props.theme.color.red};
-  }
-`;
-
 interface SmallButtonProps {
   $variant: `primary` | `ghost`;
   $color: string;

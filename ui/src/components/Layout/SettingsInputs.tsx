@@ -1,9 +1,10 @@
 import styled from "styled-components";
 
-export const InputBoxContainer = styled.label`
+export const InputBoxContainer = styled.label<{ $backgroudColour?: string }>`
   display: flex;
   flex-direction: column;
-  background-color: ${(props) => props.theme.color.darkTwo};
+  ${(props) =>
+    props.$backgroudColour && `background-color: ${props.$backgroudColour}`};
   padding: 12px;
   border-radius: 6px;
 `;
