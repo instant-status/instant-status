@@ -12,11 +12,11 @@ const constructUserStackPermissions = ({
       view_stacks: {
         id: number;
       }[];
-      view_stack_enviroments: string[];
+      view_stack_environments: string[];
       update_stacks: {
         id: number;
       }[];
-      update_stack_enviroments: string[];
+      update_stack_environments: string[];
     }[];
   };
   allStacks: { id: Stacks['id']; environment: Stacks['environment'] }[];
@@ -39,38 +39,38 @@ const constructUserStackPermissions = ({
     .flatMap((role) => role.update_stacks)
     .map((stack) => stack.id);
 
-  // List of stack enviroments that a user can view from their roles
-  const userCanViewStacksOfEnviroment = user.roles.flatMap(
-    (role) => role.view_stack_enviroments
+  // List of stack environments that a user can view from their roles
+  const userCanViewStacksOfEnvironment = user.roles.flatMap(
+    (role) => role.view_stack_environments
   );
 
-  // List of stack enviroments that a user can update from their roles
-  const userCanUpdateStacksOfEnviroment = user.roles.flatMap(
-    (role) => role.update_stack_enviroments
+  // List of stack environments that a user can update from their roles
+  const userCanUpdateStacksOfEnvironment = user.roles.flatMap(
+    (role) => role.update_stack_environments
   );
 
-  // All stacks by ID that a user can view filtered from list of enviroments
-  const userCanViewStackIdsOfEnviroment = allStacks
+  // All stacks by ID that a user can view filtered from list of environments
+  const userCanViewStackIdsOfEnvironment = allStacks
     .filter((stack) =>
-      userCanViewStacksOfEnviroment.includes(stack.environment)
+      userCanViewStacksOfEnvironment.includes(stack.environment)
     )
     .map((stack) => stack.id);
 
-  // All stacks by ID that a user can update filtered from list of enviroments
-  const userCanUpdateStackIdsOfEnviroment = allStacks
+  // All stacks by ID that a user can update filtered from list of environments
+  const userCanUpdateStackIdsOfEnvironment = allStacks
     .filter((stack) =>
-      userCanUpdateStacksOfEnviroment.includes(stack.environment)
+      userCanUpdateStacksOfEnvironment.includes(stack.environment)
     )
     .map((stack) => stack.id);
 
-  // Combine individual IDs from roles and IDs from enviroments into unique arrays
+  // Combine individual IDs from roles and IDs from environments into unique arrays
   const canViewStackIds = new Set([
     ...userCanViewStackIds,
-    ...userCanViewStackIdsOfEnviroment,
+    ...userCanViewStackIdsOfEnvironment,
   ]);
   const canUpdateStackIds = new Set([
     ...userCanUpdateStackIds,
-    ...userCanUpdateStackIdsOfEnviroment,
+    ...userCanUpdateStackIdsOfEnvironment,
   ]);
 
   return {

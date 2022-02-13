@@ -56,8 +56,8 @@ export const editRole = async (ctx) => {
     'name',
     'view_stacks',
     'update_stacks',
-    'view_stack_enviroments',
-    'update_stack_enviroments',
+    'view_stack_environments',
+    'update_stack_environments',
   ];
   const checkForRequiredDataKeysResult = checkForRequiredDataKeys(
     body,
@@ -73,13 +73,13 @@ export const editRole = async (ctx) => {
   if (
     !Array.isArray(body.view_stacks) ||
     !Array.isArray(body.update_stacks) ||
-    !Array.isArray(body.view_stack_enviroments) ||
-    !Array.isArray(body.update_stack_enviroments)
+    !Array.isArray(body.view_stack_environments) ||
+    !Array.isArray(body.update_stack_environments)
   ) {
     return response(ctx, 400, {
       ok: false,
       message:
-        "One or more of 'view_stacks', 'update_stacks', 'view_stack_enviroments', and 'update_stack_enviroments' is malformed. Expected an array for each.",
+        "One or more of 'view_stacks', 'update_stacks', 'view_stack_environments', and 'update_stack_environments' is malformed. Expected an array for each.",
     });
   }
 
@@ -93,8 +93,8 @@ export const editRole = async (ctx) => {
       update_stacks: {
         set: body.update_stacks.map((stack: number) => ({ id: stack })),
       },
-      view_stack_enviroments: body.view_stack_enviroments,
-      update_stack_enviroments: body.update_stack_enviroments,
+      view_stack_environments: body.view_stack_environments,
+      update_stack_environments: body.update_stack_environments,
     },
   });
 
@@ -117,8 +117,8 @@ export const createRole = async (ctx) => {
     'name',
     'view_stacks',
     'update_stacks',
-    'view_stack_enviroments',
-    'update_stack_enviroments',
+    'view_stack_environments',
+    'update_stack_environments',
   ];
   const checkForRequiredDataKeysResult = checkForRequiredDataKeys(
     body,
@@ -134,13 +134,13 @@ export const createRole = async (ctx) => {
   if (
     !Array.isArray(body.view_stacks) ||
     !Array.isArray(body.update_stacks) ||
-    !Array.isArray(body.view_stack_enviroments) ||
-    !Array.isArray(body.update_stack_enviroments)
+    !Array.isArray(body.view_stack_environments) ||
+    !Array.isArray(body.update_stack_environments)
   ) {
     return response(ctx, 400, {
       ok: false,
       message:
-        "One or more of 'view_stacks', 'update_stacks', 'view_stack_enviroments', and 'update_stack_enviroments' is malformed. Expected an array for each.",
+        "One or more of 'view_stacks', 'update_stacks', 'view_stack_environments', and 'update_stack_environments' is malformed. Expected an array for each.",
     });
   }
 
@@ -153,8 +153,8 @@ export const createRole = async (ctx) => {
       update_stacks: {
         connect: body.update_stacks.map((stack: number) => ({ id: stack })),
       },
-      view_stack_enviroments: body.view_stack_enviroments,
-      update_stack_enviroments: body.update_stack_enviroments,
+      view_stack_environments: body.view_stack_environments,
+      update_stack_environments: body.update_stack_environments,
     },
   });
 

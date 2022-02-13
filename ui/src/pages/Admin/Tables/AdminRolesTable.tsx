@@ -27,8 +27,8 @@ export interface RoleProps extends NewRoleProps {
   name: string;
   view_stacks: any[];
   update_stacks: any[];
-  view_stack_enviroments: string[];
-  update_stack_enviroments: string[];
+  view_stack_environments: string[];
+  update_stack_environments: string[];
   _count: {
     usersWithThisRole: any[];
   };
@@ -55,14 +55,14 @@ const UserRow = (props: {
   const [isInEditMode, setIsEditMode] = useState(props.role.isInCreateMode);
 
   const [name, setName] = useState(props.role.name);
-  const [viewStackEnviroments, setViewStackEnviroments] = useState(
-    (props.role.view_stack_enviroments || []).map((role) => ({
+  const [viewStackEnvironments, setViewStackEnvironments] = useState(
+    (props.role.view_stack_environments || []).map((role) => ({
       label: role,
       value: role,
     })),
   );
-  const [updateStackEnviroments, setUpdateStackEnviroments] = useState(
-    (props.role.update_stack_enviroments || []).map((role) => ({
+  const [updateStackEnvironments, setUpdateStackEnvironments] = useState(
+    (props.role.update_stack_environments || []).map((role) => ({
       label: role,
       value: role,
     })),
@@ -94,14 +94,14 @@ const UserRow = (props: {
 
   const clearForm = () => {
     setName(props.role.name);
-    setViewStackEnviroments(
-      (props.role.view_stack_enviroments || []).map((stack) => ({
+    setViewStackEnvironments(
+      (props.role.view_stack_environments || []).map((stack) => ({
         label: stack,
         value: stack,
       })),
     );
-    setUpdateStackEnviroments(
-      (props.role.update_stack_enviroments || []).map((stack) => ({
+    setUpdateStackEnvironments(
+      (props.role.update_stack_environments || []).map((stack) => ({
         label: stack,
         value: stack,
       })),
@@ -128,10 +128,10 @@ const UserRow = (props: {
         createRoleMutation.mutate(
           {
             name: name,
-            view_stack_enviroments: viewStackEnviroments.map(
+            view_stack_environments: viewStackEnvironments.map(
               (item) => item.value,
             ),
-            update_stack_enviroments: updateStackEnviroments.map(
+            update_stack_environments: updateStackEnvironments.map(
               (item) => item.value,
             ),
             update_stacks: updateStacks.map((item) => item.value),
@@ -149,10 +149,10 @@ const UserRow = (props: {
           {
             id: props.role.id,
             name: name,
-            view_stack_enviroments: viewStackEnviroments.map(
+            view_stack_environments: viewStackEnvironments.map(
               (item) => item.value,
             ),
-            update_stack_enviroments: updateStackEnviroments.map(
+            update_stack_environments: updateStackEnvironments.map(
               (item) => item.value,
             ),
             update_stacks: updateStacks.map((item) => item.value),
@@ -200,16 +200,16 @@ const UserRow = (props: {
       <TableCell>
         {isInEditMode ? (
           <MultiSelectInput
-            label="View Stack Enviroments"
+            label="View Stack Environments"
             options={props.availableEnvironments.map((role) => ({
               label: role,
               value: role,
             }))}
-            onChange={setViewStackEnviroments}
-            value={viewStackEnviroments}
+            onChange={setViewStackEnvironments}
+            value={viewStackEnvironments}
           />
         ) : (
-          props.role.view_stack_enviroments
+          props.role.view_stack_environments
             ?.map((environment) => environment)
             .join(`, `)
         )}
@@ -217,16 +217,16 @@ const UserRow = (props: {
       <TableCell>
         {isInEditMode ? (
           <MultiSelectInput
-            label="Update Stack Enviroments"
+            label="Update Stack Environments"
             options={props.availableEnvironments.map((role) => ({
               label: role,
               value: role,
             }))}
-            onChange={setUpdateStackEnviroments}
-            value={updateStackEnviroments}
+            onChange={setUpdateStackEnvironments}
+            value={updateStackEnvironments}
           />
         ) : (
-          props.role.update_stack_enviroments
+          props.role.update_stack_environments
             ?.map((environment) => environment)
             .join(`, `)
         )}

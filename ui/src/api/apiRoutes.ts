@@ -75,8 +75,8 @@ export interface UpdateRoleProps {
   name: string;
   view_stacks: string[];
   update_stacks: string[];
-  view_stack_enviroments: string[];
-  update_stack_enviroments: string[];
+  view_stack_environments: string[];
+  update_stack_environments: string[];
 }
 
 export type CreateRoleProps = Omit<UpdateRoleProps, `id`>;

@@ -6,10 +6,11 @@
   "scripts": {
     "dev": "dotenv -e ../config/.prisma.env -- nodemon --watch src",
     "start": "dotenv -e ../config/.prisma.env -- ts-node src/server.ts",
+    "db:dev-generate-migrations": "dotenv -e ../config/.prisma.env -- prisma migrate dev --create-only",
     "db:dev-push": "dotenv -e ../config/.prisma.env -- prisma db push",
-    "db:dev-migrate": "dotenv -e ../config/.prisma.env -- prisma migrate dev",
-    "db:dev-seed": "dotenv -e ../config/.prisma.env -- prisma db seed --preview-feature",
-    "db:deploy": "dotenv -e ../config/.prisma.env -- prisma migrate deploy",
+    "db:dev-seed": "dotenv -e ../config/.prisma.env -- prisma db seed",
+    "db:dev-studio": "dotenv -e ../config/.prisma.env -- prisma studio",
+    "db:migrate": "dotenv -e ../config/.prisma.env -- prisma migrate deploy",
     "lint": "eslint \"src/**/*.{ts,tsx}\"",
     "format": "prettier --write \"src/**/*.{ts,tsx,json,md}\"",
     "tsc": "tsc --noEmit"
@@ -27,7 +28,7 @@
   "dependencies": {
     "@koa/cors": "3.1.0",
     "@koa/router": "10.1.1",
-    "@prisma/client": "3.1.1",
+    "@prisma/client": "3.9.2",
     "googleapis": "87.0.0",
     "jsonwebtoken": "8.5.1",
     "koa": "2.13.3",
@@ -50,7 +51,7 @@
     "eslint-plugin-prettier": "4.0.0",
     "nodemon": "2.0.13",
     "prettier": "2.4.1",
-    "prisma": "3.1.1",
+    "prisma": "3.9.2",
     "ts-node": "10.2.1",
     "ts-node-dev": "1.1.8",
     "type-fest": "2.3.4"
