@@ -8,6 +8,7 @@
     "start": "dotenv -e ../config/.prisma.env -- ts-node src/server.ts",
     "db:dev-generate-migrations": "dotenv -e ../config/.prisma.env -- prisma migrate dev --create-only",
     "db:dev-push": "dotenv -e ../config/.prisma.env -- prisma db push",
+    "db:dev-reset": "dotenv -e ../config/.prisma.env -- prisma migrate reset",
     "db:dev-seed": "dotenv -e ../config/.prisma.env -- prisma db seed",
     "db:dev-studio": "dotenv -e ../config/.prisma.env -- prisma studio",
     "db:migrate": "dotenv -e ../config/.prisma.env -- prisma migrate deploy",
