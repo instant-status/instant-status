@@ -55,6 +55,6 @@
     "prisma": "3.9.2",
     "ts-node": "10.5.0",
     "ts-node-dev": "1.1.8",
-    "type-fest": "2.11.2"
+    "type-fest": "2.12.0"
   }
 }
