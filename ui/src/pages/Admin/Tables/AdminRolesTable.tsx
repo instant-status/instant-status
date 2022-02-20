@@ -16,13 +16,10 @@ import {
   TableHeader,
   TableRow,
 } from "../../../components/Tables/AdminTable";
+import { NewRowProps } from "../../../globalTypes";
 import theme from "../../../utils/theme";
 
-export interface NewRoleProps {
-  isInCreateMode?: boolean;
-}
-
-export interface RoleProps extends NewRoleProps {
+export interface RoleProps extends NewRowProps {
   id: number;
   name: string;
   view_stacks: any[];

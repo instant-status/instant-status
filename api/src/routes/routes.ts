@@ -28,7 +28,7 @@ router.get('/auth/google/callback', authController.authGoogle);
 router.get('/v2/stacks', stackController.listStacks);
 router.get('/v2/stack/get-id', serverOnly, stackController.getIdByName);
 router.post('/v2/stack', stackController.createStack);
-router.delete('/v2/stack/delete', stackController.deleteStack);
+router.post('/v2/admin/stacks/delete', stackController.deleteStacks);
 router.get(
   '/v2/stack/get-available-stacks-and-environments',
   stackController.getAvailableStacksAndEnvironments

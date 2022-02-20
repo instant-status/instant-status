@@ -32,7 +32,6 @@ export const updateGet = async (ctx) => {
       update_id: latestUpdate.id,
       is_cancelled: latestUpdate.is_cancelled,
       run_migrations: latestUpdate.run_migrations,
-      rollback_migrations: latestUpdate.rollback_migrations,
       update_app_to: latestUpdate.update_app_to,
       update_xapi_to: latestUpdate.update_xapi_to,
       server_count: latestUpdate.server_count,
@@ -114,7 +113,6 @@ export const updateCreate = async (ctx) => {
       is_cancelled: false, // not in use
 
       run_migrations: body.run_migrations,
-      rollback_migrations: false, // not in use
 
       update_app_to: body.update_app_to,
       update_xapi_to: body.update_xapi_to,

@@ -50,10 +50,14 @@ export interface CreateUpdateProps {
 }
 
 export interface CreateStackProps {
-  stack_names: string[];
+  name: string;
   run_migrations: boolean;
   update_app_to: string;
   update_xapi_to: string;
+}
+
+export interface DeleteStacksProps {
+  stack_ids: number[];
 }
 
 export interface UpdateUserProps {
@@ -135,6 +139,10 @@ const apiCreateStack = (payload: { body: CreateStackProps }) => {
   return apiPost(`${APP_CONFIG.DATA_URL}/v2/stack`, payload.body);
 };
 
+const apiDeleteStacks = (payload: { body: DeleteStacksProps }) => {
+  return apiPost(`${APP_CONFIG.DATA_URL}/v2/admin/stacks/delete`, payload.body);
+};
+
 const apiCreateUpdate = (payload: { body: CreateUpdateProps }) => {
   return apiPost(`${APP_CONFIG.DATA_URL}/v2/update/create`, payload.body);
 };
@@ -152,5 +160,6 @@ export default {
   apiGetUsers,
   apiDeleteUsers,
   apiCreateStack,
+  apiDeleteStacks,
   apiCreateUpdate,
 };

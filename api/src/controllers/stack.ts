@@ -1,10 +1,8 @@
 import checkForRequiredDataKeys from '../helpers/checkForRequiredDataKeys';
 import { getRequesterDecodedJWT, getRequesterIdentity } from './auth';
 import response from '../helpers/returnResponse';
-import isStackUpdating from '../helpers/isStackUpdating';
 import prisma from '../../prisma/prismaClient';
 import { Updates } from '@prisma/client';
-import { makeJWTsStale } from '../helpers/jwt';
 
 export const getAvailableStacksAndEnvironments = async (ctx) => {
   const userJWT = getRequesterDecodedJWT(ctx.request);
@@ -99,8 +97,8 @@ export const createStack = async (ctx) => {
   // Ensuring we have required data in the request
   const body = ctx.request.body;
   const requiredDataKeys = [
+    'name',
     'run_migrations',
-    'stack_names',
     'update_app_to',
     'update_xapi_to',
   ];
@@ -117,24 +115,14 @@ export const createStack = async (ctx) => {
 
   const updateRequestedBy = getRequesterIdentity(ctx.request);
 
-  for (const stack_name of body.stack_names) {
+  try {
     const stack = await prisma.stacks.create({
-      data: { name: stack_name.toLowerCase() },
+      data: { name: body.name.toLowerCase() },
     });
-
-    const lastUpdate = await prisma.updates.findFirst({
-      where: { stack_id: stack.id },
-      orderBy: { id: 'desc' },
-    });
-    const isUpdating = isStackUpdating(lastUpdate);
-
-    if (isUpdating) {
-      continue;
-    }
 
     const data = {
       update_requested_by: updateRequestedBy,
-      last_update_id: lastUpdate?.id || null,
+      last_update_id: null,
       stack_id: stack.id,
       servers: [],
       servers_ready_to_switch: [],
@@ -145,7 +133,6 @@ export const createStack = async (ctx) => {
       is_cancelled: false, // not in use
 
       run_migrations: body.run_migrations,
-      rollback_migrations: false, // not in use
 
       update_app_to: body.update_app_to,
       update_xapi_to: body.update_xapi_to,
@@ -165,18 +152,74 @@ export const createStack = async (ctx) => {
         server_xapi_updating_to_version: body.update_xapi_to,
       },
     });
+  } catch (err) {
+    console.log(err);
+    return response(ctx, 400, {
+      ok: false,
+      message: 'Something went wrong.',
+    });
   }
 
-  makeJWTsStale();
+  // makeJWTsStale();
   return response(ctx, 202, {});
 };
 
-export const deleteStack = async (ctx) => {
+export const deleteStacks = async (ctx) => {
   const userJWT = getRequesterDecodedJWT(ctx.request);
 
   if (userJWT.is_super_admin !== true) {
     return response(ctx, 401, {});
   }
 
-  console.log('todo');
+  // Ensuring we have required data in the request
+  const body = ctx.request.body;
+  const requiredDataKeys = ['stack_ids'];
+  const checkForRequiredDataKeysResult = checkForRequiredDataKeys(
+    body,
+    requiredDataKeys
+  );
+
+  if (checkForRequiredDataKeysResult.hasAllRequiredDataKeys === false) {
+    return response(ctx, 400, {
+      ok: false,
+      message: checkForRequiredDataKeysResult.message,
+    });
+  }
+
+  if (!Array.isArray(body.stack_ids)) {
+    return response(ctx, 400, {
+      ok: false,
+      message:
+        "'stack_ids' property is malformed, should be an array of stack ids.",
+    });
+  }
+
+  try {
+    await prisma.servers.deleteMany({
+      where: {
+        stack_id: { in: body.stack_ids.map((id: number) => Number(id)) },
+      },
+    });
+
+    await prisma.updates.deleteMany({
+      where: {
+        stack_id: { in: body.stack_ids.map((id: number) => Number(id)) },
+      },
+    });
+
+    await prisma.stacks.deleteMany({
+      where: {
+        id: { in: body.stack_ids.map((id: number) => Number(id)) },
+      },
+    });
+  } catch (err) {
+    console.log(err);
+    return response(ctx, 400, {
+      ok: false,
+      message: 'Something went wrong.',
+    });
+  }
+
+  // makeJWTsStale();
+  return response(ctx, 202, {});
 };

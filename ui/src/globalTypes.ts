@@ -50,7 +50,6 @@ export interface UpdateProps {
   server_finished_count: number;
   is_cancelled: boolean;
   run_migrations: boolean;
-  rollback_migrations: boolean;
   update_app_to: string;
   update_xapi_to: string;
   chosen_one: string;
@@ -72,4 +71,8 @@ export interface StackProps {
 
   servers: ServerProps[];
   updates: UpdateProps[];
+}
+
+export interface NewRowProps {
+  isInCreateMode?: boolean;
 }
