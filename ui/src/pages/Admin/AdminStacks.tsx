@@ -1,79 +1,60 @@
-import { AnimatePresence } from "framer-motion";
-import React, { memo, useState } from "react";
+import React, { useCallback, useState } from "react";
 import { useQuery } from "react-query";
-import styled from "styled-components";
-
 import apiRoutes from "../../api/apiRoutes";
 import { SmallButton } from "../../components/Controls/Buttons";
-import AdminPageTitle from "../../components/Layout/AdminPageTitle";
-import MaxWidth from "../../components/Layout/MaxWidth";
-import Page from "../../components/Layout/Page";
-import PageHeader from "../../components/Layout/PageHeader";
-import Stack from "../../components/Layout/Stack";
-import AdminSidebar from "../../components/Sidebar/AdminSidebar";
+import AdminPage from "../../components/Layout/AdminPage";
+import { NewRowProps } from "../../globalTypes";
+import useToggle from "../../hooks/useToggle";
 import theme from "../../utils/theme";
-import CreateStacksForm from "./Forms/CreateStacksForm";
 import AdminStacksTable from "./Tables/AdminStacksTable";
 
-const Wrapper = styled.div`
-  display: flex;
-`;
-
 const AdminStacksPage = () => {
-  const [isCreateOpen, setIsCreateOpen] = useState(false);
+  const [isCreateOpen, toggleIsCreateOpen] = useToggle(false);
+  const [newRow, setNewRow] = useState<NewRowProps[]>([]);
 
-  const updatesQuery = useQuery(`stacksData`, apiRoutes.apiGetStacksList);
+  const stacksQuery = useQuery(`stacksData`, apiRoutes.apiGetStacksList, {
+    refetchOnWindowFocus: false,
+  });
 
-  const stacksList = updatesQuery.isFetching ? [] : updatesQuery?.data;
-  const existingStackIds = stacksList.map((update: { name: string }) =>
+  const stacksList = stacksQuery.isFetching ? [] : stacksQuery?.data || [];
+
+  const existingStackNames = stacksList.map((update: { name: string }) =>
     update.name.toLowerCase(),
   );
 
-  const onNewStackSuccess = () => {
-    setIsCreateOpen(false);
-    updatesQuery.refetch();
-  };
+  const onCreateOpen = useCallback(() => {
+    toggleIsCreateOpen();
+    setNewRow([{ isInCreateMode: true }]);
+  }, []);
 
-  const onNewStackAbort = () => {
-    setIsCreateOpen(false);
-  };
+  const onCreateClose = useCallback(() => {
+    toggleIsCreateOpen(false);
+    setNewRow([]);
+  }, []);
 
   return (
-    <Wrapper>
-      <AdminSidebar />
-      <Page>
-        <PageHeader />
-        <MaxWidth>
-          <AdminPageTitle>
-            <Stack spacing={8} align="center" justify="spaceBetween">
-              <h1>Manage Stacks</h1>
-              {!isCreateOpen && (
-                <SmallButton
-                  onClick={() => setIsCreateOpen(true)}
-                  $color={theme.color.lightOne}
-                  $variant="primary"
-                >
-                  Add Stack
-                </SmallButton>
-              )}
-            </Stack>
-          </AdminPageTitle>
-          <Stack direction="down" spacing={8} fullWidth={true}>
-            <AnimatePresence>
-              {isCreateOpen && (
-                <CreateStacksForm
-                  existingStackIds={existingStackIds}
-                  onSuccess={onNewStackSuccess}
-                  onAbort={onNewStackAbort}
-                />
-              )}
-            </AnimatePresence>
-            <AdminStacksTable stacks={stacksList} />
-          </Stack>
-        </MaxWidth>
-      </Page>
-    </Wrapper>
+    <AdminPage
+      pageTitle="Manage Stacks"
+      pageAction={
+        !isCreateOpen && (
+          <SmallButton
+            onClick={onCreateOpen}
+            $color={theme.color.lightOne}
+            $variant="primary"
+          >
+            Add Stack
+          </SmallButton>
+        )
+      }
+    >
+      <AdminStacksTable
+        stacks={[...newRow, ...stacksList]}
+        existingStackNames={existingStackNames}
+        onSuccess={stacksQuery.refetch}
+        onCancel={onCreateClose}
+      />
+    </AdminPage>
   );
 };
 
-export default memo(AdminStacksPage);
+export default AdminStacksPage;

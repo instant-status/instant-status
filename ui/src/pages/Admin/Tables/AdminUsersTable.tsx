@@ -17,12 +17,10 @@ import {
   TableHeader,
   TableRow,
 } from "../../../components/Tables/AdminTable";
+import { NewRowProps } from "../../../globalTypes";
 import theme from "../../../utils/theme";
-export interface NewUserProps {
-  isInCreateMode?: boolean;
-}
 
-export interface UserProps extends NewUserProps {
+export interface UserProps extends NewRowProps {
   id: number;
   email: string;
   first_name: string;
@@ -243,12 +241,12 @@ const AdminUsersTable = (props: AdminUsersTableProps) => {
     <Table>
       <thead>
         <tr>
-          <TableHeader></TableHeader>
+          <TableHeader />
           <TableHeader width="15%">First Name</TableHeader>
           <TableHeader width="15%">Last Name</TableHeader>
           <TableHeader width="25%">Email</TableHeader>
           <TableHeader width="25%">Roles</TableHeader>
-          <TableHeader width="10%">Created At</TableHeader>
+          <TableHeader width="15%">Created At</TableHeader>
           <TableHeader width="10%">Actions</TableHeader>
         </tr>
       </thead>

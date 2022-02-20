@@ -1,4 +1,5 @@
-import React, { memo } from "react";
+import React, { memo, useEffect } from "react";
+import { Redirect } from "react-router";
 import styled from "styled-components";
 
 import Page from "../../components/Layout/Page";
@@ -18,19 +19,21 @@ const PageTitle = styled.header`
 `;
 
 const AdminPage = () => {
-  return (
-    <Wrapper>
-      <AdminSidebar />
-      <Page>
-        <PageHeader />
-        <PageTitle>
-          <Stack spacing={8} align="center" justify="spaceBetween">
-            <h1>Admin</h1>
-          </Stack>
-        </PageTitle>
-      </Page>
-    </Wrapper>
-  );
+  return <Redirect to="/admin/stacks" />;
+
+  // return (
+  //   <Wrapper>
+  //     <AdminSidebar />
+  //     <Page>
+  //       <PageHeader />
+  //       <PageTitle>
+  //         <Stack spacing={8} align="center" justify="spaceBetween">
+  //           <h1>Admin</h1>
+  //         </Stack>
+  //       </PageTitle>
+  //     </Page>
+  //   </Wrapper>
+  // );
 };
 
 export default memo(AdminPage);

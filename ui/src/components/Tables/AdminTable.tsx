@@ -27,7 +27,7 @@ export const TableRow = styled.tr`
 export const TableHeader = styled.th<{ width?: string }>`
   font-weight: 600;
   font-size: 1.3rem;
-  padding: 12px;
+  padding: 16px 12px;
   border-bottom: 1px solid ${transparentize(0.8, theme.color.lightOne)};
   text-align: left;
 `;

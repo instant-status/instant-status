@@ -69,7 +69,6 @@ model Updates {
   server_finished_count        Int
   is_cancelled                 Boolean
   run_migrations               Boolean
-  rollback_migrations          Boolean
   update_app_to                String
   update_xapi_to               String
   chosen_one                   String
