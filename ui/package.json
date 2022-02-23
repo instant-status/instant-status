@@ -16,7 +16,7 @@
   "dependencies": {
     "axios": "0.26.0",
     "config": "3.3.7",
-    "framer-motion": "6.2.6",
+    "framer-motion": "6.2.8",
     "js-cookie": "3.0.1",
     "mobx": "6.4.1",
     "mobx-react-lite": "3.3.0",
