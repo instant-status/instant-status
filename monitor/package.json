@@ -1,0 +1,23 @@
+{
+  "name": "monitor",
+  "version": "1.0.0",
+  "description": "",
+  "main": "src/index.ts",
+  "scripts": {
+    "dev": "dotenv -e ../is-config/.prisma.env -- nodemon --watch src",
+    "start": "dotenv -e ../is-config/.prisma.env -- ts-node src/index.ts",
+    "lint": "eslint \"src/**/*.{ts,tsx}\"",
+    "format": "prettier --write \"src/**/*.{ts,tsx,json,md}\"",
+    "tsc": "tsc --noEmit"
+  },
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "@prisma/client": "3.9.2",
+    "dayjs": "1.10.7",
+    "is-prisma": "1.0.0"
+  },
+  "devDependencies": {
+    "nodemon": "2.0.15"
+  }
+}

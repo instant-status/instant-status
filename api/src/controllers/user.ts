@@ -1,8 +1,7 @@
+import { prisma } from 'is-prisma';
 import checkForRequiredDataKeys from '../helpers/checkForRequiredDataKeys';
-import { getRequesterDecodedJWT } from './auth';
 import response from '../helpers/returnResponse';
-import prisma from '../../prisma/prismaClient';
-import { makeJWTsStale } from '../helpers/jwt';
+import { getRequesterDecodedJWT } from './auth';
 
 export const getUsers = async (ctx: any) => {
   const userJWT = getRequesterDecodedJWT(ctx.request);

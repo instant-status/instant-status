@@ -1,11 +1,11 @@
 import { google } from 'googleapis';
 import jwt from 'jsonwebtoken';
-// @ts-ignore
-import API_CONFIG from '../../../config/apiConfig';
-import formatAuthorisationToken from '../helpers/formatAuthorisationToken';
-import prisma from '../../prisma/prismaClient';
-import { isJWTStale } from '../helpers/jwt';
+import { prisma } from 'is-prisma';
+
+import { API_CONFIG } from 'is-config';
 import constructUserStackPermissions from '../helpers/constructUserStackPermissions';
+import formatAuthorisationToken from '../helpers/formatAuthorisationToken';
+import { isJWTStale } from '../helpers/jwt';
 
 const CLIENT_ID = API_CONFIG.GOOGLE_AUTH.CLIENT_ID;
 const CLIENT_SECRET = API_CONFIG.GOOGLE_AUTH.CLIENT_SECRET;

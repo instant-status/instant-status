@@ -1,0 +1,22 @@
+{
+  "name": "is-prisma",
+  "version": "1.0.0",
+  "description": "",
+  "main": "src/index.ts",
+  "scripts": {
+    "db:dev-generate-migrations": "dotenv -e ../is-config/.prisma.env -- prisma migrate dev --create-only",
+    "db:dev-push": "dotenv -e ../is-config/.prisma.env -- prisma db push",
+    "db:dev-reset": "dotenv -e ../is-config/.prisma.env -- prisma migrate reset",
+    "db:dev-seed": "dotenv -e ../is-config/.prisma.env -- prisma db seed",
+    "db:dev-studio": "dotenv -e ../is-config/.prisma.env -- prisma studio",
+    "db:migrate": "dotenv -e ../is-config/.prisma.env -- prisma migrate deploy"
+  },
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "@prisma/client": "3.9.2"
+  },
+  "devDependencies": {
+    "prisma": "3.9.2"
+  }
+}

@@ -1,9 +1,8 @@
+import { prisma } from 'is-prisma';
+import { Roles, Stacks } from '@prisma/client';
 import checkForRequiredDataKeys from '../helpers/checkForRequiredDataKeys';
-import { getRequesterDecodedJWT } from './auth';
 import response from '../helpers/returnResponse';
-import prisma from '../../prisma/prismaClient';
-import { makeJWTsStale } from '../helpers/jwt';
-import { Roles, Stacks } from '.prisma/client';
+import { getRequesterDecodedJWT } from './auth';
 
 export const getRoles = async (ctx: any) => {
   const userJWT = getRequesterDecodedJWT(ctx.request);

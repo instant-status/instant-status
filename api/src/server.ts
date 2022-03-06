@@ -5,7 +5,7 @@ import cors from '@koa/cors';
 
 import router from './routes/routes';
 import { isRequestAllowed } from './controllers/auth';
-import API_CONFIG from '../../config/apiConfig';
+import { API_CONFIG } from 'is-config';
 
 const app = new Koa();
 

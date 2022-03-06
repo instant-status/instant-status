@@ -1,6 +1,7 @@
+import { prisma } from 'is-prisma';
 import { Servers } from '@prisma/client';
-import ALLOWED_DATA, { AllowedDataType } from '../../../config/allowedData';
-import prisma from '../../prisma/prismaClient';
+
+import { ALLOWED_DATA, AllowedDataType } from 'is-config';
 import checkForRequiredDataKeys from '../helpers/checkForRequiredDataKeys';
 import response from '../helpers/returnResponse';
 

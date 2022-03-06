@@ -1,17 +1,16 @@
 {
   "compilerOptions": {
     "rootDirs": [
-      "src"
+      "src",
     ],
     "module": "commonjs",
     "esModuleInterop": true,
-    "target": "es6",
+    "target": "ESNext",
     "moduleResolution": "node",
     "sourceMap": true,
     "skipLibCheck": true,
     "composite": true,
     "outDir": "dist"
-
   },
   "include": ["src/**/*"],
   "exclude": ["node_modules", "**/*.spec.ts"],
