@@ -14,9 +14,9 @@
   "author": "",
   "license": "MIT",
   "dependencies": {
-    "@prisma/client": "3.9.2"
+    "@prisma/client": "3.10.0"
   },
   "devDependencies": {
-    "prisma": "3.9.2"
+    "prisma": "3.10.0"
   }
 }

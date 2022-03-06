@@ -13,7 +13,7 @@
   "author": "",
   "license": "MIT",
   "dependencies": {
-    "@prisma/client": "3.9.2",
+    "@prisma/client": "3.10.0",
     "dayjs": "1.10.7",
     "is-prisma": "1.0.0"
   },
