@@ -28,13 +28,13 @@ const monitor = async () => {
       },
     });
 
-    const truantServersIds = truantServers.map((server) => server.id);
+    if (truantServers.length > 0) {
+      const truantServerIds = truantServers.map((server) => server.id);
 
-    const serversToDelete = await prisma.servers.deleteMany({
-      where: { id: { in: truantServersIds } },
-    });
+      await prisma.servers.deleteMany({
+        where: { id: { in: truantServerIds } },
+      });
 
-    if (serversToDelete.count > 0) {
       console.log('🚮 Deleted the following truant servers:', truantServers);
     }
   } else {
