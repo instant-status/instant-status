@@ -1,10 +1,10 @@
+import { prisma } from 'is-prisma';
+import { Servers, Updates } from '@prisma/client';
 import { JsonObject } from 'type-fest';
 import checkForRequiredDataKeys from '../helpers/checkForRequiredDataKeys';
-import { getRequesterDecodedJWT, getRequesterIdentity } from './auth';
-import response from '../helpers/returnResponse';
 import isStackUpdating from '../helpers/isStackUpdating';
-import prisma from '../../prisma/prismaClient';
-import { Servers, Updates } from '@prisma/client';
+import response from '../helpers/returnResponse';
+import { getRequesterDecodedJWT, getRequesterIdentity } from './auth';
 
 export const updateGet = async (ctx) => {
   // Ensuring we have required data in the request

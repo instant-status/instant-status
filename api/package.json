@@ -1,36 +1,24 @@
 {
   "name": "instant-status-api",
   "version": "1.0.0",
-  "description": "API",
+  "description": "",
   "main": "src/server.ts",
   "scripts": {
-    "dev": "dotenv -e ../config/.prisma.env -- nodemon --watch src",
-    "start": "dotenv -e ../config/.prisma.env -- ts-node src/server.ts",
-    "db:dev-generate-migrations": "dotenv -e ../config/.prisma.env -- prisma migrate dev --create-only",
-    "db:dev-push": "dotenv -e ../config/.prisma.env -- prisma db push",
-    "db:dev-reset": "dotenv -e ../config/.prisma.env -- prisma migrate reset",
-    "db:dev-seed": "dotenv -e ../config/.prisma.env -- prisma db seed",
-    "db:dev-studio": "dotenv -e ../config/.prisma.env -- prisma studio",
-    "db:migrate": "dotenv -e ../config/.prisma.env -- prisma migrate deploy",
+    "dev": "dotenv -e ../is-config/.prisma.env -- nodemon --watch src",
+    "start": "dotenv -e ../is-config/.prisma.env -- ts-node src/server.ts",
     "lint": "eslint \"src/**/*.{ts,tsx}\"",
     "format": "prettier --write \"src/**/*.{ts,tsx,json,md}\"",
     "tsc": "tsc --noEmit"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/instant-status/instant-status.git"
-  },
-  "author": "Instant Status",
+  "author": "",
   "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/instant-status/instant-status/issues"
-  },
-  "homepage": "https://github.com/instant-status/instant-status#readme",
   "dependencies": {
     "@koa/cors": "3.1.0",
     "@koa/router": "10.1.1",
     "@prisma/client": "3.10.0",
     "googleapis": "95.0.0",
+    "is-config": "1.0.0",
+    "is-prisma": "1.0.0",
     "jsonwebtoken": "8.5.1",
     "koa": "2.13.4",
     "koa-bodyparser": "4.3.0",
@@ -52,7 +40,6 @@
     "eslint-plugin-prettier": "4.0.0",
     "nodemon": "2.0.15",
     "prettier": "2.5.1",
-    "prisma": "3.10.0",
     "ts-node": "10.5.0",
     "ts-node-dev": "1.1.8",
     "type-fest": "2.12.0"

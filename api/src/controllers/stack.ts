@@ -1,8 +1,8 @@
-import checkForRequiredDataKeys from '../helpers/checkForRequiredDataKeys';
-import { getRequesterDecodedJWT, getRequesterIdentity } from './auth';
-import response from '../helpers/returnResponse';
-import prisma from '../../prisma/prismaClient';
+import { prisma } from 'is-prisma';
 import { Updates } from '@prisma/client';
+import checkForRequiredDataKeys from '../helpers/checkForRequiredDataKeys';
+import response from '../helpers/returnResponse';
+import { getRequesterDecodedJWT, getRequesterIdentity } from './auth';
 
 export const getAvailableStacksAndEnvironments = async (ctx) => {
   const userJWT = getRequesterDecodedJWT(ctx.request);

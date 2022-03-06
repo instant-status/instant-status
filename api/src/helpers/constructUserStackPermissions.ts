@@ -1,4 +1,4 @@
-import { Stacks } from '.prisma/client';
+import { Stacks } from '@prisma/client';
 
 const constructUserStackPermissions = ({
   user,

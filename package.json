@@ -3,16 +3,22 @@
   "version": "1.0.0",
   "description": "Performant, robust, and clean monitoring application",
   "main": "index.js",
+  "workspaces": [
+    "api",
+    "is-config",
+    "is-prisma",
+    "monitor"
+  ],
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "ci": "npm ci --workspaces && cd ui && npm ci",
     "dev": "bash ./tools/startDevServers.sh",
-    "ci": "cd ./ui && npm ci && cd ../api && npm ci"
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/instant-status/instant-status.git"
   },
-  "author": "Callum Williams",
+  "author": "",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/instant-status/instant-status/issues"

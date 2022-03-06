@@ -1,4 +1,4 @@
-import prisma from '../../prisma/prismaClient';
+import { prisma } from 'is-prisma';
 import response from '../helpers/returnResponse';
 import { getRequesterDecodedJWT } from './auth';
 
