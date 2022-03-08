@@ -19,6 +19,7 @@
   "homepage": "https://github.com/instant-status/instant-status#readme",
   "dependencies": {
     "@koa/cors": "3.1.0",
+    "dayjs": "1.10.8",
     "diskdb": "0.1.17",
     "dotenv": "8.2.0",
     "googleapis": "63.0.0",
