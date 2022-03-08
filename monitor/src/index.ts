@@ -9,11 +9,11 @@ let runMonitor = false;
 
 const monitor = async () => {
   if (runMonitor) {
-    console.log(`[${dayjs().utc()}] Running monitor`);
+    console.log(`[${dayjs.utc()}] Running monitor`);
     const truantServers = await prisma.servers.findMany({
       where: {
         server_health_updated_at: {
-          lt: dayjs().utc().subtract(5, 'minutes').toDate(),
+          lt: dayjs.utc().subtract(5, 'minutes').toDate(),
         },
       },
       select: {
