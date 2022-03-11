@@ -45,11 +45,11 @@ let runMonitor = false;
 
 const monitor = () => {
   if (runMonitor) {
-    console.log(`[${dayjs().utc()}] Running monitor`);
+    console.log(`[${dayjs.utc()}] Running monitor`);
 
     const allInstances = db.instances.find({});
     const truantInstances = allInstances.filter((instance) => {
-      if (typeof instance.instanceLastHealthyAt === "undefined") return false;
+      if (instance.instanceLastHealthyAt === undefined) return false;
       return (
         dayjs.utc(instance.instanceLastHealthyAt).toDate() <
         dayjs.utc().subtract(5, "minutes").toDate()
