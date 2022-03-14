@@ -49,13 +49,11 @@ const CreateUpdateModal = observer(() => {
   const [query, setQuery] = useQueryParams({
     stackId: StringParam,
     appVersion: StringParam,
-    xapiVersion: StringParam,
   });
   const [stacksToUpdate, setStacksToUpdate] = useState(
     query.stackId ? [Number(query.stackId)] : [],
   );
   const [appVersion, setAppVersion] = useState(query.appVersion);
-  const [xapiVersion, setXapiVersion] = useState(query.xapiVersion);
   const [updateOptions, setUpdateOptions] = useState([`run_migrations`]);
 
   const store = useContext(globalStoreContext);
@@ -92,12 +90,11 @@ const CreateUpdateModal = observer(() => {
   }, [step]);
 
   const onSave = () => {
-    if (appVersion && xapiVersion && stacksToUpdate) {
+    if (appVersion && stacksToUpdate) {
       mutation.mutate({
         stack_ids: stacksToUpdate,
         run_migrations: updateOptions.includes(`run_migrations`),
         update_app_to: appVersion,
-        update_xapi_to: xapiVersion,
       });
     }
   };
@@ -162,7 +159,6 @@ const CreateUpdateModal = observer(() => {
       setQuery({
         stackId: undefined,
         appVersion: undefined,
-        xapiVersion: undefined,
       });
       store.setIsUpdateModalOpen(false);
       stacksQuery.refetch();
@@ -208,9 +204,7 @@ const CreateUpdateModal = observer(() => {
           {step === UpdateStepTypes.pickOptions && (
             <GhostButton
               onClick={() => setStep(UpdateStepTypes.confirmOptions)}
-              disabled={
-                stacksToUpdate.length < 1 || !appVersion || !xapiVersion
-              }
+              disabled={stacksToUpdate.length < 1 || !appVersion}
             >
               Next
             </GhostButton>
@@ -296,17 +290,10 @@ const CreateUpdateModal = observer(() => {
                         stack.servers.find(
                           (server) => server.server_app_version,
                         )?.server_app_version || ``;
-                      const runningXAPIVersion =
-                        stack.servers.find(
-                          (server) => server.server_xapi_version,
-                        )?.server_xapi_version || ``;
 
                       const updatingToAppVersion =
                         stack.updates.find((update) => update.update_app_to)
                           ?.update_app_to || ``;
-                      const updatingToXAPIVersion =
-                        stack.updates.find((update) => update.update_xapi_to)
-                          ?.update_xapi_to || ``;
 
                       const isUpdating = Boolean(
                         stack.servers.find(
@@ -323,8 +310,8 @@ const CreateUpdateModal = observer(() => {
                           label={stack.name}
                           helperLabel={
                             isUpdating
-                              ? `Updating to ${updatingToAppVersion} (xAPI ${updatingToXAPIVersion})`
-                              : `${runningAppVersion} (xAPI ${runningXAPIVersion})`
+                              ? `Updating to ${updatingToAppVersion}`
+                              : `${runningAppVersion}`
                           }
                           name={stack.name}
                           disabled={
@@ -365,20 +352,6 @@ const CreateUpdateModal = observer(() => {
                 name="update_app_to"
                 onChange={(event) => {
                   setAppVersion(removeWhiteSpace(event.target.value));
-                  setIsSafeToClose(false);
-                }}
-              />
-              <TextInput
-                label={
-                  <>
-                    Update <b>xAPI</b> to:
-                  </>
-                }
-                value={xapiVersion || ``}
-                disabled={step !== UpdateStepTypes.pickOptions}
-                name="update_xapi_to"
-                onChange={(event) => {
-                  setXapiVersion(removeWhiteSpace(event.target.value));
                   setIsSafeToClose(false);
                 }}
               />

@@ -38,9 +38,6 @@ const Card = observer((props: { stack: StackProps }) => {
   const serverAppVersion = servers.find(
     (server) => server.server_app_version,
   )?.server_app_version;
-  const serverXapiVersion = servers.find(
-    (server) => server.server_xapi_version,
-  )?.server_xapi_version;
 
   return (
     <CardBackground layout>
@@ -70,7 +67,6 @@ const Card = observer((props: { stack: StackProps }) => {
         stackAppUrl={props.stack.app_url}
         stackId={props.stack.id}
         serverAppVersion={serverAppVersion}
-        serverXapiVersion={serverXapiVersion}
         isUpdating={isUpdating}
         canUpdate={props.stack.canUpdate}
       />

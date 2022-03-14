@@ -46,14 +46,12 @@ export interface CreateUpdateProps {
   stack_ids: number[];
   run_migrations: boolean;
   update_app_to: string;
-  update_xapi_to: string;
 }
 
 export interface CreateStackProps {
   name: string;
   run_migrations: boolean;
   update_app_to: string;
-  update_xapi_to: string;
 }
 
 export interface DeleteStacksProps {

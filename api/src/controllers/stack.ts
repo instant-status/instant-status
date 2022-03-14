@@ -96,12 +96,7 @@ export const createStack = async (ctx) => {
 
   // Ensuring we have required data in the request
   const body = ctx.request.body;
-  const requiredDataKeys = [
-    'name',
-    'run_migrations',
-    'update_app_to',
-    'update_xapi_to',
-  ];
+  const requiredDataKeys = ['name', 'run_migrations', 'update_app_to'];
   const checkForRequiredDataKeysResult = checkForRequiredDataKeys(
     body,
     requiredDataKeys
@@ -135,7 +130,6 @@ export const createStack = async (ctx) => {
       run_migrations: body.run_migrations,
 
       update_app_to: body.update_app_to,
-      update_xapi_to: body.update_xapi_to,
 
       chosen_one: '',
       switch_code_at_date: 0,
@@ -149,7 +143,6 @@ export const createStack = async (ctx) => {
       where: { stack_id: stack.id },
       data: {
         server_app_updating_to_version: body.update_app_to,
-        server_xapi_updating_to_version: body.update_xapi_to,
       },
     });
   } catch (err) {

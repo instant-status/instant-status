@@ -89,8 +89,7 @@ const CardServer = observer(
 
     const serverIsBooting =
       props.server.server_app_version === `primal` &&
-      !props.server.server_app_updating_to_version &&
-      !props.server.server_xapi_updating_to_version;
+      !props.server.server_app_updating_to_version;
 
     const stateCode = serverIsBooting
       ? 0
@@ -197,11 +196,8 @@ const CardServer = observer(
             </ServerRow>
             <ServerRow>
               <ServerRowKey>Version:</ServerRowKey>
-              <CopyText
-                value={`${props.server.server_app_version} (xAPI ${props.server.server_xapi_version}`}
-              >
-                {props.server.server_app_version} (xAPI{` `}
-                {props.server.server_xapi_version})
+              <CopyText value={`${props.server.server_app_version}`}>
+                {props.server.server_app_version}
               </CopyText>
               <IconButton
                 href={`${APP_CONFIG.GITHUB_VERSION_URL}${props.server.server_app_version}`}
