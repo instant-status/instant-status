@@ -33,7 +33,6 @@ const StackRow = (props: {
 }) => {
   const [stackName, setStackName] = useState(``);
   const [appVersion, setAppVersion] = useState(``);
-  const [xapiVersion, setXapiVersion] = useState(``);
   const [runMigrations, toggleRunMigrations] = useToggle(true);
   const [isInEditMode, setIsEditMode] = useState(props.stack.isInCreateMode);
 
@@ -60,7 +59,6 @@ const StackRow = (props: {
   const clearForm = () => {
     setStackName(``);
     setAppVersion(``);
-    setXapiVersion(``);
     toggleRunMigrations(true);
 
     setIsEditMode(false);
@@ -69,13 +67,12 @@ const StackRow = (props: {
 
   const createStack = () => {
     const stackNameAlreadyInUse = props.existingStackNames.includes(stackName);
-    if (appVersion && xapiVersion && stackName && !stackNameAlreadyInUse) {
+    if (appVersion && stackName && !stackNameAlreadyInUse) {
       createStackMutation.mutate(
         {
           name: stackName,
           run_migrations: runMigrations,
           update_app_to: appVersion,
-          update_xapi_to: xapiVersion,
         },
         {
           onSuccess: () => {
@@ -90,16 +87,10 @@ const StackRow = (props: {
   const runningAppVersion =
     props.stack?.servers?.find((server) => server.server_app_version)
       ?.server_app_version || ``;
-  const runningXAPIVersion =
-    props.stack?.servers?.find((server) => server.server_xapi_version)
-      ?.server_xapi_version || ``;
 
   const updatingToAppVersion =
     props.stack?.updates?.find((update) => update.update_app_to)
       ?.update_app_to || ``;
-  const updatingToXAPIVersion =
-    props.stack?.updates?.find((update) => update.update_xapi_to)
-      ?.update_xapi_to || ``;
 
   const isUpdating = Boolean(
     props.stack?.servers?.find(
@@ -144,31 +135,6 @@ const StackRow = (props: {
                   {runningAppVersion
                     ? `(updating to ${updatingToAppVersion})`
                     : `(will be ${updatingToAppVersion})`}
-                </HelperLabel>
-              </>
-            ) : null}
-          </>
-        )}
-      </TableCell>
-      <TableCell>
-        {isInEditMode ? (
-          <TextInput
-            value={xapiVersion}
-            name="xapiVersion"
-            onChange={(event) => setXapiVersion(event.target.value)}
-            label="xAPI Version"
-            required={true}
-          />
-        ) : (
-          <>
-            {runningXAPIVersion}
-            {isUpdating ? (
-              <>
-                {runningXAPIVersion && <br />}
-                <HelperLabel>
-                  {runningAppVersion
-                    ? `(updating to ${updatingToXAPIVersion})`
-                    : `(will be ${updatingToXAPIVersion})`}
                 </HelperLabel>
               </>
             ) : null}
@@ -239,9 +205,8 @@ const AdminStacksTable = (props: AdminStacksTableProps) => {
         <tr>
           <TableHeader />
           <TableHeader width="20%">Stack Name</TableHeader>
-          <TableHeader width="15%">app Version</TableHeader>
-          <TableHeader width="15%">xAPI Version</TableHeader>
-          <TableHeader width="15%" />
+          <TableHeader width="20%">app Version</TableHeader>
+          <TableHeader width="20%" />
           <TableHeader width="20%">Created</TableHeader>
           <TableHeader width="20%">Actions</TableHeader>
         </tr>

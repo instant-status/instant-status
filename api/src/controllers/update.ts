@@ -33,7 +33,6 @@ export const updateGet = async (ctx) => {
       is_cancelled: latestUpdate.is_cancelled,
       run_migrations: latestUpdate.run_migrations,
       update_app_to: latestUpdate.update_app_to,
-      update_xapi_to: latestUpdate.update_xapi_to,
       server_count: latestUpdate.server_count,
       server_ready_to_switch_count: latestUpdate.server_ready_to_switch_count,
       server_finished_count: latestUpdate.server_finished_count,
@@ -64,12 +63,7 @@ export const updateCreate = async (ctx) => {
 
   // Ensuring we have required data in the request
   const body = ctx.request.body;
-  const requiredDataKeys = [
-    'run_migrations',
-    'stack_ids',
-    'update_app_to',
-    'update_xapi_to',
-  ];
+  const requiredDataKeys = ['run_migrations', 'stack_ids', 'update_app_to'];
   const checkForRequiredDataKeysResult = checkForRequiredDataKeys(
     body,
     requiredDataKeys
@@ -115,7 +109,6 @@ export const updateCreate = async (ctx) => {
       run_migrations: body.run_migrations,
 
       update_app_to: body.update_app_to,
-      update_xapi_to: body.update_xapi_to,
 
       chosen_one: '',
       switch_code_at_date: 0,
@@ -129,7 +122,6 @@ export const updateCreate = async (ctx) => {
       where: { stack_id: stackId },
       data: {
         server_app_updating_to_version: body.update_app_to,
-        server_xapi_updating_to_version: body.update_xapi_to,
       },
     });
   }
@@ -247,11 +239,9 @@ export const updateServerProgress = async (ctx) => {
     server_update_message: body.server_update_message,
     ...(body.server_update_stage === 'finished' && {
       server_app_version: latestUpdate.update_app_to,
-      server_xapi_version: latestUpdate.update_xapi_to,
       server_updated_at: new Date(),
     }),
     server_app_updating_to_version: latestUpdate.update_app_to,
-    server_xapi_updating_to_version: latestUpdate.update_xapi_to,
     server_is_chosen_one:
       body.server_id === latestUpdate.chosen_one ? true : false,
   } as Servers;

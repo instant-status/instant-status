@@ -123,22 +123,15 @@ const CardServerOverlay = (props: {
             <RowKey>Message:</RowKey>
             <div>{updateMessage}</div>
           </Stack>
-          {(props.server.server_app_version ||
-            props.server.server_xapi_version) && (
+          {props.server.server_app_version && (
             <Stack spacing={2}>
               <RowKey>From:</RowKey>
-              <div>
-                {props.server.server_app_version} (xAPI{` `}
-                {props.server.server_xapi_version})
-              </div>
+              <div>{props.server.server_app_version}</div>
             </Stack>
           )}
           <Stack spacing={2}>
             <RowKey>To:</RowKey>
-            <div>
-              {props.server.server_app_updating_to_version} (xAPI{` `}
-              {props.server.server_xapi_updating_to_version})
-            </div>
+            <div>{props.server.server_app_updating_to_version}</div>
           </Stack>
         </Stack>
       </Stack>

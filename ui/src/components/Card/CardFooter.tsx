@@ -51,7 +51,6 @@ interface CardFooterProps {
   stackAppUrl?: string;
   stackId?: number;
   serverAppVersion?: string;
-  serverXapiVersion?: string;
   isUpdating: boolean;
   canUpdate: boolean;
 }
@@ -60,7 +59,6 @@ const CardFooter = observer((props: CardFooterProps) => {
   const [, setQuery] = useQueryParams({
     stackId: NumberParam,
     appVersion: StringParam,
-    xapiVersion: StringParam,
   });
 
   const store = useContext(globalStoreContext);
@@ -97,7 +95,6 @@ const CardFooter = observer((props: CardFooterProps) => {
           setQuery({
             stackId: props.stackId,
             appVersion: props.serverAppVersion,
-            xapiVersion: props.serverXapiVersion,
           });
         }}
       >

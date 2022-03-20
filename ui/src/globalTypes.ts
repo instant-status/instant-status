@@ -13,7 +13,6 @@ export interface ServerProps {
   server_public_ip: string;
   server_updated_at: string;
   server_app_version: string;
-  server_xapi_version: string;
   server_disk_used_gb: number;
   server_disk_total_gb: number;
   server_key_file_name: string;
@@ -24,7 +23,6 @@ export interface ServerProps {
   server_update_progress: number;
   server_update_message: string;
   server_app_updating_to_version: string;
-  server_xapi_updating_to_version: string;
 
   // Server Display Advanced
   server_availability_zone: string;
@@ -51,7 +49,6 @@ export interface UpdateProps {
   is_cancelled: boolean;
   run_migrations: boolean;
   update_app_to: string;
-  update_xapi_to: string;
   chosen_one: string;
   switch_code_at_date: number;
   created_at: string;
