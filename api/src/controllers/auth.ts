@@ -1,4 +1,5 @@
 import { google } from 'googleapis';
+import { Context } from 'koa';
 import jwt from 'jsonwebtoken';
 import { prisma } from 'is-prisma';
 
@@ -72,6 +73,73 @@ export const getRequesterIdentity = (request: any) => {
   return requesterIdentity;
 };
 
+export const checkUserValidityAndIssueNewJWT = async (
+  userEmails: string[],
+  ctx: Context
+) => {
+  const matchingUser = await prisma.users.findFirst({
+    where: { email: { in: userEmails } },
+    select: {
+      id: true,
+      email: true,
+      is_super_admin: true,
+      roles: {
+        select: {
+          view_stacks: {
+            select: {
+              id: true,
+            },
+          },
+          view_stack_environments: true,
+          update_stacks: {
+            select: {
+              id: true,
+            },
+          },
+          update_stack_environments: true,
+        },
+      },
+    },
+  });
+
+  if (!matchingUser) return false;
+
+  const allStacks = await prisma.stacks.findMany({
+    select: {
+      id: true,
+      environment: true,
+    },
+  });
+
+  const userStackPermissions = constructUserStackPermissions({
+    user: matchingUser,
+    allStacks,
+  });
+
+  const validUser = {
+    email: matchingUser.email,
+    is_super_admin: matchingUser.is_super_admin,
+    roles: {
+      view_stacks: userStackPermissions.canViewStackIds,
+      update_stacks: userStackPermissions.canUpdateStackIds,
+    },
+  };
+
+  // console.log('Valid user:', validUser);
+
+  const authCookie = jwt.sign(validUser, API_CONFIG.APP_SECRETS[0], {
+    expiresIn: AUTH_VALID_FOR_SECONDS,
+  });
+
+  // Set a valid JWT in their cookie
+  ctx.cookies.set(API_CONFIG.COOKIE_NAME, authCookie, {
+    maxAge: 1000 * AUTH_VALID_FOR_SECONDS,
+    httpOnly: false,
+  });
+
+  return true;
+};
+
 export const authGoogle = async (ctx: any) => {
   try {
     const code = ctx.query.code;
@@ -107,67 +175,12 @@ export const authGoogle = async (ctx: any) => {
 
     const userEmails = emails.map((user) => user.value);
 
-    const matchingUser = await prisma.users.findFirst({
-      where: { email: { in: userEmails } },
-      select: {
-        id: true,
-        email: true,
-        is_super_admin: true,
-        roles: {
-          select: {
-            view_stacks: {
-              select: {
-                id: true,
-              },
-            },
-            view_stack_environments: true,
-            update_stacks: {
-              select: {
-                id: true,
-              },
-            },
-            update_stack_environments: true,
-          },
-        },
-      },
-    });
-
-    if (!matchingUser) {
+    const checkUserValidityAndIssueNewJWTResult =
+      await checkUserValidityAndIssueNewJWT(userEmails, ctx);
+    if (checkUserValidityAndIssueNewJWTResult !== true)
       throw new Error('User not allowed');
-    }
 
-    const allStacks = await prisma.stacks.findMany({
-      select: {
-        id: true,
-        environment: true,
-      },
-    });
-
-    const userStackPermissions = constructUserStackPermissions({
-      user: matchingUser,
-      allStacks,
-    });
-
-    const validUser = {
-      email: matchingUser.email,
-      is_super_admin: matchingUser.is_super_admin,
-      roles: {
-        view_stacks: userStackPermissions.canViewStackIds,
-        update_stacks: userStackPermissions.canUpdateStackIds,
-      },
-    };
-
-    // console.log('Valid user:', validUser);
-
-    const authCookie = jwt.sign(validUser, API_CONFIG.APP_SECRETS[0], {
-      expiresIn: AUTH_VALID_FOR_SECONDS,
-    });
-
-    // Redirect them back to the home page with a valid bearer in their cookie
-    ctx.cookies.set(API_CONFIG.COOKIE_NAME, authCookie, {
-      maxAge: 1000 * AUTH_VALID_FOR_SECONDS,
-      httpOnly: false,
-    });
+    // Redirect them back to the home page with a valid JWT in their cookie
     ctx.body = `Redirecting to ${API_CONFIG.APP_NAME}...`;
     ctx.response.redirect(API_CONFIG.APP_URL);
     return;

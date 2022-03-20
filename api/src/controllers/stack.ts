@@ -2,7 +2,12 @@ import { prisma } from 'is-prisma';
 import { Updates } from '@prisma/client';
 import checkForRequiredDataKeys from '../helpers/checkForRequiredDataKeys';
 import response from '../helpers/returnResponse';
-import { getRequesterDecodedJWT, getRequesterIdentity } from './auth';
+import {
+  getRequesterDecodedJWT,
+  getRequesterIdentity,
+  checkUserValidityAndIssueNewJWT,
+} from './auth';
+import { makeJWTsStale } from '../helpers/jwt';
 
 export const getAvailableStacksAndEnvironments = async (ctx) => {
   const userJWT = getRequesterDecodedJWT(ctx.request);
@@ -153,7 +158,15 @@ export const createStack = async (ctx) => {
     });
   }
 
-  // makeJWTsStale();
+  makeJWTsStale();
+  const checkUserValidityAndIssueNewJWTResult =
+    await checkUserValidityAndIssueNewJWT(
+      [getRequesterIdentity(ctx.request)],
+      ctx
+    );
+  if (checkUserValidityAndIssueNewJWTResult !== true)
+    return response(ctx, 401, {});
+
   return response(ctx, 202, {});
 };
 
@@ -213,6 +226,5 @@ export const deleteStacks = async (ctx) => {
     });
   }
 
-  // makeJWTsStale();
   return response(ctx, 202, {});
 };
