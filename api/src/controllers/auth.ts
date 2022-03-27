@@ -11,7 +11,6 @@ import { isJWTStale } from '../helpers/jwt';
 const CLIENT_ID = API_CONFIG.GOOGLE_AUTH.CLIENT_ID;
 const CLIENT_SECRET = API_CONFIG.GOOGLE_AUTH.CLIENT_SECRET;
 const REDIRECT_URL = API_CONFIG.GOOGLE_AUTH.REDIRECT_URL;
-const AUTH_VALID_FOR_SECONDS = 60 * 60 * 1; // 1 hour
 
 export const isRequestAllowed = (request: {
   url: string;
@@ -36,7 +35,11 @@ export const isRequestAllowed = (request: {
           secret
         );
 
-        if (isRequestFromServer || !isJWTStale(request.headers.authorization)) {
+        if (
+          process.env.NODE_ENV === `development` ||
+          isRequestFromServer ||
+          !isJWTStale(request.headers.authorization)
+        ) {
           isRequestAllowed = true;
         }
       }
@@ -68,15 +71,20 @@ export const getRequesterDecodedJWT = (request: {
 export const getRequesterIdentity = (request: any) => {
   const decodedJWT = getRequesterDecodedJWT(request);
 
-  const requesterIdentity = decodedJWT?.email || null;
+  const requesterIdentity = decodedJWT?.email;
 
   return requesterIdentity;
 };
 
-export const checkUserValidityAndIssueNewJWT = async (
-  userEmails: string[],
-  ctx: Context
-) => {
+export const checkUserValidityAndIssueNewJWT = async (options: {
+  ctx: Context;
+  emailsOveride?: string[];
+}) => {
+  const userEmails =
+    options.emailsOveride ?? getRequesterIdentity(options.ctx.request);
+
+  if (!userEmails) return false;
+
   const matchingUser = await prisma.users.findFirst({
     where: { email: { in: userEmails } },
     select: {
@@ -128,12 +136,12 @@ export const checkUserValidityAndIssueNewJWT = async (
   // console.log('Valid user:', validUser);
 
   const authCookie = jwt.sign(validUser, API_CONFIG.APP_SECRETS[0], {
-    expiresIn: AUTH_VALID_FOR_SECONDS,
+    expiresIn: API_CONFIG.AUTH_VALID_FOR_SECONDS,
   });
 
   // Set a valid JWT in their cookie
-  ctx.cookies.set(API_CONFIG.COOKIE_NAME, authCookie, {
-    maxAge: 1000 * AUTH_VALID_FOR_SECONDS,
+  options.ctx.cookies.set(API_CONFIG.COOKIE_NAME, authCookie, {
+    maxAge: 1000 * API_CONFIG.AUTH_VALID_FOR_SECONDS,
     httpOnly: false,
   });
 
@@ -176,7 +184,10 @@ export const authGoogle = async (ctx: any) => {
     const userEmails = emails.map((user) => user.value);
 
     const checkUserValidityAndIssueNewJWTResult =
-      await checkUserValidityAndIssueNewJWT(userEmails, ctx);
+      await checkUserValidityAndIssueNewJWT({
+        ctx,
+        emailsOveride: userEmails,
+      });
     if (checkUserValidityAndIssueNewJWTResult !== true)
       throw new Error('User not allowed');
 

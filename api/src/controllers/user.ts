@@ -5,7 +5,6 @@ import response from '../helpers/returnResponse';
 import {
   checkUserValidityAndIssueNewJWT,
   getRequesterDecodedJWT,
-  getRequesterIdentity,
 } from './auth';
 
 export const getUsers = async (ctx: any) => {
@@ -66,10 +65,7 @@ export const editUser = async (ctx) => {
 
   makeJWTsStale();
   const checkUserValidityAndIssueNewJWTResult =
-    await checkUserValidityAndIssueNewJWT(
-      [getRequesterIdentity(ctx.request)],
-      ctx
-    );
+    await checkUserValidityAndIssueNewJWT({ ctx });
   if (checkUserValidityAndIssueNewJWTResult !== true)
     return response(ctx, 401, {});
 
@@ -159,10 +155,7 @@ export const deleteUsers = async (ctx) => {
 
   makeJWTsStale();
   const checkUserValidityAndIssueNewJWTResult =
-    await checkUserValidityAndIssueNewJWT(
-      [getRequesterIdentity(ctx.request)],
-      ctx
-    );
+    await checkUserValidityAndIssueNewJWT({ ctx });
   if (checkUserValidityAndIssueNewJWTResult !== true)
     return response(ctx, 401, {});
 

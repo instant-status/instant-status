@@ -160,10 +160,7 @@ export const createStack = async (ctx) => {
 
   makeJWTsStale();
   const checkUserValidityAndIssueNewJWTResult =
-    await checkUserValidityAndIssueNewJWT(
-      [getRequesterIdentity(ctx.request)],
-      ctx
-    );
+    await checkUserValidityAndIssueNewJWT({ ctx });
   if (checkUserValidityAndIssueNewJWTResult !== true)
     return response(ctx, 401, {});
 

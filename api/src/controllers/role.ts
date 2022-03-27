@@ -1,13 +1,12 @@
-import { prisma } from 'is-prisma';
 import { Roles, Stacks } from '@prisma/client';
+import { prisma } from 'is-prisma';
 import checkForRequiredDataKeys from '../helpers/checkForRequiredDataKeys';
+import { makeJWTsStale } from '../helpers/jwt';
 import response from '../helpers/returnResponse';
 import {
   checkUserValidityAndIssueNewJWT,
   getRequesterDecodedJWT,
-  getRequesterIdentity,
 } from './auth';
-import { makeJWTsStale } from '../helpers/jwt';
 
 export const getRoles = async (ctx: any) => {
   const userJWT = getRequesterDecodedJWT(ctx.request);
@@ -104,10 +103,7 @@ export const editRole = async (ctx) => {
 
   makeJWTsStale();
   const checkUserValidityAndIssueNewJWTResult =
-    await checkUserValidityAndIssueNewJWT(
-      [getRequesterIdentity(ctx.request)],
-      ctx
-    );
+    await checkUserValidityAndIssueNewJWT({ ctx });
   if (checkUserValidityAndIssueNewJWTResult !== true)
     return response(ctx, 401, {});
 
@@ -173,10 +169,7 @@ export const createRole = async (ctx) => {
 
   makeJWTsStale();
   const checkUserValidityAndIssueNewJWTResult =
-    await checkUserValidityAndIssueNewJWT(
-      [getRequesterIdentity(ctx.request)],
-      ctx
-    );
+    await checkUserValidityAndIssueNewJWT({ ctx });
   if (checkUserValidityAndIssueNewJWTResult !== true)
     return response(ctx, 401, {});
 
@@ -221,10 +214,7 @@ export const deleteRoles = async (ctx) => {
 
   makeJWTsStale();
   const checkUserValidityAndIssueNewJWTResult =
-    await checkUserValidityAndIssueNewJWT(
-      [getRequesterIdentity(ctx.request)],
-      ctx
-    );
+    await checkUserValidityAndIssueNewJWT({ ctx });
   if (checkUserValidityAndIssueNewJWTResult !== true)
     return response(ctx, 401, {});
 
