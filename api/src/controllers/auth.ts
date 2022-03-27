@@ -17,7 +17,7 @@ export const isRequestAllowed = (request: {
   headers: { authorization?: string };
 }) => {
   const isRequestFromServer =
-    getRequesterIdentity(request) === `server@InstantStatus`;
+    getRequesterIdentity(request) === `server@instantstatus.local`;
 
   // Don't require auth if user is trying to log in
   if (request.url.includes('/auth/google/callback')) {

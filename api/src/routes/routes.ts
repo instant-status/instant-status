@@ -11,7 +11,8 @@ import * as roleController from '../controllers/role';
 
 const serverOnly = (ctx: KoaRouter.RouterContext, next: () => void) => {
   const isRequestFromServer =
-    authController.getRequesterIdentity(ctx.request) === `server@InstantStatus`;
+    authController.getRequesterIdentity(ctx.request) ===
+    `server@instantstatus.local`;
   if (!isRequestFromServer) ctx.throw(401);
   return next();
 };
