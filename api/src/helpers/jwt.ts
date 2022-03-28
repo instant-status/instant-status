@@ -13,5 +13,12 @@ export const isJWTStale = (jwt: string) => {
 };
 
 export const makeJWTsStale = () => {
-  jwtStaleBefore = Math.floor(Date.now() / 1000);
+  // 10 second grace period is allowed, to account for two things:
+  //   - new JWTs being generated alongside staleness requests
+  //   - delay before user is provided with fresh JWT from API response
+  const gracePeriodSeconds = 10;
+  const newJwtStaleBefore = Math.floor(Date.now() / 1000 - gracePeriodSeconds);
+  setTimeout(() => {
+    jwtStaleBefore = newJwtStaleBefore;
+  }, 1000 * gracePeriodSeconds);
 };

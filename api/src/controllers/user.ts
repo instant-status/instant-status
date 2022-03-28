@@ -1,7 +1,11 @@
 import { prisma } from 'is-prisma';
 import checkForRequiredDataKeys from '../helpers/checkForRequiredDataKeys';
+import { makeJWTsStale } from '../helpers/jwt';
 import response from '../helpers/returnResponse';
-import { getRequesterDecodedJWT } from './auth';
+import {
+  checkUserValidityAndIssueNewJWT,
+  getRequesterDecodedJWT,
+} from './auth';
 
 export const getUsers = async (ctx: any) => {
   const userJWT = getRequesterDecodedJWT(ctx.request);
@@ -59,6 +63,12 @@ export const editUser = async (ctx) => {
     },
   });
 
+  makeJWTsStale();
+  const checkUserValidityAndIssueNewJWTResult =
+    await checkUserValidityAndIssueNewJWT({ ctx });
+  if (checkUserValidityAndIssueNewJWTResult !== true)
+    return response(ctx, 401, {});
+
   return response(ctx, 200, {
     ok: true,
     id: body.id,
@@ -104,7 +114,6 @@ export const createUser = async (ctx) => {
     },
   });
 
-  // makeJWTsStale();
   return response(ctx, 202, {});
 };
 
@@ -144,6 +153,11 @@ export const deleteUsers = async (ctx) => {
     },
   });
 
-  // makeJWTsStale();
+  makeJWTsStale();
+  const checkUserValidityAndIssueNewJWTResult =
+    await checkUserValidityAndIssueNewJWT({ ctx });
+  if (checkUserValidityAndIssueNewJWTResult !== true)
+    return response(ctx, 401, {});
+
   return response(ctx, 202, {});
 };

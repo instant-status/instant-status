@@ -3,8 +3,7 @@ import Cookies from "js-cookie";
 import APP_CONFIG from "../../appConfig";
 
 const apiFetch = async (url: string) => {
-  const bearer =
-    localStorage.getItem(`bearer`) || Cookies.get(APP_CONFIG.COOKIE_NAME);
+  const bearer = Cookies.get(APP_CONFIG.COOKIE_NAME);
 
   const response = await fetch(url, {
     headers: {
@@ -22,8 +21,7 @@ const apiFetch = async (url: string) => {
 };
 
 const apiPost = async <T>(url: string, body: T) => {
-  const bearer =
-    localStorage.getItem(`bearer`) || Cookies.get(APP_CONFIG.COOKIE_NAME);
+  const bearer = Cookies.get(APP_CONFIG.COOKIE_NAME);
 
   const response = await fetch(url, {
     method: `POST`,

@@ -6,10 +6,9 @@ import APP_CONFIG from "../../../appConfig";
 
 const Logout = () => {
   useEffect(() => {
-    localStorage.removeItem(`bearer`);
     Cookies.remove(APP_CONFIG.COOKIE_NAME);
   }, []);
-  return <Redirect to="/" push={true} />;
+  return <Redirect to="/login" push={true} />;
 };
 
 export default memo(Logout);

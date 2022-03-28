@@ -1,4 +1,5 @@
 import { google } from 'googleapis';
+import { Context } from 'koa';
 import jwt from 'jsonwebtoken';
 import { prisma } from 'is-prisma';
 
@@ -10,14 +11,13 @@ import { isJWTStale } from '../helpers/jwt';
 const CLIENT_ID = API_CONFIG.GOOGLE_AUTH.CLIENT_ID;
 const CLIENT_SECRET = API_CONFIG.GOOGLE_AUTH.CLIENT_SECRET;
 const REDIRECT_URL = API_CONFIG.GOOGLE_AUTH.REDIRECT_URL;
-const AUTH_VALID_FOR_SECONDS = 60 * 60 * 1; // 1 hour
 
 export const isRequestAllowed = (request: {
   url: string;
   headers: { authorization?: string };
 }) => {
   const isRequestFromServer =
-    getRequesterIdentity(request) === `server@InstantStatus`;
+    getRequesterIdentity(request) === `server@instantstatus.local`;
 
   // Don't require auth if user is trying to log in
   if (request.url.includes('/auth/google/callback')) {
@@ -35,7 +35,11 @@ export const isRequestAllowed = (request: {
           secret
         );
 
-        if (isRequestFromServer || !isJWTStale(request.headers.authorization)) {
+        if (
+          process.env.NODE_ENV === `development` ||
+          isRequestFromServer ||
+          !isJWTStale(request.headers.authorization)
+        ) {
           isRequestAllowed = true;
         }
       }
@@ -67,9 +71,81 @@ export const getRequesterDecodedJWT = (request: {
 export const getRequesterIdentity = (request: any) => {
   const decodedJWT = getRequesterDecodedJWT(request);
 
-  const requesterIdentity = decodedJWT?.email || null;
+  const requesterIdentity = decodedJWT?.email;
 
   return requesterIdentity;
+};
+
+export const checkUserValidityAndIssueNewJWT = async (options: {
+  ctx: Context;
+  emailsOveride?: string[];
+}) => {
+  const userEmails =
+    options.emailsOveride ?? getRequesterIdentity(options.ctx.request);
+
+  if (!userEmails) return false;
+
+  const matchingUser = await prisma.users.findFirst({
+    where: { email: { in: userEmails } },
+    select: {
+      id: true,
+      email: true,
+      is_super_admin: true,
+      roles: {
+        select: {
+          view_stacks: {
+            select: {
+              id: true,
+            },
+          },
+          view_stack_environments: true,
+          update_stacks: {
+            select: {
+              id: true,
+            },
+          },
+          update_stack_environments: true,
+        },
+      },
+    },
+  });
+
+  if (!matchingUser) return false;
+
+  const allStacks = await prisma.stacks.findMany({
+    select: {
+      id: true,
+      environment: true,
+    },
+  });
+
+  const userStackPermissions = constructUserStackPermissions({
+    user: matchingUser,
+    allStacks,
+  });
+
+  const validUser = {
+    email: matchingUser.email,
+    is_super_admin: matchingUser.is_super_admin,
+    roles: {
+      view_stacks: userStackPermissions.canViewStackIds,
+      update_stacks: userStackPermissions.canUpdateStackIds,
+    },
+  };
+
+  // console.log('Valid user:', validUser);
+
+  const authCookie = jwt.sign(validUser, API_CONFIG.APP_SECRETS[0], {
+    expiresIn: API_CONFIG.AUTH_VALID_FOR_SECONDS,
+  });
+
+  // Set a valid JWT in their cookie
+  options.ctx.cookies.set(API_CONFIG.COOKIE_NAME, authCookie, {
+    maxAge: 1000 * API_CONFIG.AUTH_VALID_FOR_SECONDS,
+    httpOnly: false,
+  });
+
+  return true;
 };
 
 export const authGoogle = async (ctx: any) => {
@@ -107,67 +183,15 @@ export const authGoogle = async (ctx: any) => {
 
     const userEmails = emails.map((user) => user.value);
 
-    const matchingUser = await prisma.users.findFirst({
-      where: { email: { in: userEmails } },
-      select: {
-        id: true,
-        email: true,
-        is_super_admin: true,
-        roles: {
-          select: {
-            view_stacks: {
-              select: {
-                id: true,
-              },
-            },
-            view_stack_environments: true,
-            update_stacks: {
-              select: {
-                id: true,
-              },
-            },
-            update_stack_environments: true,
-          },
-        },
-      },
-    });
-
-    if (!matchingUser) {
+    const checkUserValidityAndIssueNewJWTResult =
+      await checkUserValidityAndIssueNewJWT({
+        ctx,
+        emailsOveride: userEmails,
+      });
+    if (checkUserValidityAndIssueNewJWTResult !== true)
       throw new Error('User not allowed');
-    }
 
-    const allStacks = await prisma.stacks.findMany({
-      select: {
-        id: true,
-        environment: true,
-      },
-    });
-
-    const userStackPermissions = constructUserStackPermissions({
-      user: matchingUser,
-      allStacks,
-    });
-
-    const validUser = {
-      email: matchingUser.email,
-      is_super_admin: matchingUser.is_super_admin,
-      roles: {
-        view_stacks: userStackPermissions.canViewStackIds,
-        update_stacks: userStackPermissions.canUpdateStackIds,
-      },
-    };
-
-    // console.log('Valid user:', validUser);
-
-    const authCookie = jwt.sign(validUser, API_CONFIG.APP_SECRETS[0], {
-      expiresIn: AUTH_VALID_FOR_SECONDS,
-    });
-
-    // Redirect them back to the home page with a valid bearer in their cookie
-    ctx.cookies.set(API_CONFIG.COOKIE_NAME, authCookie, {
-      maxAge: 1000 * AUTH_VALID_FOR_SECONDS,
-      httpOnly: false,
-    });
+    // Redirect them back to the home page with a valid JWT in their cookie
     ctx.body = `Redirecting to ${API_CONFIG.APP_NAME}...`;
     ctx.response.redirect(API_CONFIG.APP_URL);
     return;

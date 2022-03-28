@@ -1,4 +1,5 @@
 import { AnimatePresence, motion } from "framer-motion";
+import Cookies from "js-cookie";
 import React, { useRef, useState } from "react";
 import styled from "styled-components";
 
@@ -62,7 +63,7 @@ const DevMenu = () => {
                   },
                 }}
                 onClick={() => {
-                  localStorage.removeItem(`bearer`);
+                  Cookies.remove(APP_CONFIG.COOKIE_NAME);
                   window.location.href = `/logout`;
                 }}
                 title="Log out"
@@ -80,7 +81,7 @@ const DevMenu = () => {
                   },
                 }}
                 onClick={() => {
-                  localStorage.setItem(`bearer`, APP_CONFIG.DEV_JWT);
+                  Cookies.set(APP_CONFIG.COOKIE_NAME, APP_CONFIG.DEV_JWT);
                   window.location.reload();
                 }}
                 title="Log in"
