@@ -32,7 +32,8 @@ export const getMetadata = async (ctx: Context) => {
   });
 
   const maxDisplayCount =
-    stacksWithServerCount.sort((a, b) => b._count - a._count)?.[0]._count || 0;
+    stacksWithServerCount.sort((a, b) => b?._count - a?._count)?.[0]?._count ||
+    0;
 
   const responseBody = {
     isSuperAdmin: userJWT.is_super_admin,

@@ -29,8 +29,6 @@ const StatusSidebar = observer(() => {
     store.orderBy !== APP_CONFIG.DEFAULTS.ORDER_BY ||
     store.showMoreInfo !== APP_CONFIG.DEFAULTS.SHOW_MORE_INFO;
 
-  const maxDisplayCount = sidebarQuery.data?.maxDisplayCount;
-
   return (
     <Sidebar
       stackCount={sidebarQuery.data?.stackCount || 0}
@@ -58,7 +56,7 @@ const StatusSidebar = observer(() => {
             onChange={(event) =>
               store.setServerDisplayCount(Number(event.target.value))
             }
-            total={maxDisplayCount || 3}
+            total={sidebarQuery.data?.maxDisplayCount || 3}
             label="Display Count:"
           />
           <TextInput

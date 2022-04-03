@@ -23,7 +23,7 @@ const Card = observer((props: { stack: StackProps }) => {
   const store = useContext(globalStoreContext);
 
   const servers = props.stack.servers;
-  const serverCount = props.stack.servers.length;
+  const serverCount = servers.length;
 
   const isStartingUpdate = Boolean(
     !servers.length ||
