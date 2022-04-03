@@ -23,6 +23,7 @@ const Card = observer((props: { stack: StackProps }) => {
   const store = useContext(globalStoreContext);
 
   const servers = props.stack.servers;
+  const serverCount = props.stack.servers.length;
 
   const isStartingUpdate = Boolean(
     !servers.length ||
@@ -41,7 +42,11 @@ const Card = observer((props: { stack: StackProps }) => {
 
   return (
     <CardBackground layout>
-      <CardHeader stackId={props.stack.name} stackLogo={props.stack.logo_url} />
+      <CardHeader
+        stackId={props.stack.name}
+        stackLogo={props.stack.logo_url}
+        stackServerCount={serverCount}
+      />
       {servers
         .sort((a: ServerProps, b: ServerProps) =>
           a.server_public_ip.localeCompare(b.server_public_ip),

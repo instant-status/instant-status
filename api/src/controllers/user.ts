@@ -1,4 +1,6 @@
 import { prisma } from 'is-prisma';
+import { Context } from 'koa';
+
 import checkForRequiredDataKeys from '../helpers/checkForRequiredDataKeys';
 import { makeJWTsStale } from '../helpers/jwt';
 import response from '../helpers/returnResponse';
@@ -7,7 +9,7 @@ import {
   getRequesterDecodedJWT,
 } from './auth';
 
-export const getUsers = async (ctx: any) => {
+export const getUsers = async (ctx: Context) => {
   const userJWT = getRequesterDecodedJWT(ctx.request);
 
   if (userJWT.is_super_admin !== true) {
@@ -23,7 +25,7 @@ export const getUsers = async (ctx: any) => {
   return response(ctx, 200, users);
 };
 
-export const editUser = async (ctx) => {
+export const editUser = async (ctx: Context) => {
   const userJWT = getRequesterDecodedJWT(ctx.request);
 
   if (userJWT.is_super_admin !== true) {
@@ -75,7 +77,7 @@ export const editUser = async (ctx) => {
   });
 };
 
-export const createUser = async (ctx) => {
+export const createUser = async (ctx: Context) => {
   const userJWT = getRequesterDecodedJWT(ctx.request);
 
   if (userJWT.is_super_admin !== true) {
@@ -117,7 +119,7 @@ export const createUser = async (ctx) => {
   return response(ctx, 202, {});
 };
 
-export const deleteUsers = async (ctx) => {
+export const deleteUsers = async (ctx: Context) => {
   const userJWT = getRequesterDecodedJWT(ctx.request);
 
   if (userJWT.is_super_admin !== true) {

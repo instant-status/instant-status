@@ -1,5 +1,6 @@
 import React, { useCallback, useState } from "react";
 import { useQuery } from "react-query";
+
 import apiRoutes from "../../api/apiRoutes";
 import { SmallButton } from "../../components/Controls/Buttons";
 import AdminPage from "../../components/Layout/AdminPage";
@@ -29,7 +30,10 @@ const AdminRolesPage = () => {
   const { availableStacks, availableEnvironments } =
     apiGetAvailableStacksAndEnvironmentsQuery.isFetching
       ? { availableStacks: [], availableEnvironments: [] }
-      : apiGetAvailableStacksAndEnvironmentsQuery?.data;
+      : apiGetAvailableStacksAndEnvironmentsQuery?.data || {
+          availableStacks: [],
+          availableEnvironments: [],
+        };
 
   const onCreateOpen = useCallback(() => {
     toggleIsCreateOpen();

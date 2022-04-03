@@ -1,15 +1,17 @@
-import { prisma } from 'is-prisma';
 import { Updates } from '@prisma/client';
+import { prisma } from 'is-prisma';
+import { Context } from 'koa';
+
 import checkForRequiredDataKeys from '../helpers/checkForRequiredDataKeys';
+import { makeJWTsStale } from '../helpers/jwt';
 import response from '../helpers/returnResponse';
 import {
+  checkUserValidityAndIssueNewJWT,
   getRequesterDecodedJWT,
   getRequesterIdentity,
-  checkUserValidityAndIssueNewJWT,
 } from './auth';
-import { makeJWTsStale } from '../helpers/jwt';
 
-export const getAvailableStacksAndEnvironments = async (ctx) => {
+export const getAvailableStacksAndEnvironments = async (ctx: Context) => {
   const userJWT = getRequesterDecodedJWT(ctx.request);
 
   if (userJWT.is_super_admin !== true) {
@@ -38,7 +40,7 @@ export const getAvailableStacksAndEnvironments = async (ctx) => {
   });
 };
 
-export const listStacks = async (ctx) => {
+export const listStacks = async (ctx: Context) => {
   const userJWT = getRequesterDecodedJWT(ctx.request);
 
   if (!userJWT.roles) {
@@ -59,7 +61,7 @@ export const listStacks = async (ctx) => {
   return response(ctx, 202, stackList || []);
 };
 
-export const getIdByName = async (ctx) => {
+export const getIdByName = async (ctx: Context) => {
   // Ensuring we have required data in the request
   const body = ctx.request.body;
   const requiredDataKeys = ['stack_name'];
@@ -92,7 +94,7 @@ export const getIdByName = async (ctx) => {
   });
 };
 
-export const createStack = async (ctx) => {
+export const createStack = async (ctx: Context) => {
   const userJWT = getRequesterDecodedJWT(ctx.request);
 
   if (userJWT.is_super_admin !== true) {
@@ -167,7 +169,7 @@ export const createStack = async (ctx) => {
   return response(ctx, 202, {});
 };
 
-export const deleteStacks = async (ctx) => {
+export const deleteStacks = async (ctx: Context) => {
   const userJWT = getRequesterDecodedJWT(ctx.request);
 
   if (userJWT.is_super_admin !== true) {

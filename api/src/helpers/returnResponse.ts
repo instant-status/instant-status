@@ -1,8 +1,8 @@
-import { ContextProps } from '../types/commonTypes';
+import { Context } from 'koa';
 import { JsonObject } from 'type-fest';
 
 const response = <T>(
-  ctx: ContextProps<T>,
+  ctx: Context,
   statusCode: number,
   responseBody?: JsonObject | string | T
 ) => {

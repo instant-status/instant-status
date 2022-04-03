@@ -1,11 +1,11 @@
-import Koa from 'koa';
-import json from 'koa-json';
-import bodyParser from 'koa-bodyparser';
 import cors from '@koa/cors';
-
-import router from './routes/routes';
-import { isRequestAllowed } from './controllers/auth';
 import { API_CONFIG } from 'is-config';
+import Koa from 'koa';
+import bodyParser from 'koa-bodyparser';
+import json from 'koa-json';
+
+import { isRequestAllowed } from './controllers/auth';
+import router from './routes/routes';
 
 const app = new Koa();
 

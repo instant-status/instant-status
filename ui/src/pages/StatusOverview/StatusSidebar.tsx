@@ -29,10 +29,12 @@ const StatusSidebar = observer(() => {
     store.orderBy !== APP_CONFIG.DEFAULTS.ORDER_BY ||
     store.showMoreInfo !== APP_CONFIG.DEFAULTS.SHOW_MORE_INFO;
 
+  const maxDisplayCount = sidebarQuery.data?.maxDisplayCount;
+
   return (
     <Sidebar
-      stackCount={sidebarQuery.data?.stackCount}
-      serverCount={sidebarQuery.data?.serverCount}
+      stackCount={sidebarQuery.data?.stackCount || 0}
+      serverCount={sidebarQuery.data?.serverCount || 0}
       isSuperAdmin={sidebarQuery.data?.isSuperAdmin}
       isLoading={sidebarQuery.isLoading}
     >
@@ -56,7 +58,7 @@ const StatusSidebar = observer(() => {
             onChange={(event) =>
               store.setServerDisplayCount(Number(event.target.value))
             }
-            total={4}
+            total={maxDisplayCount || 3}
             label="Display Count:"
           />
           <TextInput

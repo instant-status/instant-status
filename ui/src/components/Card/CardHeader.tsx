@@ -2,6 +2,8 @@ import { lighten } from "polished";
 import React from "react";
 import styled from "styled-components";
 
+import theme from "../../utils/theme";
+
 const Header = styled.header`
   display: flex;
   align-items: center;
@@ -23,16 +25,32 @@ const StackId = styled.h2`
 const StackLogo = styled.div<{ image?: string }>`
   background: url(${(props) => props.image}) center center no-repeat;
   background-size: cover;
-  height: 58px;
-  width: 58px;
+  height: 64px;
+  width: 64px;
   flex-shrink: 0;
 `;
 
-const CardHeader = (props: { stackId?: string; stackLogo?: string }) => {
+const StackServerCount = styled.div`
+  font-size: 14px;
+  margin-top: -2px;
+  color: ${theme.color.blue};
+`;
+
+const CardHeader = (props: {
+  stackId?: string;
+  stackLogo?: string;
+  stackServerCount?: number;
+}) => {
   return (
     <Header>
       <StackLogo image={props.stackLogo} />
-      <StackId>{props.stackId}</StackId>
+      <StackId>
+        {props.stackId}
+        <StackServerCount>
+          {props.stackServerCount}
+          {props.stackServerCount !== 1 ? ` servers` : ` server`}
+        </StackServerCount>
+      </StackId>
     </Header>
   );
 };

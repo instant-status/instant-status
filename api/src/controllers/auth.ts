@@ -1,9 +1,9 @@
 import { google } from 'googleapis';
-import { Context } from 'koa';
-import jwt from 'jsonwebtoken';
-import { prisma } from 'is-prisma';
-
 import { API_CONFIG } from 'is-config';
+import { prisma } from 'is-prisma';
+import jwt from 'jsonwebtoken';
+import { Context } from 'koa';
+
 import constructUserStackPermissions from '../helpers/constructUserStackPermissions';
 import formatAuthorisationToken from '../helpers/formatAuthorisationToken';
 import { isJWTStale } from '../helpers/jwt';
@@ -148,9 +148,9 @@ export const checkUserValidityAndIssueNewJWT = async (options: {
   return true;
 };
 
-export const authGoogle = async (ctx: any) => {
+export const authGoogle = async (ctx: Context) => {
   try {
-    const code = ctx.query.code;
+    const code = ctx.query.code.toString();
     if (!code) {
       throw new Error('No code passed');
     }
