@@ -20,7 +20,7 @@
     "js-cookie": "3.0.1",
     "mobx": "6.4.2",
     "mobx-react-lite": "3.3.0",
-    "moment": "2.29.1",
+    "moment": "2.29.2",
     "polished": "4.1.4",
     "query-string": "7.1.1",
     "react": "17.0.2",
