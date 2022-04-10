@@ -34,7 +34,7 @@ const StackRow = (props: {
 }) => {
   const [stackName, setStackName] = useState(``);
   const [appVersion, setAppVersion] = useState(``);
-  const [runMigrations, toggleRunMigrations] = useToggle(true);
+  const [runMigrations, toggleRunMigrations] = useToggle(false);
   const [isInEditMode, setIsEditMode] = useState(props.stack.isInCreateMode);
 
   const createStackMutation = useMutation((payload: CreateStackProps) =>
