@@ -1,11 +1,12 @@
-import { prisma } from 'is-prisma';
 import { Servers } from '@prisma/client';
-
 import { ALLOWED_DATA, AllowedDataType } from 'is-config';
+import { prisma } from 'is-prisma';
+import { Context } from 'koa';
+
 import checkForRequiredDataKeys from '../helpers/checkForRequiredDataKeys';
 import response from '../helpers/returnResponse';
 
-export const checkIn = async (ctx) => {
+export const checkIn = async (ctx: Context) => {
   // Ensuring we have required data in the request
   const body = ctx.request.body;
   const requiredDataKeys = ['server_id', 'stack_id', 'last_update_id'];

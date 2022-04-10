@@ -1,15 +1,16 @@
 import KoaRouter from '@koa/router';
+import { Context } from 'koa';
 
-import * as checkInController from '../controllers/checkIn';
-import * as updateController from '../controllers/update';
-import * as metadataController from '../controllers/metadata';
-import * as stackController from '../controllers/stack';
-import * as serverController from '../controllers/server';
-import * as userController from '../controllers/user';
 import * as authController from '../controllers/auth';
+import * as checkInController from '../controllers/checkIn';
+import * as metadataController from '../controllers/metadata';
 import * as roleController from '../controllers/role';
+import * as serverController from '../controllers/server';
+import * as stackController from '../controllers/stack';
+import * as updateController from '../controllers/update';
+import * as userController from '../controllers/user';
 
-const serverOnly = (ctx: KoaRouter.RouterContext, next: () => void) => {
+const serverOnly = (ctx: Context, next: () => void) => {
   const isRequestFromServer =
     authController.getRequesterIdentity(ctx.request) ===
     `server@instantstatus.local`;

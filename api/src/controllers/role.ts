@@ -1,5 +1,7 @@
 import { Roles, Stacks } from '@prisma/client';
 import { prisma } from 'is-prisma';
+import { Context } from 'koa';
+
 import checkForRequiredDataKeys from '../helpers/checkForRequiredDataKeys';
 import { makeJWTsStale } from '../helpers/jwt';
 import response from '../helpers/returnResponse';
@@ -8,7 +10,7 @@ import {
   getRequesterDecodedJWT,
 } from './auth';
 
-export const getRoles = async (ctx: any) => {
+export const getRoles = async (ctx: Context) => {
   const userJWT = getRequesterDecodedJWT(ctx.request);
 
   if (userJWT.is_super_admin !== true) {
@@ -45,7 +47,7 @@ interface EditRolePayload extends Roles {
   update_stacks: Stacks;
 }
 
-export const editRole = async (ctx) => {
+export const editRole = async (ctx: Context) => {
   const userJWT = getRequesterDecodedJWT(ctx.request);
 
   if (userJWT.is_super_admin !== true) {
@@ -113,7 +115,7 @@ export const editRole = async (ctx) => {
   });
 };
 
-export const createRole = async (ctx) => {
+export const createRole = async (ctx: Context) => {
   const userJWT = getRequesterDecodedJWT(ctx.request);
 
   if (userJWT.is_super_admin !== true) {
@@ -176,7 +178,7 @@ export const createRole = async (ctx) => {
   return response(ctx, 202, {});
 };
 
-export const deleteRoles = async (ctx) => {
+export const deleteRoles = async (ctx: Context) => {
   const userJWT = getRequesterDecodedJWT(ctx.request);
 
   if (userJWT.is_super_admin !== true) {

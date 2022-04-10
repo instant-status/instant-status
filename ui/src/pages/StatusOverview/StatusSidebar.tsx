@@ -31,8 +31,8 @@ const StatusSidebar = observer(() => {
 
   return (
     <Sidebar
-      stackCount={sidebarQuery.data?.stackCount}
-      serverCount={sidebarQuery.data?.serverCount}
+      stackCount={sidebarQuery.data?.stackCount || 0}
+      serverCount={sidebarQuery.data?.serverCount || 0}
       isSuperAdmin={sidebarQuery.data?.isSuperAdmin}
       isLoading={sidebarQuery.isLoading}
     >
@@ -56,7 +56,7 @@ const StatusSidebar = observer(() => {
             onChange={(event) =>
               store.setServerDisplayCount(Number(event.target.value))
             }
-            total={4}
+            total={sidebarQuery.data?.maxDisplayCount || 3}
             label="Display Count:"
           />
           <TextInput

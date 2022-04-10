@@ -1,12 +1,14 @@
-import { prisma } from 'is-prisma';
 import { Servers, Updates } from '@prisma/client';
+import { prisma } from 'is-prisma';
+import { Context } from 'koa';
 import { JsonObject } from 'type-fest';
+
 import checkForRequiredDataKeys from '../helpers/checkForRequiredDataKeys';
 import isStackUpdating from '../helpers/isStackUpdating';
 import response from '../helpers/returnResponse';
 import { getRequesterDecodedJWT, getRequesterIdentity } from './auth';
 
-export const updateGet = async (ctx) => {
+export const updateGet = async (ctx: Context) => {
   // Ensuring we have required data in the request
   const body = ctx.request.body;
   const requiredDataKeys = ['update_id'];
@@ -54,7 +56,7 @@ export const updateGet = async (ctx) => {
   }
 };
 
-export const updateCreate = async (ctx) => {
+export const updateCreate = async (ctx: Context) => {
   const userJWT = getRequesterDecodedJWT(ctx.request);
 
   if (!userJWT.roles) {
@@ -129,7 +131,7 @@ export const updateCreate = async (ctx) => {
   return response(ctx, 202, {});
 };
 
-export const updateServerProgress = async (ctx) => {
+export const updateServerProgress = async (ctx: Context) => {
   // Ensuring we have required data in the request
   const body = ctx.request.body;
   const requiredDataKeys = [

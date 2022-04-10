@@ -1,4 +1,5 @@
 import { decode } from 'jsonwebtoken';
+
 import formatAuthorisationToken from './formatAuthorisationToken';
 
 let jwtStaleBefore = 0;

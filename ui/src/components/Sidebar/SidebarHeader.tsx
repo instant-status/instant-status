@@ -59,8 +59,8 @@ const SidebarHeader = (props: { stackCount: number; serverCount: number }) => {
       <AppInfo>
         <AppName>{APP_CONFIG.APP_NAME}</AppName>
         <PageInfo>
-          {props.stackCount} {props.stackCount !== 1 ? `Stacks` : `Stack`} /
-          {` `}
+          {props.stackCount} {props.stackCount !== 1 ? `Stacks` : `Stack`}
+          {` / `}
           {props.serverCount} {props.serverCount !== 1 ? `Servers` : `Server`}
         </PageInfo>
       </AppInfo>
