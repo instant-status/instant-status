@@ -1,4 +1,6 @@
-import moment from "moment";
+import dayjs from "dayjs";
+import relativeTime from "dayjs/plugin/relativeTime";
+import utc from "dayjs/plugin/utc";
 import React, { memo, useState } from "react";
 import { useMutation } from "react-query";
 
@@ -19,6 +21,9 @@ import {
 } from "../../../components/Tables/AdminTable";
 import { NewRowProps } from "../../../globalTypes";
 import theme from "../../../utils/theme";
+
+dayjs.extend(relativeTime);
+dayjs.extend(utc);
 
 export interface UserProps extends NewRowProps {
   id: number;
@@ -189,7 +194,9 @@ const UserRow = (props: {
         )}
       </TableCell>
       <TableCell title={props.user.created_at}>
-        {props.user.created_at ? moment(props.user.created_at).fromNow() : ``}
+        {props.user.created_at
+          ? dayjs.utc(props.user.created_at).fromNow()
+          : ``}
       </TableCell>
       <TableCell>
         {isInEditMode ? (

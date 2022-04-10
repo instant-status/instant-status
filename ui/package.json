@@ -16,11 +16,11 @@
   "dependencies": {
     "axios": "0.26.0",
     "config": "3.3.7",
+    "dayjs": "1.11.0",
     "framer-motion": "6.2.8",
     "js-cookie": "3.0.1",
     "mobx": "6.4.2",
     "mobx-react-lite": "3.3.0",
-    "moment": "2.29.1",
     "polished": "4.1.4",
     "query-string": "7.1.1",
     "react": "17.0.2",
