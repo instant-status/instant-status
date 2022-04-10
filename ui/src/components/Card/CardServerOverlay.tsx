@@ -83,12 +83,12 @@ const CardServerOverlay = (props: {
         </Stack>
         <Stack direction="down" spacing={1}>
           <Stack spacing={2}>
-            <RowKey>Last Reported:</RowKey>
-            <div>{getDate(props.server.server_health_updated_at)}</div>
-          </Stack>
-          <Stack spacing={2}>
             <RowKey>Message:</RowKey>
             <div>{props.server.server_health_message}</div>
+          </Stack>
+          <Stack spacing={2}>
+            <RowKey>Last Reported:</RowKey>
+            <div>{getDate(props.server.server_health_updated_at)}</div>
           </Stack>
         </Stack>
       </Stack>

@@ -160,7 +160,11 @@ const CardServer = observer(
               <ServerRole $color={getHealthColor(healthCode)}>
                 {props.server.server_role}
               </ServerRole>
-              <ServerId>{props.server.server_id}</ServerId>
+              <ServerId>
+                <CopyText value={props.server.server_id}>
+                  {props.server.server_id}
+                </CopyText>
+              </ServerId>
               <span>{props.server.server_is_chosen_one && `👑`}</span>
             </Stack>
 

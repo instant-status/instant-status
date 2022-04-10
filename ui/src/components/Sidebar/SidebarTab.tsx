@@ -45,7 +45,14 @@ interface SidebarTabProps {
 
 const SidebarTab = (props: SidebarTabProps) => {
   return (
-    <Tab to={props.to} exact={true}>
+    <Tab
+      to={props.to}
+      exact={true}
+      isActive={(match, location) =>
+        Boolean(match) ||
+        (props.to !== `/` && location.pathname.startsWith(props.to))
+      }
+    >
       {props.icon}
       <Text>{props.label}</Text>
     </Tab>

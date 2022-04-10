@@ -8,7 +8,6 @@ export interface ServerProps {
   stack_logo_url: string;
 
   // Server Display
-  server_name: string;
   server_role: string;
   server_public_ip: string;
   server_updated_at: string;

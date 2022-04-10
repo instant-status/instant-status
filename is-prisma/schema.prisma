@@ -31,7 +31,6 @@ model Servers {
   server_id                      String    @unique
   stack_id                       Int
   last_update_id                 Int?
-  server_name                    String
   server_role                    String
   server_public_ip               String
   server_app_version             String
