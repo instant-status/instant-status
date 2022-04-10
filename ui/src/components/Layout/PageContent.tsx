@@ -47,10 +47,11 @@ const PageContent = observer(() => {
             stacks
               .filter((stack) => {
                 return (
-                  store?.displayVersions === undefined ||
-                  store.displayVersions.includes(
-                    stack?.servers[0]?.server_app_version,
-                  )
+                  stack?.servers?.length > 0 &&
+                  (store?.displayVersions === undefined ||
+                    store.displayVersions.includes(
+                      stack?.servers[0]?.server_app_version,
+                    ))
                 );
               })
               .sort((a, b) => {
