@@ -38,7 +38,6 @@ const ProgressUsed = styled.div<{ $width: number; $color: string }>`
 
   ${(props) =>
     props.$width > 3 &&
-    props.$width < 98 &&
     css`
       border-right: 2px solid ${props.theme.color.darkOne};
     `}
@@ -60,7 +59,10 @@ const ProgressBar = (props: ProgressBarProps) => {
       $height={props.height}
       $margin={props.margin}
     >
-      <ProgressUsed $width={props.progress} $color={props.color} />
+      <ProgressUsed
+        $width={props.progress > 98 ? props.progress + 2 : props.progress}
+        $color={props.color}
+      />
     </ProgressBackground>
   );
 };
