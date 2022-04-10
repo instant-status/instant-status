@@ -2,7 +2,6 @@ const ALLOWED_DATA = <const>[
   'server_id',
   'stack_id',
   'last_update_id',
-  'server_name',
   'server_role',
   'server_public_ip',
   'server_updated_at',
