@@ -1,4 +1,6 @@
-import moment from "moment";
+import dayjs from "dayjs";
+import relativeTime from "dayjs/plugin/relativeTime";
+import utc from "dayjs/plugin/utc";
 import React, { useState } from "react";
 import { useMutation } from "react-query";
 import styled from "styled-components";
@@ -20,6 +22,9 @@ import {
 import { NewRowProps, StackProps } from "../../../globalTypes";
 import useToggle from "../../../hooks/useToggle";
 import theme from "../../../utils/theme";
+
+dayjs.extend(relativeTime);
+dayjs.extend(utc);
 
 const HelperLabel = styled.span`
   font-size: 14px;
@@ -153,7 +158,9 @@ const StackRow = (props: {
         )}
       </TableCell>
       <TableCell title={props.stack.created_at}>
-        {props.stack.created_at ? moment(props.stack.created_at).fromNow() : ``}
+        {props.stack.created_at
+          ? dayjs.utc(props.stack.created_at).fromNow()
+          : ``}
       </TableCell>
       <TableCell>
         {isInEditMode ? (
