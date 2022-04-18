@@ -177,18 +177,15 @@ const CreateUpdateModal = observer(() => {
   };
 
   const groupedStacks = stacks
-    .filter((stack) => stack.canUpdate)
+    .filter((stack) => stack.canUpdate && stack.servers.length > 0)
     .reduce((groupedStack, stack) => {
       groupedStack[stack.environment] = [
         ...(groupedStack[stack.environment] || []),
         stack,
       ];
 
-      if (stack.servers.length > 0) {
-        return groupedStack;
-      }
-      return {};
-    }, {} as { [key: string]: any });
+      return groupedStack;
+    }, {} as { [key: string]: StackProps[] });
 
   const groupedStacksArray = Object.entries(groupedStacks) as {
     [0]: string;

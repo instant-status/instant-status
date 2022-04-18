@@ -135,6 +135,16 @@ const CardServer = observer(
 
     return (
       <ServerWrapper>
+        {isHealthOverlayVisible && (
+          <CardServerOverlay
+            onClick={() => setIsHealthOverlayVisible(false)}
+            type="health"
+            stateOrHealthCode={healthCode}
+            isStartingUpdate={props.isStartingUpdate}
+            server={props.server}
+          />
+        )}
+
         {isStateOverlayVisible && (
           <CardServerOverlay
             onClick={() => setIsStateOverlayVisible(false)}
@@ -145,15 +155,6 @@ const CardServer = observer(
           />
         )}
 
-        {isHealthOverlayVisible && (
-          <CardServerOverlay
-            onClick={() => setIsHealthOverlayVisible(false)}
-            type="health"
-            stateOrHealthCode={healthCode}
-            isStartingUpdate={props.isStartingUpdate}
-            server={props.server}
-          />
-        )}
         <Server>
           <ServerHeader>
             <Stack as={ServerName} spacing={2} align="baseline">

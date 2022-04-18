@@ -49,7 +49,14 @@ export const listStacks = async (ctx: Context) => {
 
   const stackList = await prisma.stacks.findMany({
     orderBy: { id: 'desc' },
-    include: { servers: true, updates: { orderBy: { created_at: 'desc' } } },
+    include: {
+      servers: true,
+      updates: {
+        where: { is_cancelled: false },
+        orderBy: { id: 'desc' },
+        take: 1,
+      },
+    },
     where: { id: { in: userJWT.roles?.view_stacks || [] } },
   });
 
@@ -132,7 +139,7 @@ export const createStack = async (ctx: Context) => {
       server_count: 0,
       server_ready_to_switch_count: 0,
       server_finished_count: 0,
-      is_cancelled: false, // not in use
+      is_cancelled: false,
 
       run_migrations: body.run_migrations,
 
