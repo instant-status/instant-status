@@ -51,13 +51,6 @@ export const checkIn = async (ctx: Context) => {
     });
   }
 
-  const isServerChosenOne = Boolean(
-    stack.servers.find(
-      (server) =>
-        server.server_id === body.server_id && server.server_is_chosen_one
-    )
-  );
-
   const latestUpdate = stack.updates?.[0];
   const updateIsAvailable =
     Boolean(latestUpdate) &&
@@ -85,27 +78,45 @@ export const checkIn = async (ctx: Context) => {
     }
   });
 
-  try {
-    await prisma.servers.upsert({
-      where: { server_id: body.server_id },
-      create: data,
-      update: data,
-    });
-  } catch (err) {
-    console.warn(err);
-  }
+  if (body.is_slim_check_in === true) {
+    try {
+      await prisma.servers.update({
+        where: { server_id: body.server_id },
+        data: data,
+      });
+    } catch (err) {
+      console.warn(err);
+    }
+  } else {
+    try {
+      await prisma.servers.upsert({
+        where: { server_id: body.server_id },
+        create: data,
+        update: data,
+      });
+    } catch (err) {
+      console.warn(err);
+    }
 
-  if (isServerChosenOne) {
-    await prisma.stacks.update({
-      where: { id: Number(body.stack_id) },
-      data: {
-        logs_url: body.stack_logs_url,
-        logo_url: body.stack_logo_url,
-        app_url: body.stack_app_url,
-        region: body.stack_region,
-        environment: body.stack_environment,
-      },
-    });
+    const isServerChosenOne = Boolean(
+      stack.servers.find(
+        (server) =>
+          server.server_id === body.server_id && server.server_is_chosen_one
+      )
+    );
+
+    if (isServerChosenOne) {
+      await prisma.stacks.update({
+        where: { id: Number(body.stack_id) },
+        data: {
+          logs_url: body.stack_logs_url,
+          logo_url: body.stack_logo_url,
+          app_url: body.stack_app_url,
+          region: body.stack_region,
+          environment: body.stack_environment,
+        },
+      });
+    }
   }
 
   return response(ctx, 200, responseBody);
