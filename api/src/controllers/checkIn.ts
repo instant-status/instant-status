@@ -34,7 +34,14 @@ export const checkIn = async (ctx: Context) => {
   // Fetching the details of the latest update for the Stack and returning a response
   const stack = await prisma.stacks.findUnique({
     where: { id: body.stack_id },
-    include: { servers: true, updates: { orderBy: { id: 'desc' }, take: 1 } },
+    include: {
+      servers: true,
+      updates: {
+        where: { is_cancelled: false },
+        orderBy: { id: 'desc' },
+        take: 1,
+      },
+    },
   });
 
   if (!stack) {
@@ -51,16 +58,21 @@ export const checkIn = async (ctx: Context) => {
     )
   );
 
-  const latestUpdate = stack.updates[0];
-
+  const latestUpdate = stack.updates?.[0];
   const updateIsAvailable =
+    Boolean(latestUpdate) &&
     !latestUpdate.servers.includes(body.server_id) &&
     latestUpdate.id !== body.last_update_id;
+
   const responseBody = {
     ok: true,
     update_available: updateIsAvailable,
-    update_id: latestUpdate.id,
+    update_id: latestUpdate?.id,
   };
+
+  if (!latestUpdate) {
+    return response(ctx, 200, responseBody);
+  }
 
   // Save latest server information
   const payloadItems = Object.entries(body);
@@ -73,11 +85,15 @@ export const checkIn = async (ctx: Context) => {
     }
   });
 
-  await prisma.servers.upsert({
-    where: { server_id: body.server_id },
-    create: data,
-    update: data,
-  });
+  try {
+    await prisma.servers.upsert({
+      where: { server_id: body.server_id },
+      create: data,
+      update: data,
+    });
+  } catch (err) {
+    console.warn(err);
+  }
 
   if (isServerChosenOne) {
     await prisma.stacks.update({

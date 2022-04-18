@@ -90,10 +90,24 @@ export const updateCreate = async (ctx: Context) => {
       where: { stack_id: stackId },
       orderBy: { id: 'desc' },
     });
-    const isUpdating = isStackUpdating(lastUpdate);
+
+    const lastNonCancelledUpdate =
+      lastUpdate?.is_cancelled === true
+        ? await prisma.updates.findFirst({
+            where: { stack_id: stackId, is_cancelled: false },
+            orderBy: { id: 'desc' },
+          })
+        : lastUpdate;
+
+    const isUpdating = isStackUpdating(lastNonCancelledUpdate);
 
     if (isUpdating) {
-      continue;
+      await prisma.updates.update({
+        where: { id: Number(lastNonCancelledUpdate.id) },
+        data: {
+          is_cancelled: true,
+        },
+      });
     }
 
     const data = {
@@ -106,7 +120,7 @@ export const updateCreate = async (ctx: Context) => {
       server_count: 0,
       server_ready_to_switch_count: 0,
       server_finished_count: 0,
-      is_cancelled: false, // not in use
+      is_cancelled: false,
 
       run_migrations: body.run_migrations,
 
@@ -167,6 +181,17 @@ export const updateServerProgress = async (ctx: Context) => {
   const responseBody = {} as JsonObject;
 
   switch (body.server_update_stage) {
+    case 'request-update-cancellation':
+      if (latestUpdate.is_cancelled === false) {
+        await prisma.updates.update({
+          where: { id: Number(body.update_id) },
+          data: {
+            is_cancelled: true,
+          },
+        });
+      }
+      break;
+
     case 'election':
       if (!latestUpdate['servers'].includes(body.server_id)) {
         const doesChosenOneExist = latestUpdate['chosen_one'];

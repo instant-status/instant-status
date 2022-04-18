@@ -66,7 +66,7 @@ const RowKey = styled.div`
 
 const CardServerOverlay = (props: {
   onClick: () => void;
-  type: string;
+  type: `health` | `state`;
   stateOrHealthCode: number;
   isStartingUpdate: boolean;
   server: ServerProps;
