@@ -20,7 +20,6 @@ const Overlay = styled.div`
   position: absolute;
   z-index: 100;
   flex-direction: column;
-  text-align: center;
   padding: 16px;
   cursor: pointer;
   backdrop-filter: blur(2px);
