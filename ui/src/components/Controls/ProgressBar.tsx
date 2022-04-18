@@ -31,16 +31,14 @@ const ProgressBackground = styled.div<{
 `;
 
 const ProgressUsed = styled.div<{ $width: number; $color: string }>`
-  width: ${(props) => props.$width}%;
+  width: ${(props) =>
+    props.$width > 0 ? `calc(${props.$width}% + 2px)` : `${props.$width}%`};
   height: 100%;
-  transition: width 10s;
   background-color: ${(props) => props.$color};
-
-  ${(props) =>
-    props.$width > 3 &&
-    css`
-      border-right: 2px solid ${props.theme.color.darkOne};
-    `}
+  margin-left: -2px;
+  box-sizing: content-box;
+  border-right: 2px solid ${(props) => props.theme.color.darkOne};
+  transition: width 10s;
 `;
 
 interface ProgressBarProps {
@@ -59,10 +57,7 @@ const ProgressBar = (props: ProgressBarProps) => {
       $height={props.height}
       $margin={props.margin}
     >
-      <ProgressUsed
-        $width={props.progress > 98 ? props.progress + 2 : props.progress}
-        $color={props.color}
-      />
+      <ProgressUsed $width={props.progress} $color={props.color} />
     </ProgressBackground>
   );
 };
