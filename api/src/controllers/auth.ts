@@ -197,7 +197,7 @@ export const authGoogle = async (ctx: Context) => {
     return;
   } catch (err) {
     console.log('Error in auth', err);
-    ctx.body = 'Could not auth you: ' + err.message;
+    ctx.body = 'Could not auth you.';
     ctx.response.status = 401;
     return;
   }
