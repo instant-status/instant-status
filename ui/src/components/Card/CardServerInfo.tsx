@@ -159,7 +159,7 @@ const CardServer = observer(
           <ServerHeader>
             <Stack as={ServerName} spacing={2} align="baseline">
               <ServerRole $color={getHealthColor(healthCode)}>
-                {props.server.server_role}
+                {props.server.server_role || `App`}
               </ServerRole>
               <ServerId>
                 <CopyText value={props.server.server_id}>
