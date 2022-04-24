@@ -18,7 +18,7 @@ CREATE TABLE "Servers" (
     "server_id" TEXT NOT NULL,
     "stack_id" INTEGER NOT NULL,
     "last_update_id" INTEGER,
-    "server_role" TEXT NOT NULL,
+    "server_role" TEXT,
     "server_public_ip" TEXT NOT NULL,
     "server_app_version" TEXT NOT NULL,
     "server_disk_used_gb" INTEGER NOT NULL,
