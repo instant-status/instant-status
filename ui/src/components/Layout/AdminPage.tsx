@@ -1,6 +1,8 @@
 import React from "react";
+import { Helmet } from "react-helmet";
 import styled from "styled-components";
 
+import APP_CONFIG from "../../../appConfig";
 import AdminPageTitle from "../../components/Layout/AdminPageTitle";
 import MaxWidth from "../../components/Layout/MaxWidth";
 import Page from "../../components/Layout/Page";
@@ -21,6 +23,11 @@ interface AdminPageProps {
 const AdminPage = (props: AdminPageProps) => {
   return (
     <Wrapper>
+      <Helmet>
+        <title>
+          {props.pageTitle} | {APP_CONFIG.APP_NAME}
+        </title>
+      </Helmet>
       <AdminSidebar />
       <Page>
         <PageHeader />
