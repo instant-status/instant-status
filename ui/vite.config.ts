@@ -1,4 +1,4 @@
-import reactRefresh from "@vitejs/plugin-react-refresh";
+import reactRefresh from "@vitejs/plugin-react";
 import { defineConfig } from "vite";
 
 console.log(`Running in ${process.env.NODE_ENV} mode.`);
@@ -11,7 +11,7 @@ export default defineConfig({
     ...(process.env.NODE_ENV === `development` && {
       hmr: {
         path: `/vite-ws/`,
-        port: 443,
+        clientPort: 443,
       },
     }),
   },
