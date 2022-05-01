@@ -17,10 +17,10 @@
   "author": "",
   "license": "MIT",
   "dependencies": {
-    "@prisma/client": "3.10.0"
+    "@prisma/client": "3.13.0"
   },
   "devDependencies": {
-    "prisma": "3.10.0",
+    "prisma": "3.13.0",
     "ts-node": "10.7.0"
   }
 }

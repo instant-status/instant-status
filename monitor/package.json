@@ -13,12 +13,12 @@
   "author": "",
   "license": "MIT",
   "dependencies": {
-    "@prisma/client": "3.10.0",
-    "dayjs": "1.11.0",
+    "@prisma/client": "3.13.0",
+    "dayjs": "1.11.1",
     "is-prisma": "1.0.0"
   },
   "devDependencies": {
     "eslint-plugin-simple-import-sort": "7.0.0",
-    "nodemon": "2.0.15"
+    "nodemon": "2.0.16"
   }
 }
