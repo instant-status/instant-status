@@ -32,12 +32,11 @@ const apiPost = async <T>(url: string, body: T) => {
       ...(bearer && { authorization: `Bearer ${bearer}` }),
     },
   });
-  const data = await response;
 
-  if (data.status === 401) {
+  if (response.status === 401) {
     window.location.href = `/logout`;
   }
-  return data.json();
+  return response.json();
 };
 
 export interface CreateUpdateProps {
