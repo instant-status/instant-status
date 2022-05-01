@@ -45,6 +45,29 @@ const A = styled.a`
   color: ${(props) => props.theme.color.lightOne};
 `;
 
+const madeWith = [
+  `⚡️`,
+  `🧠`,
+  `🤩`,
+  `😎`,
+  `🥳`,
+  `💥`,
+  `✨`,
+  `👻`,
+  `🎯`,
+  `🚀`,
+  `🔮`,
+  `📚`,
+  `🔥`,
+  `🍕`,
+  `🍔`,
+  `🎨`,
+  `🎲`,
+];
+
+const random = (min: number, max: number) =>
+  Math.floor(Math.random() * (max - min)) + min;
+
 interface SidebarProps {
   stackCount: number;
   serverCount: number;
@@ -101,7 +124,7 @@ const Sidebar = observer((props: SidebarProps) => {
               >
                 Instant Status
               </A>
-              : Made With ⚡
+              : Made With {madeWith[random(0, madeWith.length)]}
             </Stack>
           </Stack>
         </FooterContainer>
