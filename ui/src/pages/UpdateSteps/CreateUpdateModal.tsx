@@ -18,6 +18,7 @@ import ModalBase from "../../components/Modal/ModalBase";
 import { StackProps } from "../../globalTypes";
 import { globalStoreContext } from "../../store/globalStore";
 import allExistIn from "../../utils/allExistIn";
+import removeWhiteSpace from "../../utils/removeWhiteSpace";
 import UpdateSuccess from "./UpdateSuccess";
 
 const Heading = styled.h2`
@@ -171,10 +172,6 @@ const CreateUpdateModal = observer(() => {
       name: `run_migrations`,
     },
   ];
-
-  const removeWhiteSpace = (value: string) => {
-    return value.replace(/ /g, ``);
-  };
 
   const groupedStacks = stacks
     .filter((stack) => stack.canUpdate && stack.servers.length > 0)
