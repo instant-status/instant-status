@@ -1,5 +1,5 @@
 import { observer } from "mobx-react-lite";
-import React from "react";
+import React, { useMemo } from "react";
 import { Redirect, useLocation } from "react-router";
 import styled from "styled-components";
 
@@ -79,6 +79,8 @@ interface SidebarProps {
 const Sidebar = observer((props: SidebarProps) => {
   const location = useLocation();
 
+  const emoji = useMemo(() => madeWith[random(0, madeWith.length)], []);
+
   if (
     location.pathname.startsWith(`/admin`) &&
     !props.isLoading &&
@@ -124,7 +126,7 @@ const Sidebar = observer((props: SidebarProps) => {
               >
                 Instant Status
               </A>
-              : Made With {madeWith[random(0, madeWith.length)]}
+              : Made With {emoji}
             </Stack>
           </Stack>
         </FooterContainer>
