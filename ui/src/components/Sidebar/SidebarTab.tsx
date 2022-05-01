@@ -2,15 +2,7 @@ import React from "react";
 import { NavLink } from "react-router-dom";
 import styled from "styled-components";
 
-import theme from "../../utils/theme";
-
-const Tab = styled(NavLink).attrs({
-  activeStyle: {
-    backgroundColor: theme.color.lightOne,
-    color: theme.color.darkTwo,
-    fill: theme.color.darkTwo,
-  },
-})`
+const Tab = styled(NavLink)`
   width: 100%;
   display: flex;
   flex-direction: column;
@@ -27,6 +19,12 @@ const Tab = styled(NavLink).attrs({
 
   :hover {
     background-color: ${({ theme }) => theme.color.darkTwo};
+  }
+
+  &.active {
+    background-color: ${({ theme }) => theme.color.lightOne};
+    color: ${({ theme }) => theme.color.darkTwo};
+    fill: ${({ theme }) => theme.color.darkTwo};
   }
 `;
 
@@ -45,14 +43,7 @@ interface SidebarTabProps {
 
 const SidebarTab = (props: SidebarTabProps) => {
   return (
-    <Tab
-      to={props.to}
-      exact={true}
-      isActive={(match, location) =>
-        Boolean(match) ||
-        (props.to !== `/` && location.pathname.startsWith(props.to))
-      }
-    >
+    <Tab to={props.to}>
       {props.icon}
       <Text>{props.label}</Text>
     </Tab>

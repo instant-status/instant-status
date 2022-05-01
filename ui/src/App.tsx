@@ -2,17 +2,21 @@ import { lighten } from "polished";
 import React from "react";
 import { Helmet } from "react-helmet";
 import { QueryClient, QueryClientProvider } from "react-query";
-import { BrowserRouter, Redirect, Route, Switch } from "react-router-dom";
+import {
+  BrowserRouter,
+  Navigate,
+  Route,
+  Routes,
+  useLocation,
+  useNavigate,
+} from "react-router-dom";
 import { createGlobalStyle, ThemeProvider } from "styled-components";
 import { QueryParamProvider } from "use-query-params";
-
 import APP_CONFIG from "../appConfig";
 import DevMenu from "./components/DevTools/DevMenu";
 import useIsLoggedIn from "./hooks/useIsLoggedIn";
 import Admin from "./pages/Admin/Admin";
-import AdminRoles from "./pages/Admin/AdminRoles";
-import AdminStacks from "./pages/Admin/AdminStacks";
-import AdminUsers from "./pages/Admin/AdminUsers";
+
 import AutoLogin from "./pages/Auth/AutoLogin";
 import Login from "./pages/Auth/Login";
 import Logout from "./pages/Auth/Logout";
@@ -53,9 +57,56 @@ const GlobalStyle = createGlobalStyle`
   }
 `;
 
-const App = () => {
+const AuthCheck = (props: { requireAuth: boolean; children: JSX.Element }) => {
   const { isLoggedIn } = useIsLoggedIn();
 
+  const location = useLocation() as {
+    state?: {
+      from?: {
+        pathname?: string;
+      };
+    };
+  };
+
+  if (!isLoggedIn && props.requireAuth) {
+    return (
+      <Navigate
+        to={APP_CONFIG.GOOGLE_AUTH_URL ? "/google" : "/login"}
+        state={{ from: location }}
+        replace={true}
+      />
+    );
+  }
+
+  if (isLoggedIn && props.requireAuth === false) {
+    return (
+      <Navigate to={location.state?.from?.pathname ?? "/"} replace={true} />
+    );
+  }
+
+  return props.children;
+};
+
+// Not happy with this...
+const RouteAdapter = ({ children }) => {
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  const adaptedHistory = React.useMemo(
+    () => ({
+      replace(location) {
+        navigate(location, { replace: true, state: location.state });
+      },
+      push(location) {
+        navigate(location, { replace: false, state: location.state });
+      },
+    }),
+    [navigate],
+  );
+  return children({ history: adaptedHistory, location });
+};
+
+const App = () => {
   const queryClient = new QueryClient();
 
   return (
@@ -67,55 +118,42 @@ const App = () => {
       <QueryClientProvider client={queryClient}>
         <StoreProvider>
           <BrowserRouter>
-            <QueryParamProvider ReactRouterRoute={Route}>
-              <Route
-                render={({ location }) => (
-                  <Switch location={location} key={location.pathname}>
-                    <Route exact path="/google">
-                      {!isLoggedIn ? <AutoLogin /> : <Redirect to="/" />}
-                    </Route>
-                    <Route exact path="/login">
-                      {!isLoggedIn ? (
-                        APP_CONFIG.GOOGLE_AUTH_URL ? (
-                          <Redirect to="/google" />
-                        ) : (
-                          <Login />
-                        )
-                      ) : (
-                        <Redirect to="/" />
-                      )}
-                    </Route>
-                    <Route exact path="/logout">
-                      <Logout />
-                    </Route>
-                    <Route path="/">
-                      {isLoggedIn ? (
-                        <Switch location={location} key={location.pathname}>
-                          <Route exact path="/admin" component={Admin} />
-                          <Route
-                            exact
-                            path="/admin/stacks"
-                            component={AdminStacks}
-                          />
-                          <Route
-                            exact
-                            path="/admin/roles"
-                            component={AdminRoles}
-                          />
-                          <Route
-                            exact
-                            path="/admin/users"
-                            component={AdminUsers}
-                          />
-                          <Route path="*" component={StatusPage} />
-                        </Switch>
-                      ) : (
-                        <Redirect to="/login" />
-                      )}
-                    </Route>
-                  </Switch>
-                )}
-              />
+            <QueryParamProvider ReactRouterRoute={RouteAdapter}>
+              <Routes>
+                <Route
+                  path="/"
+                  element={
+                    <AuthCheck requireAuth={true}>
+                      <StatusPage />
+                    </AuthCheck>
+                  }
+                />
+                <Route
+                  path="login"
+                  element={
+                    <AuthCheck requireAuth={false}>
+                      <Login />
+                    </AuthCheck>
+                  }
+                />
+                <Route
+                  path="google"
+                  element={
+                    <AuthCheck requireAuth={false}>
+                      <AutoLogin />
+                    </AuthCheck>
+                  }
+                />
+                <Route
+                  path="admin/*"
+                  element={
+                    <AuthCheck requireAuth={true}>
+                      <Admin />
+                    </AuthCheck>
+                  }
+                />
+                <Route path="logout" element={<Logout />} />
+              </Routes>
             </QueryParamProvider>
           </BrowserRouter>
         </StoreProvider>

@@ -10,6 +10,7 @@ import theme from "../../utils/theme";
 import AdminStacksTable from "./Tables/AdminStacksTable";
 
 const AdminStacksPage = () => {
+  console.log("test");
   const [isCreateOpen, toggleIsCreateOpen] = useToggle(false);
   const [newRow, setNewRow] = useState<NewRowProps[]>([]);
 
