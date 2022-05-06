@@ -14,7 +14,7 @@
   "license": "MIT",
   "dependencies": {
     "@prisma/client": "3.13.0",
-    "dayjs": "1.11.1",
+    "dayjs": "1.11.2",
     "is-prisma": "1.0.0"
   },
   "devDependencies": {
