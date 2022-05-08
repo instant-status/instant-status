@@ -40,11 +40,7 @@ export const listUpdates = async (ctx: Context) => {
     take: 1000,
   });
 
-  return response(
-    ctx,
-    202,
-    { updateList, totalCount } || { updateList: [], totalCount }
-  );
+  return response(ctx, 202, { updateList, totalCount });
 };
 
 export const updateGet = async (ctx: Context) => {
