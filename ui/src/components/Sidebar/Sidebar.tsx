@@ -1,5 +1,5 @@
 import { observer } from "mobx-react-lite";
-import React from "react";
+import React, { useMemo } from "react";
 import { Navigate, useLocation } from "react-router";
 import styled from "styled-components";
 
@@ -45,6 +45,29 @@ const A = styled.a`
   color: ${(props) => props.theme.color.lightOne};
 `;
 
+const madeWith = [
+  `⚡️`,
+  `🧠`,
+  `🤩`,
+  `😎`,
+  `🥳`,
+  `💥`,
+  `✨`,
+  `👻`,
+  `🎯`,
+  `🚀`,
+  `🔮`,
+  `📚`,
+  `🔥`,
+  `🍕`,
+  `🍔`,
+  `🎨`,
+  `🎲`,
+];
+
+const random = (min: number, max: number) =>
+  Math.floor(Math.random() * (max - min)) + min;
+
 interface SidebarProps {
   stackCount: number;
   serverCount: number;
@@ -55,6 +78,8 @@ interface SidebarProps {
 
 const Sidebar = observer((props: SidebarProps) => {
   const location = useLocation();
+
+  const emoji = useMemo(() => madeWith[random(0, madeWith.length)], []);
 
   if (
     location.pathname.startsWith(`/admin`) &&
@@ -101,7 +126,7 @@ const Sidebar = observer((props: SidebarProps) => {
               >
                 Instant Status
               </A>
-              : Made With ⚡
+              : Made With {emoji}
             </Stack>
           </Stack>
         </FooterContainer>

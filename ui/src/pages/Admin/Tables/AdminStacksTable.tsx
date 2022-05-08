@@ -21,6 +21,7 @@ import {
 } from "../../../components/Tables/AdminTable";
 import { NewRowProps, StackProps } from "../../../globalTypes";
 import useToggle from "../../../hooks/useToggle";
+import removeWhiteSpace from "../../../utils/removeWhiteSpace";
 import theme from "../../../utils/theme";
 
 dayjs.extend(relativeTime);
@@ -127,7 +128,9 @@ const StackRow = (props: {
           <TextInput
             value={appVersion}
             name="appVersion"
-            onChange={(event) => setAppVersion(event.target.value)}
+            onChange={(event) =>
+              setAppVersion(removeWhiteSpace(event.target.value))
+            }
             label="app Version"
             required={true}
           />
