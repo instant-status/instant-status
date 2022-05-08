@@ -19,6 +19,16 @@
     "type": "git",
     "url": "git+https://github.com/instant-status/instant-status.git"
   },
+  "release": {
+    "branches": [
+      "master"
+    ],
+    "plugins": [
+      "@semantic-release/commit-analyzer",
+      "@semantic-release/release-notes-generator",
+      "@semantic-release/github"
+    ]
+  },
   "author": "",
   "license": "MIT",
   "bugs": {
