@@ -18,7 +18,11 @@ export const TableCell = styled.td`
   border-top: 0;
 `;
 
-export const TableRow = styled.tr`
+export const TableRow = styled.tr<{ $highlighted?: boolean }>`
+  ${(props) =>
+    props.$highlighted &&
+    `background-color: ${transparentize(0.9, theme.color.lightOne)}`};
+
   &:hover {
     background-color: ${transparentize(0.9, theme.color.lightOne)};
   }

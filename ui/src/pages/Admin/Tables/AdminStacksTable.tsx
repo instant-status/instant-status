@@ -218,7 +218,7 @@ const AdminStacksTable = (props: AdminStacksTableProps) => {
           <TableHeader width="20%">Stack Name</TableHeader>
           <TableHeader width="20%">app Version</TableHeader>
           <TableHeader width="20%" />
-          <TableHeader width="20%">Created</TableHeader>
+          <TableHeader width="20%">Created At</TableHeader>
           <TableHeader width="20%">Actions</TableHeader>
         </tr>
       </thead>

@@ -3,6 +3,7 @@ import relativeTime from "dayjs/plugin/relativeTime";
 import utc from "dayjs/plugin/utc";
 import React, { memo, useState } from "react";
 import { useMutation } from "react-query";
+import { useSearchParams } from "react-router-dom";
 
 import apiRoutes, {
   CreateUserProps,
@@ -49,6 +50,8 @@ const UserRow = (props: {
   onCancel: AdminUsersTableProps[`onCancel`];
 }) => {
   const [isInEditMode, setIsEditMode] = useState(props.user.isInCreateMode);
+
+  const [searchParams] = useSearchParams();
 
   const [firstName, setFirstName] = useState(props.user.first_name);
   const [lastName, setLastName] = useState(props.user.last_name);
@@ -136,8 +139,8 @@ const UserRow = (props: {
   };
 
   return (
-    <TableRow>
-      <TableCell>{props.user.is_super_admin ? `👑 ` : ``}</TableCell>
+    <TableRow $highlighted={searchParams.get(`email`) === props.user.email}>
+      <TableCell>{props.user.is_super_admin && `👑`}</TableCell>
       <TableCell>
         {isInEditMode ? (
           <TextInput

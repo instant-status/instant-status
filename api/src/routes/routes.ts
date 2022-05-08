@@ -43,6 +43,7 @@ router.post('/v2/check-in', serverOnly, checkInController.checkIn);
 router.delete('/v2/server/delete', serverController.deleteServer);
 
 // Update
+router.get('/v2/updates', updateController.listUpdates);
 router.post('/v2/update/create', updateController.updateCreate);
 
 // Metadata
