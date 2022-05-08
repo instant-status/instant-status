@@ -193,7 +193,7 @@ export const authGoogle = async (ctx: Context) => {
 
     // Redirect them back to the home page with a valid JWT in their cookie
     ctx.body = `Redirecting to ${API_CONFIG.APP_NAME}...`;
-    ctx.response.redirect(API_CONFIG.APP_URL);
+    ctx.response.redirect(`${API_CONFIG.APP_URL}?restore_page=true`);
     return;
   } catch (err) {
     console.log('Error in auth', err);

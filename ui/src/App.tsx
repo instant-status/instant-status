@@ -1,18 +1,22 @@
 import { lighten } from "polished";
-import React from "react";
+import React, { useEffect } from "react";
 import { Helmet } from "react-helmet";
 import { QueryClient, QueryClientProvider } from "react-query";
-import { BrowserRouter, Redirect, Route, Switch } from "react-router-dom";
+import {
+  BrowserRouter,
+  Navigate,
+  Route,
+  Routes,
+  useLocation,
+  useNavigate,
+  useSearchParams,
+} from "react-router-dom";
 import { createGlobalStyle, ThemeProvider } from "styled-components";
-import { QueryParamProvider } from "use-query-params";
 
 import APP_CONFIG from "../appConfig";
 import DevMenu from "./components/DevTools/DevMenu";
 import useIsLoggedIn from "./hooks/useIsLoggedIn";
 import Admin from "./pages/Admin/Admin";
-import AdminRoles from "./pages/Admin/AdminRoles";
-import AdminStacks from "./pages/Admin/AdminStacks";
-import AdminUsers from "./pages/Admin/AdminUsers";
 import AutoLogin from "./pages/Auth/AutoLogin";
 import Login from "./pages/Auth/Login";
 import Logout from "./pages/Auth/Logout";
@@ -53,70 +57,107 @@ const GlobalStyle = createGlobalStyle`
   }
 `;
 
-const App = () => {
+const AuthCheck = (props: { requireAuth: boolean; children: JSX.Element }) => {
   const { isLoggedIn } = useIsLoggedIn();
 
+  const location = useLocation() as {
+    state?: {
+      from?: {
+        pathname?: string;
+      };
+    };
+  };
+
+  if (!isLoggedIn && props.requireAuth) {
+    return (
+      <Navigate
+        to={APP_CONFIG.GOOGLE_AUTH_URL ? `/google` : `/login`}
+        state={{ from: location }}
+        replace={true}
+      />
+    );
+  }
+
+  if (isLoggedIn && props.requireAuth === false) {
+    return (
+      <Navigate to={location.state?.from?.pathname ?? `/`} replace={true} />
+    );
+  }
+
+  return props.children;
+};
+
+const Root = () => {
+  const location = useLocation();
+  const navigateTo = useNavigate();
+
+  const [searchParams] = useSearchParams();
+  const shouldRedirect = searchParams.get(`restore_page`) === `true`;
+
+  const ignoredPaths = [`/logout`, `/google`, `/login`];
+
+  useEffect(() => {
+    if (!ignoredPaths.includes(location.pathname)) {
+      if (shouldRedirect) {
+        const loginRedirect = localStorage.getItem(`currentPage`);
+        if (loginRedirect) navigateTo(loginRedirect);
+      }
+      localStorage.setItem(`currentPage`, location.pathname);
+    }
+  }, [location.pathname, shouldRedirect]);
+
+  return (
+    <Routes>
+      <Route
+        path="login"
+        element={
+          <AuthCheck requireAuth={false}>
+            {APP_CONFIG.GOOGLE_AUTH_URL ? <AutoLogin /> : <Login />}
+          </AuthCheck>
+        }
+      />
+      <Route
+        path="google"
+        element={
+          <AuthCheck requireAuth={false}>
+            <AutoLogin />
+          </AuthCheck>
+        }
+      />
+      <Route
+        path="admin/*"
+        element={
+          <AuthCheck requireAuth={true}>
+            <Admin />
+          </AuthCheck>
+        }
+      />
+      <Route path="logout" element={<Logout />} />
+      <Route
+        path="*"
+        element={
+          <AuthCheck requireAuth={true}>
+            <StatusPage />
+          </AuthCheck>
+        }
+      />
+    </Routes>
+  );
+};
+
+const App = () => {
   const queryClient = new QueryClient();
 
   return (
     <ThemeProvider theme={theme}>
       <Helmet>
-        <title>{APP_CONFIG.APP_NAME}</title>
+        <title>{APP_CONFIG.APP_NAME} | Instant Status</title>
       </Helmet>
       <GlobalStyle />
       <QueryClientProvider client={queryClient}>
         <StoreProvider>
           <BrowserRouter>
-            <QueryParamProvider ReactRouterRoute={Route}>
-              <Route
-                render={({ location }) => (
-                  <Switch location={location} key={location.pathname}>
-                    <Route exact path="/google">
-                      {!isLoggedIn ? <AutoLogin /> : <Redirect to="/" />}
-                    </Route>
-                    <Route exact path="/login">
-                      {!isLoggedIn ? (
-                        APP_CONFIG.GOOGLE_AUTH_URL ? (
-                          <Redirect to="/google" />
-                        ) : (
-                          <Login />
-                        )
-                      ) : (
-                        <Redirect to="/" />
-                      )}
-                    </Route>
-                    <Route exact path="/logout">
-                      <Logout />
-                    </Route>
-                    <Route path="/">
-                      {isLoggedIn ? (
-                        <Switch location={location} key={location.pathname}>
-                          <Route exact path="/admin" component={Admin} />
-                          <Route
-                            exact
-                            path="/admin/stacks"
-                            component={AdminStacks}
-                          />
-                          <Route
-                            exact
-                            path="/admin/roles"
-                            component={AdminRoles}
-                          />
-                          <Route
-                            exact
-                            path="/admin/users"
-                            component={AdminUsers}
-                          />
-                          <Route path="*" component={StatusPage} />
-                        </Switch>
-                      ) : (
-                        <Redirect to="/login" />
-                      )}
-                    </Route>
-                  </Switch>
-                )}
-              />
-            </QueryParamProvider>
+            <Root />
           </BrowserRouter>
         </StoreProvider>
       </QueryClientProvider>

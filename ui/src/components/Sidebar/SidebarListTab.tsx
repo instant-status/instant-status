@@ -1,14 +1,7 @@
 import { NavLink } from "react-router-dom";
 import styled from "styled-components";
 
-import theme from "../../utils/theme";
-
-const SidebarListTab = styled(NavLink).attrs({
-  activeStyle: {
-    backgroundColor: theme.color.darkTwo,
-    color: theme.color.lightOne,
-  },
-})`
+const SidebarListTab = styled(NavLink)`
   cursor: pointer;
   color: ${(props) => props.theme.color.lightOne};
 
@@ -24,6 +17,11 @@ const SidebarListTab = styled(NavLink).attrs({
 
   margin-left: 20px;
   border-radius: 12px 0 0 12px;
+
+  &.active {
+    background-color: ${(props) => props.theme.color.darkTwo};
+    color: ${(props) => props.theme.color.lightOne};
+  }
 `;
 
 export default SidebarListTab;

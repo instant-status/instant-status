@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
-import { AnimatePresence, AnimateSharedLayout } from "framer-motion";
+import { AnimatePresence } from "framer-motion";
 import { observer } from "mobx-react-lite";
 import React, { useContext } from "react";
 import { useQuery } from "react-query";
@@ -41,52 +41,50 @@ const PageContent = observer(() => {
   return (
     <Page>
       <PageHeader />
-      <AnimateSharedLayout>
-        <Grid>
-          {stacks.length > 0 ? (
-            stacks
-              .filter((stack) => {
-                return (
-                  stack?.servers?.length > 0 &&
-                  (store?.displayVersions === undefined ||
-                    store.displayVersions.includes(
-                      stack?.servers[0]?.server_app_version,
-                    ))
-                );
-              })
-              .sort((a, b) => {
-                let item1 = a; // First server
-                let item2 = b; // First server
+      <Grid>
+        {stacks.length > 0 ? (
+          stacks
+            .filter((stack) => {
+              return (
+                stack?.servers?.length > 0 &&
+                (store?.displayVersions === undefined ||
+                  store.displayVersions.includes(
+                    stack?.servers[0]?.server_app_version,
+                  ))
+              );
+            })
+            .sort((a, b) => {
+              let item1 = a; // First server
+              let item2 = b; // First server
 
-                let sortBy = store.orderBy.replace(`!`, ``);
+              let sortBy = store.orderBy.replace(`!`, ``);
 
-                if (sortBy.startsWith(`stack.`)) {
-                  // @ts-ignore
-                  item1 = a.servers[0]; // First server
-                  // @ts-ignore
-                  item2 = b.servers[0]; // First server
+              if (sortBy.startsWith(`stack.`)) {
+                // @ts-ignore
+                item1 = a.servers[0]; // First server
+                // @ts-ignore
+                item2 = b.servers[0]; // First server
 
-                  sortBy = sortBy.replace(`stack.`, ``);
-                }
+                sortBy = sortBy.replace(`stack.`, ``);
+              }
 
-                const sortByReverse = store.orderBy.startsWith(`!`);
+              const sortByReverse = store.orderBy.startsWith(`!`);
 
-                if (sortByReverse) {
-                  // @ts-ignore
-                  return item1[sortBy] < item2[sortBy] ? 1 : -1;
-                } else {
-                  // @ts-ignore
-                  return item1[sortBy] > item2[sortBy] ? 1 : -1;
-                }
-              })
-              .map((stack) => {
-                return <Card key={stack.id} stack={stack} />;
-              })
-          ) : (
-            <img src={logo} alt="Loading..." width="400px" />
-          )}
-        </Grid>
-      </AnimateSharedLayout>
+              if (sortByReverse) {
+                // @ts-ignore
+                return item1[sortBy] < item2[sortBy] ? 1 : -1;
+              } else {
+                // @ts-ignore
+                return item1[sortBy] > item2[sortBy] ? 1 : -1;
+              }
+            })
+            .map((stack) => {
+              return <Card key={stack.id} stack={stack} />;
+            })
+        ) : (
+          <img src={logo} alt="Loading..." width="400px" />
+        )}
+      </Grid>
 
       <AnimatePresence>
         {store.isUpdateModalOpen && <CreateUpdateModal />}

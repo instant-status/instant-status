@@ -25,7 +25,7 @@ const AdminPage = (props: AdminPageProps) => {
     <Wrapper>
       <Helmet>
         <title>
-          {props.pageTitle} | {APP_CONFIG.APP_NAME}
+          {props.pageTitle} | {APP_CONFIG.APP_NAME} | Instant Status
         </title>
       </Helmet>
       <AdminSidebar />

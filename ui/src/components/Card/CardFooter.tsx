@@ -1,8 +1,8 @@
 import { observer } from "mobx-react-lite";
 import { transparentize } from "polished";
 import React, { useContext } from "react";
+import { useSearchParams } from "react-router-dom";
 import styled from "styled-components";
-import { NumberParam, StringParam, useQueryParams } from "use-query-params";
 
 import { globalStoreContext } from "../../store/globalStore";
 import IconLogs from "../Icons/IconLogs";
@@ -56,10 +56,7 @@ interface CardFooterProps {
 }
 
 const CardFooter = observer((props: CardFooterProps) => {
-  const [, setQuery] = useQueryParams({
-    stackId: NumberParam,
-    appVersion: StringParam,
-  });
+  const [, setSearchParams] = useSearchParams();
 
   const store = useContext(globalStoreContext);
 
@@ -92,9 +89,11 @@ const CardFooter = observer((props: CardFooterProps) => {
         disabled={props.isUpdating || !props.canUpdate}
         onClick={() => {
           store.setIsUpdateModalOpen(true);
-          setQuery({
-            stackId: props.stackId,
-            appVersion: props.serverAppVersion,
+          setSearchParams({
+            ...(props.stackId && { stackId: props.stackId.toString() }),
+            ...(props.serverAppVersion && {
+              appVersion: props.serverAppVersion,
+            }),
           });
         }}
       >

@@ -1,8 +1,8 @@
 import { observer } from "mobx-react-lite";
 import React, { memo, useContext, useEffect, useState } from "react";
 import { useMutation, useQuery } from "react-query";
+import { useSearchParams } from "react-router-dom";
 import styled from "styled-components";
-import { StringParam, useQueryParams } from "use-query-params";
 
 import apiRoutes, { CreateUpdateProps } from "../../api/apiRoutes";
 import {
@@ -45,16 +45,14 @@ enum UpdateStepTypes {
 }
 
 const CreateUpdateModal = observer(() => {
+  const [searchParams, setSearchParams] = useSearchParams();
+
   const [step, setStep] = useState(UpdateStepTypes.pickOptions);
   const [isSafeToClose, setIsSafeToClose] = useState(true);
-  const [query, setQuery] = useQueryParams({
-    stackId: StringParam,
-    appVersion: StringParam,
-  });
   const [stacksToUpdate, setStacksToUpdate] = useState(
-    query.stackId ? [Number(query.stackId)] : [],
+    searchParams.get(`stackId`) ? [Number(searchParams.get(`stackId`))] : [],
   );
-  const [appVersion, setAppVersion] = useState(query.appVersion);
+  const [appVersion, setAppVersion] = useState(searchParams.get(`appVersion`));
   const [updateOptions, setUpdateOptions] = useState([`run_migrations`]);
 
   const store = useContext(globalStoreContext);
@@ -157,10 +155,7 @@ const CreateUpdateModal = observer(() => {
     }
 
     if (canClose) {
-      setQuery({
-        stackId: undefined,
-        appVersion: undefined,
-      });
+      setSearchParams({});
       store.setIsUpdateModalOpen(false);
       stacksQuery.refetch();
     }

@@ -46,6 +46,8 @@ const DevMenu = () => {
 
   const { isLoggedIn } = useIsLoggedIn();
 
+  const loginRedirect = localStorage.getItem(`currentPage`);
+
   return (
     <>
       <AnimatePresence>
@@ -82,7 +84,7 @@ const DevMenu = () => {
                 }}
                 onClick={() => {
                   Cookies.set(APP_CONFIG.COOKIE_NAME, APP_CONFIG.DEV_JWT);
-                  window.location.reload();
+                  window.location.href = loginRedirect || `/`;
                 }}
                 title="Log in"
               >

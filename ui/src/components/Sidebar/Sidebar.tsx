@@ -1,6 +1,6 @@
 import { observer } from "mobx-react-lite";
 import React, { useMemo } from "react";
-import { Redirect, useLocation } from "react-router";
+import { Navigate, useLocation } from "react-router";
 import styled from "styled-components";
 
 import IconAdmin from "../Icons/IconAdmin";
@@ -86,7 +86,7 @@ const Sidebar = observer((props: SidebarProps) => {
     !props.isLoading &&
     !props.isSuperAdmin
   ) {
-    return <Redirect to="/" />;
+    return <Navigate to="/" />;
   }
 
   return (
