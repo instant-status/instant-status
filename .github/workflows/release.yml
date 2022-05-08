@@ -2,8 +2,7 @@ name: Release
 on:
   push:
     branches:
-      - is-next
-      - semantic-release
+      - master
 jobs:
   release:
     name: Release
