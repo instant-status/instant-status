@@ -3,7 +3,7 @@ on:
   push:
     branches:
       - is-next
-      - semantic-releases
+      - semantic-release
 jobs:
   release:
     name: Release
