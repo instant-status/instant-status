@@ -21,6 +21,7 @@ import AutoLogin from "./pages/Auth/AutoLogin";
 import Login from "./pages/Auth/Login";
 import Logout from "./pages/Auth/Logout";
 import StatusPage from "./pages/StatusOverview/StatusPage";
+import HistoryPage from "./pages/Updates/History";
 import { StoreProvider } from "./store/globalStore";
 import theme from "./utils/theme";
 
@@ -121,6 +122,14 @@ const Root = () => {
         element={
           <AuthCheck requireAuth={false}>
             <AutoLogin />
+          </AuthCheck>
+        }
+      />
+      <Route
+        path="history"
+        element={
+          <AuthCheck requireAuth={true}>
+            <HistoryPage />
           </AuthCheck>
         }
       />

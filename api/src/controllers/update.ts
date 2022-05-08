@@ -8,6 +8,41 @@ import isStackUpdating from '../helpers/isStackUpdating';
 import response from '../helpers/returnResponse';
 import { getRequesterDecodedJWT, getRequesterIdentity } from './auth';
 
+export const listUpdates = async (ctx: Context) => {
+  const userJWT = getRequesterDecodedJWT(ctx.request);
+
+  if (!userJWT.roles) {
+    return response(ctx, 202, []);
+  }
+
+  const totalCount = await prisma.updates.count({
+    where: { stack_id: { in: userJWT.roles?.view_stacks || [] } },
+  });
+
+  const updateList = await prisma.updates.findMany({
+    select: {
+      id: true,
+      created_at: true,
+      is_cancelled: true,
+      run_migrations: true,
+      server_count: true,
+      server_finished_count: true,
+      update_app_to: true,
+      update_requested_by: true,
+      stackId: {
+        select: {
+          name: true,
+        },
+      },
+    },
+    orderBy: { id: 'desc' },
+    where: { stack_id: { in: userJWT.roles?.view_stacks || [] } },
+    take: 1000,
+  });
+
+  return response(ctx, 202, { updateList, totalCount });
+};
+
 export const updateGet = async (ctx: Context) => {
   // Ensuring we have required data in the request
   const body = ctx.request.body;

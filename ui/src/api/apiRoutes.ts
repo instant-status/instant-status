@@ -1,8 +1,9 @@
+import { Updates } from "@prisma/client";
 import Cookies from "js-cookie";
 
 import APP_CONFIG from "../../appConfig";
 
-const apiFetch = async (url: string) => {
+const apiFetch = async <T>(url: string): Promise<T> => {
   const bearer = Cookies.get(APP_CONFIG.COOKIE_NAME);
 
   const response = await fetch(url, {
@@ -93,6 +94,12 @@ const apiGetAvailableStacksAndEnvironments = () => {
   );
 };
 
+const apiGetUpdatesList = () => {
+  return apiFetch<{ updateList: Updates[]; totalCount: number }>(
+    `${APP_CONFIG.DATA_URL}/v2/updates`,
+  );
+};
+
 const apiGetUsers = () => {
   return apiFetch(`${APP_CONFIG.DATA_URL}/v2/admin/users`);
 };
@@ -145,6 +152,7 @@ export default {
   apiGetStacksList,
   apiGetStacksMetadata,
   apiGetAvailableStacksAndEnvironments,
+  apiGetUpdatesList,
   apiCreateUser,
   apiGetRoles,
   apiCreateRole,
