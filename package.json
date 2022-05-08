@@ -11,7 +11,7 @@
     "ui"
   ],
   "scripts": {
-    "ci": "npm ci --workspaces && cd is-prisma && npx prisma generate",
+    "ci": "npm exec -workspaces -c 'rm -rf node_modules; :' && npm ci --workspaces && cd is-prisma && npx prisma generate",
     "dev": "bash ./tools/startDevServers.sh",
     "test": "echo \"Error: no test specified\" && exit 1"
   },

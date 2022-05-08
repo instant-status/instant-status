@@ -1,5 +1,5 @@
 import { lighten } from "polished";
-import React from "react";
+import React, { useEffect } from "react";
 import { Helmet } from "react-helmet";
 import { QueryClient, QueryClientProvider } from "react-query";
 import {
@@ -9,14 +9,14 @@ import {
   Routes,
   useLocation,
   useNavigate,
+  useSearchParams,
 } from "react-router-dom";
 import { createGlobalStyle, ThemeProvider } from "styled-components";
-import { QueryParamProvider } from "use-query-params";
+
 import APP_CONFIG from "../appConfig";
 import DevMenu from "./components/DevTools/DevMenu";
 import useIsLoggedIn from "./hooks/useIsLoggedIn";
 import Admin from "./pages/Admin/Admin";
-
 import AutoLogin from "./pages/Auth/AutoLogin";
 import Login from "./pages/Auth/Login";
 import Logout from "./pages/Auth/Logout";
@@ -71,7 +71,7 @@ const AuthCheck = (props: { requireAuth: boolean; children: JSX.Element }) => {
   if (!isLoggedIn && props.requireAuth) {
     return (
       <Navigate
-        to={APP_CONFIG.GOOGLE_AUTH_URL ? "/google" : "/login"}
+        to={APP_CONFIG.GOOGLE_AUTH_URL ? `/google` : `/login`}
         state={{ from: location }}
         replace={true}
       />
@@ -80,30 +80,69 @@ const AuthCheck = (props: { requireAuth: boolean; children: JSX.Element }) => {
 
   if (isLoggedIn && props.requireAuth === false) {
     return (
-      <Navigate to={location.state?.from?.pathname ?? "/"} replace={true} />
+      <Navigate to={location.state?.from?.pathname ?? `/`} replace={true} />
     );
   }
 
   return props.children;
 };
 
-// Not happy with this...
-const RouteAdapter = ({ children }) => {
-  const navigate = useNavigate();
+const Root = () => {
   const location = useLocation();
+  const navigateTo = useNavigate();
 
-  const adaptedHistory = React.useMemo(
-    () => ({
-      replace(location) {
-        navigate(location, { replace: true, state: location.state });
-      },
-      push(location) {
-        navigate(location, { replace: false, state: location.state });
-      },
-    }),
-    [navigate],
+  const [searchParams] = useSearchParams();
+  const shouldRedirect = searchParams.get(`restore_page`) === `true`;
+
+  const ignoredPaths = [`/logout`, `/google`, `/login`];
+
+  useEffect(() => {
+    if (!ignoredPaths.includes(location.pathname)) {
+      if (shouldRedirect) {
+        const loginRedirect = localStorage.getItem(`currentPage`);
+        if (loginRedirect) navigateTo(loginRedirect);
+      }
+      localStorage.setItem(`currentPage`, location.pathname);
+    }
+  }, [location.pathname, shouldRedirect]);
+
+  return (
+    <Routes>
+      <Route
+        path="login"
+        element={
+          <AuthCheck requireAuth={false}>
+            {APP_CONFIG.GOOGLE_AUTH_URL ? <AutoLogin /> : <Login />}
+          </AuthCheck>
+        }
+      />
+      <Route
+        path="google"
+        element={
+          <AuthCheck requireAuth={false}>
+            <AutoLogin />
+          </AuthCheck>
+        }
+      />
+      <Route
+        path="admin/*"
+        element={
+          <AuthCheck requireAuth={true}>
+            <Admin />
+          </AuthCheck>
+        }
+      />
+      <Route path="logout" element={<Logout />} />
+      <Route
+        path="*"
+        element={
+          <AuthCheck requireAuth={true}>
+            <StatusPage />
+          </AuthCheck>
+        }
+      />
+    </Routes>
   );
-  return children({ history: adaptedHistory, location });
 };
 
 const App = () => {
@@ -112,49 +151,13 @@ const App = () => {
   return (
     <ThemeProvider theme={theme}>
       <Helmet>
-        <title>{APP_CONFIG.APP_NAME}</title>
+        <title>{APP_CONFIG.APP_NAME} | Instant Status</title>
       </Helmet>
       <GlobalStyle />
       <QueryClientProvider client={queryClient}>
         <StoreProvider>
           <BrowserRouter>
-            <QueryParamProvider ReactRouterRoute={RouteAdapter}>
-              <Routes>
-                <Route
-                  path="/"
-                  element={
-                    <AuthCheck requireAuth={true}>
-                      <StatusPage />
-                    </AuthCheck>
-                  }
-                />
-                <Route
-                  path="login"
-                  element={
-                    <AuthCheck requireAuth={false}>
-                      <Login />
-                    </AuthCheck>
-                  }
-                />
-                <Route
-                  path="google"
-                  element={
-                    <AuthCheck requireAuth={false}>
-                      <AutoLogin />
-                    </AuthCheck>
-                  }
-                />
-                <Route
-                  path="admin/*"
-                  element={
-                    <AuthCheck requireAuth={true}>
-                      <Admin />
-                    </AuthCheck>
-                  }
-                />
-                <Route path="logout" element={<Logout />} />
-              </Routes>
-            </QueryParamProvider>
+            <Root />
           </BrowserRouter>
         </StoreProvider>
       </QueryClientProvider>

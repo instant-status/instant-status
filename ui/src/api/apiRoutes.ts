@@ -14,9 +14,7 @@ const apiFetch = async (url: string) => {
   });
 
   if (response.status === 401) {
-    window.location.href = `/logout?redirectUrl=${encodeURIComponent(
-      window.location.pathname,
-    )}`;
+    window.location.href = `/logout`;
   }
   return response.json();
 };
@@ -35,9 +33,7 @@ const apiPost = async <T>(url: string, body: T) => {
   });
 
   if (response.status === 401) {
-    window.location.href = `/logout?redirectUrl=${encodeURIComponent(
-      window.location.pathname,
-    )}`;
+    window.location.href = `/logout`;
   }
   return response.json();
 };
