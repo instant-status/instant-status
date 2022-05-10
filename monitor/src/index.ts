@@ -45,3 +45,5 @@ setInterval(monitor, 1 * 60 * 1000);
 setTimeout(() => {
   runMonitor = true;
 }, 2 * 60 * 1000);
+
+if (process.send) process.send('ready');
