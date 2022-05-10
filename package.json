@@ -12,7 +12,7 @@
   ],
   "scripts": {
     "ci": "npm exec -workspaces -c 'rm -rf node_modules; :' && npm ci --workspaces && cd is-prisma && npx prisma generate",
-    "install": "npm exec -w ui -c 'npm run build' && npm exec -w api -c 'npm run build' && npm exec -w monitor -c 'npm run build'",
+    "build": "npm exec -w ui -c 'npm run build' && npm exec -w api -c 'npm run build' && npm exec -w monitor -c 'npm run build'",
     "dev": "bash ./tooling/startDevServers.sh",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
