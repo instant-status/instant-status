@@ -1,0 +1,24 @@
+{
+  "apps": [
+    {
+      "name": "API",
+      "script": "api/dist/server.js",
+      "cwd": "/usr/local/instantstatus/current",
+      "instances": "max",
+      "exec_mode": "cluster",
+      "wait_ready": true,
+      "listen_timeout": 30000,
+      "node_args": "--max-old-space-size=256 --max-semi-space-size=2"
+    },
+    {
+      "name": "Monitor",
+      "script": "monitor/dist/server",
+      "cwd": "/usr/local/instantstatus/current",
+      "instances": "max",
+      "exec_mode": "cluster",
+      "wait_ready": true,
+      "listen_timeout": 30000,
+      "node_args": "--max-old-space-size=256 --max-semi-space-size=2"
+    }
+  ]
+}

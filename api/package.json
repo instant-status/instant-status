@@ -8,6 +8,7 @@
     "start": "dotenv -e ../is-config/.prisma.env -- ts-node src/server.ts",
     "lint": "eslint \"src/**/*.{ts,tsx}\"",
     "format": "prettier --write \"src/**/*.{ts,tsx,json,md}\"",
+    "build": "tsc",
     "tsc": "tsc --noEmit"
   },
   "author": "",
