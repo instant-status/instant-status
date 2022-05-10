@@ -7,7 +7,7 @@
       "instances": "max",
       "exec_mode": "cluster",
       "wait_ready": true,
-      "listen_timeout": 30000,
+      "listen_timeout": 10000,
       "node_args": "--max-old-space-size=256 --max-semi-space-size=2",
       "env": {
         "DOTENV_CONFIG_PATH": "/usr/local/instantstatus/current/is-config/.prisma.env",
@@ -21,7 +21,7 @@
       "instances": 1,
       "exec_mode": "cluster",
       "wait_ready": true,
-      "listen_timeout": 30000,
+      "listen_timeout": 10000,
       "node_args": "--max-old-space-size=256 --max-semi-space-size=2",
       "env": {
         "DOTENV_CONFIG_PATH": "/usr/local/instantstatus/current/is-config/.prisma.env",
