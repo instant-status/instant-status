@@ -1,3 +1,5 @@
+import 'dotenv/config';
+
 import cors from '@koa/cors';
 import { API_CONFIG } from 'is-config';
 import Koa from 'koa';

@@ -2,14 +2,14 @@
   "name": "instant-status-api",
   "version": "1.0.0",
   "description": "",
-  "main": "src/server.ts",
+  "main": "dist/src/server.js",
   "scripts": {
-    "dev": "NODE_ENV=development dotenv -e ../is-config/.prisma.env -- nodemon --watch src",
-    "start": "NODE_ENV=production dotenv -e ../is-config/.prisma.env -- ts-node src/server.ts",
+    "dev": "NODE_ENV=development DOTENV_CONFIG_PATH=../is-config/.prisma.env nodemon src/server.ts --watch src",
+    "start": "NODE_ENV=production DOTENV_CONFIG_PATH=../is-config/.prisma.env ts-node src/server.ts",
     "lint": "eslint \"src/**/*.{ts,tsx}\"",
     "format": "prettier --write \"src/**/*.{ts,tsx,json,md}\"",
     "build": "tsc",
-    "tsc": "tsc --noEmit"
+    "tscnoemit": "tsc --noEmit"
   },
   "author": "",
   "license": "MIT",
@@ -17,7 +17,7 @@
     "@koa/cors": "3.3.0",
     "@koa/router": "10.1.1",
     "@prisma/client": "3.13.0",
-    "dotenv": "16.0.0",
+    "dotenv": "16.0.1",
     "googleapis": "100.0.0",
     "is-config": "1.0.0",
     "is-prisma": "1.0.0",
