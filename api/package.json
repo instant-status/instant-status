@@ -4,8 +4,8 @@
   "description": "",
   "main": "dist/src/server.js",
   "scripts": {
-    "dev": "NODE_ENV=development DOTENV_CONFIG_PATH=../is-config/.prisma.env nodemon src/server.ts --watch src",
-    "start": "NODE_ENV=production DOTENV_CONFIG_PATH=../is-config/.prisma.env ts-node src/server.ts",
+    "dev": "NODE_ENV=development DOTENV_CONFIG_PATH=../is-config/.env nodemon src/server.ts --watch src",
+    "start": "NODE_ENV=production DOTENV_CONFIG_PATH=../is-config/.env ts-node src/server.ts",
     "lint": "eslint \"src/**/*.{ts,tsx}\"",
     "format": "prettier --write \"src/**/*.{ts,tsx,json,md}\"",
     "build": "tsc",

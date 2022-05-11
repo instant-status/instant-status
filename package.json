@@ -10,7 +10,7 @@
     "ui"
   ],
   "scripts": {
-    "ci": "npm exec -workspaces -c 'rm -rf dist node_modules; :' && npm ci --workspaces && cd is-prisma && npx prisma generate && cd ../ && npm run slimbuild",
+    "ci": "npm exec -workspaces -c 'rm -rf dist node_modules; :' && npm ci --workspaces && cd is-prisma && npm run db:generate && cd ../ && npm run slimbuild",
     "build": "npm run build --workspaces",
     "slimbuild": "cd is-config && npm run build && cd ../is-prisma && npm run build && cd ../",
     "dev": "bash ./tooling/startDevServers.sh",

@@ -2,4 +2,4 @@ dist
 node_modules
 appConfig.ts
 apiConfig.ts
-.prisma.env
+.env

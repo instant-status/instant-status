@@ -4,12 +4,13 @@
   "description": "",
   "main": "dist/src/index.js",
   "scripts": {
-    "db:dev-generate-migrations": "dotenv -e ../is-config/.prisma.env -- prisma migrate dev --create-only",
-    "db:dev-push": "dotenv -e ../is-config/.prisma.env -- prisma db push",
-    "db:dev-reset": "dotenv -e ../is-config/.prisma.env -- prisma migrate reset",
-    "db:dev-seed": "dotenv -e ../is-config/.prisma.env -- prisma db seed",
-    "db:dev-studio": "dotenv -e ../is-config/.prisma.env -- prisma studio",
-    "db:migrate": "dotenv -e ../is-config/.prisma.env -- prisma migrate deploy",
+    "db:dev-generate-migrations": "dotenv -e ../is-config/.env -- prisma migrate dev --create-only",
+    "db:dev-push": "dotenv -e ../is-config/.env -- prisma db push",
+    "db:dev-reset": "dotenv -e ../is-config/.env -- prisma migrate reset",
+    "db:dev-seed": "dotenv -e ../is-config/.env -- prisma db seed",
+    "db:dev-studio": "dotenv -e ../is-config/.env -- prisma studio",
+    "db:migrate": "dotenv -e ../is-config/.env -- prisma migrate deploy",
+    "db:generate": "prisma generate",
     "build": "tsc"
   },
   "prisma": {
