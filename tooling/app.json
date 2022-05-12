@@ -1,0 +1,32 @@
+{
+  "apps": [
+    {
+      "name": "API",
+      "script": "dist/src/server.js",
+      "cwd": "/usr/local/instantstatus/current/api",
+      "instances": "max",
+      "exec_mode": "cluster",
+      "wait_ready": true,
+      "listen_timeout": 10000,
+      "node_args": "--max-old-space-size=256 --max-semi-space-size=2",
+      "env": {
+        "DOTENV_CONFIG_PATH": "/usr/local/instantstatus/current/is-config/.env",
+        "NODE_ENV": "production"
+      }
+    },
+    {
+      "name": "Monitor",
+      "script": "dist/src/index.js",
+      "cwd": "/usr/local/instantstatus/current/monitor",
+      "instances": 1,
+      "exec_mode": "cluster",
+      "wait_ready": true,
+      "listen_timeout": 10000,
+      "node_args": "--max-old-space-size=256 --max-semi-space-size=2",
+      "env": {
+        "DOTENV_CONFIG_PATH": "/usr/local/instantstatus/current/is-config/.env",
+        "NODE_ENV": "production"
+      }
+    }
+  ]
+}

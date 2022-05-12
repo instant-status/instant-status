@@ -1,6 +1,6 @@
 server {
   listen       80 default_server;
-  root /path/to/files/ui/dist/;
+  root /usr/local/instantstatus/current/ui/dist/;
   index index.php index.html index.htm;
 
   # Redirect API requests

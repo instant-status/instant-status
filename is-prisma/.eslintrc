@@ -1,0 +1,19 @@
+{
+  "parserOptions": {
+    "sourceType": "module"
+  },
+  "extends": [
+    "plugin:prettier/recommended"
+  ],
+  "parser": "@typescript-eslint/parser",
+  "env": {
+    "es2021": true,
+    "node": true
+  },
+  "plugins": ["prettier", "simple-import-sort"],
+  "rules": {
+    "prettier/prettier": "error",
+    "simple-import-sort/imports": "error",
+    "simple-import-sort/exports": "error"
+  }
+}

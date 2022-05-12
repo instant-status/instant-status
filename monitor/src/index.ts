@@ -1,3 +1,5 @@
+import 'dotenv/config';
+
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
 import { prisma } from 'is-prisma';
@@ -45,3 +47,5 @@ setInterval(monitor, 1 * 60 * 1000);
 setTimeout(() => {
   runMonitor = true;
 }, 2 * 60 * 1000);
+
+if (process.send) process.send('ready');

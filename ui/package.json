@@ -2,13 +2,14 @@
   "name": "ui",
   "version": "1.1.0",
   "description": "",
-  "main": "index.js",
+  "main": "dist/index.html",
   "scripts": {
     "lint": "eslint \"src/**/*.{ts,tsx}\"",
     "format": "prettier --write \"src/**/*.{ts,tsx,json,md}\"",
-    "tsc": "tsc --noEmit",
+    "tsc": "tsc",
+    "tscnoemit": "tsc --noEmit",
     "dev": "NODE_ENV=development vite",
-    "build": "tsc && vite build",
+    "build": "vite build",
     "serve": "vite preview"
   },
   "author": "",

@@ -2,7 +2,6 @@
   "name": "instant-status",
   "version": "1.0.0",
   "description": "Performant, robust, and clean monitoring application",
-  "main": "index.js",
   "workspaces": [
     "api",
     "is-config",
@@ -11,8 +10,10 @@
     "ui"
   ],
   "scripts": {
-    "ci": "npm exec -workspaces -c 'rm -rf node_modules; :' && npm ci --workspaces && cd is-prisma && npx prisma generate",
-    "dev": "bash ./tools/startDevServers.sh",
+    "ci": "npm exec -workspaces -c 'rm -rf dist node_modules; :' && npm ci --workspaces && cd is-prisma && npm run db:generate && cd ../ && npm run slimbuild",
+    "build": "npm run build --workspaces",
+    "slimbuild": "cd is-config && npm run build && cd ../is-prisma && npm run build && cd ../",
+    "dev": "bash ./tooling/startDevServers.sh",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {

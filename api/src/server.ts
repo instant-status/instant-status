@@ -1,3 +1,5 @@
+import 'dotenv/config';
+
 import cors from '@koa/cors';
 import { API_CONFIG } from 'is-config';
 import Koa from 'koa';
@@ -27,3 +29,5 @@ const port = API_CONFIG.PORT || 3000;
 app.listen(port, () =>
   console.info(`Server started on http://localhost:${port}`)
 );
+
+if (process.send) process.send('ready');
