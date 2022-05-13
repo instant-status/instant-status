@@ -19,9 +19,9 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: "lts/*"
-      - name: Install dependencies
-        run: npm run ci
       - name: Prepare ENVs
         run: cp ui/example.appConfig.ts ui/appConfig.ts && cp is-config/src/example.apiConfig.ts is-config/src/apiConfig.ts && cp is-config/.example.env is-config/.env
+      - name: Install dependencies
+        run: npm run ci
       - name: Build app
         run: npm run build
