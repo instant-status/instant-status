@@ -1,0 +1,27 @@
+name: BuildApp
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+     # The branches below must be a subset of the branches above
+     branches: [ master ]
+jobs:
+  release:
+    name: Release
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: "lts/*"
+      - name: Install dependencies
+        run: npm run ci
+      - name: Prepare ENVs
+        run: cp ui/example.appConfig.ts ui/appConfig.ts && cp is-config/src/example.apiConfig.ts is-config/src/apiConfig.ts && cp is-config/.example.env is-config/.env
+      - name: Build app
+        run: npm run build
