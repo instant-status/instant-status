@@ -1,0 +1,1 @@
+gnome-terminal --tab --title="Instant Status UI" --command="bash -c 'cd ~/instant-status/ui; npm run vite; $SHELL'" --tab --title="Instant Status API" --command="bash -c 'cd ~/instant-status/api; npm run dev; $SHELL'"
