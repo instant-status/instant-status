@@ -1,3 +1,4 @@
+import compareVersions, { validate } from 'compare-versions';
 import { prisma } from 'is-prisma';
 import { Context } from 'koa';
 
@@ -28,12 +29,12 @@ export const getMetadata = async (ctx: Context) => {
 
   // Quick filter and sort for items formatted using semantic versioning
   const semanticVersions = [...versions]
-    .filter((version) => version.toLowerCase().startsWith('v'))
-    .sort((a, b) => a.localeCompare(b));
+    .filter((version) => validate(version))
+    .sort(compareVersions);
 
   // Sort all other items
   const otherVersions = [...versions]
-    .filter((version) => !version.toLowerCase().startsWith('v'))
+    .filter((version) => !validate(version))
     .sort((a, b) => a.localeCompare(b));
 
   const stacksWithServerCount = await prisma.servers.groupBy({
