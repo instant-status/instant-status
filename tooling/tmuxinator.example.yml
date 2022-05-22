@@ -1,0 +1,9 @@
+name: IS
+root: /home/ubuntu/instant-status
+
+windows:
+  - dev-watchers:
+      layout: even-vertical
+      panes:
+        - cd /home/ubuntu/instant-status/api && npm run dev
+        - cd /home/ubuntu/instant-status/ui && npm run dev

@@ -9,6 +9,7 @@
     "tsc": "tsc",
     "tscnoemit": "tsc --noEmit",
     "dev": "NODE_ENV=development vite",
+    "vite": "vite",
     "build": "vite build",
     "serve": "vite preview"
   },

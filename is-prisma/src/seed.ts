@@ -1,5 +1,6 @@
-import { prisma } from "./index";
 import { Users } from "@prisma/client";
+
+import { prisma } from "./index";
 
 const userData: Omit<Users, "id" | "created_at">[] = [
   {
