@@ -68,7 +68,7 @@ function statusAPI_POST() {
 # create stack
 JSONData="{
   \"name\": $(jq -R <<<"$STACK_NAME"),
-  \"update_app_to\": \"v1\",
+  \"update_app_to\": $(jq -R <<<"$appVersion"),
   \"run_migrations\": false
 }"
 response=$(statusAPI_POSTDEV "stack" "$JSONData")
