@@ -1,3 +1,4 @@
+import compareVersions, { validate } from 'compare-versions';
 import { prisma } from 'is-prisma';
 import { Context } from 'koa';
 
@@ -26,6 +27,16 @@ export const getMetadata = async (ctx: Context) => {
   const stacks = new Set(servers.map((server) => server.stack_id));
   const versions = new Set(servers.map((server) => server.server_app_version));
 
+  // Quick filter and sort for items formatted using semantic versioning
+  const semanticVersions = [...versions]
+    .filter((version) => validate(version))
+    .sort(compareVersions);
+
+  // Sort all other items
+  const otherVersions = [...versions]
+    .filter((version) => !validate(version))
+    .sort((a, b) => a.localeCompare(b));
+
   const stacksWithServerCount = await prisma.servers.groupBy({
     by: ['stack_id'],
     _count: true,
@@ -37,7 +48,7 @@ export const getMetadata = async (ctx: Context) => {
 
   const responseBody = {
     isSuperAdmin: userJWT.is_super_admin,
-    activeVersions: [...versions],
+    activeVersions: [...semanticVersions, ...otherVersions],
     serverCount: servers.length,
     stackCount: [...stacks].length,
     stacks: [...stacks],
