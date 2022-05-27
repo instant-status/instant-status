@@ -217,7 +217,10 @@ export const updateServerProgress = async (ctx: Context) => {
 
   switch (body.server_update_stage) {
     case 'request-update-cancellation':
-      if (latestUpdate.is_cancelled === false) {
+      if (
+        latestUpdate.is_cancelled === false &&
+        latestUpdate.server_finished_count === 0
+      ) {
         await prisma.updates.update({
           where: { id: Number(body.update_id) },
           data: {
