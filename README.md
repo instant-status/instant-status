@@ -14,7 +14,7 @@ The [production installation script can be found here](https://github.com/instan
 [![instant-status-infrastructure-diagram-thumb](https://raw.githubusercontent.com/instant-status/deploy/master/img/instant-status-infrastructure-diagram-thumb.png)](https://raw.githubusercontent.com/instant-status/deploy/master/img/instant-status-infrastructure-diagram.png)
 _click for full resolution zoomable image_
 
-For more information and code for deploying Instant Status, see [the deploy repo](https://github.com/instant-status/deploy#readme).
+For more information and Infrastructure as Code (IaC) for deploying Instant Status, see [the deploy repo](https://github.com/instant-status/deploy#readme).
 
 ## Development
 
