@@ -6,10 +6,10 @@ import { InputBoxContainer, Label } from "../Layout/SettingsInputs";
 
 const InputBox = styled.div<{ $disabled?: boolean }>`
   font-size: 16px;
-  background-color: var(--color-darkOne);
+  background-color: var(--color-midnight);
   padding: 8px 12px;
   border: none;
-  color: var(--color-lightOne);
+  color: var(--color-parchment);
   border-radius: 6px;
   width: 100%;
   max-width: 276px;
@@ -20,9 +20,9 @@ const InputBox = styled.div<{ $disabled?: boolean }>`
 
 const InputTag = styled.div<{ $disabled?: boolean }>`
   font-size: 16px;
-  background-color: var(--color-darkTwo);
+  background-color: var(--color-nautical);
   padding: 8px 12px;
-  color: var(--color-lightOne);
+  color: var(--color-parchment);
   border-radius: 6px;
   margin: 0 4px 4px 0;
   display: flex;
@@ -41,10 +41,10 @@ const Icon = styled(IconClose)`
 
 const Input = styled.input<{ $disabled?: boolean }>`
   font-size: 16px;
-  background-color: var(--color-darkOne);
+  background-color: var(--color-midnight);
   padding: 0;
   border: none;
-  color: var(--color-lightOne);
+  color: var(--color-parchment);
   ${(props) => props.$disabled && `pointer-events: none`};
   padding: 2px;
 

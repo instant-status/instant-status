@@ -9,7 +9,7 @@ export const getStateIcon = (stateCode: number, size?: string) => {
     case 0:
       return <IconAdd color={`--color-purple`} width={iconSize} />;
     case 1:
-      return <IconAdd color={`--color-lightOne`} width={iconSize} />;
+      return <IconAdd color={`--color-parchment`} width={iconSize} />;
     case 2:
       return <IconUpdating color={`--color-purple`} width={iconSize} />;
     default:

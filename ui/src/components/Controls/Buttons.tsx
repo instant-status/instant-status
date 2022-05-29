@@ -16,9 +16,9 @@ const ButtonBase = styled.button`
   border-radius: 12px;
   cursor: pointer;
   font-size: ${spacing[9]};
-  color: var(--color-lightOne);
+  color: var(--color-parchment);
   background-color: transparent;
-  border: 4px solid var(--color-lightOne);
+  border: 4px solid var(--color-parchment);
   transition: background-color 0.3s, color 0.3s;
 
   &:disabled {
@@ -29,8 +29,8 @@ const ButtonBase = styled.button`
 
 export const GhostButton = styled(ButtonBase)`
   &:hover:not(:disabled) {
-    color: var(--color-darkTwo);
-    background-color: var(--color-lightOne);
+    color: var(--color-nautical);
+    background-color: var(--color-parchment);
   }
 `;
 
@@ -40,13 +40,13 @@ export const SidebarButton = styled(ButtonBase)`
   font-size: 16px;
 
   &:hover:not(:disabled) {
-    color: var(--color-darkTwo);
-    background-color: var(--color-lightOne);
+    color: var(--color-nautical);
+    background-color: var(--color-parchment);
   }
 `;
 
 export const UpdateButton = styled(ButtonBase)`
-  color: var(--color-darkTwo);
+  color: var(--color-nautical);
   background-color: var(--color-purple);
   border: 4px solid var(--color-purple);
 
@@ -64,7 +64,7 @@ export const CancelButton = styled(GhostButton)`
   border: 4px solid var(--color-red);
 
   &:hover:not(:disabled) {
-    color: var(--color-darkTwo);
+    color: var(--color-nautical);
     background-color: var(--color-red);
   }
 `;
@@ -81,7 +81,7 @@ export const SmallButton = styled.button<SmallButtonProps>`
 
   color: var(
     ${(props) =>
-      props.$variant === `ghost` ? props.$color : `--color-darkTwo`}
+      props.$variant === `ghost` ? props.$color : `--color-nautical`}
   );
   background-color: ${(props) =>
     props.$variant === `ghost` ? `transparent` : `var(${props.$color})`};

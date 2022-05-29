@@ -50,7 +50,7 @@ const ServerRole = styled.h4<{ $color: string }>`
 `;
 
 const ServerId = styled.span`
-  color: ${transparentize(0.5, cssVar(`--color-lightOne`).toString())};
+  color: ${transparentize(0.5, cssVar(`--color-parchment`).toString())};
   font-weight: 400;
   font-size: 16px;
   display: inline-block;
@@ -195,7 +195,7 @@ const CardServer = observer(
                   )
                 }
               >
-                <IconUbuntu color={`--color-lightOne`} width="1em" />
+                <IconUbuntu color={`--color-parchment`} width="1em" />
               </IconButton>
             </ServerRow>
             <ServerRow>
@@ -206,7 +206,7 @@ const CardServer = observer(
               <IconButton
                 href={`${APP_CONFIG.GITHUB_VERSION_URL}${props.server.server_app_version}`}
               >
-                <IconGithub color={`--color-lightOne`} width="1em" />
+                <IconGithub color={`--color-parchment`} width="1em" />
               </IconButton>
             </ServerRow>
             <ServerRow>

@@ -6,9 +6,9 @@ import { InputBoxContainer, Label } from "../Layout/SettingsInputs";
 
 const InputBox = styled(Select)`
   font-size: 16px;
-  background-color: var(--color-lightOne);
+  background-color: var(--color-parchment);
   padding: 8px 12px;
-  color: var(--color-darkOne);
+  color: var(--color-midnight);
   width: 100%;
   border: none !important;
   border-radius: 6px !important;
@@ -23,7 +23,7 @@ const InputBox = styled(Select)`
   }
 
   .react-dropdown-select-dropdown {
-    background-color: var(--color-lightOne);
+    background-color: var(--color-parchment);
     border: none;
     border-radius: 6px;
   }
@@ -53,7 +53,7 @@ interface MultiSelectInputProps {
 const MultiSelectInput = (props: MultiSelectInputProps) => {
   return (
     <InputBoxContainer
-      $backgroundColor={props.theme === `dark` ? `--color-darkTwo` : ``}
+      $backgroundColor={props.theme === `dark` ? `--color-nautical` : ``}
     >
       <Label>{props.label}</Label>
       <InputBox

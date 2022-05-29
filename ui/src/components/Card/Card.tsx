@@ -10,8 +10,8 @@ import CardHeader from "./CardHeader";
 import CardServer from "./CardServerInfo";
 
 const CardBackground = styled(motion.div)`
-  background: var(--color-darkOne);
-  color: var(--color-lightOne);
+  background: var(--color-midnight);
+  color: var(--color-parchment);
   border-radius: 2px;
   box-shadow: var(--shadow-medium);
   width: 360px;

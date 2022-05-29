@@ -5,7 +5,8 @@ import styled from "styled-components";
 const Header = styled.header`
   display: flex;
   align-items: center;
-  border-bottom: 1px solid ${lighten(0.1, cssVar(`--color-darkOne`).toString())};
+  border-bottom: 1px solid
+    ${lighten(0.1, cssVar(`--color-midnight`).toString())};
   justify-content: space-between;
 `;
 

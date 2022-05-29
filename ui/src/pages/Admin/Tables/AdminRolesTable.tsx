@@ -266,7 +266,7 @@ const UserRow = (props: {
         {isInEditMode ? (
           <Stack spacing={2}>
             <SmallButton
-              $color={`--color-lightOne`}
+              $color={`--color-parchment`}
               $variant="primary"
               $size="small"
               onClick={updateOrCreateUser}
@@ -274,7 +274,7 @@ const UserRow = (props: {
               {props.role.isInCreateMode ? `Add` : `Save`}
             </SmallButton>
             <SmallButton
-              $color={`--color-lightOne`}
+              $color={`--color-parchment`}
               $variant="ghost"
               $size="small"
               onClick={clearForm}
@@ -285,7 +285,7 @@ const UserRow = (props: {
         ) : (
           <Stack spacing={2}>
             <SmallButton
-              $color={`--color-lightOne`}
+              $color={`--color-parchment`}
               $variant="ghost"
               $size="small"
               onClick={() => setIsEditMode(true)}

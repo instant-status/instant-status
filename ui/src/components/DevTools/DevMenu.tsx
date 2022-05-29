@@ -18,7 +18,7 @@ const MenuButton = styled(motion.button)`
   border: none;
   width: 50px;
   height: 50px;
-  background-color: var(--color-lightOne);
+  background-color: var(--color-parchment);
   box-shadow: var(--shadow-medium);
   padding: 12px;
   cursor: pointer;
@@ -32,7 +32,7 @@ const MenuToggleButton = styled(motion.button)`
   border: none;
   width: 60px;
   height: 60px;
-  background-color: var(--color-lightOne);
+  background-color: var(--color-parchment);
   box-shadow: var(--shadow-medium);
   padding: 12px;
   cursor: pointer;
@@ -101,7 +101,7 @@ const DevMenu = () => {
         ref={menuButtonRef}
         title="Open dev menu"
       >
-        <IconGlasses color={`--color-darkOne`} />
+        <IconGlasses color={`--color-midnight`} />
       </MenuToggleButton>
     </>
   );

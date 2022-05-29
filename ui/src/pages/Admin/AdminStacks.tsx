@@ -39,7 +39,7 @@ const AdminStacksPage = () => {
         !isCreateOpen && (
           <SmallButton
             onClick={onCreateOpen}
-            $color={`--color-lightOne`}
+            $color={`--color-parchment`}
             $variant="primary"
           >
             Add Stack

@@ -9,22 +9,22 @@ const Tab = styled(NavLink)`
   border: none;
   align-items: center;
   cursor: pointer;
-  color: var(--color-lightOne);
-  fill: var(--color-lightOne);
+  color: var(--color-parchment);
+  fill: var(--color-parchment);
   text-decoration: none;
   padding: 0.5rem 0;
   transition: background-color 0.15s ease-out;
   font-size: 1.5em;
-  background-color: var(--color-darkOne);
+  background-color: var(--color-midnight);
 
   :hover {
-    background-color: var(--color-darkTwo);
+    background-color: var(--color-nautical);
   }
 
   &.active {
-    background-color: var(--color-lightOne);
-    color: var(--color-darkTwo);
-    fill: var(--color-darkTwo);
+    background-color: var(--color-parchment);
+    color: var(--color-nautical);
+    fill: var(--color-nautical);
   }
 `;
 

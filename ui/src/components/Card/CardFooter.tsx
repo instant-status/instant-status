@@ -23,21 +23,21 @@ const FooterButton = styled.button<{ disabled: boolean }>`
   align-items: center;
   color: ${(props) =>
     props.disabled
-      ? transparentize(0.8, cssVar(`--color-lightOne`).toString())
-      : `var(--color-lightOne)`};
+      ? transparentize(0.8, cssVar(`--color-parchment`).toString())
+      : `var(--color-parchment)`};
   fill: ${(props) =>
     props.disabled
-      ? transparentize(0.8, cssVar(`--color-lightOne`).toString())
-      : `var(--color-lightOne)`};
+      ? transparentize(0.8, cssVar(`--color-parchment`).toString())
+      : `var(--color-parchment)`};
   cursor: ${(props) => (props.disabled ? `not-allowed` : `pointer`)};
   text-decoration: none;
   padding: 1rem 0;
   transition: background-color 0.15s ease-out;
   font-size: 1.5em;
-  background-color: var(--color-darkOne);
+  background-color: var(--color-midnight);
 
   :hover {
-    background-color: var(--color-darkTwo);
+    background-color: var(--color-nautical);
   }
 `;
 

@@ -168,7 +168,7 @@ const StackRow = (props: {
         {isInEditMode ? (
           <Stack spacing={2}>
             <SmallButton
-              $color={`--color-lightOne`}
+              $color={`--color-parchment`}
               $variant="primary"
               $size="small"
               onClick={createStack}
@@ -176,7 +176,7 @@ const StackRow = (props: {
               {props.stack.isInCreateMode ? `Add` : `Save`}
             </SmallButton>
             <SmallButton
-              $color={`--color-lightOne`}
+              $color={`--color-parchment`}
               $variant="ghost"
               $size="small"
               onClick={clearForm}

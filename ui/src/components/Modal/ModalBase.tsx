@@ -13,11 +13,11 @@ import Stack from "../Layout/Stack";
 
 const ModalContainer = styled(motion.div)`
   padding: 2rem;
-  background-color: var(--color-darkOne);
+  background-color: var(--color-midnight);
   width: 100%;
   max-width: 1000px;
   box-shadow: 4px 4px 20px rgba(0, 0, 0, 0.6), 0px 0px 40px rgba(0, 0, 0, 0.2);
-  color: var(--color-lightOne);
+  color: var(--color-parchment);
   margin: 0 auto;
   position: relative;
   min-height: 100%;
@@ -32,9 +32,9 @@ const ModalCloseButton = styled.button`
   width: 60px;
   height: 60px;
   border-radius: 50%;
-  fill: var(--color-lightOne);
-  background-color: var(--color-darkOne);
-  border: 6px solid var(--color-darkTwo);
+  fill: var(--color-parchment);
+  background-color: var(--color-midnight);
+  border: 6px solid var(--color-nautical);
   position: absolute;
   right: -20px;
   top: -20px;

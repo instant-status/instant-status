@@ -15,7 +15,7 @@ const Overlay = styled.div`
   height: 100%;
   background-color: ${transparentize(
     0.1,
-    cssVar(`--color-darkOne`).toString(),
+    cssVar(`--color-midnight`).toString(),
   )};
   font-size: 15px;
   position: absolute;
@@ -42,11 +42,11 @@ const Overlay = styled.div`
 `;
 
 const OverlayCloseButton = styled.button`
-  fill: var(--color-lightOne);
+  fill: var(--color-parchment);
   cursor: pointer;
   border-radius: 50%;
-  background-color: var(--color-darkTwo);
-  border: 1px solid var(--color-lightOne);
+  background-color: var(--color-nautical);
+  border: 1px solid var(--color-parchment);
   width: 24px;
   height: 24px;
   padding: 4px;

@@ -31,6 +31,6 @@ export const getHealthColor = (healthCode: number) => {
     case 3:
       return `--color-red`;
     default:
-      return `--color-lightOne`;
+      return `--color-parchment`;
   }
 };

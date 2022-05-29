@@ -8,7 +8,7 @@ const SplashContent = styled.div`
   justify-content: center;
   flex-direction: column;
   align-items: center;
-  color: var(--color-lightOne);
+  color: var(--color-parchment);
   width: 100%;
   overflow: hidden;
   height: 100vh;

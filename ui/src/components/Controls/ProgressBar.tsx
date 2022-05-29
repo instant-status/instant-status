@@ -37,7 +37,7 @@ const ProgressUsed = styled.div<{ $width: number; $color: string }>`
   background-color: var(${(props) => props.$color});
   margin-left: -2px;
   box-sizing: content-box;
-  border-right: 2px solid var(--color-darkOne);
+  border-right: 2px solid var(--color-midnight);
   transition: width 10s;
 `;
 

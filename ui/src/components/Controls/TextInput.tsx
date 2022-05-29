@@ -6,12 +6,12 @@ import { InputBoxContainer, Label } from "../Layout/SettingsInputs";
 const InputBox = styled.input<{ $disabled?: boolean; $isDarkMode: boolean }>`
   font-size: 16px;
   background-color: var(
-    ${(props) => (props.$isDarkMode ? `--color-darkOne` : `--color-lightOne`)}
+    ${(props) => (props.$isDarkMode ? `--color-midnight` : `--color-parchment`)}
   );
   padding: 8px 12px;
   border: none;
   color: var(
-    ${(props) => (props.$isDarkMode ? `--color-lightOne` : `--color-darkOne`)}
+    ${(props) => (props.$isDarkMode ? `--color-parchment` : `--color-midnight`)}
   );
   border-radius: 6px;
   width: 100%;
@@ -34,7 +34,7 @@ interface TextInputProps {
 const TextInput = (props: TextInputProps) => {
   return (
     <InputBoxContainer
-      $backgroundColor={props.theme === `dark` ? `--color-darkTwo` : ``}
+      $backgroundColor={props.theme === `dark` ? `--color-nautical` : ``}
     >
       <Label>{props.label}</Label>
       <InputBox

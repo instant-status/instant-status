@@ -3,7 +3,7 @@ import styled from "styled-components";
 
 const SidebarListTab = styled(NavLink)`
   cursor: pointer;
-  color: var(--color-lightOne);
+  color: var(--color-parchment);
 
   padding: 0.6rem 1.4rem;
   font-size: 1.13rem;
@@ -11,16 +11,16 @@ const SidebarListTab = styled(NavLink)`
   color: lightseagreen;
 
   &:hover:not(:disabled) {
-    color: var(--color-lightOne);
-    background-color: var(--color-darkTwo);
+    color: var(--color-parchment);
+    background-color: var(--color-nautical);
   }
 
   margin-left: 20px;
   border-radius: 12px 0 0 12px;
 
   &.active {
-    background-color: var(--color-darkTwo);
-    color: var(--color-lightOne);
+    background-color: var(--color-nautical);
+    color: var(--color-parchment);
   }
 `;
 

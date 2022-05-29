@@ -2,11 +2,11 @@ import React from "react";
 import styled from "styled-components";
 
 const StyledSearchBar = styled.input`
-  background-color: var(--color-darkOne);
+  background-color: var(--color-midnight);
   border-radius: 10px;
   border: none;
   box-shadow: var(--shadow-medium);
-  color: var(--color-lightOne);
+  color: var(--color-parchment);
   font-size: 24px;
   height: 40px;
   margin-bottom: 30px;

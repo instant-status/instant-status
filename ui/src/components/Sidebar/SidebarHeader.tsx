@@ -47,7 +47,7 @@ const SidebarHeader = (props: { stackCount: number; serverCount: number }) => {
             strokeLinejoin="round"
             strokeLinecap="round"
             strokeWidth="7"
-            stroke="var(--color-lightOne)"
+            stroke="var(--color-parchment)"
             fill="none"
           >
             <path d="M4 50h21l6-12 10 37 15-55 10 38 5-8h25" />

@@ -16,7 +16,7 @@ dayjs.extend(relativeTime);
 dayjs.extend(utc);
 
 const Limit = styled.div`
-  color: var(--color-lightOne);
+  color: var(--color-parchment);
   padding: 1rem;
 `;
 
