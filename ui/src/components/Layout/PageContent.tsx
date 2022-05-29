@@ -27,6 +27,14 @@ const Grid = styled.div`
   }
 `;
 
+const NoResults = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  color: ${(props) => props.theme.color.lightOne};
+  opacity: 0.5;
+`;
+
 const PageContent = observer(() => {
   const store = useContext(globalStoreContext);
 
@@ -36,53 +44,59 @@ const PageContent = observer(() => {
     refetchInterval,
   });
 
-  const stacks = (stacksQuery?.data || []) as StackProps[];
+  const allStacks = (stacksQuery?.data || []) as StackProps[];
+
+  const stacksToDisplay = allStacks
+    .filter((stack) => {
+      return (
+        stack?.servers?.length > 0 &&
+        (store?.displayVersions === undefined ||
+          store.displayVersions.includes(stack?.servers[0]?.server_app_version))
+      );
+    })
+    .sort((a, b) => {
+      let item1 = a; // First server
+      let item2 = b; // First server
+
+      let sortBy = store.orderBy.replace(`!`, ``);
+
+      if (sortBy.startsWith(`stack.`)) {
+        // @ts-ignore
+        item1 = a.servers[0]; // First server
+        // @ts-ignore
+        item2 = b.servers[0]; // First server
+
+        sortBy = sortBy.replace(`stack.`, ``);
+      }
+
+      const sortByReverse = store.orderBy.startsWith(`!`);
+
+      if (sortByReverse) {
+        // @ts-ignore
+        return item1[sortBy] < item2[sortBy] ? 1 : -1;
+      } else {
+        // @ts-ignore
+        return item1[sortBy] > item2[sortBy] ? 1 : -1;
+      }
+    });
 
   return (
     <Page>
       <PageHeader />
       <Grid>
-        {stacks.length > 0 ? (
-          stacks
-            .filter((stack) => {
-              return (
-                stack?.servers?.length > 0 &&
-                (store?.displayVersions === undefined ||
-                  store.displayVersions.includes(
-                    stack?.servers[0]?.server_app_version,
-                  ))
-              );
-            })
-            .sort((a, b) => {
-              let item1 = a; // First server
-              let item2 = b; // First server
-
-              let sortBy = store.orderBy.replace(`!`, ``);
-
-              if (sortBy.startsWith(`stack.`)) {
-                // @ts-ignore
-                item1 = a.servers[0]; // First server
-                // @ts-ignore
-                item2 = b.servers[0]; // First server
-
-                sortBy = sortBy.replace(`stack.`, ``);
-              }
-
-              const sortByReverse = store.orderBy.startsWith(`!`);
-
-              if (sortByReverse) {
-                // @ts-ignore
-                return item1[sortBy] < item2[sortBy] ? 1 : -1;
-              } else {
-                // @ts-ignore
-                return item1[sortBy] > item2[sortBy] ? 1 : -1;
-              }
-            })
-            .map((stack) => {
-              return <Card key={stack.id} stack={stack} />;
-            })
+        {stacksToDisplay.length > 0 ? (
+          stacksToDisplay.map((stack) => {
+            return <Card key={stack.id} stack={stack} />;
+          })
         ) : (
-          <img src={logo} alt="Loading..." width="400px" />
+          <NoResults>
+            <img src={logo} alt="Loading..." width="400px" />
+            {allStacks.length > 0 && store?.displayVersions === undefined
+              ? `No Servers Found`
+              : (store?.displayVersions ?? []).length < 1
+              ? `No Matching Stacks`
+              : `No Stacks Found`}
+          </NoResults>
         )}
       </Grid>
 
