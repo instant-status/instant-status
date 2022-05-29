@@ -8,7 +8,7 @@ const SidebarListTab = styled(NavLink)`
   padding: 0.6rem 1.4rem;
   font-size: 1.13rem;
   text-decoration: none;
-  color: lightseagreen;
+  color: var(--color-lightseagreen);
 
   &:hover:not(:disabled) {
     color: var(--color-parchment);

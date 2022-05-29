@@ -7,6 +7,7 @@ const Tab = styled(NavLink)`
   display: flex;
   flex-direction: column;
   border: none;
+  border-radius: 10px 10px 0 0;
   align-items: center;
   cursor: pointer;
   color: var(--color-parchment);

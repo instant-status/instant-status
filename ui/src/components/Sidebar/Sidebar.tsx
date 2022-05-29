@@ -38,7 +38,7 @@ const Footer = styled.footer`
   padding: 6px 0;
   text-align: center;
   font-size: 14px;
-  background-color: darkcyan;
+  background-color: var(--color-cyan);
 `;
 
 const A = styled.a`
