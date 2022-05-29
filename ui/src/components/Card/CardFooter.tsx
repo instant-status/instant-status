@@ -1,5 +1,5 @@
 import { observer } from "mobx-react-lite";
-import { transparentize } from "polished";
+import { cssVar, transparentize } from "polished";
 import React, { useContext } from "react";
 import { useSearchParams } from "react-router-dom";
 import styled from "styled-components";
@@ -22,22 +22,22 @@ const FooterButton = styled.button<{ disabled: boolean }>`
   border: none;
   align-items: center;
   color: ${(props) =>
-    props.disabled && props.theme.color.darkOne
-      ? transparentize(0.8, props.theme.color.lightOne)
-      : props.theme.color.lightOne};
+    props.disabled
+      ? transparentize(0.8, cssVar(`--color-lightOne`).toString())
+      : `var(--color-lightOne)`};
   fill: ${(props) =>
-    props.disabled && props.theme.color.darkOne
-      ? transparentize(0.8, props.theme.color.lightOne)
-      : props.theme.color.lightOne};
+    props.disabled
+      ? transparentize(0.8, cssVar(`--color-lightOne`).toString())
+      : `var(--color-lightOne)`};
   cursor: ${(props) => (props.disabled ? `not-allowed` : `pointer`)};
   text-decoration: none;
   padding: 1rem 0;
   transition: background-color 0.15s ease-out;
   font-size: 1.5em;
-  background-color: ${({ theme }) => theme.color.darkOne};
+  background-color: var(--color-darkOne);
 
   :hover {
-    background-color: ${({ theme }) => theme.color.darkTwo};
+    background-color: var(--color-darkTwo);
   }
 `;
 

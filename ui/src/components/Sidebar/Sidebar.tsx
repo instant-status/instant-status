@@ -11,11 +11,11 @@ import SidebarHeader from "./SidebarHeader";
 import SidebarTab from "./SidebarTab";
 
 const Aside = styled.aside`
-  background-color: ${(props) => props.theme.color.darkOne};
+  background-color: var(--color-darkOne);
   width: 290px;
   height: 100vh;
   position: fixed;
-  color: ${(props) => props.theme.color.lightOne};
+  color: var(--color-lightOne);
   padding: 20px 0 0;
   display: flex;
   flex-direction: column;
@@ -42,7 +42,7 @@ const Footer = styled.footer`
 `;
 
 const A = styled.a`
-  color: ${(props) => props.theme.color.lightOne};
+  color: var(--color-lightOne);
 `;
 
 const madeWith = [

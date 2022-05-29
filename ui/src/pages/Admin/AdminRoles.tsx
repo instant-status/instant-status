@@ -6,7 +6,6 @@ import { SmallButton } from "../../components/Controls/Buttons";
 import AdminPage from "../../components/Layout/AdminPage";
 import { NewRowProps } from "../../globalTypes";
 import useToggle from "../../hooks/useToggle";
-import theme from "../../utils/theme";
 import AdminRolesTable from "./Tables/AdminRolesTable";
 
 const AdminRolesPage = () => {
@@ -52,7 +51,7 @@ const AdminRolesPage = () => {
         !isCreateOpen && (
           <SmallButton
             onClick={onCreateOpen}
-            $color={theme.color.lightOne}
+            $color={`--color-lightOne`}
             $variant="primary"
           >
             Add Role

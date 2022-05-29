@@ -21,7 +21,6 @@ import {
   TableRow,
 } from "../../../components/Tables/AdminTable";
 import { NewRowProps } from "../../../globalTypes";
-import theme from "../../../utils/theme";
 
 dayjs.extend(relativeTime);
 dayjs.extend(utc);
@@ -205,7 +204,7 @@ const UserRow = (props: {
         {isInEditMode ? (
           <Stack spacing={2}>
             <SmallButton
-              $color={theme.color.lightOne}
+              $color={`--color-lightOne`}
               $variant="primary"
               $size="small"
               onClick={updateOrCreateUser}
@@ -213,7 +212,7 @@ const UserRow = (props: {
               {props.user.isInCreateMode ? `Add` : `Save`}
             </SmallButton>
             <SmallButton
-              $color={theme.color.lightOne}
+              $color={`--color-lightOne`}
               $variant="ghost"
               $size="small"
               onClick={clearForm}
@@ -224,7 +223,7 @@ const UserRow = (props: {
         ) : (
           <Stack spacing={2}>
             <SmallButton
-              $color={theme.color.lightOne}
+              $color={`--color-lightOne`}
               $variant="ghost"
               $size="small"
               onClick={() => setIsEditMode(true)}
@@ -232,7 +231,7 @@ const UserRow = (props: {
               Edit
             </SmallButton>
             <SmallButton
-              $color={theme.color.red}
+              $color={`--color-red`}
               $variant="ghost"
               $size="small"
               onClick={deleteUser}

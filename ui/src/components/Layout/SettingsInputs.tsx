@@ -4,7 +4,8 @@ export const InputBoxContainer = styled.label<{ $backgroundColor?: string }>`
   display: flex;
   flex-direction: column;
   ${(props) =>
-    props.$backgroundColor && `background-color: ${props.$backgroundColor}`};
+    props.$backgroundColor &&
+    `background-color: var(${props.$backgroundColor})`};
   padding: 12px;
   border-radius: 6px;
 `;

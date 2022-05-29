@@ -3,7 +3,6 @@ import { Link } from "react-router-dom";
 import styled from "styled-components";
 
 import APP_CONFIG from "../../../appConfig";
-import theme from "../../utils/theme";
 
 const Header = styled.header`
   display: flex;
@@ -48,7 +47,7 @@ const SidebarHeader = (props: { stackCount: number; serverCount: number }) => {
             strokeLinejoin="round"
             strokeLinecap="round"
             strokeWidth="7"
-            stroke={theme.color.lightOne}
+            stroke="var(--color-lightOne)"
             fill="none"
           >
             <path d="M4 50h21l6-12 10 37 15-55 10 38 5-8h25" />

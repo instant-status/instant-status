@@ -6,10 +6,10 @@ import { InputBoxContainer, Label } from "../Layout/SettingsInputs";
 
 const InputBox = styled.div<{ $disabled?: boolean }>`
   font-size: 16px;
-  background-color: ${(props) => props.theme.color.darkOne};
+  background-color: var(--color-darkOne);
   padding: 8px 12px;
   border: none;
-  color: ${(props) => props.theme.color.lightOne};
+  color: var(--color-lightOne);
   border-radius: 6px;
   width: 100%;
   max-width: 276px;
@@ -20,9 +20,9 @@ const InputBox = styled.div<{ $disabled?: boolean }>`
 
 const InputTag = styled.div<{ $disabled?: boolean }>`
   font-size: 16px;
-  background-color: ${(props) => props.theme.color.darkTwo};
+  background-color: var(--color-darkTwo);
   padding: 8px 12px;
-  color: ${(props) => props.theme.color.lightOne};
+  color: var(--color-lightOne);
   border-radius: 6px;
   margin: 0 4px 4px 0;
   display: flex;
@@ -31,7 +31,7 @@ const InputTag = styled.div<{ $disabled?: boolean }>`
   cursor: pointer;
 
   &:hover {
-    background-color: ${(props) => props.theme.color.red};
+    background-color: var(--color-red);
   }
 `;
 
@@ -41,10 +41,10 @@ const Icon = styled(IconClose)`
 
 const Input = styled.input<{ $disabled?: boolean }>`
   font-size: 16px;
-  background-color: ${(props) => props.theme.color.darkOne};
+  background-color: var(--color-darkOne);
   padding: 0;
   border: none;
-  color: ${(props) => props.theme.color.lightOne};
+  color: var(--color-lightOne);
   ${(props) => props.$disabled && `pointer-events: none`};
   padding: 2px;
 
@@ -65,11 +65,7 @@ const TagInput = (props: {
       <Label>{props.label}</Label>
       <InputBox>
         {props.values.map((value) => (
-          <InputTag
-            key={`${value}`}
-            onClick={() => props.removeValue(value)}
-            // type="button"
-          >
+          <InputTag key={`${value}`} onClick={() => props.removeValue(value)}>
             <span>{value}</span>
             <Icon width="16px" color="#fff" />
           </InputTag>

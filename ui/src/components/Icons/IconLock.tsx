@@ -9,7 +9,10 @@ const IconLock = (props: { color?: string; width?: string }) => {
       viewBox="0 0 490 490"
       enableBackground="new 0 0 490 490"
       xmlSpace="preserve"
-      style={{ fill: props.color || `inherit`, width: props.width || `100%` }}
+      style={{
+        fill: `var(${props.color})` || `inherit`,
+        width: props.width || `100%`,
+      }}
     >
       <path
         d="M380,201.1h-14.4v-80.5C365.6,54.1,311.5,0,245,0S124.4,54.1,124.4,120.6v80.5H110c-31.5,0-57.2,25.6-57.2,57.2v174.5

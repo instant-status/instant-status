@@ -6,7 +6,6 @@ import { SmallButton } from "../../components/Controls/Buttons";
 import AdminPage from "../../components/Layout/AdminPage";
 import { NewRowProps } from "../../globalTypes";
 import useToggle from "../../hooks/useToggle";
-import theme from "../../utils/theme";
 import AdminStacksTable from "./Tables/AdminStacksTable";
 
 const AdminStacksPage = () => {
@@ -40,7 +39,7 @@ const AdminStacksPage = () => {
         !isCreateOpen && (
           <SmallButton
             onClick={onCreateOpen}
-            $color={theme.color.lightOne}
+            $color={`--color-lightOne`}
             $variant="primary"
           >
             Add Stack

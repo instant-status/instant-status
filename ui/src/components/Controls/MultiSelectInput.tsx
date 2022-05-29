@@ -2,20 +2,19 @@ import React from "react";
 import Select from "react-dropdown-select";
 import styled from "styled-components";
 
-import theme from "../../utils/theme";
 import { InputBoxContainer, Label } from "../Layout/SettingsInputs";
 
 const InputBox = styled(Select)`
   font-size: 16px;
-  background-color: ${(props) => props.theme.color.lightOne};
+  background-color: var(--color-lightOne);
   padding: 8px 12px;
-  color: ${(props) => props.theme.color.darkOne};
+  color: var(--color-darkOne);
   width: 100%;
   border: none !important;
   border-radius: 6px !important;
 
   .react-dropdown-select-option {
-    background-color: ${theme.color.cyan};
+    background-color: var(--color-cyan);
     border-radius: 6px;
   }
 
@@ -24,7 +23,7 @@ const InputBox = styled(Select)`
   }
 
   .react-dropdown-select-dropdown {
-    background-color: ${theme.color.lightOne};
+    background-color: var(--color-lightOne);
     border: none;
     border-radius: 6px;
   }
@@ -35,7 +34,7 @@ const InputBox = styled(Select)`
   }
 
   .react-dropdown-select-item.react-dropdown-select-item-selected {
-    background: ${theme.color.cyan};
+    background: var(--color-cyan);
   }
 `;
 
@@ -54,7 +53,7 @@ interface MultiSelectInputProps {
 const MultiSelectInput = (props: MultiSelectInputProps) => {
   return (
     <InputBoxContainer
-      $backgroundColor={props.theme === `dark` ? theme.color.darkTwo : ``}
+      $backgroundColor={props.theme === `dark` ? `--color-darkTwo` : ``}
     >
       <Label>{props.label}</Label>
       <InputBox

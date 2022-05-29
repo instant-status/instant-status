@@ -9,7 +9,10 @@ const IconGlasses = (props: { color?: string; width?: string }) => {
       viewBox="0 0 489.6 489.6"
       enableBackground="new 0 0 489.6 489.6"
       xmlSpace="preserve"
-      style={{ fill: props.color || `inherit`, width: props.width || `100%` }}
+      style={{
+        fill: `var(${props.color})` || `inherit`,
+        width: props.width || `100%`,
+      }}
     >
       <path
         d="M353.7,85.738c6.5-2,13.5-1.3,19.5,1.9c6,3.2,10.4,8.6,12.4,15.1v0.1c0,0,0,0,0,0.1l43,136.4c-13-5.9-27.5-9.2-42.7-9.2

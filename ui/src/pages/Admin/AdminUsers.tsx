@@ -6,7 +6,6 @@ import { SmallButton } from "../../components/Controls/Buttons";
 import AdminPage from "../../components/Layout/AdminPage";
 import { NewRowProps } from "../../globalTypes";
 import useToggle from "../../hooks/useToggle";
-import theme from "../../utils/theme";
 import AdminUsersTable from "./Tables/AdminUsersTable";
 
 const AdminUsersPage = () => {
@@ -42,7 +41,7 @@ const AdminUsersPage = () => {
         !isCreateOpen && (
           <SmallButton
             onClick={onCreateOpen}
-            $color={theme.color.lightOne}
+            $color={`--color-lightOne`}
             $variant="primary"
           >
             Add User

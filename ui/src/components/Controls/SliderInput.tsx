@@ -1,7 +1,6 @@
 import React from "react";
 import styled from "styled-components";
 
-import theme from "../../utils/theme";
 import { InputBoxContainer, Label } from "../Layout/SettingsInputs";
 
 const Output = styled.span`
@@ -16,7 +15,7 @@ const SliderInput = (props: {
   total: number;
 }) => {
   return (
-    <InputBoxContainer $backgroundColor={theme.color.darkTwo}>
+    <InputBoxContainer $backgroundColor={`--color-darkTwo`}>
       <Label>
         {props.label}
         {` `}

@@ -1,4 +1,4 @@
-import { transparentize } from "polished";
+import { cssVar, transparentize } from "polished";
 import React from "react";
 import styled from "styled-components";
 
@@ -6,7 +6,6 @@ import { ServerProps } from "../../globalTypes";
 import getDate from "../../utils/getDate";
 import { getHealthIcon } from "../../utils/getHealth";
 import { getStateIcon } from "../../utils/getState";
-import theme from "../../utils/theme";
 import ProgressBar from "../Controls/ProgressBar";
 import IconClose from "../Icons/IconClose";
 import Stack from "../Layout/Stack";
@@ -14,8 +13,10 @@ import Stack from "../Layout/Stack";
 const Overlay = styled.div`
   width: 100%;
   height: 100%;
-  background-color: ${({ theme }) =>
-    theme.color.darkOne && transparentize(0.1, theme.color.darkOne)};
+  background-color: ${transparentize(
+    0.1,
+    cssVar(`--color-darkOne`).toString(),
+  )};
   font-size: 15px;
   position: absolute;
   z-index: 100;
@@ -41,11 +42,11 @@ const Overlay = styled.div`
 `;
 
 const OverlayCloseButton = styled.button`
-  fill: ${(props) => props.theme.color.lightOne};
+  fill: var(--color-lightOne);
   cursor: pointer;
   border-radius: 50%;
-  background-color: ${(props) => props.theme.color.darkTwo};
-  border: 1px solid ${(props) => props.theme.color.lightOne};
+  background-color: var(--color-darkTwo);
+  border: 1px solid var(--color-lightOne);
   width: 24px;
   height: 24px;
   padding: 4px;
@@ -114,7 +115,7 @@ const CardServerOverlay = (props: {
           <ProgressBar
             progress={updateProgress}
             pulse={true}
-            color={theme.color.purple}
+            color={`--color-purple`}
           />
         </Stack>
         <Stack direction="down" spacing={1}>

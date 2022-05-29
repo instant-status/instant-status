@@ -3,7 +3,7 @@ import styled, { css, keyframes } from "styled-components";
 
 const pulseAnimation = (props: { $color: string }) => keyframes`
 0% {
-  box-shadow: 0 0 0 0px ${props.$color};
+  box-shadow: 0 0 0 0px var(${props.$color});
 }
 100% {
   box-shadow: 0 0 0 10px rgba(0,0,0,0);
@@ -34,10 +34,10 @@ const ProgressUsed = styled.div<{ $width: number; $color: string }>`
   width: ${(props) =>
     props.$width > 0 ? `calc(${props.$width}% + 2px)` : `${props.$width}%`};
   height: 100%;
-  background-color: ${(props) => props.$color};
+  background-color: var(${(props) => props.$color});
   margin-left: -2px;
   box-sizing: content-box;
-  border-right: 2px solid ${(props) => props.theme.color.darkOne};
+  border-right: 2px solid var(--color-darkOne);
   transition: width 10s;
 `;
 

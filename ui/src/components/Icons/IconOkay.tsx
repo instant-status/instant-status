@@ -9,7 +9,10 @@ const IconOkay = (props: { color?: string; width?: string }) => {
       viewBox="0 0 512 512"
       enableBackground="new 0 0 512 512"
       xmlSpace="preserve"
-      style={{ fill: props.color || `inherit`, width: props.width || `100%` }}
+      style={{
+        fill: `var(${props.color})` || `inherit`,
+        width: props.width || `100%`,
+      }}
     >
       <g>
         <path d="M325.3,103.1H211c-6.8,0-12.3,5.5-12.3,12.3s5.5,12.3,12.3,12.3h114.4c6.8,0,12.3-5.5,12.3-12.3S332.1,103.1,325.3,103.1z" />
