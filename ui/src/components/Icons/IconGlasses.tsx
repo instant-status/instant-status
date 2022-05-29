@@ -10,7 +10,7 @@ const IconGlasses = (props: { color?: string; width?: string }) => {
       enableBackground="new 0 0 489.6 489.6"
       xmlSpace="preserve"
       style={{
-        fill: `var(${props.color})` || `inherit`,
+        fill: props.color ? `var(${props.color})` : `inherit`,
         width: props.width || `100%`,
       }}
     >

@@ -10,6 +10,8 @@
   --color-cyan: hsl(184, 52%, 32%);
 
   --shadow-medium: 4px 4px 20px rgba(0, 0, 0, 0.17);
+
+  --font-family-body: "PT Sans", sans-serif;
 }
 
 html {
@@ -24,7 +26,7 @@ html {
 }
 
 body {
-  font-family: "PT Sans", sans-serif;
+  font-family: var(--font-family-body);
   font-weight: 400;
   font-size: 18px;
   margin: 0;
