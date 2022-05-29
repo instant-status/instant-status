@@ -11,7 +11,13 @@ const VersionFilters = (props: { versions: string[] }) => {
 
   useEffect(() => {
     if (props.versions.length) {
-      setIsCheckedArray(props.versions);
+      const activeItems = store.displayVersions
+        ? props.versions.filter((version) =>
+            store.displayVersions?.includes(version),
+          )
+        : props.versions;
+      setIsCheckedArray(activeItems);
+      store.setDisplayVersions(activeItems);
     }
   }, [props.versions]);
 
