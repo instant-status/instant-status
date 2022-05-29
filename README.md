@@ -7,7 +7,7 @@ Performant, robust, and clean monitoring application
 
 ## Production Install
 
-The [production installation script can be found here](https://github.com/instant-status/deploy/tree/master#install-script).
+The [production installation script can be found here](https://github.com/instant-status/deploy/tree/master#instant-status-install-script).
 
 ## Recommended Production Infrastructure
 

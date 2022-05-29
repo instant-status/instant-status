@@ -54,7 +54,7 @@ interface MultiSelectInputProps {
 const MultiSelectInput = (props: MultiSelectInputProps) => {
   return (
     <InputBoxContainer
-      $backgroudColour={props.theme === `dark` ? theme.color.darkTwo : ``}
+      $backgroundColor={props.theme === `dark` ? theme.color.darkTwo : ``}
     >
       <Label>{props.label}</Label>
       <InputBox

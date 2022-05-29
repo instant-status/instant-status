@@ -16,7 +16,7 @@ const SliderInput = (props: {
   total: number;
 }) => {
   return (
-    <InputBoxContainer $backgroudColour={theme.color.darkTwo}>
+    <InputBoxContainer $backgroundColor={theme.color.darkTwo}>
       <Label>
         {props.label}
         {` `}

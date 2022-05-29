@@ -3,19 +3,25 @@ import React, { ChangeEvent } from "react";
 import theme from "../../utils/theme";
 import { InputBoxContainer, Label } from "../Layout/SettingsInputs";
 
-const SelectInput = (props: {
+interface SelectInputProps {
   label: string;
   value: string;
   onChange: (event: ChangeEvent<HTMLSelectElement>) => void;
-}) => {
+}
+
+const SelectInput = (props: SelectInputProps) => {
   return (
-    <InputBoxContainer $backgroudColour={theme.color.darkTwo}>
+    <InputBoxContainer $backgroundColor={theme.color.darkTwo}>
       <Label>{props.label}</Label>
       <select onChange={props.onChange} value={props.value}>
-        <option value="name">Stack A{`->`}Z</option>
-        <option value="!name">Stack Z{`->`}A</option>
-        <option value="!stack.server_app_version">Version New{`->`}Old</option>
-        <option value="stack.server_app_version">Version Old{`->`}New</option>
+        <option value="name">Stack A{` --> `}Z</option>
+        <option value="!name">Stack Z{` --> `}A</option>
+        <option value="!stack.server_app_version">
+          Version New{` --> `}Old
+        </option>
+        <option value="stack.server_app_version">
+          Version Old{` --> `}New
+        </option>
       </select>
     </InputBoxContainer>
   );
