@@ -1,0 +1,13 @@
+:root {
+  --color-darkOne: hsl(222, 22%, 15%);
+  --color-darkTwo: hsl(222, 25%, 13%);
+  --color-lightOne: hsl(28, 100%, 95%);
+  --color-red: hsl(0, 100%, 67%);
+  --color-green: hsl(147, 100%, 34%);
+  --color-blue: hsl(204, 100%, 57%);
+  --color-orange: hsl(40, 97%, 54%);
+  --color-purple: hsl(290, 52%, 62%);
+  --color-cyan: hsl(184, 52%, 32%);
+
+  --shadow-medium: 4px 4px 20px rgba(0, 0, 0, 0.17);
+}
