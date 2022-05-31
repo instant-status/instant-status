@@ -6,7 +6,6 @@ import styled from "styled-components";
 import APP_CONFIG from "../../../appConfig";
 import useClickAway from "../../hooks/useClickAway";
 import useIsLoggedIn from "../../hooks/useIsLoggedIn";
-import theme from "../../utils/theme";
 import IconGlasses from "../Icons/IconGlasses";
 import IconLock from "../Icons/IconLock";
 import IconUnlock from "../Icons/IconUnlock";
@@ -19,8 +18,8 @@ const MenuButton = styled(motion.button)`
   border: none;
   width: 50px;
   height: 50px;
-  background-color: ${(props) => props.theme.color.lightOne};
-  box-shadow: ${(props) => props.theme.shadow.card};
+  background-color: var(--color-parchment);
+  box-shadow: var(--shadow-medium);
   padding: 12px;
   cursor: pointer;
 `;
@@ -33,8 +32,8 @@ const MenuToggleButton = styled(motion.button)`
   border: none;
   width: 60px;
   height: 60px;
-  background-color: ${(props) => props.theme.color.lightOne};
-  box-shadow: ${(props) => props.theme.shadow.card};
+  background-color: var(--color-parchment);
+  box-shadow: var(--shadow-medium);
   padding: 12px;
   cursor: pointer;
 `;
@@ -102,7 +101,7 @@ const DevMenu = () => {
         ref={menuButtonRef}
         title="Open dev menu"
       >
-        <IconGlasses color={theme.color.darkOne} />
+        <IconGlasses color={`--color-midnight`} />
       </MenuToggleButton>
     </>
   );

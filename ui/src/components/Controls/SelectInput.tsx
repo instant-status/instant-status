@@ -1,6 +1,5 @@
 import React, { ChangeEvent } from "react";
 
-import theme from "../../utils/theme";
 import { InputBoxContainer, Label } from "../Layout/SettingsInputs";
 
 interface SelectInputProps {
@@ -11,7 +10,7 @@ interface SelectInputProps {
 
 const SelectInput = (props: SelectInputProps) => {
   return (
-    <InputBoxContainer $backgroundColor={theme.color.darkTwo}>
+    <InputBoxContainer $backgroundColor={`--color-twilight`}>
       <Label>{props.label}</Label>
       <select onChange={props.onChange} value={props.value}>
         <option value="name">Stack A{` --> `}Z</option>

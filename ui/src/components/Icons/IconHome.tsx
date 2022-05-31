@@ -9,7 +9,10 @@ const IconHome = (props: { color?: string; width?: string }) => {
       viewBox="0 0 512 512"
       enableBackground="new 0 0 512 512"
       xmlSpace="preserve"
-      style={{ fill: props.color || `inherit`, width: props.width || `100%` }}
+      style={{
+        fill: props.color ? `var(${props.color})` : `inherit`,
+        width: props.width || `100%`,
+      }}
     >
       <g>
         <path d="M49.2,453.4h413.7c20.3,0,36.8-16.5,36.8-36.9V95.5c0-20.3-16.5-36.9-36.8-36.9H49.2c-20.3,0-36.8,16.5-36.8,36.9v321.1   C12.3,436.9,28.9,453.4,49.2,453.4z M462.8,428.9H49.2c-6.8,0-12.3-5.5-12.3-12.4V175.7h438.3v240.9   C475.2,423.3,469.6,428.9,462.8,428.9z M49.2,83.1h413.7c6.8,0,12.3,5.5,12.3,12.4v55.7H36.8V95.5C36.8,88.7,42.4,83.1,49.2,83.1z" />

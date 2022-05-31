@@ -17,7 +17,6 @@ import {
   TableRow,
 } from "../../../components/Tables/AdminTable";
 import { NewRowProps } from "../../../globalTypes";
-import theme from "../../../utils/theme";
 
 export interface RoleProps extends NewRowProps {
   id: number;
@@ -267,7 +266,7 @@ const UserRow = (props: {
         {isInEditMode ? (
           <Stack spacing={2}>
             <SmallButton
-              $color={theme.color.lightOne}
+              $color={`--color-parchment`}
               $variant="primary"
               $size="small"
               onClick={updateOrCreateUser}
@@ -275,7 +274,7 @@ const UserRow = (props: {
               {props.role.isInCreateMode ? `Add` : `Save`}
             </SmallButton>
             <SmallButton
-              $color={theme.color.lightOne}
+              $color={`--color-parchment`}
               $variant="ghost"
               $size="small"
               onClick={clearForm}
@@ -286,7 +285,7 @@ const UserRow = (props: {
         ) : (
           <Stack spacing={2}>
             <SmallButton
-              $color={theme.color.lightOne}
+              $color={`--color-parchment`}
               $variant="ghost"
               $size="small"
               onClick={() => setIsEditMode(true)}
@@ -294,7 +293,7 @@ const UserRow = (props: {
               Edit
             </SmallButton>
             <SmallButton
-              $color={theme.color.red}
+              $color={`--color-red`}
               $variant="ghost"
               $size="small"
               onClick={deleteRole}

@@ -22,7 +22,6 @@ import {
 import { NewRowProps, StackProps } from "../../../globalTypes";
 import useToggle from "../../../hooks/useToggle";
 import removeWhiteSpace from "../../../utils/removeWhiteSpace";
-import theme from "../../../utils/theme";
 
 dayjs.extend(relativeTime);
 dayjs.extend(utc);
@@ -169,7 +168,7 @@ const StackRow = (props: {
         {isInEditMode ? (
           <Stack spacing={2}>
             <SmallButton
-              $color={theme.color.lightOne}
+              $color={`--color-parchment`}
               $variant="primary"
               $size="small"
               onClick={createStack}
@@ -177,7 +176,7 @@ const StackRow = (props: {
               {props.stack.isInCreateMode ? `Add` : `Save`}
             </SmallButton>
             <SmallButton
-              $color={theme.color.lightOne}
+              $color={`--color-parchment`}
               $variant="ghost"
               $size="small"
               onClick={clearForm}
@@ -188,7 +187,7 @@ const StackRow = (props: {
         ) : (
           <Stack spacing={2}>
             <SmallButton
-              $color={theme.color.red}
+              $color={`--color-red`}
               $variant="ghost"
               $size="small"
               onClick={deleteStack}

@@ -32,7 +32,7 @@ const Box = styled.div<{ $disabled?: boolean }>`
   height: 20px;
   border-radius: 6px;
   margin-right: 8px;
-  border: 1px solid ${(props) => props.theme.color.lightOne};
+  border: 1px solid var(--color-parchment);
   ${(props) => props.$disabled && `opacity: 0.2;`};
   display: flex;
   align-items: center;
@@ -43,7 +43,7 @@ const LittlePop = styled(motion.div)`
   width: 12px;
   height: 12px;
   border-radius: 3px;
-  background-color: ${(props) => props.theme.color.lightOne};
+  background-color: var(--color-parchment);
 `;
 
 const Label = styled.span`

@@ -1,13 +1,12 @@
-import { lighten } from "polished";
+import { cssVar, lighten } from "polished";
 import React from "react";
 import styled from "styled-components";
-
-import theme from "../../utils/theme";
 
 const Header = styled.header`
   display: flex;
   align-items: center;
-  border-bottom: 1px solid ${(props) => lighten(0.1, props.theme.color.darkOne)};
+  border-bottom: 1px solid
+    ${lighten(0.1, cssVar(`--color-midnight`).toString())};
   justify-content: space-between;
 `;
 
@@ -33,7 +32,7 @@ const StackLogo = styled.div<{ image?: string }>`
 const StackServerCount = styled.div`
   font-size: 14px;
   margin-top: -2px;
-  color: ${theme.color.blue};
+  color: var(--color-blue);
 `;
 
 const CardHeader = (props: {

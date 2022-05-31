@@ -1,9 +1,7 @@
 import styled from "styled-components";
 
-import theme from "../../utils/theme";
-
 const AdminPageTitle = styled.header`
-  color: ${theme.color.lightOne};
+  color: var(--color-parchment);
   width: 100%;
   padding: 0 32px;
 `;

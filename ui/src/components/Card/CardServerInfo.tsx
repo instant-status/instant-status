@@ -1,5 +1,5 @@
 import { observer } from "mobx-react-lite";
-import { transparentize } from "polished";
+import { cssVar, transparentize } from "polished";
 import React, { useContext, useEffect, useState } from "react";
 import styled from "styled-components";
 
@@ -9,7 +9,6 @@ import { globalStoreContext } from "../../store/globalStore";
 import getDate from "../../utils/getDate";
 import { getHealthColor, getHealthIcon } from "../../utils/getHealth";
 import { getStateIcon } from "../../utils/getState";
-import theme from "../../utils/theme";
 import CopyText from "../Controls/CopyText";
 import IconButton from "../Controls/IconButton";
 import ProgressBar from "../Controls/ProgressBar";
@@ -47,11 +46,11 @@ const ServerRole = styled.h4<{ $color: string }>`
   font-size: 17px;
   margin: 0;
   text-transform: capitalize;
-  color: ${(props) => props.$color};
+  color: var(${(props) => props.$color});
 `;
 
 const ServerId = styled.span`
-  color: ${(props) => transparentize(0.5, props.theme.color.lightOne)};
+  color: ${transparentize(0.5, cssVar(`--color-parchment`).toString())};
   font-weight: 400;
   font-size: 16px;
   display: inline-block;
@@ -105,10 +104,10 @@ const CardServer = observer(
 
     const diskColor =
       diskUsed >= 80
-        ? theme.color.red
+        ? `--color-red`
         : diskUsed >= 50
-        ? theme.color.orange
-        : theme.color.green;
+        ? `--color-orange`
+        : `--color-green`;
 
     const [isStateOverlayVisible, setIsStateOverlayVisible] = useState(false);
     const [isHealthOverlayVisible, setIsHealthOverlayVisible] = useState(false);
@@ -196,7 +195,7 @@ const CardServer = observer(
                   )
                 }
               >
-                <IconUbuntu color={theme.color.lightOne} width="1em" />
+                <IconUbuntu color={`--color-parchment`} width="1em" />
               </IconButton>
             </ServerRow>
             <ServerRow>
@@ -207,7 +206,7 @@ const CardServer = observer(
               <IconButton
                 href={`${APP_CONFIG.GITHUB_VERSION_URL}${props.server.server_app_version}`}
               >
-                <IconGithub color={theme.color.lightOne} width="1em" />
+                <IconGithub color={`--color-parchment`} width="1em" />
               </IconButton>
             </ServerRow>
             <ServerRow>

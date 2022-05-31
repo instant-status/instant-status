@@ -10,10 +10,10 @@ import CardHeader from "./CardHeader";
 import CardServer from "./CardServerInfo";
 
 const CardBackground = styled(motion.div)`
-  background: ${(props) => props.theme.color.darkOne};
-  color: ${(props) => props.theme.color.lightOne};
+  background: var(--color-midnight);
+  color: var(--color-parchment);
   border-radius: 2px;
-  box-shadow: ${(props) => props.theme.shadow.card};
+  box-shadow: var(--shadow-medium);
   width: 360px;
   display: flex;
   flex-direction: column;

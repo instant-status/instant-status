@@ -11,13 +11,12 @@ import {
   TableHeader,
   TableRow,
 } from "../../../components/Tables/AdminTable";
-import theme from "../../../utils/theme";
 
 dayjs.extend(relativeTime);
 dayjs.extend(utc);
 
 const Limit = styled.div`
-  color: ${theme.color.lightOne};
+  color: var(--color-parchment);
   padding: 1rem;
 `;
 

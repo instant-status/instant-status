@@ -11,11 +11,11 @@ import SidebarHeader from "./SidebarHeader";
 import SidebarTab from "./SidebarTab";
 
 const Aside = styled.aside`
-  background-color: ${(props) => props.theme.color.darkOne};
+  background-color: var(--color-midnight);
   width: 290px;
   height: 100vh;
   position: fixed;
-  color: ${(props) => props.theme.color.lightOne};
+  color: var(--color-parchment);
   padding: 20px 0 0;
   display: flex;
   flex-direction: column;
@@ -38,11 +38,11 @@ const Footer = styled.footer`
   padding: 6px 0;
   text-align: center;
   font-size: 14px;
-  background-color: darkcyan;
+  background-color: var(--color-cyan);
 `;
 
 const A = styled.a`
-  color: ${(props) => props.theme.color.lightOne};
+  color: var(--color-parchment);
 `;
 
 const madeWith = [
