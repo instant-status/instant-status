@@ -12,12 +12,11 @@ import CardServer from "./CardServerInfo";
 const CardBackground = styled(motion.div)`
   background: var(--color-midnight);
   color: var(--color-parchment);
-  border-radius: 10px;
+  border-radius: 2px;
   box-shadow: var(--shadow-medium);
   width: 360px;
   display: flex;
   flex-direction: column;
-  overflow: hidden;
 `;
 
 const Card = observer((props: { stack: StackProps }) => {

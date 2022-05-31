@@ -29,7 +29,7 @@ const ButtonBase = styled.button`
 
 export const GhostButton = styled(ButtonBase)`
   &:hover:not(:disabled) {
-    color: var(--color-nautical);
+    color: var(--color-twilight);
     background-color: var(--color-parchment);
   }
 `;
@@ -40,13 +40,13 @@ export const SidebarButton = styled(ButtonBase)`
   font-size: 16px;
 
   &:hover:not(:disabled) {
-    color: var(--color-nautical);
+    color: var(--color-twilight);
     background-color: var(--color-parchment);
   }
 `;
 
 export const UpdateButton = styled(ButtonBase)`
-  color: var(--color-nautical);
+  color: var(--color-twilight);
   background-color: var(--color-purple);
   border: 4px solid var(--color-purple);
 
@@ -64,7 +64,7 @@ export const CancelButton = styled(GhostButton)`
   border: 4px solid var(--color-red);
 
   &:hover:not(:disabled) {
-    color: var(--color-nautical);
+    color: var(--color-twilight);
     background-color: var(--color-red);
   }
 `;
@@ -81,7 +81,7 @@ export const SmallButton = styled.button<SmallButtonProps>`
 
   color: var(
     ${(props) =>
-      props.$variant === `ghost` ? props.$color : `--color-nautical`}
+      props.$variant === `ghost` ? props.$color : `--color-twilight`}
   );
   background-color: ${(props) =>
     props.$variant === `ghost` ? `transparent` : `var(${props.$color})`};

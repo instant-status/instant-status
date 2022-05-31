@@ -20,7 +20,6 @@ const FooterButton = styled.button<{ disabled: boolean }>`
   display: flex;
   flex-direction: column;
   border: none;
-  border-radius: 10px 10px 0 0;
   align-items: center;
   color: ${(props) =>
     props.disabled
@@ -38,7 +37,7 @@ const FooterButton = styled.button<{ disabled: boolean }>`
   background-color: var(--color-midnight);
 
   :hover {
-    background-color: var(--color-nautical);
+    background-color: var(--color-twilight);
   }
 `;
 

@@ -7,7 +7,6 @@ const Tab = styled(NavLink)`
   display: flex;
   flex-direction: column;
   border: none;
-  border-radius: 10px 10px 0 0;
   align-items: center;
   cursor: pointer;
   color: var(--color-parchment);
@@ -19,13 +18,13 @@ const Tab = styled(NavLink)`
   background-color: var(--color-midnight);
 
   :hover {
-    background-color: var(--color-nautical);
+    background-color: var(--color-twilight);
   }
 
   &.active {
     background-color: var(--color-parchment);
-    color: var(--color-nautical);
-    fill: var(--color-nautical);
+    color: var(--color-twilight);
+    fill: var(--color-twilight);
   }
 `;
 

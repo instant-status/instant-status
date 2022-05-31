@@ -34,7 +34,7 @@ interface TextInputProps {
 const TextInput = (props: TextInputProps) => {
   return (
     <InputBoxContainer
-      $backgroundColor={props.theme === `dark` ? `--color-nautical` : ``}
+      $backgroundColor={props.theme === `dark` ? `--color-twilight` : ``}
     >
       <Label>{props.label}</Label>
       <InputBox

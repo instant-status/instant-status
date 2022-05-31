@@ -34,7 +34,7 @@ const ModalCloseButton = styled.button`
   border-radius: 50%;
   fill: var(--color-parchment);
   background-color: var(--color-midnight);
-  border: 6px solid var(--color-nautical);
+  border: 6px solid var(--color-twilight);
   position: absolute;
   right: -20px;
   top: -20px;

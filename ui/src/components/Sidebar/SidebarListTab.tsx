@@ -12,14 +12,14 @@ const SidebarListTab = styled(NavLink)`
 
   &:hover:not(:disabled) {
     color: var(--color-parchment);
-    background-color: var(--color-nautical);
+    background-color: var(--color-twilight);
   }
 
   margin-left: 20px;
   border-radius: 12px 0 0 12px;
 
   &.active {
-    background-color: var(--color-nautical);
+    background-color: var(--color-twilight);
     color: var(--color-parchment);
   }
 `;

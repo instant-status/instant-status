@@ -26,8 +26,7 @@ done
 
 ec2InstanceIdChosen="i-$RANDOM$RANDOM$RANDOM$RANDOM"
 ec2InstanceIdOthers="i-$RANDOM$RANDOM$RANDOM$RANDOM"
-while [[ "$OTHER_SERVERS_TO_CREATE" -gt 1 ]]
-do
+while [[ "$OTHER_SERVERS_TO_CREATE" -gt 1 ]]; do
   ec2InstanceIdOthers+=" i-$RANDOM$RANDOM$RANDOM$RANDOM"
   OTHER_SERVERS_TO_CREATE=$(($OTHER_SERVERS_TO_CREATE - 1))
 done
@@ -101,8 +100,7 @@ stackId=$(echo "$response" | jq -r '."id"')
 healthCode=0
 healthMessage="All Good!"
 
-for ec2InstanceId in $ec2InstanceIds
-do
+for ec2InstanceId in $ec2InstanceIds; do
   JSONData="{
     \"server_id\": $(jq -R <<<"$ec2InstanceId"),
     \"stack_id\": $(jq -R <<<"$stackId"),
@@ -152,8 +150,7 @@ do
   echo "$response" | jq -r .
 done
 
-for ec2InstanceId in $ec2InstanceIdOthers
-do
+for ec2InstanceId in $ec2InstanceIdOthers; do
   ##### UPDATE STATUS #####
   JSONData="{
     \"update_id\": $(jq -R <<<"$updateId"),
@@ -188,8 +185,7 @@ JSONData="{
 response=$(statusAPI_POST "update" "$JSONData")
 echo "$response" | jq -r .
 
-for ec2InstanceId in $ec2InstanceIds
-do
+for ec2InstanceId in $ec2InstanceIds; do
   ##### UPDATE STATUS #####
   JSONData="{
     \"update_id\": $(jq -R <<<"$updateId"),

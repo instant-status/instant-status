@@ -10,7 +10,7 @@ interface SelectInputProps {
 
 const SelectInput = (props: SelectInputProps) => {
   return (
-    <InputBoxContainer $backgroundColor={`--color-nautical`}>
+    <InputBoxContainer $backgroundColor={`--color-twilight`}>
       <Label>{props.label}</Label>
       <select onChange={props.onChange} value={props.value}>
         <option value="name">Stack A{` --> `}Z</option>

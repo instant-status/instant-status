@@ -45,7 +45,7 @@ const OverlayCloseButton = styled.button`
   fill: var(--color-parchment);
   cursor: pointer;
   border-radius: 50%;
-  background-color: var(--color-nautical);
+  background-color: var(--color-twilight);
   border: 1px solid var(--color-parchment);
   width: 24px;
   height: 24px;
