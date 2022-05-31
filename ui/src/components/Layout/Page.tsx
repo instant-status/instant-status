@@ -1,7 +1,7 @@
 import styled from "styled-components";
 
 const Page = styled.main`
-  background-color: var(--color-nautical);
+  background-color: var(--color-twilight);
   width: 100%;
   min-height: 100vh;
   border-radius: 40px 0 0 0;
