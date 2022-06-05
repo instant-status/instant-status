@@ -12,7 +12,7 @@ const Tab = styled(NavLink)`
   color: var(--color-parchment);
   fill: var(--color-parchment);
   text-decoration: none;
-  padding: 0.5rem 0;
+  padding: 0.6rem 0;
   transition: background-color 0.15s ease-out;
   font-size: 1.5em;
   background-color: var(--color-midnight);
