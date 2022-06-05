@@ -6,16 +6,25 @@ import { globalStoreContext } from "../../store/globalStore";
 
 const VersionFilters = (props: { versions: string[] }) => {
   const [isCheckedArray, setIsCheckedArray] = useState(props.versions);
+  const [knownVersionsCount, setKnownVersionsCount] = useState(
+    props.versions.length,
+  );
 
   const store = useContext(globalStoreContext);
 
   useEffect(() => {
     if (props.versions.length) {
-      const activeItems = store.displayVersions
-        ? props.versions.filter((version) =>
-            store.displayVersions?.includes(version),
-          )
-        : props.versions;
+      const storeSelectedItems = store.displayVersions ?? [];
+      const hasFilter = storeSelectedItems.length !== knownVersionsCount;
+
+      const activeItems =
+        storeSelectedItems.length > 0 && hasFilter
+          ? props.versions.filter((version) =>
+              store.displayVersions?.includes(version),
+            )
+          : props.versions;
+
+      setKnownVersionsCount(props.versions.length);
       setIsCheckedArray(activeItems);
       store.setDisplayVersions(activeItems);
     }
