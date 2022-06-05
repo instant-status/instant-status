@@ -93,9 +93,9 @@ const PageContent = observer(() => {
             <img src={logo} alt="Loading..." width="400px" />
             {allStacks.length > 0 && store?.displayVersions === undefined
               ? `No Servers Found`
-              : (store?.displayVersions ?? []).length < 1
-              ? `No Matching Stacks`
-              : `No Stacks Found`}
+              : allStacks.length < 1
+              ? `No Stacks Found`
+              : `No Matching Stacks`}
           </NoResults>
         )}
       </Grid>
