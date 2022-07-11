@@ -20,7 +20,7 @@
   "license": "MIT",
   "dependencies": {
     "@prisma/client": "3.13.0",
-    "dotenv-cli": "5.1.0"
+    "dotenv-cli": "6.0.0"
   },
   "devDependencies": {
     "eslint-plugin-simple-import-sort": "7.0.0",
