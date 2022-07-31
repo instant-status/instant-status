@@ -19,12 +19,12 @@
   "author": "",
   "license": "MIT",
   "dependencies": {
-    "@prisma/client": "3.13.0",
-    "dotenv-cli": "5.1.0"
+    "@prisma/client": "4.1.1",
+    "dotenv-cli": "6.0.0"
   },
   "devDependencies": {
     "eslint-plugin-simple-import-sort": "7.0.0",
-    "prisma": "3.13.0",
-    "ts-node": "10.7.0"
+    "prisma": "4.1.1",
+    "ts-node": "10.9.1"
   }
 }
