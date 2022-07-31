@@ -1,14 +1,11 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-datasource db {
-  provider          = "postgres"
-  url               = env("DATABASE_URL")
-  shadowDatabaseUrl = env("SHADOW_DATABASE_URL")
-}
-
 generator client {
   provider = "prisma-client-js"
+}
+
+datasource db {
+  provider          = "postgresql"
+  url               = env("DATABASE_URL")
+  shadowDatabaseUrl = env("SHADOW_DATABASE_URL")
 }
 
 model Stacks {
@@ -22,8 +19,8 @@ model Stacks {
   created_at               DateTime  @default(now())
   servers                  Servers[]
   updates                  Updates[]
-  rolesWithThisStackUpdate Roles[]   @relation("UsersToStacksView")
   rolesWithThisStackView   Roles[]   @relation("UsersToStacksUpdate")
+  rolesWithThisStackUpdate Roles[]   @relation("UsersToStacksView")
 }
 
 model Servers {
@@ -71,9 +68,9 @@ model Updates {
   switch_code_at_date          Int
   created_at                   DateTime  @default(now())
   lastUpdateId                 Updates?  @relation("UpdatesToUpdates", fields: [last_update_id], references: [id])
-  nextUpdateId                 Updates[] @relation("UpdatesToUpdates")
+  stackId                      Stacks?    @relation(fields: [stack_id], references: [id])
   serversWithThisUpdate        Servers[]
-  stackId                      Stacks?   @relation(fields: [stack_id], references: [id])
+  nextUpdateId                 Updates[]  @relation("UpdatesToUpdates")
 }
 
 model Users {
@@ -82,16 +79,16 @@ model Users {
   first_name     String
   last_name      String
   is_super_admin Boolean  @default(false)
-  roles          Roles[]  @relation("UsersToRoles")
   created_at     DateTime @default(now())
+  roles          Roles[]  @relation("UsersToRoles")
 }
 
 model Roles {
   id                        Int      @id @default(autoincrement())
   name                      String   @unique
-  view_stacks               Stacks[] @relation("UsersToStacksView")
-  update_stacks             Stacks[] @relation("UsersToStacksUpdate")
   view_stack_environments   String[]
   update_stack_environments String[]
   usersWithThisRole         Users[]  @relation("UsersToRoles")
+  update_stacks             Stacks[] @relation("UsersToStacksUpdate")
+  view_stacks               Stacks[] @relation("UsersToStacksView")
 }
