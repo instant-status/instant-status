@@ -10,6 +10,6 @@
   "author": "",
   "license": "MIT",
   "devDependencies": {
-    "eslint-plugin-simple-import-sort": "7.0.0"
+    "eslint-plugin-simple-import-sort": "8.0.0"
   }
 }
