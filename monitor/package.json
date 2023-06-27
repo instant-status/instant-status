@@ -20,7 +20,7 @@
     "is-prisma": "1.0.0"
   },
   "devDependencies": {
-    "eslint-plugin-simple-import-sort": "7.0.0",
+    "eslint-plugin-simple-import-sort": "10.0.0",
     "nodemon": "2.0.19"
   }
 }
