@@ -36,7 +36,7 @@
     "@types/koa-json": "2.0.20",
     "@typescript-eslint/parser": "5.31.0",
     "eslint": "8.20.0",
-    "eslint-config-prettier": "8.5.0",
+    "eslint-config-prettier": "8.10.0",
     "eslint-plugin-prettier": "4.2.1",
     "eslint-plugin-simple-import-sort": "7.0.0",
     "nodemon": "2.0.19",
