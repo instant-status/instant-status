@@ -24,7 +24,7 @@
     "is-prisma": "1.0.0",
     "jsonwebtoken": "8.5.1",
     "koa": "2.13.4",
-    "koa-bodyparser": "4.3.0",
+    "koa-bodyparser": "4.4.1",
     "koa-json": "2.0.2"
   },
   "devDependencies": {
@@ -32,7 +32,7 @@
     "@types/koa": "2.13.5",
     "@types/koa__cors": "3.3.0",
     "@types/koa__router": "8.0.11",
-    "@types/koa-bodyparser": "4.3.7",
+    "@types/koa-bodyparser": "4.3.12",
     "@types/koa-json": "2.0.20",
     "@typescript-eslint/parser": "5.31.0",
     "eslint": "8.20.0",
