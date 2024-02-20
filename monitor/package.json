@@ -16,7 +16,7 @@
   "dependencies": {
     "@prisma/client": "4.1.1",
     "dayjs": "1.11.4",
-    "dotenv": "16.0.1",
+    "dotenv": "16.4.5",
     "is-prisma": "1.0.0"
   },
   "devDependencies": {
