@@ -16,7 +16,7 @@
   "author": "",
   "license": "MIT",
   "dependencies": {
-    "config": "3.3.7",
+    "config": "3.3.12",
     "dayjs": "1.11.4",
     "framer-motion": "6.5.1",
     "js-cookie": "3.0.1",
