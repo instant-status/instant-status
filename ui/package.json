@@ -17,7 +17,7 @@
   "license": "MIT",
   "dependencies": {
     "config": "3.3.7",
-    "dayjs": "1.11.4",
+    "dayjs": "1.11.13",
     "framer-motion": "6.5.1",
     "js-cookie": "3.0.1",
     "mobx": "6.6.1",
