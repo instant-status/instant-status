@@ -34,7 +34,7 @@
     "styled-components": "5.3.5"
   },
   "devDependencies": {
-    "@babel/core": "7.18.9",
+    "@babel/core": "7.25.9",
     "@prisma/client": "4.1.1",
     "@types/babel__core": "7.1.19",
     "@types/js-cookie": "3.0.2",
