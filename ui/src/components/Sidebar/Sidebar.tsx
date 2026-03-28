@@ -32,6 +32,21 @@ const FooterContainer = styled.div`
   padding: 20px 0 0;
   text-align: center;
   font-size: 14px;
+  position: sticky;
+  bottom: 0;
+
+  /* &:before {
+    content: "";
+    display: block;
+    width: 100%;
+    height: 30px;
+    background: linear-gradient(
+      0deg,
+      rgba(0, 0, 0, 0.4) 0%,
+      rgba(0, 0, 0, 0.4) 20%,
+      rgba(0, 0, 0, 0) 100%
+    );
+  } */
 `;
 
 const Footer = styled.footer`
