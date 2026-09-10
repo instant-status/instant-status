@@ -23,7 +23,7 @@
     "is-config": "1.0.0",
     "is-prisma": "1.0.0",
     "jsonwebtoken": "8.5.1",
-    "koa": "2.13.4",
+    "koa": "2.16.4",
     "koa-bodyparser": "4.3.0",
     "koa-json": "2.0.2"
   },
