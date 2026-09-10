@@ -19,7 +19,7 @@
   "author": "",
   "license": "MIT",
   "dependencies": {
-    "@prisma/client": "4.1.1",
+    "@prisma/client": "4.16.2",
     "dotenv-cli": "6.0.0"
   },
   "devDependencies": {
